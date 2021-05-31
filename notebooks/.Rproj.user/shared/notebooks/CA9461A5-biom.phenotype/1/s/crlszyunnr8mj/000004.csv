@@ -1,0 +1,33 @@
+"0","pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)"
+"0",""
+"0","pheno$Phenotype[is.na(pheno$Phenotype)] <- 0"
+"0","pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'"
+"0","pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'"
+"0",""
+"0","X.metadata <- left_join(subgr,pheno,by = 'file_name')"
+"0",""
+"0","X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype'))) %>% "
+"0","  column_to_rownames(.,var = 'file_name')"
+"0",""
+"0","Y = X.metadata$Phenotype %>% as.factor(.)"
+"0",""
+"0","conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))"
+"0","# nutr.clust$file_name <- row.names(nutr.clust)"
+"0","pheno.X <- pheno.X[grepl('U2',pheno.X$file_name),]"
+"0",""
+"0","conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('type'))"
+"0",""
+"0","conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]"
+"0",""
+"0","Y =pheno.X$Phenotype %>% as.factor(.)"
+"0",""

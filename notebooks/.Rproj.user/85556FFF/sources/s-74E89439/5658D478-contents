@@ -1,0 +1,95 @@
+---
+title: "BLS Data"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(tidyverse)
+```
+
+Import Data
+```{r}
+read_data <- function(file) {
+  
+  tmp <- read.delim(file, as.is = T)  
+  
+  # item_id
+  item_id_idx = grepl(tmp[, 'Property'], pattern = 'item_id')
+  item_id = tmp[item_id_idx, 'Value']
+  
+  # item_descr
+  item_descr_idx = grepl(tmp[, 'Property'], pattern = 'item_descr')
+  item_descr = tmp[item_descr_idx, 'Value']
+  
+  tmp <- tmp[!(item_id_idx | item_descr_idx), ] %>% 
+    mutate(item_id = item_id, 
+           item_descr = item_descr) %>% 
+    separate(Value, into = c('Value_Orig','Unit'), sep = ' ') %>% 
+    mutate(Value = gsub(Value_Orig, pattern = '[.]', replacement = '')) %>%  
+    mutate(Value = as.numeric(gsub(Value, pattern = '[,]', replacement = '.')))
+  
+  return(tmp)
+}
+```
+
+
+```{r}
+files = c('../data/Bundeslms/nwr/items/NWItem.nrB105411.txt')
+files = list.files(path = '../data/Bundeslms/nwr/items/', 
+                   pattern = 'NWItem.*txt', full.names = T)
+df <- NULL
+for(file in files) {
+  df = rbind(df, read_data(file))
+}
+```
+
+Scale µg, mg, and kg / 100g to g/g
+84.0	µg / 100 g = 
+0.84 µg / 1e6g = 
+8.4e-07
+```{r}
+df <-
+  df %>% 
+  select(item_id, item_descr, Property, Value, Unit) %>% 
+  mutate(Property = ifelse(Property == 'gesättigte Fettsäuren', 
+                           'Gesättigte Fettsäuren',
+                           Property)) %>% 
+  mutate(Value_Scale = case_when(
+      Unit == 'µg' ~ Value / 100 / 1e6, 
+      Unit == 'mg' ~ Value / 100 / 1e3, 
+      Unit == 'g' ~ Value / 100, 
+      Unit == 'kg' ~ Value / 100 * 1e3,
+      T ~ Value
+    ))
+```
+
+Save to File
+```{r}
+write_tsv(df, path = '../data/Bundeslms/BLS.DP.310520.tsv')
+```
+
+Categories
+```{r}
+properties <- 
+  tibble(Property = levels(as.factor(df$Property)))
+
+write_tsv(properties, path = '../data/Bundeslms/BLS.Property.DP.310520.tsv')
+```
+
+
+```{r}
+df.wide <-
+  df %>% 
+  select(-Value, -Unit) %>% 
+  pivot_wider(names_from = 'Property', values_from = 'Value_Scale')
+```
+
+```{r}
+df.wide %>% 
+  filter(grepl(item_descr, pattern = 'Apfel')) %>% 
+  select(item_id, item_descr, 
+         `Eiweiß, Proteine`, Kohlenhydrate, Fett, Kilokalorien) %>% 
+  View
+```
+

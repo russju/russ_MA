@@ -1,0 +1,79 @@
+"0","```r
+# if (!requireNamespace(\"BiocManager\", quietly = TRUE))
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+3: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+#     install.packages(\"BiocManager\")
+# 
+# BiocManager::install(\"mixOmics\")
+  
+
+library(tidyverse)
+library(mixOmics)
+```"
+"1","Paket ã¤¼ã¸±mixOmicsã¤¼ã¸² wurde unter R Version 4.0.2 erstelltLade næ˜¼ã¸¶tiges Paket: MASS
+Paket ã¤¼ã¸±MASSã¤¼ã¸² wurde unter R Version 4.0.4 erstellt
+Attache Paket: ã¤¼ã¸±MASSã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:dplyrã¤¼ã¸²:
+
+    select
+
+Lade næ˜¼ã¸¶tiges Paket: lattice
+
+Loaded mixOmics 6.12.2
+Thank you for using mixOmics!
+Tutorials: http://mixomics.org
+Bookdown vignette: https://mixomicsteam.github.io/Bookdown
+Questions, issues: Follow the prompts at http://mixomics.org/contact-us
+Cite us:  citation('mixOmics')
+
+
+Attache Paket: ã¤¼ã¸±mixOmicsã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:purrrã¤¼ã¸²:
+
+    map
+"
+"0","```r
+library(plotly)
+```"
+"1","Paket ã¤¼ã¸±plotlyã¤¼ã¸² wurde unter R Version 4.0.3 erstelltRegistered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+
+Attache Paket: ã¤¼ã¸±plotlyã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:MASSã¤¼ã¸²:
+
+    select
+
+The following object is masked from ã¤¼ã¸±package:ggplot2ã¤¼ã¸²:
+
+    last_plot
+
+The following object is masked from ã¤¼ã¸±package:statsã¤¼ã¸²:
+
+    filter
+
+The following object is masked from ã¤¼ã¸±package:graphicsã¤¼ã¸²:
+
+    layout
+"
+"0","```r
+library(gridExtra)
+```"
+"1","
+Attache Paket: ã¤¼ã¸±gridExtraã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:dplyrã¤¼ã¸²:
+
+    combine
+"
+"0","```r
+library(Maaslin2)
+```"

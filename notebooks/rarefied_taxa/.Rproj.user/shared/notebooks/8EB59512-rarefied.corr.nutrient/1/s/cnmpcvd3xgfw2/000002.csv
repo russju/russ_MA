@@ -1,0 +1,27 @@
+"0","```r
+
+#x axis log2 correlation
+
+cor.test.log.biom.L6 <- log2(r.cor.biom.L6) %>% as.numeric(.)
+cor.test.log.biom.L6[is.nan(cor.test.log.biom.L6)] <- 0
+cor.test.log.biom.L6[is.infinite(cor.test.log.biom.L6)] <- 0
+cor.test.log.biom.L6 <- as.data.frame(cor.test.log.biom.L6)
+
+r.cor.biom.L6[is.nan(r.cor.biom.L6)] <- 0
+r.cor.biom.L6[is.infinite(r.cor.biom.L6)] <- 0
+r.cor.biom.L6 <- as.data.frame(r.cor.biom.L6)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L6 <- -log10(p.adj.biom.L6)
+p.adj.log.biom.L6[is.infinite(p.adj.log.biom.L6)] <- 0
+p.adj.log.biom.L6 <- as.data.frame(p.adj.log.biom.L6)
+
+cor.test.adj.biom.L6 <- cbind(cor.test.biom.L6[ ,c(1,3)],p.adj.log.biom.L6) %>% cbind(.,r.cor.biom.L6) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L6) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L6 <- cor.test.adj.biom.L6[cor.test.adj.biom.L6$p.adj.log != 0 & cor.test.adj.biom.L6$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L6,paste0(table_dir,'corr.nutr.biom.L6.tsv'))
+
+```"

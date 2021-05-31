@@ -1,0 +1,1 @@
+{"frames":[{"func":"pdf(paste0(converter_dir, \"foods.sPLS-DA.pdf\"))","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Fehler in pdf(paste0(converter_dir, \"foods.sPLS-DA.pdf\")) : \n  kann Datei '../results/converter/foods.sPLS-DA.pdf' nicht öffnen\n"}

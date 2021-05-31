@@ -1,0 +1,2 @@
+"0","all.higher <- all[all$coef.nut > 0, ]"
+"0","all.lower <- all[all$coef.nut < 0, ]"

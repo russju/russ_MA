@@ -1,0 +1,136 @@
+Property	Value
+item_id	Y999241
+item_descr	Eis-Baisertorte (Zubereitung Haushalt)
+item_cat	Menükomponenten
+Energie (kcal)	238,0 kcal
+Fett	9,6 g
+Kohlenhydrate	34,8 g
+Eiweiß, Proteingehalt	2,6 g
+Ballaststoffe	0,2 g
+Wasser	51,9 g
+Broteinheiten_DE_UNIT	2,9  g
+Broteinheiten_CH_UNIT	3,5  g
+Broteinheiten_EN_UNIT	2,3  g
+Alkohol (Ethanol)	0,0 g
+Mineralstoffe (Rohasche)	0,4 g
+organische Säuren	0,3 g
+Vitamin A Retinoläquivalent	128,0 µg (= 426,7 IE)
+Vitamin A Retinol	114,0 µg (= 380,0 IE)
+Vitamin A Beta-Carotin	81,0 µg (= 270,0 IE)
+Vitamin B1 Thiamin	26,0 µg (= 8,7 IE)
+Vitamin B2 Riboflavin	107,0 µg
+Vitamin B3 Niacin, Nicotinsäure	117,0 µg
+Vitamin B3 Niacinäquivalent	734,0 µg
+Vitamin B5 Pantothensäure	257,0 µg
+Vitamin B6 Pyridoxin	30,0 µg
+Vitamin B7 Biotin (Vitamin H)	3,3 µg
+Vitamin B9 gesamte Folsäure	9,0 µg
+Vitamin B12 Cobalamin	0,2 µg
+Vitamin C Ascorbinsäure	6.904,0 µg (= 138,1 IE)
+Vitamin D Calciferole	0,4 µg (= 16,0 IE)
+Vitamin E Tocopheroläquivalent	402,0 µg (= 0,6 IE)
+Vitamin E Tocopherol	396,0 µg
+Vitamin K Phyllochinon	14,0 µg
+Natrium	32,0 mg
+Kalium	87,0 mg
+Calcium	45,0 mg
+Magnesium	8,0 mg
+Phosphor	46,0 mg
+Chlorid	49,0 mg
+Schwefel	31,0 mg
+Eisen	423,0 µg
+Zink	243,0 µg
+Kupfer	54,0 µg
+Mangan	35,0 µg
+Fluorid	16,0 µg
+Iodid	4,4 µg
+Mannit	0,0 mg
+Sorbit	3,0 mg
+Xylit	2,0 mg
+Summe Zuckeralkohole	5,0 mg
+Glucose (Traubenzucker)	731,0 mg
+Fructose (Fruchtzucker)	592,0 mg
+Galactose (Schleimzucker)	0,0 mg
+Monosaccharide (1 M)	1.324,0 mg
+Saccharose (Rübenzucker)	32.015,0 mg
+Maltose (Malzzucker)	0,0 mg
+Lactose (Milchzucker)	1.505,0 mg
+Disaccharide (2 M)	33.520,0 mg
+Oligosaccharide, resorbierbar (3-9 M)	0,0 mg
+Oligosaccharide, nicht resorbierbar	13,0 mg
+Glykogen (tierische Stärke)	0,0 mg
+Stärke	0,0 mg
+Polysaccharide (> 9 M)	0,0 mg
+Isoleucin	145,0 mg
+Leucin	223,0 mg
+Lysin	168,0 mg
+Methionin	74,0 mg
+Cystein	40,0 mg
+Phenylalanin	131,0 mg
+Tyrosin	110,0 mg
+Threonin	113,0 mg
+Tryptophan	37,0 mg
+Valin	173,0 mg
+Arginin	123,0 mg
+Histidin	59,0 mg
+Essentielle Aminosäuren	1.396,0 mg
+Alanin	119,0 mg
+Asparaginsäure	269,0 mg
+Glutaminsäure	405,0 mg
+Glycin	73,0 mg
+Prolin	159,0 mg
+Serin	164,0 mg
+Nichtessentielle Aminosäuren	1.189,0 mg
+Harnsäure	4,0 mg
+Purin	1,0 mg
+Poly-Pentosen	62,0 mg
+Poly-Hexosen	45,0 mg
+Poly-Uronsäure	86,0 mg
+Cellulose	37,0 mg
+Lignin	8,0 mg
+Wasserlösliche Ballaststoffe	93,0 mg
+Wasserunlösliche Ballaststoffe	144,0 mg
+Butansäure/Buttersäure	302,0 mg
+Hexansäure/Capronsäure	193,0 mg
+Octansäure/Caprylsäure	109,0 mg
+Decansäure/Caprinsäure	227,0 mg
+Dodecansäure/Laurinsäure	277,0 mg
+Tetradecansäure/Myristinsäure	900,0 mg
+Pentadecansäure	101,0 mg
+Hexadecansäure/Palmitinsäure	2.467,0 mg
+Heptadecansäure	76,0 mg
+Octadecansäure/Stearinsäure	900,0 mg
+Eicosansäure/Arachinsäure	45,0 mg
+Decosansäure/Behensäure	0,0 mg
+Tetracosansäure/Lignocerinsäure	0,0 mg
+Gesättigte Fettsäuren	5.597,0 mg
+Tetradecensäure	118,0 mg
+Pentadecensäure	59,0 mg
+Hexadecensäure/Palmitoleinsäure	241,0 mg
+Heptadecensäure	84,0 mg
+Octadecensäure/Ölsäure	2.441,0 mg
+Eicosensäure	17,0 mg
+Decosensäure/Erucasäure	0,0 mg
+Tetracosensäure/Nervonsäure	0,0 mg
+Einfach ungesättigte Fettsäuren	2.960,0 mg
+Hexadecadiensäure	0,0 mg
+Hexadecatetraensäure	0,0 mg
+Octadecadiensäure/Linolsäure	289,0 mg
+Octadecatriensäure/Linolensäure	147,0 mg
+Octadecatetraensäure/Stearidonsäure	0,0 mg
+Nonadecatriensäure	0,0 mg
+Eicosadiensäure	0,0 mg
+Eicosatriensäure	0,0 mg
+Eicosatetraensäure/Arachidonsäure	6,0 mg
+EPA - Eicosapentaensäure	0,0 mg
+Docosadiensäure	0,0 mg
+Docosatriensäure	0,0 mg
+Docosatetraensäure	0,0 mg
+Docosapentaensäure	0,0 mg
+DHA - Docosahexaensäure	7,0 mg
+Mehrfach ungesättigte Fettsäuren	449,0 mg
+Kurzkettige Fettsäuren	495,0 mg
+Mittelkettige Fettsäuren	336,0 mg
+Langkettige Fettsäuren	8.175,0 mg
+Glycerin und Lipoide	616,0 mg
+Cholesterin	53,0 mg

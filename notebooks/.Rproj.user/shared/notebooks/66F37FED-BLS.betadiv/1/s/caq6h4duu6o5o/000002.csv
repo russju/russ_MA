@@ -1,0 +1,4 @@
+"0","scale_gelman <- function(x) {"
+"0","  return((x - mean(x, na.rm = T)) / (2 * sd(x, na.rm = T)))"
+"0","}"
+"0","df.scale_gelman <- apply(df, 2, function(x) scale_gelman(x))"

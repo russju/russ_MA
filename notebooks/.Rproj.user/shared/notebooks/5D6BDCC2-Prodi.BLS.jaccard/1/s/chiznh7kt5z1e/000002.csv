@@ -1,0 +1,11 @@
+"0","#otu_table per week
+otu.week <- read_tsv(paste0(table_dir,'otu.conv.uw.19.08.tsv'))
+"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

@@ -1,0 +1,34 @@
+"0","```r
+names(scfa.sub.z)[names(scfa.sub.z) == 'scfa.sub.samples'] <- 'file_name'
+write_tsv(scfa.sub.z,paste0(table_dir,'scfa.normalized_20.11.tsv'))
+scfa.sub.z <- column_to_rownames(scfa.sub.z,'file_name')
+
+#input for correlation cor.test.scfa value_left:
+#cl.sum.z   `1.veg.fruit`:`15.cheese`
+#nutr.sum.z   `Energie (kcal)`:`Energie, Gesamt (kcal)`
+#conv.clust.z   `Alkoholfreie GetrÃ¤nke`:`Wurst, Fleischwaren`
+##--> put that into the correlation
+
+#merge input
+##nutr.sum.z nutrients per samples
+##conv.sum.z conventional clusters per samples
+##cl.sum.z nutrient clusters per samples
+
+merge.scfa.nutr <- scfa.sub.z %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.scfa.nutr[is.na(merge.scfa.nutr)] <- 0
+merge.scfa.nutr <- dplyr::select(merge.scfa.nutr,everything(),-ends_with('rowsum'))
+
+
+cor.test.scfa <- merge.scfa.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", `Acetate`:`Butyrate`) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Alkoholfreie GetrÃ¤nke`:`Wurst, Fleischwaren`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right, method = \"spearman\"))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right, method = \"spearman\"))$estimate)
+```"
+"1","Fehler: Can't subset columns that don't exist.
+x Column `Alkoholfreie GetrÃ¤nke` doesn't exist.
+Run `rlang::last_error()` to see where the error occurred.
+"

@@ -1,0 +1,87 @@
+"0","loop_tsne <- function(df, label) {"
+"0","  output <- NULL"
+"0","  for (perplexity in seq(10, 50, 20)) {"
+"0","  tmp.tsne_data <- Rtsne(X = as.matrix(df),"
+"0","                     check_duplicates = FALSE,"
+"0","                     pca = T, pca_center = T, pca_scale = T, normalize = T, "
+"0","                     dims = 2, perplexity = perplexity,"
+"0","                     verbose=TRUE, max_iter=400)"
+"0","  tmp.data <- "
+"0","    cbind(metadata, tmp.tsne_data$Y) %>% "
+"0","    rename(Dim.1 = `1`, "
+"0","         Dim.2 = `2`) %>% "
+"0","    mutate(perplexity = perplexity)  "
+"0","  output <- rbind(output, tmp.data)"
+"0","  }"
+"0","  return(output %>% mutate(label = label))"
+"0","}"
+"0",""
+"0","tsne.clr <- loop_tsne(df.clr, 'clr')"
+"1","Performing PCA
+"
+"1","Read the 10614 x 50 data matrix successfully!
+"
+"1","OpenMP is working. 1 threads.
+"
+"1","Using no_dims = 2, perplexity = 10.000000, and theta = 0.500000
+"
+"1","Computing input similarities...
+"
+"1","Building tree...
+"
+"1"," - point 10000 of 10614
+"
+"1","Done in 13.45 seconds (sparsity = 0.003857)!
+Learning embedding...
+"
+"1","Iteration 50: error is 111.495743 (50 iterations in 8.92 seconds)
+"
+"1","Iteration 100: error is 91.130026 (50 iterations in 8.93 seconds)
+"
+"1","Iteration 150: error is 82.958034 (50 iterations in 5.94 seconds)
+"
+"1","Iteration 200: error is 78.913144 (50 iterations in 7.25 seconds)
+"
+"1","Iteration 250: error is 76.318908 (50 iterations in 5.93 seconds)
+"
+"1","Iteration 300: error is 3.182176 (50 iterations in 5.88 seconds)
+"
+"1","Iteration 350: error is 2.680977 (50 iterations in 7.26 seconds)
+"
+"1","Iteration 400: error is 2.317404 (50 iterations in 8.79 seconds)
+"
+"1","Fitting performed in 58.90 seconds.
+"
+"1","Performing PCA
+"
+"1","Read the 10614 x 50 data matrix successfully!
+"
+"1","OpenMP is working. 1 threads.
+"
+"1","Using no_dims = 2, perplexity = 30.000000, and theta = 0.500000
+"
+"1","Computing input similarities...
+"
+"1","Building tree...
+"
+"1"," - point 10000 of 10614
+"
+"1","Done in 22.82 seconds (sparsity = 0.011757)!
+Learning embedding...
+"
+"1","Iteration 50: error is 98.524481 (50 iterations in 7.78 seconds)
+"
+"1","Iteration 100: error is 80.360672 (50 iterations in 8.18 seconds)
+"
+"1","Iteration 150: error is 73.561384 (50 iterations in 8.60 seconds)
+"
+"1","Iteration 200: error is 70.648960 (50 iterations in 10.57 seconds)
+"
+"1","Iteration 250: error is 68.974069 (50 iterations in 8.91 seconds)
+"
+"1","Iteration 300: error is 2.415761 (50 iterations in 7.75 seconds)
+"
+"1","Iteration 350: error is 1.960103 (50 iterations in 7.05 seconds)
+"
+"2","
+"

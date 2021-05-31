@@ -1,0 +1,45 @@
+"0","```r
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+```"
+"1","
+-- Column specification -----------------------------------------------
+cols(
+  .default = col_character(),
+  day = col_double(),
+  date = col_date(format = \"\"),
+  Sex = col_logical(),
+  Energie_bls = col_double(),
+  `Eiweiæ¼ã¹¦, Proteingehalt` = col_double(),
+  Kohlenhydrate = col_double(),
+  Fett = col_double(),
+  Ballaststoffe = col_double(),
+  `Gesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Einfach ungesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Alkohol (Ethanol)` = col_double(),
+  `Energie (kcal)` = col_double()
+)
+i Use `spec()` for the full column specifications.
+
+5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","```r
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+subclusters <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv'))
+```"
+"1","
+-- Column specification -----------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"

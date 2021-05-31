@@ -1,0 +1,36 @@
+"1","
+$graph
+"
+"0","```r
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA nutrient clusters',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+```"
+"0","```r
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+stats::heatmap(matrix.nutr.z,cexRow = .9,cexCol = .9,Colv = NA,Rowv = NA,scale = 'none')
+```"
+"0","```r
+
+stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,scale = c('row')) 
+
+heatmap.2(matrix.nutr.z,cexRow = .85,cexCol = .75,trace = 'none',notecol = 'black',srtCol = 30)
+```"
+"0","```r
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

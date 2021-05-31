@@ -1,0 +1,24 @@
+"0","```r
+#sum of the rows
+
+#taxa
+
+biom.L6.family <- data.matrix(biom.L6.family)
+biom.L6.family <- biom.L6.family+0.5##pseudocount
+rowsum <- rowSums(biom.L6.family)
+
+
+biom.L6.family <- cbind(biom.L6.family,rowsum) %>% as.data.frame(.)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+biom.L6.family <- biom.L6.family/biom.L6.family$rowsum
+
+#clr transformation
+biom.L6.family <- clr(biom.L6.family) %>% as.data.frame(.) ##acomp
+
+biom.L6.family <- select(biom.L6.family,everything(), -starts_with(c('row','file')))
+biom.L6.family$file_name <- row.names(biom.L6.family)
+write_tsv(biom.L6.family,paste0(table_dir,'rarefied.family.correlation.24.02.tsv'))
+
+
+```"

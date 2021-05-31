@@ -1,0 +1,14 @@
+"0","```r
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')##nutrient level
+
+```"
+"1","
+-- Column specification ----------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+
+Es gab 12 Warnungen (Anzeige mit warnings())
+"

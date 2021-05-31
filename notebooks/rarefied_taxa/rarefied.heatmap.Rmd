@@ -1,0 +1,740 @@
+---
+title: "rarefied L6(genus) and L7(specy) correlation matrices to nutrients,nutclust,convclust"
+output: html_notebook
+---
+
+
+#libraries
+```{r}
+library(tidyverse)
+library(ggplot2)  
+library(gplots)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+output_heatmap = paste0(output_dir,'sig.heatmaps/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+#Data Import
+```{r}
+##nutrients
+nutr.L6 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.tsv'))
+nutr.L6.U1 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.U1.tsv'))
+nutr.L6.U2 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.U2.tsv'))
+
+nutr.L7 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.tsv'))
+nutr.L7.U1 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.U1.tsv'))
+nutr.L7.U2 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.U2.tsv'))
+
+##convclust
+conv.L6 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.tsv'))
+conv.L7 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.tsv'))
+
+conv.L6.U1 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.U1.tsv'))
+conv.L6.U2 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.U2.tsv'))
+
+conv.L7.U1 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.U1.tsv'))
+conv.L7.U2 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.U2.tsv'))
+
+##nutclust
+nutclust.L6 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.tsv'))
+nutclust.L7 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.tsv'))
+
+nutclust.L6.U1 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.U1.tsv'))
+nutclust.L6.U2 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.U2.tsv'))
+
+nutclust.L7.U1 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.U1.tsv'))
+nutclust.L7.U2 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.U2.tsv'))
+
+##family level
+cor.test.family <- read_tsv(paste0(table_dir,'rarefied.corr.nutr.family.tsv'))
+cor.test.conv <- read_tsv(paste0(table_dir,'corr.convclust.family.tsv'))
+cor.test.nutr <- read_tsv(paste0(table_dir,'rarefied.corr.nutclust.family.tsv'))
+
+```
+What did you do with input data (from #Data Import) previously?
+pseudo count
+relative abundance
+centered log ratio
+
+correlation (every taxa with every nutrient/cluster)
+
+-log10(BH p.value)
+
+What did you do now?
+1.correlation output is in wrong format --> pivot_wider()
+2. matrix with samples as row.names, taxa as colnames, spearman correlation as values
+2.matrix with samples as row.names, taxa as colnames, significant p.values as values
+3.heatmap with the two matrices as input; colours of field defined by spearman, * when p.value <= 0.05
+
+4.finding out interesting taxa by looking at significant correlations (-+0.35) and select --> subset heatmap only with interesting taxa/nutrients
+
+For nutrients, nutrient clusters and conventional clusters correlated with family, genus and specy level
+
+#family level
+```{r}
+
+#nutrient family
+cor.test.family.sub <- cor.test.family  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+
+cor.test.family.sub2 <- cor.test.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+cor.test.family.sub2 <- ifelse(cor.test.family.sub2 >= -log10(0.05),'*','')
+
+##nutrient cluster
+cor.test.nutr.sub <- cor.test.nutr  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+
+cor.test.nutr.sub2 <- cor.test.nutr %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+cor.test.nutr.sub2 <- ifelse(cor.test.nutr.sub2 >= -log10(0.05),'*','')
+
+##convetional cluster
+cor.test.conv.sub <-cor.test.conv  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+
+cor.test.conv.sub2 <- cor.test.conv %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+cor.test.conv.sub2 <- ifelse(cor.test.conv.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+
+pdf(paste0(output_heatmap,'rarefied.24.02.family.heatmaps.pdf'))
+
+heatmap.2(cor.test.family.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.family.sub2)
+
+heatmap.2(cor.test.nutr.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.nutr.sub2)
+
+heatmap.2(cor.test.conv.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.conv.sub2)
+
+dev.off()
+```
+
+#nutrients L6,L7,U1,U2
+```{r}
+##L6
+nutr.L6.sub <- nutr.L6  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.sub2 <- nutr.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sub2 <- ifelse(nutr.L6.sub2 >= -log10(0.05),'*','')
+
+nutr.L6.U1.sub <- nutr.L6.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.U1.sub2 <- nutr.L6.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sub2 <- ifelse(nutr.L6.U1.sub2 >= -log10(0.05),'*','')
+
+nutr.L6.U2.sub <- nutr.L6.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.U2.sub2 <- nutr.L6.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sub2 <- ifelse(nutr.L6.U2.sub2 >= -log10(0.05),'*','')
+
+##L7
+nutr.L7.sub <- nutr.L7  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.sub2 <- nutr.L7 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sub2 <- ifelse(nutr.L7.sub2 >= -log10(0.05),'*','')
+
+nutr.L7.U1.sub <- nutr.L7.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.U1.sub2 <- nutr.L7.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sub2 <- ifelse(nutr.L7.U1.sub2 >= -log10(0.05),'*','')
+
+nutr.L7.U2.sub <- nutr.L7.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.U2.sub2 <- nutr.L7.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sub2 <- ifelse(nutr.L7.U2.sub2 >= -log10(0.05),'*','')
+
+##only spearman not -0.35 until 0.35, finding out interesting taxa
+#L6
+nutr.L6 <- nutr.L6 %>% distinct(.)
+nutr.L6.sig <- filter(nutr.L6,nutr.L6$estimate >= 0.35 | nutr.L6$estimate <= -0.35)
+nutr.L6.sig <- nutr.L6.sig %>% as.data.frame() %>% filter(nutr.L6.sig$p.adj.log >= -log10(0.05))
+# nutr.L6.sig <- nutr.L6[nutr.L6$estimate >= 0.2 | nutr.L6$estimate <= -0.2,]
+# nutr.L6.sig.min <- nutr.L6[order(nutr.L6$estimate ),][1:30,]
+# nutr.L6.sig.plus <- nutr.L6[order(-nutr.L6$estimate ),][1:30,]
+# nutr.L6.sig <- rbind(nutr.L6.sig.min,nutr.L6.sig.plus) %>% distinct(.)
+
+write_tsv(nutr.L6.sig,paste0(table_dir,'nutrients.L6.corr.tsv'))
+
+#subset of high correlations with interesting taxa
+
+nutr.L6.sig <- nutr.L6[grepl('_Actinomyces',nutr.L6$genus) | grepl('_Streptomyces',nutr.L6$genus) | grepl('Clostridiales._',nutr.L6$genus)| grepl('Butyrivibrio',nutr.L6$genus)| grepl('Bacteroides',nutr.L6$genus) ,]
+
+nutr.L6.sig <- nutr.L6.sig[grepl('Gesättigte Fettsäuren',nutr.L6.sig$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L6.sig$nutrient)|grepl('Glucose',nutr.L6.sig$nutrient)| grepl('Energie,',nutr.L6.sig$nutrient) | grepl('Polysaccharide',nutr.L6.sig$nutrient)|grepl('Essentielle Aminosäuren',nutr.L6.sig$nutrient)| grepl('Protein',nutr.L6.sig$nutrient),]
+
+# nutr.L6.sig <- nutr.L6.sig[!grepl('Vitamin',nutr.L6.sig$nutrient) & !grepl('Kalium',nutr.L6.sig$nutrient) &!grepl('Iodid',nutr.L6.sig$nutrient)& !grepl('Kupfer',nutr.L6.sig$nutrient)& !grepl('asser',nutr.L6.sig$nutrient)& !grepl('Fluorid',nutr.L6.sig$nutrient)& !grepl('Sorbit',nutr.L6.sig$nutrient)& !grepl('Schwefel',nutr.L6.sig$nutrient)& !grepl('Chlorid',nutr.L6.sig$nutrient)& !grepl('Zink',nutr.L6.sig$nutrient)& !grepl('Mangan',nutr.L6.sig$nutrient)& !grepl('ium',nutr.L6.sig$nutrient)& !grepl('Eisen',nutr.L6.sig$nutrient)& !grepl('Phosphor',nutr.L6.sig$nutrient)& !grepl('Mannit',nutr.L6.sig$nutrient)& !grepl('Harn',nutr.L6.sig$nutrient)& !grepl('Purin',nutr.L6.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig$nutrient)& !grepl('Alkohol',nutr.L6.sig$nutrient)& !grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Zuckeralkohol',nutr.L6.sig$nutrient)&!grepl('Alkohol',nutr.L6.sig$nutrient),]
+
+
+nutr.L6.sig.sub <- nutr.L6.sig  %>%  dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sig.sub[is.na(nutr.L6.sig.sub)] <- 0
+
+nutr.L6.sig.sub2 <- nutr.L6.sig  %>%  dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sig.sub2 <- ifelse(nutr.L6.sig.sub2 >= -log10(0.05),'*','')
+
+##U1 with sub of taxa and nutrients
+
+nutr.L6.U1 <- nutr.L6.U1 %>% distinct(.)
+
+nutr.L6.sig.U1 <- nutr.L6.U1[grepl('_Actinomyces',nutr.L6.U1$genus) | grepl('_Streptomyces',nutr.L6.U1$genus) | grepl('Clostridiales._',nutr.L6.U1$genus)| grepl('Butyrivibrio',nutr.L6.U1$genus)| grepl('Bacteroides',nutr.L6.U1$genus),]
+
+nutr.L6.sig.U1 <- nutr.L6.sig.U1[grepl('Gesättigte Fettsäuren',nutr.L6.sig.U1$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L6.sig.U1$nutrient)|grepl('Glucose',nutr.L6.sig.U1$nutrient)| grepl('Energie,',nutr.L6.sig.U1$nutrient) | grepl('Polysaccharide',nutr.L6.sig.U1$nutrient)|grepl('Essentielle Aminosäuren',nutr.L6.sig.U1$nutrient)| grepl('Protein',nutr.L6.sig.U1$nutrient),]
+
+
+# nutr.L6.sig.U1 <- nutr.L6.sig.U1[!grepl('Vitamin',nutr.L6.sig.U1$nutrient) & !grepl('Kalium',nutr.L6.sig.U1$nutrient) &!grepl('Iodid',nutr.L6.sig.U1$nutrient)& !grepl('Kupfer',nutr.L6.sig.U1$nutrient)& !grepl('asser',nutr.L6.sig.U1$nutrient)& !grepl('Fluorid',nutr.L6.sig.U1$nutrient)& !grepl('Sorbit',nutr.L6.sig.U1$nutrient)& !grepl('Schwefel',nutr.L6.sig.U1$nutrient)& !grepl('Chlorid',nutr.L6.sig.U1$nutrient)& !grepl('Zink',nutr.L6.sig.U1$nutrient)& !grepl('Mangan',nutr.L6.sig.U1$nutrient)& !grepl('ium',nutr.L6.sig.U1$nutrient)& !grepl('Eisen',nutr.L6.sig.U1$nutrient)& !grepl('Phosphor',nutr.L6.sig.U1$nutrient)& !grepl('Mannit',nutr.L6.sig.U1$nutrient)& !grepl('Harn',nutr.L6.sig.U1$nutrient)& !grepl('Purin',nutr.L6.sig.U1$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig.U1$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L6.sig.U1$nutrient),]
+
+# nutr.L6.U1.sig <- nutr.L6.U1[nutr.L6.U1$estimate >= 0.2 | nutr.L6.U1$estimate <= -0.2,]
+# nutr.L6.U1.sig <- nutr.L6.U1.sig[order(-nutr.L6.U1.sig$estimate ),][1:50,]
+
+nutr.L6.U1.sig.sub <- nutr.L6.sig.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sig.sub[is.na(nutr.L6.U1.sig.sub)] <- 0
+
+nutr.L6.U1.sig.sub2 <- nutr.L6.sig.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sig.sub2 <- ifelse(nutr.L6.U1.sig.sub2 >= -log10(0.05),'*','')
+
+
+
+##U2 with sub of taxa and nutrients
+
+nutr.L6.U2 <- nutr.L6.U2 %>% distinct(.)
+
+nutr.L6.sig.U2 <- nutr.L6.U2[grepl('_Actinomyces',nutr.L6.U2$genus) | grepl('_Streptomyces',nutr.L6.U2$genus) | grepl('Clostridiales._',nutr.L6.U2$genus)| grepl('Butyrivibrio',nutr.L6.U2$genus)| grepl('Bacteroides',nutr.L6.U2$genus),]
+
+nutr.L6.sig.U2 <- nutr.L6.sig.U2[grepl('Gesättigte Fettsäuren',nutr.L6.sig.U2$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L6.sig.U2$nutrient)|grepl('Glucose',nutr.L6.sig.U2$nutrient)| grepl('Energie,',nutr.L6.sig.U2$nutrient) | grepl('Polysaccharide',nutr.L6.sig.U2$nutrient)|grepl('Essentielle Aminosäuren',nutr.L6.sig.U2$nutrient)| grepl('Protein',nutr.L6.sig.U2$nutrient),]
+
+# nutr.L6.sig.U2 <- nutr.L6.sig.U2[!grepl('Vitamin',nutr.L6.sig.U2$nutrient) & !grepl('Kalium',nutr.L6.sig.U2$nutrient) &!grepl('Iodid',nutr.L6.sig.U2$nutrient)& !grepl('Kupfer',nutr.L6.sig.U2$nutrient)& !grepl('asser',nutr.L6.sig.U2$nutrient)& !grepl('Fluorid',nutr.L6.sig.U2$nutrient)& !grepl('Sorbit',nutr.L6.sig.U2$nutrient)& !grepl('Schwefel',nutr.L6.sig.U2$nutrient)& !grepl('Chlorid',nutr.L6.sig.U2$nutrient)& !grepl('Zink',nutr.L6.sig.U2$nutrient)& !grepl('Mangan',nutr.L6.sig.U2$nutrient)& !grepl('ium',nutr.L6.sig.U2$nutrient)& !grepl('Eisen',nutr.L6.sig.U2$nutrient)& !grepl('Phosphor',nutr.L6.sig.U2$nutrient)& !grepl('Mannit',nutr.L6.sig.U2$nutrient)& !grepl('Harn',nutr.L6.sig.U2$nutrient)& !grepl('Purin',nutr.L6.sig.U2$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig.U2$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L6.sig.U2$nutrient),]
+
+# nutr.L6.U2.sig <- nutr.L6.U2[nutr.L6.U2$estimate >= 0.2 | nutr.L6.U2$estimate <= -0.2,]
+# nutr.L6.U2.sig <- nutr.L6.U2.sig[order(-nutr.L6.U2.sig$estimate ),][1:50,]
+nutr.L6.U2.sig.sub <- nutr.L6.sig.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sig.sub[is.na(nutr.L6.U2.sig.sub)] <- 0
+
+nutr.L6.U2.sig.sub2 <- nutr.L6.sig.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sig.sub2 <- ifelse(nutr.L6.U2.sig.sub2 >= -log10(0.05),'*','')
+
+##only spearman not -0.35 until 0.35, finding o ut interesting taxa
+#L7
+nutr.L7 <- nutr.L7 %>% distinct(.)
+nutr.L7.sig <- nutr.L7[nutr.L7$estimate >= 0.35 | nutr.L7$estimate <= -0.35,]
+nutr.L7.sig <- nutr.L7[nutr.L7$p.adj.log >= -log10(0.05),]
+
+# nutr.L7.sig.min <- nutr.L7.sig[order(nutr.L7.sig$estimate ),][1:30,]
+# nutr.L7.sig.plus <- nutr.L7.sig[order(-nutr.L7.sig$estimate ),][1:30,]
+# nutr.L7.sig <- rbind(nutr.L7.sig.min,nutr.L7.sig.plus) %>% distinct(.)
+
+write_tsv(nutr.L7.sig,paste0(table_dir,'nutrients.L7.corr.tsv'))
+
+nutr.L7.sig <- nutr.L7[grepl('pallens',nutr.L7$specy) | grepl('bacilliformis',nutr.L7$specy)| grepl('faecis',nutr.L7$specy)|  grepl('bifidum',nutr.L7$specy)| grepl('catus',nutr.L7$specy)| grepl('_obeum',nutr.L7$specy) ,]
+
+nutr.L7.sig <- nutr.L7.sig[grepl('Gesättigte Fettsäuren',nutr.L7.sig$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L7.sig$nutrient)|grepl('Glucose',nutr.L7.sig$nutrient)| grepl('Energie,',nutr.L7.sig$nutrient) | grepl('Polysaccharide',nutr.L7.sig$nutrient)|grepl('Essentielle Aminosäuren',nutr.L7.sig$nutrient)| grepl('Protein',nutr.L7.sig$nutrient),]
+
+# nutr.L7.sig <- nutr.L7.sig[!grepl('Vitamin',nutr.L7.sig$nutrient) & !grepl('Kalium',nutr.L7.sig$nutrient) &!grepl('Iodid',nutr.L7.sig$nutrient)& !grepl('Kupfer',nutr.L7.sig$nutrient)& !grepl('asser',nutr.L7.sig$nutrient)& !grepl('Fluorid',nutr.L7.sig$nutrient)& !grepl('Sorbit',nutr.L7.sig$nutrient)& !grepl('Schwefel',nutr.L7.sig$nutrient)& !grepl('Chlorid',nutr.L7.sig$nutrient)& !grepl('Zink',nutr.L7.sig$nutrient)& !grepl('Mangan',nutr.L7.sig$nutrient)& !grepl('ium',nutr.L7.sig$nutrient)& !grepl('Eisen',nutr.L7.sig$nutrient)& !grepl('Phosphor',nutr.L7.sig$nutrient)& !grepl('Mannit',nutr.L7.sig$nutrient)& !grepl('Harn',nutr.L7.sig$nutrient)& !grepl('Purin',nutr.L7.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.sig$nutrient)&!grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&   !grepl('Alkohol',nutr.L7.sig$nutrient),]
+
+nutr.L7.sig.sub <- nutr.L7.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sig.sub[is.na(nutr.L7.sig.sub)] <- 0
+
+nutr.L7.sig.sub2 <- nutr.L7.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sig.sub2 <- ifelse(nutr.L7.sig.sub2 >= -log10(0.05),'*','')
+
+#U1 with subset of taxa and nutrients
+
+nutr.L7.U1 <- nutr.L7.U1 %>% distinct(.)
+
+nutr.L7.U1.sig <- nutr.L7.U1[grepl('pallens',nutr.L7.U1$genus) | grepl('bacilliformis',nutr.L7.U1$genus)| grepl('faecis',nutr.L7.U1$genus)| grepl('bifidum',nutr.L7.U1$genus)| grepl('catus',nutr.L7.U1$genus)| grepl('_obeum',nutr.L7.U1$genus) ,]
+
+nutr.L7.U1.sig <- nutr.L7.U1.sig[grepl('Gesättigte Fettsäuren',nutr.L7.U1.sig$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L7.U1.sig$nutrient)|grepl('Glucose',nutr.L7.U1.sig$nutrient)| grepl('Energie,',nutr.L7.U1.sig$nutrient) | grepl('Polysaccharide',nutr.L7.U1.sig$nutrient)|grepl('Essentielle Aminosäuren',nutr.L7.U1.sig$nutrient)| grepl('Protein',nutr.L7.U1.sig$nutrient),]
+
+
+# nutr.L7.U1.sig <- nutr.L7.U1.sig[!grepl('Vitamin',nutr.L7.U1.sig$nutrient) & !grepl('Kalium',nutr.L7.U1.sig$nutrient) &!grepl('Iodid',nutr.L7.U1.sig$nutrient)& !grepl('Kupfer',nutr.L7.U1.sig$nutrient)& !grepl('asser',nutr.L7.U1.sig$nutrient)& !grepl('Fluorid',nutr.L7.U1.sig$nutrient)& !grepl('Sorbit',nutr.L7.U1.sig$nutrient)& !grepl('Schwefel',nutr.L7.U1.sig$nutrient)& !grepl('Chlorid',nutr.L7.U1.sig$nutrient)& !grepl('Zink',nutr.L7.U1.sig$nutrient)& !grepl('Mangan',nutr.L7.U1.sig$nutrient)& !grepl('ium',nutr.L7.U1.sig$nutrient)& !grepl('Eisen',nutr.L7.U1.sig$nutrient)& !grepl('Phosphor',nutr.L7.U1.sig$nutrient)& !grepl('Mannit',nutr.L7.U1.sig$nutrient)& !grepl('Harn',nutr.L7.U1.sig$nutrient)& !grepl('Purin',nutr.L7.U1.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.U1.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L7.U1.sig$nutrient),]
+# nutr.L7.U1.sig <- nutr.L7.U1[nutr.L7.U1$estimate >= 0.2 | nutr.L7.U1$estimate <= -0.2,]
+# nutr.L7.U1.sig <- nutr.L7.U1.sig[order(-nutr.L7.U1.sig$estimate ),][1:50,]
+nutr.L7.U1.sig.sub <- nutr.L7.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sig.sub[is.na(nutr.L7.U1.sig.sub)] <- 0
+
+nutr.L7.U1.sig.sub2 <- nutr.L7.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sig.sub2 <- ifelse(nutr.L7.U1.sig.sub2 >= -log10(0.05),'*','')
+
+#sub of taxa and nutrients
+nutr.L7.U2 <- nutr.L7.U2 %>% distinct(.)
+nutr.L7.U2.sig <- nutr.L7.U2[grepl('pallens',nutr.L7.U2$specy) | grepl('bacilliformis',nutr.L7.U2$specy)| grepl('faecis',nutr.L7.U2$specy)| grepl('bifidum',nutr.L7.U2$specy)| grepl('catus',nutr.L7.U2$specy)| grepl('_obeum',nutr.L7.U2$specy) ,]
+
+nutr.L7.U2.sig <- nutr.L7.U2.sig[grepl('Gesättigte Fettsäuren',nutr.L7.U2.sig$nutrient) |grepl('ungesättigte Fettsäuren',nutr.L7.U2.sig$nutrient)|grepl('Glucose',nutr.L7.U2.sig$nutrient)| grepl('Energie,',nutr.L7.U2.sig$nutrient) | grepl('Polysaccharide',nutr.L7.U2.sig$nutrient)|grepl('Essentielle Aminosäuren',nutr.L7.U2.sig$nutrient)| grepl('Protein',nutr.L7.U2.sig$nutrient),]
+
+# nutr.L7.U2.sig <- nutr.L7.U2.sig[!grepl('Vitamin',nutr.L7.U2.sig$nutrient) & !grepl('Kalium',nutr.L7.U2.sig$nutrient) &!grepl('Iodid',nutr.L7.U2.sig$nutrient)& !grepl('Kupfer',nutr.L7.U2.sig$nutrient)& !grepl('asser',nutr.L7.U2.sig$nutrient)& !grepl('Fluorid',nutr.L7.U2.sig$nutrient)& !grepl('Sorbit',nutr.L7.U2.sig$nutrient)& !grepl('Schwefel',nutr.L7.U2.sig$nutrient)& !grepl('Chlorid',nutr.L7.U2.sig$nutrient)& !grepl('Zink',nutr.L7.U2.sig$nutrient)& !grepl('Mangan',nutr.L7.U2.sig$nutrient)& !grepl('ium',nutr.L7.U2.sig$nutrient)& !grepl('Eisen',nutr.L7.U2.sig$nutrient)& !grepl('Phosphor',nutr.L7.U2.sig$nutrient)& !grepl('Mannit',nutr.L7.U2.sig$nutrient)& !grepl('Harn',nutr.L7.U2.sig$nutrient)& !grepl('Purin',nutr.L7.U2.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.U2.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L7.U2.sig$nutrient),]
+
+# nutr.L7.U2.sig <- nutr.L7.U2[nutr.L7.U2$estimate >= 0.2 | nutr.L7.U2$estimate <= -0.2,]
+# nutr.L7.U2.sig <- nutr.L7.U2.sig[order(-nutr.L7.U2.sig$estimate ),][1:50,]
+nutr.L7.U2.sig.sub <- nutr.L7.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sig.sub[is.na(nutr.L7.U2.sig.sub)] <- 0
+
+nutr.L7.U2.sig.sub2 <- nutr.L7.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sig.sub2 <- ifelse(nutr.L7.U2.sig.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+
+# pdf(paste0(output_heatmap,'21.02_nutrients.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutr.L6.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.sub2)
+
+heatmap.2(nutr.L7.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L7.sub2)
+
+heatmap.2(nutr.L6.U1.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.U1.sub2)
+
+heatmap.2(nutr.L7.U1.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L7.U1.sub2)
+
+heatmap.2(nutr.L6.U2.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.U2.sub2)
+
+heatmap.2(nutr.L7.U2.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L7.U2.sub2)
+
+
+# dev.off()
+
+#sig
+colnames(nutr.L6.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutr.L7.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+# pdf(paste0(output_heatmap,'21.02_.sig.nutrient.rarefied.heatmaps.pdf'))
+
+nutr.L6.sig.sub.h <- heatmap.2(nutr.L6.sig.sub,cexRow = .8,cexCol = 1.5,trace = 'none',key=FALSE,col = my_palette,notecol = 'black',srtCol = 30,cellnote = nutr.L6.sig.sub2,lwid = c(1,5),lhei = c(1,5),margins = c(10,9))
+
+nutr.L7.sig.sub.h <- heatmap.2(nutr.L7.sig.sub,cexRow = .8,cexCol = 1.5,trace = 'none',key=FALSE,col = my_palette,notecol = 'black',srtCol = 30,cellnote = nutr.L7.sig.sub2,lwid = c(1,5),lhei = c(1,5),margins = c(10,9))
+
+# dev.off()
+
+
+colnames(nutr.L6.U1.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutr.L7.U1.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+# pdf(paste0(output_heatmap,'21.02_.sig.U1.nutrient.rarefied.heatmaps.pdf'))
+
+nutr.L6.U1.sig.sub.h <- heatmap.2(nutr.L6.U1.sig.sub,cexRow = .75,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.U1.sig.sub2,margins = c(8,8))
+
+nutr.L7.U1.sig.sub.h <- heatmap.2(nutr.L7.U1.sig.sub,cexRow = .75,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L7.U1.sig.sub2,margins = c(8,8))
+
+# dev.off()
+colnames(nutr.L6.U2.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutr.L7.U2.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+# pdf(paste0(output_heatmap,'21.02_.sig.U2.nutrient.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutr.L6.U2.sig.sub,cexRow = .75,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.U2.sig.sub2,margins = c(8,8))##,Rowv = nutr.L6.U1.sig.sub.h$rowDendrogram, Colv = nutr.L6.U1.sig.sub.h$colDendrogram
+
+heatmap.2(nutr.L7.U2.sig.sub,cexRow = .75,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L7.U2.sig.sub2,margins = c(8,8))##,Rowv = nutr.L7.U1.sig.sub.h$rowDendrogram, Colv = nutr.L7.U1.sig.sub.h$colDendrogram
+
+
+# dev.off()
+
+
+```
+
+#nutclust L6,L7,U1,U2
+```{r}
+##L6
+nutclust.L6.sub <- nutclust.L6  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+nutclust.L6.sub2 <- nutclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L6.sub2 <- ifelse(nutclust.L6.sub2 >= -log10(0.05),'*','')
+
+nutclust.L6.U1.sub <- nutclust.L6.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+nutclust.L6.U1.sub2 <- nutclust.L6.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U1.sub2 <- ifelse(nutclust.L6.U1.sub2 >= -log10(0.05),'*','')
+
+nutclust.L6.U2.sub <- nutclust.L6.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+nutclust.L6.U2.sub2 <- nutclust.L6.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U2.sub2 <- ifelse(nutclust.L6.U2.sub2 >= -log10(0.05),'*','')
+
+##L7
+nutclust.L7.sub <- nutclust.L7  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+nutclust.L7.sub2 <- nutclust.L7 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L7.sub2 <- ifelse(nutclust.L7.sub2 >= -log10(0.05),'*','')
+
+nutclust.L7.U1.sub <- nutclust.L7.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+nutclust.L7.U1.sub2 <- nutclust.L7.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U1.sub2 <- ifelse(nutclust.L7.U1.sub2 >= -log10(0.05),'*','')
+
+nutclust.L7.U2.sub <- nutclust.L7.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+nutclust.L7.U2.sub2 <- nutclust.L7.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U2.sub2 <- ifelse(nutclust.L7.U2.sub2 >= -log10(0.05),'*','')
+
+##interesting taxa
+#L6
+nutclust.L6 <- nutclust.L6 %>% distinct(.)
+
+nutclust.L6.sig <- nutclust.L6[grepl('_Actinomyces',nutclust.L6$genus) | grepl('_Streptomyces',nutclust.L6$genus) | grepl('Clostridiales._',nutclust.L6$genus)| grepl('Butyrivibrio',nutclust.L6$genus)| grepl('Bacteroides',nutclust.L6$genus),]
+
+# nutclust.L6.sig <- nutclust.L6[nutclust.L6$estimate >= 0.2 | nutclust.L6$estimate <= -0.2,]
+# nutclust.L6.sig <- nutclust.L6.sig[order(-nutclust.L6.sig$estimate ),][1:50,]
+nutclust.L6.sig.sub <- nutclust.L6.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L6.sig.sub[is.na(nutclust.L6.sig.sub)] <- 0
+
+nutclust.L6.sig.sub2 <- nutclust.L6.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L6.sig.sub2 <- ifelse(nutclust.L6.sig.sub2 >= -log10(0.05),'*','')
+
+##U1 sub of taxa
+nutclust.L6.U1 <- nutclust.L6.U1 %>% distinct(.)
+
+nutclust.L6.U1.sig <- nutclust.L6.U1[grepl('_Actinomyces',nutclust.L6.U1$genus) | grepl('_Streptomyces',nutclust.L6.U1$genus) | grepl('Clostridiales._',nutclust.L6.U1$genus)| grepl('Butyrivibrio',nutclust.L6.U1$genus)| grepl('Bacteroides',nutclust.L6.U1$genus),]
+
+# nutclust.L6.U1.sig <- nutclust.L6.U1[nutclust.L6.U1$estimate >= 0.2 | nutclust.L6.U1$estimate <= -0.2,]
+# nutclust.L6.U1.sig <- nutclust.L6.U1.sig[order(-nutclust.L6.U1.sig$estimate ),][1:50,]
+nutclust.L6.U1.sig.sub <- nutclust.L6.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U1.sig.sub[is.na(nutclust.L6.U1.sig.sub)] <- 0
+
+nutclust.L6.U1.sig.sub2 <- nutclust.L6.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U1.sig.sub2 <- ifelse(nutclust.L6.U1.sig.sub2 >= -log10(0.05),'*','')
+
+#U2 with subset of taxa
+nutclust.L6.U2 <- nutclust.L6.U2 %>% distinct(.)
+
+nutclust.L6.U2.sig <- nutclust.L6.U2[grepl('_Actinomyces',nutclust.L6.U2$genus) | grepl('_Streptomyces',nutclust.L6.U2$genus) | grepl('Clostridiales._',nutclust.L6.U2$genus)| grepl('Butyrivibrio',nutclust.L6.U2$genus)| grepl('Bacteroides',nutclust.L6.U2$genus),]
+
+# nutclust.L6.U2.sig <- nutclust.L6.U2[nutclust.L6.U2$estimate >= 0.2 | nutclust.L6.U2$estimate <= -0.2,]
+# nutclust.L6.U2.sig <- nutclust.L6.U2.sig[order(-nutclust.L6.U2.sig$estimate ),][1:50,]
+nutclust.L6.U2.sig.sub <- nutclust.L6.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U2.sig.sub[is.na(nutclust.L6.U2.sig.sub)] <- 0
+
+nutclust.L6.U2.sig.sub2 <- nutclust.L6.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L6.U2.sig.sub2 <- ifelse(nutclust.L6.U2.sig.sub2 >= -log10(0.05),'*','')
+
+##interesting taxa
+#L7
+nutclust.L7 <- nutclust.L7 %>% distinct(.)
+
+nutclust.L7.sig <- nutclust.L7[grepl('pallens',nutclust.L7$genus) | grepl('bacilliformis',nutclust.L7$genus)| grepl('faecis',nutclust.L7$genus)| grepl('bifidum',nutclust.L7$genus)| grepl('catus',nutclust.L7$genus)| grepl('_obeum',nutclust.L7$genus) ,]
+
+# nutclust.L7.sig <- nutclust.L7[nutclust.L7$estimate >= 0.2 | nutclust.L7$estimate <= -0.2,]
+# nutclust.L7.sig <- nutclust.L7.sig[order(-nutclust.L7.sig$estimate ),][1:50,]
+nutclust.L7.sig.sub <- nutclust.L7.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L7.sig.sub[is.na(nutclust.L7.sig.sub)] <- 0
+
+nutclust.L7.sig.sub2 <- nutclust.L7.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+nutclust.L7.sig.sub2 <- ifelse(nutclust.L7.sig.sub2 >= -log10(0.05),'*','')
+
+#U1 with sub of nutrients
+
+nutclust.L7.U1 <- nutclust.L7.U1 %>% distinct(.)
+
+nutclust.L7.U1.sig <- nutclust.L7.U1[grepl('pallens',nutclust.L7.U1$specy) | grepl('bacilliformis',nutclust.L7.U1$specy)| grepl('faecis',nutclust.L7.U1$specy)| grepl('bifidum',nutclust.L7.U1$specy)| grepl('catus',nutclust.L7.U1$specy)| grepl('_obeum',nutclust.L7.U1$specy) ,]
+
+# nutclust.L7.U1.sig <- nutclust.L7.U1[nutclust.L7.U1$estimate >= 0.2 | nutclust.L7.U1$estimate <= -0.2,]
+# nutclust.L7.U1.sig <- nutclust.L7.U1.sig[order(-nutclust.L7.U1.sig$estimate ),][1:50,]
+nutclust.L7.U1.sig.sub <- nutclust.L7.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U1.sig.sub[is.na(nutclust.L7.U1.sig.sub)] <- 0
+
+nutclust.L7.U1.sig.sub2 <- nutclust.L7.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U1.sig.sub2 <- ifelse(nutclust.L7.U1.sig.sub2 >= -log10(0.05),'*','')
+
+#U2 with sub of nutrients
+
+nutclust.L7.U2 <- nutclust.L7.U2 %>% distinct(.)
+nutclust.L7.U2.sig <- nutclust.L7.U2[grepl('pallens',nutclust.L7.U2$specy) | grepl('bacilliformis',nutclust.L7.U2$specy)| grepl('faecis',nutclust.L7.U2$specy)| grepl('bifidum',nutclust.L7.U2$specy)| grepl('catus',nutclust.L7.U2$specy)| grepl('_obeum',nutclust.L7.U2$specy) ,]
+
+# nutclust.L7.U2.sig <- nutclust.L7.U2[nutclust.L7.U2$estimate >= 0.2 | nutclust.L7.U2$estimate <= -0.2,]
+# nutclust.L7.U2.sig <- nutclust.L7.U2.sig[order(-nutclust.L7.U2.sig$estimate ),][1:50,]
+nutclust.L7.U2.sig.sub <- nutclust.L7.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U2.sig.sub[is.na(nutclust.L7.U2.sig.sub)] <- 0
+
+nutclust.L7.U2.sig.sub2 <- nutclust.L7.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+nutclust.L7.U2.sig.sub2 <- ifelse(nutclust.L7.U2.sig.sub2 >= -log10(0.05),'*','')
+
+pdf(paste0(output_heatmap,'21.02_nutclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutclust.L6.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.sub2)
+
+heatmap.2(nutclust.L7.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.sub2)
+
+heatmap.2(nutclust.L6.U1.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.U1.sub2)
+
+heatmap.2(nutclust.L7.U1.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.U1.sub2)
+
+heatmap.2(nutclust.L6.U2.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.U2.sub2)
+
+heatmap.2(nutclust.L7.U2.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.U2.sub2)
+
+
+dev.off()
+
+#sig
+colnames(nutclust.L6.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutclust.L7.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.nutclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutclust.L6.sig.sub,cexRow = 1,cexCol = 1.5,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.5) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.sig.sub2,lwid = c(1,4), lhei = c(1,4),margins = c(8,8))
+
+heatmap.2(nutclust.L7.sig.sub,cexRow = 1,cexCol = 1.5,trace = 'none',key=F,col = my_palette,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.sig.sub2,lwid = c(1,4), lhei = c(1,4),margins = c(8,8))
+
+dev.off()
+
+colnames(nutclust.L6.U1.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutclust.L7.U1.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.U1.nutclust.rarefied.heatmaps.pdf'))
+
+nutclust.L6.U1.sig.sub.h <- heatmap.2(nutclust.L6.U1.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.U1.sig.sub2,lwid = c(1,4), lhei = c(1,4))
+
+nutclust.L7.U1.sig.sub.h <- heatmap.2(nutclust.L7.U1.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.U1.sig.sub2,lwid = c(1,4), lhei = c(1,4))
+
+dev.off()
+
+colnames(nutclust.L6.U2.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutclust.L7.U2.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.U2.nutclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutclust.L6.U2.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.U2.sig.sub2,Rowv = nutclust.L6.U1.sig.sub.h$rowDendrogram, Colv = nutclust.L6.U1.sig.sub.h$colDendrogram,lwid = c(1,4), lhei = c(1,4))
+
+heatmap.2(nutclust.L7.U2.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.U2.sig.sub2,Rowv = nutclust.L7.U1.sig.sub.h$rowDendrogram, Colv = nutclust.L7.U1.sig.sub.h$colDendrogram,lwid = c(1,4), lhei = c(1,4))
+
+
+dev.off()
+
+```
+
+#convclust L6,L7,U1,U2
+```{r}
+##L6
+conv.L6.sub <- conv.L6  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+conv.L6.sub2 <- conv.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.sub2 <- ifelse(conv.L6.sub2 >= -log10(0.05),'*','')
+
+conv.L6.U1.sub <- conv.L6.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+conv.L6.U1.sub2 <- conv.L6.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U1.sub2 <- ifelse(conv.L6.U1.sub2 >= -log10(0.05),'*','')
+
+conv.L6.U2.sub <- conv.L6.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+conv.L6.U2.sub2 <- conv.L6.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U2.sub2 <- ifelse(conv.L6.U2.sub2 >= -log10(0.05),'*','')
+
+##L7
+conv.L7.sub <- conv.L7  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+conv.L7.sub2 <- conv.L7 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.sub2 <- ifelse(conv.L7.sub2 >= -log10(0.05),'*','')
+
+conv.L7.U1.sub <- conv.L7.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+conv.L7.U1.sub2 <- conv.L7.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+conv.L7.U1.sub2 <- ifelse(conv.L7.U1.sub2 >= -log10(0.05),'*','')
+
+conv.L7.U2.sub <- conv.L7.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+conv.L7.U2.sub2 <- conv.L7.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.U2.sub2 <- ifelse(conv.L7.U2.sub2 >= -log10(0.05),'*','')
+
+##interesting taxa
+#L6
+conv.L6 <- conv.L6 %>% distinct(.)
+
+conv.L6.sig <- conv.L6[grepl('_Actinomyces',conv.L6$genus) | grepl('_Streptomyces',conv.L6$genus) | grepl('Clostridiales._',conv.L6$genus)| grepl('Butyrivibrio',conv.L6$genus)| grepl('Bacteroides',conv.L6$genus),]
+
+# conv.L6.sig <- conv.L6[conv.L6$estimate >= 0.2 | conv.L6$estimate <= -0.2,]
+# conv.L6.sig <- conv.L6.sig[order(-conv.L6.sig$estimate ),][1:50,]
+conv.L6.sig.sub <- conv.L6.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.sig.sub[is.na(conv.L6.sig.sub)] <- 0
+
+conv.L6.sig.sub2 <- conv.L6.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.sig.sub2 <- ifelse(conv.L6.sig.sub2 >= -log10(0.05),'*','')
+
+conv.L6.U1 <- conv.L6.U1 %>% distinct(.)
+
+conv.L6.U1.sig <- conv.L6.U1[grepl('_Actinomyces',conv.L6.U1$genus) | grepl('_Streptomyces',conv.L6.U1$genus) | grepl('Clostridiales._',conv.L6.U1$genus)| grepl('Butyrivibrio',conv.L6.U1$genus)| grepl('Bacteroides',conv.L6.U1$genus),]
+
+# conv.L6.U1.sig <- conv.L6.U1[conv.L6.U1$estimate >= 0.2 | conv.L6.U1$estimate <= -0.2,]
+# conv.L6.U1.sig <- conv.L6.U1.sig[order(-conv.L6.U1.sig$estimate ),][1:50,]
+conv.L6.U1.sig.sub <- conv.L6.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U1.sig.sub[is.na(conv.L6.U1.sig.sub)] <- 0
+
+conv.L6.U1.sig.sub2 <- conv.L6.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U1.sig.sub2 <- ifelse(conv.L6.U1.sig.sub2 >= -log10(0.05),'*','')
+
+conv.L6.U2 <- conv.L6.U2 %>% distinct(.)
+
+conv.L6.U2.sig <- conv.L6.U2[grepl('_Actinomyces',conv.L6.U2$genus) | grepl('_Streptomyces',conv.L6.U2$genus) | grepl('Clostridiales._',conv.L6.U2$genus)| grepl('Butyrivibrio',conv.L6.U2$genus)| grepl('Bacteroides',conv.L6.U2$genus),]
+
+# conv.L6.U2.sig <- conv.L6.U2[conv.L6.U2$estimate >= 0.2 | conv.L6.U2$estimate <= -0.2,]
+# conv.L6.U2.sig <- conv.L6.U2.sig[order(-conv.L6.U2.sig$estimate ),][1:50,]
+conv.L6.U2.sig.sub <- conv.L6.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U2.sig.sub[is.na(conv.L6.U2.sig.sub)] <- 0
+
+conv.L6.U2.sig.sub2 <- conv.L6.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L6.U2.sig.sub2 <- ifelse(conv.L6.U2.sig.sub2 >= -log10(0.05),'*','')
+
+##interesting taxa
+#L7
+conv.L7 <- conv.L7 %>% distinct(.)
+
+conv.L7.sig <- conv.L7[grepl('pallens',conv.L7$specy) | grepl('bacilliformis',conv.L7$specy)| grepl('faecis',conv.L7$specy)| grepl('bifidum',conv.L7$specy)| grepl('catus',conv.L7$specy)| grepl('_obeum',conv.L7$specy) ,]
+
+# conv.L7.sig <- conv.L7[conv.L7$estimate >= 0.2 | conv.L7$estimate <= -0.2,]
+# conv.L7.sig <- conv.L7.sig[order(-conv.L7.sig$estimate ),][1:50,]
+conv.L7.sig.sub <- conv.L7.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.sig.sub[is.na(conv.L7.sig.sub)] <- 0
+
+conv.L7.sig.sub2 <- conv.L7.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.sig.sub2 <- ifelse(conv.L7.sig.sub2 >= -log10(0.05),'*','')
+
+conv.L7.U1 <- conv.L7.U1 %>% distinct(.)
+
+conv.L7.U1.sig <- conv.L7.U1[grepl('pallens',conv.L7.U1$specy) | grepl('bacilliformis',conv.L7.U1$specy)| grepl('faecis',conv.L7.U1$specy)| grepl('bifidum',conv.L7.U1$specy)| grepl('catus',conv.L7.U1$specy)| grepl('_obeum',conv.L7.U1$specy) ,]
+
+# conv.L7.U1.sig <- conv.L7.U1[conv.L7.U1$estimate >= 0.2 | conv.L7.U1$estimate <= -0.2,]
+# conv.L7.U1.sig <- conv.L7.U1.sig[order(-conv.L7.U1.sig$estimate ),][1:50,]
+conv.L7.U1.sig.sub <- conv.L7.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+conv.L7.U1.sig.sub[is.na(conv.L7.U1.sig.sub)] <- 0
+
+conv.L7.U1.sig.sub2 <- conv.L7.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+conv.L7.U1.sig.sub2 <- ifelse(conv.L7.U1.sig.sub2 >= -log10(0.05),'*','')
+
+conv.L7.U2 <- conv.L7.U2 %>% distinct(.)
+
+conv.L7.U2.sig <- conv.L7.U2[grepl('pallens',conv.L7.U2$specy) | grepl('bacilliformis',conv.L7.U2$specy)| grepl('faecis',conv.L7.U2$specy)| grepl('bifidum',conv.L7.U2$specy)| grepl('catus',conv.L7.U2$specy)| grepl('_obeum',conv.L7.U2$specy) ,]
+
+# conv.L7.U2.sig <- conv.L7.U2[conv.L7.U2$estimate >= 0.2 | conv.L7.U2$estimate <= -0.2,]
+# conv.L7.U2.sig <- conv.L7.U2.sig[order(-conv.L7.U2.sig$estimate ),][1:50,]
+conv.L7.U2.sig.sub <- conv.L7.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.U2.sig.sub[is.na(conv.L7.U2.sig.sub)] <- 0
+
+conv.L7.U2.sig.sub2 <- conv.L7.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+conv.L7.U2.sig.sub2 <- ifelse(conv.L7.U2.sig.sub2 >= -log10(0.05),'*','')
+
+
+pdf(paste0(output_heatmap,'21.02_convclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(conv.L6.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L6.sub2)
+
+heatmap.2(conv.L7.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L7.sub2)
+
+heatmap.2(conv.L6.U1.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L6.U1.sub2)
+
+heatmap.2(conv.L7.U1.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L7.U1.sub2)
+
+heatmap.2(conv.L6.U2.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L6.U2.sub2)
+
+heatmap.2(conv.L7.U2.sub,cexRow = .5,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L7.U2.sub2)
+
+
+dev.off()
+
+#sig
+
+colnames(conv.L6.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(conv.L7.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.convclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(conv.L6.sig.sub,cexRow = .95,cexCol = 1.5,trace = 'none',key=FALSE,col = my_palette,notecol = 'black',srtCol = 30,cellnote = conv.L6.sig.sub2,lwid = c(1,5), lhei = c(1,5),margins = c(10,9))
+
+heatmap.2(conv.L7.sig.sub,cexRow = .95,cexCol = 1.5,trace = 'none',key=FALSE,col = my_palette,notecol = 'black',srtCol = 30,cellnote = conv.L7.sig.sub2,lwid = c(1,5), lhei = c(1,5),margins = c(10,9))
+
+dev.off()
+
+colnames(conv.L6.U1.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(conv.L7.U1.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.U1.convclust.rarefied.heatmaps.pdf'))
+
+conv.L6.U1.sig.sub.h <- heatmap.2(conv.L6.U1.sig.sub,cexRow = .6,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L6.U1.sig.sub2,lwid = c(1,5), lhei = c(1,5))
+
+conv.L7.U1.sig.sub.h <- heatmap.2(conv.L7.U1.sig.sub,cexRow = .6,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L7.U1.sig.sub2,lwid = c(1,5), lhei = c(1,5))
+
+dev.off()
+
+colnames(conv.L6.U2.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(conv.L7.U2.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.U2.convclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(conv.L6.U2.sig.sub,cexRow = .6,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L6.U2.sig.sub2,Row.v = conv.L6.U1.sig.sub.h$rowDendrogram, Colv = conv.L6.U1.sig.sub.h$colDendrogram,lwid = c(1,5), lhei = c(1,5))
+
+heatmap.2(conv.L7.U2.sig.sub,cexRow = .6,cexCol = .7,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = conv.L7.U2.sig.sub2,Rowv = conv.L7.U1.sig.sub.h$rowDendrogram, Colv = conv.L7.U1.sig.sub.h$colDendrogram,lwid = c(1,5), lhei = c(1,5))
+
+
+dev.off()
+```

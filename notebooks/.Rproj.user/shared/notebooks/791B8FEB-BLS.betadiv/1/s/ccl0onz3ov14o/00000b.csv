@@ -1,0 +1,10 @@
+"0","#extract PCs"
+"0",""
+"0","pca <- get_pca(df.clr.pca_data,'ind')"
+"0","# plot(pca$coord)"
+"0","pca.coord.bls <- as.data.frame(pca$coord)"
+"0",""
+"0","var(df.clr.pca_data$var$coord$Dim.1)"
+"2","Fehler in df.clr.pca_data$var$coord$Dim.1 : 
+  $ operator is invalid for atomic vectors
+"

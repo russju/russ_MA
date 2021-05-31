@@ -1,0 +1,72 @@
+"0","bls.scale <- read_tsv(paste0(table_dir, 'BLS.scale.15Jun2020.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m,
+  item_group = [31mcol_character()[39m,
+  item_no = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"2","2 parsing failures.
+ row          col expected actual                                     file
+3307 item_info    a double      i '../data/tables/BLS.scale.15Jun2020.tsv'
+3307 item_cooking a double      a '../data/tables/BLS.scale.15Jun2020.tsv'
+"
+"0","bls.properties <- read_tsv(paste0(table_dir, 'BLS.properties.15Jun2020.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  Category = [31mcol_character()[39m,
+  Property = [31mcol_character()[39m
+)
+
+"
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","# subclusters <- read_tsv(paste0(table_dir, 'subclusters_06.10.tsv'))"
+"0",""
+"0","# nut.clust <- read_tsv(paste0(table_dir, 'food.conv.nutrient.tsv'))"
+"0","keto.bls.merged <- read_tsv(paste0(table_dir, 'keto.bls.merged.tsv'))%>%"
+"0","  dplyr::select(.,starts_with('item'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  sample = [31mcol_character()[39m,
+  time_point.label = [31mcol_character()[39m,
+  time_point = [31mcol_character()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Time = [31mcol_character()[39m,
+  Sex = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"

@@ -1,0 +1,7 @@
+"0","```r
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+output_heatmap = paste0(output_dir,'sig.heatmaps/')
+```"

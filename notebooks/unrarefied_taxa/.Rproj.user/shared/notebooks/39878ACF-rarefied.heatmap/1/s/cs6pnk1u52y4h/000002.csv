@@ -1,0 +1,16 @@
+"0","```r
+colnames(nutclust.L6.U2.sig.sub) <- c('Actinomyces','Streptomyces','Bacteroides','Clostridiales','Butyrivibrio')
+colnames(nutclust.L7.U2.sig.sub) <- c('Bifidobacterium bifidum','Prevotella pallens','Blautia obeum','Coprococcus catus','Roseburia faecis','Neisseria bacilliformis')
+pdf(paste0(output_heatmap,'21.02_.sig.U2.nutclust.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutclust.L6.U2.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L6.U2.sig.sub2,Rowv = nutclust.L6.U1.sig.sub.h$rowDendrogram, Colv = nutclust.L6.U1.sig.sub.h$colDendrogram,lwid = c(1,4), lhei = c(1,4))
+
+heatmap.2(nutclust.L7.U2.sig.sub,cexRow = .85,cexCol = .95,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .1,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutclust.L7.U2.sig.sub2,Rowv = nutclust.L7.U1.sig.sub.h$rowDendrogram, Colv = nutclust.L7.U1.sig.sub.h$colDendrogram,lwid = c(1,4), lhei = c(1,4))
+
+
+dev.off()
+
+```"
+"1","null device 
+          1 
+"

@@ -1,0 +1,17 @@
+"0","```r
+
+merge.L6.fiber <- dplyr::select(merge.L6.nutr,starts_with(c('D_','Cellulose','WasserunlÃ¶sliche Ballaststoffe','Ballaststoffe','Lignin','Oligosaccharide, nicht resorbierbar')),-ends_with('D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177'))
+
+cor.test.fiber <- merge.L6.fiber %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\",`Cellulose`:`Oligosaccharide, nicht resorbierbar`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right))$estimate)
+
+cor.test.fiber[is.na(cor.test.fiber)] <- 0
+
+p.adj.fiber <- subset(cor.test.fiber,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.fiber <- subset(cor.test.fiber,select = `estimate`) %>% data.matrix(.)
+
+```"

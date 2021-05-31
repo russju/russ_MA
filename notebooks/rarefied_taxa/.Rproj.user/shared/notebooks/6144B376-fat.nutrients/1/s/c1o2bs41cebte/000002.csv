@@ -1,0 +1,409 @@
+"0","```r
+
+# chol.sub.z <- rownames_to_column(chol.sub.z)
+colnames(chol.sub.z)[colnames(chol.sub.z) == 'chol.samples'] <- 'file_name'
+
+write_tsv(chol.sub.z,paste0(table_dir,'chol.normalized_20.11.tsv'))
+chol.sub.z <- column_to_rownames(chol.sub.z,'file_name')
+
+##change merge input:
+#nutr.sum.z  nutrients per sample
+#conv.sum.z  conventional clusters per sample
+#cl.sum.z    nutreitn cluster per sample
+
+merge.chol.nutr <- chol.sub.z %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.chol.nutr[is.na(merge.chol.nutr)] <- 0
+merge.chol.nutr <- dplyr::select(merge.chol.nutr,everything(),-ends_with('rowsum'))
+
+#cl.sum.z   `1.veg.fruit`:`15.cheese`
+#nutr.sum.z   `Energie (kcal)`:`Energie, Gesamt (kcal)`
+#conv.clust.z   `Alkoholfreie GetrÃ¤nke`:`Wurst, Fleischwaren`
+##--> put that into the correlation   valaue_left
+
+cor.test.chol <- merge.chol.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", `Sum.Cholesterol.and.derived.stanols`:`Sum.Plant.Sterols.and.derived.stanols`) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right, method = \"spearman\"))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right, method = \"spearman\"))$estimate)
+```"
+"1","Cannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullStandardabweichung ist NullCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with tiesCannot compute exact p-value with ties
+"
+"0","```r
+cor.test.chol[is.na(cor.test.chol)] <- 0
+
+p.adj.chol <- subset(cor.test.chol,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.chol <- subset(cor.test.chol,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log.chol <- log2(r.cor.chol) %>% as.numeric(.)
+```"
+"1","NaNs wurden erzeugt
+"
+"0","```r
+cor.test.log.chol[is.nan(cor.test.log.chol)] <- 0
+cor.test.log.chol[is.infinite(cor.test.log.chol)] <- 0
+cor.test.log.chol <- as.data.frame(cor.test.log.chol)
+
+r.cor.chol[is.nan(r.cor.chol)] <- 0
+r.cor.chol[is.infinite(r.cor.chol)] <- 0
+r.cor.chol <- as.data.frame(r.cor.chol)
+
+#y axis -log10 p.value
+
+p.adj.log.chol <- -log10(p.adj.chol)
+p.adj.log.chol[is.infinite(p.adj.log.chol)] <- 0
+p.adj.log.chol <- as.data.frame(p.adj.log.chol)
+
+cor.test.adj.chol <- cbind(cor.test.chol[ ,c(1,3)],p.adj.log.chol) %>% cbind(.,r.cor.chol) %>% as.data.frame(.)
+colnames(cor.test.adj.chol) <- c('sum fecal chol (derivates)','nutrient','p.adj.log','estimate')
+
+##nutreints 'corr.chol.nutr.tsv'
+##conventional clusters 'corr.chol.convclust.tsv'
+##nutreint clusters  'corr.chol.nutclust.tsv'
+
+# write_tsv(cor.test.adj.chol,paste0(table_dir,'corr.chol.nutr.tsv'))
+
+sig.chol <- cor.test.adj.chol[cor.test.adj.chol$p.adj.log >= -log10(0.050) & cor.test.adj.chol$p.adj.log > 0.00000,]
+top.sig.chol <- sig.chol[order(-sig.chol$p.adj.log ),]
+
+df <- row.names(merge.chol.nutr) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+
+##maaslin
+#take care of the input data
+
+##nutrients   chol_maaslin    as output
+##conventional clusters  chol.convclust_maaslin    as output
+##nutrient clusters    chol.nutclust_maaslin    as output
+
+maaslin.chol <- Maaslin2(input_data = merge.chol.nutr,input_metadata = df,fixed_effects = 'group',output = 'chol_maaslin',
+                         min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```"
+"1","[1] \"Warning: Deleting existing log file: chol_maaslin/maaslin2.log\"
+2021-04-10 10:34:09 INFO::Writing function arguments to log file
+2021-04-10 10:34:10 INFO::Verifying options selected are valid
+2021-04-10 10:34:11 INFO::Determining format of input files
+2021-04-10 10:34:11 INFO::Input format is data samples as rows and metadata samples as rows
+2021-04-10 10:34:11 WARNING::Feature name not found in metadata so not applied to formula as random effect: row.names
+2021-04-10 10:34:11 INFO::Formula for fixed effects: expr ~  group
+2021-04-10 10:34:11 INFO::Running selected normalization method: NONE
+2021-04-10 10:34:11 INFO::Filter data based on min abundance and min prevalence
+2021-04-10 10:34:11 INFO::Total samples in data: 63
+2021-04-10 10:34:11 INFO::Min samples required with min abundance for a feature not to be filtered: 6.300000
+2021-04-10 10:34:11 INFO::Total filtered features: 0
+2021-04-10 10:34:11 INFO::Filtered feature names:
+2021-04-10 10:34:11 INFO::Bypass z-score application to metadata
+2021-04-10 10:34:11 INFO::Running selected transform method: NONE
+2021-04-10 10:34:11 INFO::Running selected analysis method: LM
+
+  |                                                  | 0 % ~calculating  2021-04-10 10:34:11 INFO::Fitting model to feature number 1, Sum.Cholesterol.and.derived.stanols
+2021-04-10 10:34:11 INFO::Fitting model to feature number 2, Sum.Sitosterol.and.derived.stanols
+
+  |+                                                 | 1 % ~11s          2021-04-10 10:34:11 INFO::Fitting model to feature number 3, Sum.Campesterol.and.derived.stanols
+2021-04-10 10:34:11 INFO::Fitting model to feature number 4, Sum.Plant.Sterols.and.derived.stanols
+
+  |++                                                | 3 % ~09s          2021-04-10 10:34:11 INFO::Fitting model to feature number 5, Total.Sterols
+2021-04-10 10:34:11 INFO::Fitting model to feature number 6, Energie..kcal.
+
+  |+++                                               | 4 % ~07s          2021-04-10 10:34:12 INFO::Fitting model to feature number 7, EiweiÃŸ..Proteingehalt
+2021-04-10 10:34:12 INFO::Fitting model to feature number 8, Fett
+
+  |+++                                               | 6 % ~07s          2021-04-10 10:34:12 INFO::Fitting model to feature number 9, Kohlenhydrate
+2021-04-10 10:34:12 INFO::Fitting model to feature number 10, Ballaststoffe
+
+  |++++                                              | 7 % ~06s          2021-04-10 10:34:12 INFO::Fitting model to feature number 11, Cholesterin
+2021-04-10 10:34:12 INFO::Fitting model to feature number 12, Einfach.ungesÃ¤ttigte.FettsÃ¤uren
+
+  |+++++                                             | 8 % ~06s          2021-04-10 10:34:12 INFO::Fitting model to feature number 13, GesÃ¤ttigte.FettsÃ¤uren
+2021-04-10 10:34:12 INFO::Fitting model to feature number 14, Alkohol..Ethanol.
+
+  |+++++                                             | 10% ~06s          2021-04-10 10:34:12 INFO::Fitting model to feature number 15, Vitamin.B7.Biotin..Vitamin.H.
+2021-04-10 10:34:12 INFO::Fitting model to feature number 16, EPA...EicosapentaensÃ¤ure
+
+  |++++++                                            | 11% ~06s          2021-04-10 10:34:12 INFO::Fitting model to feature number 17, DHA...DocosahexaensÃ¤ure
+2021-04-10 10:34:12 INFO::Fitting model to feature number 18, Calcium
+
+  |+++++++                                           | 13% ~06s          2021-04-10 10:34:12 INFO::Fitting model to feature number 19, Eisen
+2021-04-10 10:34:12 INFO::Fitting model to feature number 20, Vitamin.B9.gesamte.FolsÃ¤ure
+
+  |++++++++                                          | 14% ~05s          2021-04-10 10:34:12 INFO::Fitting model to feature number 21, Iodid
+2021-04-10 10:34:12 INFO::Fitting model to feature number 22, Kalium
+
+  |++++++++                                          | 15% ~05s          2021-04-10 10:34:12 INFO::Fitting model to feature number 23, OctadecadiensÃ¤ure.LinolsÃ¤ure
+2021-04-10 10:34:12 INFO::Fitting model to feature number 24, OctadecatriensÃ¤ure.LinolensÃ¤ure
+
+  |+++++++++                                         | 17% ~05s          2021-04-10 10:34:12 INFO::Fitting model to feature number 25, Magnesium
+2021-04-10 10:34:12 INFO::Fitting model to feature number 26, Mehrfach.ungesÃ¤ttigte.FettsÃ¤uren
+
+  |++++++++++                                        | 18% ~05s          2021-04-10 10:34:12 INFO::Fitting model to feature number 27, Vitamin.B3.NiacinÃ¤quivalent
+2021-04-10 10:34:12 INFO::Fitting model to feature number 28, Vitamin.B5.PantothensÃ¤ure
+
+  |++++++++++                                        | 20% ~05s          2021-04-10 10:34:12 INFO::Fitting model to feature number 29, Phosphor
+2021-04-10 10:34:13 INFO::Fitting model to feature number 30, Vitamin.A.RetinolÃ¤quivalent
+
+  |+++++++++++                                       | 21% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 31, Vitamin.B1.Thiamin
+2021-04-10 10:34:13 INFO::Fitting model to feature number 32, Vitamin.B2.Riboflavin
+
+  |++++++++++++                                      | 23% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 33, Vitamin.B12.Cobalamin
+2021-04-10 10:34:13 INFO::Fitting model to feature number 34, Vitamin.B6.Pyridoxin
+
+  |++++++++++++                                      | 24% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 35, Vitamin.C.AscorbinsÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 36, Vitamin.D.Calciferole
+
+  |+++++++++++++                                     | 25% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 37, Vitamin.E.Tocopherol
+2021-04-10 10:34:13 INFO::Fitting model to feature number 38, Vitamin.K.Phyllochinon
+
+  |++++++++++++++                                    | 27% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 39, Nichtessentielle.AminosÃ¤uren
+2021-04-10 10:34:13 INFO::Fitting model to feature number 40, Cellulose
+
+  |+++++++++++++++                                   | 28% ~05s          2021-04-10 10:34:13 INFO::Fitting model to feature number 41, Vitamin.A.Beta.Carotin
+2021-04-10 10:34:13 INFO::Fitting model to feature number 42, Monosaccharide..1.M.
+
+  |+++++++++++++++                                   | 30% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 43, Lactose..Milchzucker.
+2021-04-10 10:34:13 INFO::Fitting model to feature number 44, WasserunlÃ¶sliche.Ballaststoffe
+
+  |++++++++++++++++                                  | 31% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 45, ButansÃ¤ure.ButtersÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 46, Glycin
+
+  |+++++++++++++++++                                 | 32% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 47, Mannit
+2021-04-10 10:34:13 INFO::Fitting model to feature number 48, Glucose..Traubenzucker.
+
+  |+++++++++++++++++                                 | 34% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 49, Poly.Pentosen
+2021-04-10 10:34:13 INFO::Fitting model to feature number 50, PentadecansÃ¤ure
+
+  |++++++++++++++++++                                | 35% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 51, Serin
+2021-04-10 10:34:13 INFO::Fitting model to feature number 52, Polysaccharide....9.M.
+
+  |+++++++++++++++++++                               | 37% ~04s          2021-04-10 10:34:13 INFO::Fitting model to feature number 53, HexadecansÃ¤ure.PalmitinsÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 54, TetradecensÃ¤ure
+
+  |++++++++++++++++++++                              | 38% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 55, DodecansÃ¤ure.LaurinsÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 56, Arginin
+
+  |++++++++++++++++++++                              | 39% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 57, EicosensÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 58, Histidin
+
+  |+++++++++++++++++++++                             | 41% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 59, Xylit
+2021-04-10 10:34:13 INFO::Fitting model to feature number 60, Leucin
+
+  |++++++++++++++++++++++                            | 42% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 61, Poly.UronsÃ¤ure
+2021-04-10 10:34:13 INFO::Fitting model to feature number 62, Broteinheiten_DE_UNIT
+
+  |++++++++++++++++++++++                            | 44% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 63, Poly.Hexosen
+2021-04-10 10:34:13 INFO::Fitting model to feature number 64, Oligosaccharide..resorbierbar..3.9.M.
+
+  |+++++++++++++++++++++++                           | 45% ~03s          2021-04-10 10:34:13 INFO::Fitting model to feature number 65, Methionin
+2021-04-10 10:34:14 INFO::Fitting model to feature number 66, Fructose..Fruchtzucker.
+
+  |++++++++++++++++++++++++                          | 46% ~03s          2021-04-10 10:34:14 INFO::Fitting model to feature number 67, Lysin
+2021-04-10 10:34:14 INFO::Fitting model to feature number 68, EicosadiensÃ¤ure
+
+  |++++++++++++++++++++++++                          | 48% ~03s          2021-04-10 10:34:14 INFO::Fitting model to feature number 69, TetradecansÃ¤ure.MyristinsÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 70, Alanin
+
+  |+++++++++++++++++++++++++                         | 49% ~03s          2021-04-10 10:34:14 INFO::Fitting model to feature number 71, Mittelkettige.FettsÃ¤uren
+2021-04-10 10:34:14 INFO::Fitting model to feature number 72, Maltose..Malzzucker.
+
+  |++++++++++++++++++++++++++                        | 51% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 73, Glycerin.und.Lipoide
+2021-04-10 10:34:14 INFO::Fitting model to feature number 74, Valin
+
+  |+++++++++++++++++++++++++++                       | 52% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 75, organische.SÃ¤uren
+2021-04-10 10:34:14 INFO::Fitting model to feature number 76, Vitamin.A.Retinol
+
+  |+++++++++++++++++++++++++++                       | 54% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 77, Saccharose..RÃ¼benzucker.
+2021-04-10 10:34:14 INFO::Fitting model to feature number 78, DecansÃ¤ure.CaprinsÃ¤ure
+
+  |++++++++++++++++++++++++++++                      | 55% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 79, Purin
+2021-04-10 10:34:14 INFO::Fitting model to feature number 80, Broteinheiten_EN_UNIT
+
+  |+++++++++++++++++++++++++++++                     | 56% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 81, Natrium
+2021-04-10 10:34:14 INFO::Fitting model to feature number 82, Wasser
+
+  |+++++++++++++++++++++++++++++                     | 58% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 83, Chlorid
+2021-04-10 10:34:14 INFO::Fitting model to feature number 84, Isoleucin
+
+  |++++++++++++++++++++++++++++++                    | 59% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 85, HexadecadiensÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 86, Kupfer
+
+  |+++++++++++++++++++++++++++++++                   | 61% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 87, Phenylalanin
+2021-04-10 10:34:14 INFO::Fitting model to feature number 88, HeptadecansÃ¤ure
+
+  |+++++++++++++++++++++++++++++++                   | 62% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 89, AsparaginsÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 90, Fluorid
+
+  |++++++++++++++++++++++++++++++++                  | 63% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 91, Vitamin.B3.Niacin..NicotinsÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 92, Essentielle.AminosÃ¤uren
+
+  |+++++++++++++++++++++++++++++++++                 | 65% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 93, DocosadiensÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 94, HexansÃ¤ure.CapronsÃ¤ure
+
+  |++++++++++++++++++++++++++++++++++                | 66% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 95, OctadecansÃ¤ure.StearinsÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 96, Tyrosin
+
+  |++++++++++++++++++++++++++++++++++                | 68% ~02s          2021-04-10 10:34:14 INFO::Fitting model to feature number 97, HexadecensÃ¤ure.PalmitoleinsÃ¤ure
+2021-04-10 10:34:14 INFO::Fitting model to feature number 98, HeptadecensÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++               | 69% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 99, Langkettige.FettsÃ¤uren
+2021-04-10 10:34:15 INFO::Fitting model to feature number 100, Prolin
+
+  |++++++++++++++++++++++++++++++++++++              | 70% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 101, Vitamin.E.TocopherolÃ¤quivalent
+2021-04-10 10:34:15 INFO::Fitting model to feature number 102, EicosatriensÃ¤ure
+
+  |++++++++++++++++++++++++++++++++++++              | 72% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 103, Lignin
+2021-04-10 10:34:15 INFO::Fitting model to feature number 104, HexadecatetraensÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++             | 73% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 105, Cystein
+2021-04-10 10:34:15 INFO::Fitting model to feature number 106, DocosatriensÃ¤ure
+
+  |++++++++++++++++++++++++++++++++++++++            | 75% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 107, WasserlÃ¶sliche.Ballaststoffe
+2021-04-10 10:34:15 INFO::Fitting model to feature number 108, OctansÃ¤ure.CaprylsÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++           | 76% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 109, Schwefel
+2021-04-10 10:34:15 INFO::Fitting model to feature number 110, DocosapentaensÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++           | 77% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 111, Galactose..Schleimzucker.
+2021-04-10 10:34:15 INFO::Fitting model to feature number 112, Summe.Zuckeralkohole
+
+  |++++++++++++++++++++++++++++++++++++++++          | 79% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 113, HarnsÃ¤ure
+2021-04-10 10:34:15 INFO::Fitting model to feature number 114, Zink
+
+  |+++++++++++++++++++++++++++++++++++++++++         | 80% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 115, EicosatetraensÃ¤ure.ArachidonsÃ¤ure
+2021-04-10 10:34:15 INFO::Fitting model to feature number 116, NonadecatriensÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++++         | 82% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 117, EicosansÃ¤ure.ArachinsÃ¤ure
+2021-04-10 10:34:15 INFO::Fitting model to feature number 118, DocosatetraensÃ¤ure
+
+  |++++++++++++++++++++++++++++++++++++++++++        | 83% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 119, Mineralstoffe..Rohasche.
+2021-04-10 10:34:15 INFO::Fitting model to feature number 120, Glykogen..tierische.StÃ¤rke.
+
+  |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~01s          2021-04-10 10:34:15 INFO::Fitting model to feature number 121, Disaccharide..2.M.
+2021-04-10 10:34:16 INFO::Fitting model to feature number 122, DecosansÃ¤ure.BehensÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~01s          2021-04-10 10:34:16 INFO::Fitting model to feature number 123, PentadecensÃ¤ure
+2021-04-10 10:34:16 INFO::Fitting model to feature number 124, Oligosaccharide..nicht.resorbierbar
+
+  |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~01s          2021-04-10 10:34:16 INFO::Fitting model to feature number 125, Tryptophan
+2021-04-10 10:34:16 INFO::Fitting model to feature number 126, TetracosensÃ¤ure.NervonsÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++++++++     | 89% ~01s          2021-04-10 10:34:16 INFO::Fitting model to feature number 127, GlutaminsÃ¤ure
+2021-04-10 10:34:16 INFO::Fitting model to feature number 128, DecosensÃ¤ure.ErucasÃ¤ure
+
+  |++++++++++++++++++++++++++++++++++++++++++++++    | 90% ~01s          2021-04-10 10:34:16 INFO::Fitting model to feature number 129, OctadecatetraensÃ¤ure.StearidonsÃ¤ure
+2021-04-10 10:34:16 INFO::Fitting model to feature number 130, Sorbit
+
+  |++++++++++++++++++++++++++++++++++++++++++++++    | 92% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 131, Threonin
+2021-04-10 10:34:16 INFO::Fitting model to feature number 132, TetracosansÃ¤ure.LignocerinsÃ¤ure
+
+  |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 133, Kurzkettige.FettsÃ¤uren
+2021-04-10 10:34:16 INFO::Fitting model to feature number 134, Mangan
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++  | 94% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 135, OctadecensÃ¤ure.Ã–lsÃ¤ure
+2021-04-10 10:34:16 INFO::Fitting model to feature number 136, StÃ¤rke
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++  | 96% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 137, Broteinheiten_CH_UNIT
+2021-04-10 10:34:16 INFO::Fitting model to feature number 138, Energie..Protein..kcal.
+
+  |+++++++++++++++++++++++++++++++++++++++++++++++++ | 97% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 139, Energie..Kohlenhydrate..kcal.
+2021-04-10 10:34:16 INFO::Fitting model to feature number 140, Energie..Fett..kcal.
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 99% ~00s          2021-04-10 10:34:16 INFO::Fitting model to feature number 141, Energie..Alkohol..kcal.
+2021-04-10 10:34:16 INFO::Fitting model to feature number 142, Energie..Gesamt..kcal.
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=05s  
+2021-04-10 10:34:16 INFO::Counting total values for each feature
+2021-04-10 10:34:16 WARNING::Deleting existing residuals file: chol_maaslin/residuals.rds
+2021-04-10 10:34:16 INFO::Writing residuals to file chol_maaslin/residuals.rds
+2021-04-10 10:34:16 INFO::Writing all results to file (ordered by increasing q-values): chol_maaslin/all_results.tsv
+2021-04-10 10:34:16 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): chol_maaslin/significant_results.tsv
+2021-04-10 10:34:16 INFO::Writing heatmap of significant results to file: chol_maaslin/heatmap.pdf
+[1] \"There is not enough metadata in the associations to create a heatmap plot. Please review the associations in text output file.\"
+2021-04-10 10:34:16 INFO::Writing association plots (one for each significant association) to output folder: chol_maaslin
+2021-04-10 10:34:16 INFO::Plotting associations from most to least significant, grouped by metadata
+2021-04-10 10:34:16 INFO::Plotting data for metadata number 1, group
+2021-04-10 10:34:16 INFO::Creating boxplot for categorical data, group vs Kohlenhydrate
+2021-04-10 10:34:17 INFO::Creating boxplot for categorical data, group vs Broteinheiten_EN_UNIT
+2021-04-10 10:34:18 INFO::Creating boxplot for categorical data, group vs Energie..Kohlenhydrate..kcal.
+2021-04-10 10:34:19 INFO::Creating boxplot for categorical data, group vs Broteinheiten_CH_UNIT
+2021-04-10 10:34:21 INFO::Creating boxplot for categorical data, group vs Broteinheiten_DE_UNIT
+2021-04-10 10:34:22 INFO::Creating boxplot for categorical data, group vs Saccharose..RÃ¼benzucker.
+2021-04-10 10:34:23 INFO::Creating boxplot for categorical data, group vs Polysaccharide....9.M.
+2021-04-10 10:34:23 INFO::Creating boxplot for categorical data, group vs Disaccharide..2.M.
+2021-04-10 10:34:23 INFO::Creating boxplot for categorical data, group vs StÃ¤rke
+2021-04-10 10:34:25 INFO::Creating boxplot for categorical data, group vs Einfach.ungesÃ¤ttigte.FettsÃ¤uren
+2021-04-10 10:34:25 INFO::Creating boxplot for categorical data, group vs HexadecensÃ¤ure.PalmitoleinsÃ¤ure
+2021-04-10 10:34:25 INFO::Creating boxplot for categorical data, group vs OctadecensÃ¤ure.Ã–lsÃ¤ure
+2021-04-10 10:34:25 INFO::Creating boxplot for categorical data, group vs Fett
+2021-04-10 10:34:26 INFO::Creating boxplot for categorical data, group vs Langkettige.FettsÃ¤uren
+2021-04-10 10:34:26 INFO::Creating boxplot for categorical data, group vs Energie..Fett..kcal.
+2021-04-10 10:34:26 INFO::Creating boxplot for categorical data, group vs EicosansÃ¤ure.ArachinsÃ¤ure
+2021-04-10 10:34:27 INFO::Creating boxplot for categorical data, group vs GesÃ¤ttigte.FettsÃ¤uren
+2021-04-10 10:34:28 INFO::Creating boxplot for categorical data, group vs HexadecansÃ¤ure.PalmitinsÃ¤ure
+2021-04-10 10:34:30 INFO::Creating boxplot for categorical data, group vs Fructose..Fruchtzucker.
+2021-04-10 10:34:32 INFO::Creating boxplot for categorical data, group vs NonadecatriensÃ¤ure
+2021-04-10 10:34:33 INFO::Creating boxplot for categorical data, group vs EicosensÃ¤ure
+2021-04-10 10:34:33 INFO::Creating boxplot for categorical data, group vs TetradecansÃ¤ure.MyristinsÃ¤ure
+2021-04-10 10:34:34 INFO::Creating boxplot for categorical data, group vs Glycerin.und.Lipoide
+2021-04-10 10:34:34 INFO::Creating boxplot for categorical data, group vs Sorbit
+2021-04-10 10:34:35 INFO::Creating boxplot for categorical data, group vs Monosaccharide..1.M.
+2021-04-10 10:34:35 INFO::Creating boxplot for categorical data, group vs Mittelkettige.FettsÃ¤uren
+2021-04-10 10:34:36 INFO::Creating boxplot for categorical data, group vs DecansÃ¤ure.CaprinsÃ¤ure
+2021-04-10 10:34:36 INFO::Creating boxplot for categorical data, group vs HeptadecansÃ¤ure
+2021-04-10 10:34:37 INFO::Creating boxplot for categorical data, group vs OctansÃ¤ure.CaprylsÃ¤ure
+2021-04-10 10:34:38 INFO::Creating boxplot for categorical data, group vs EicosadiensÃ¤ure
+2021-04-10 10:34:39 INFO::Creating boxplot for categorical data, group vs Cholesterin
+2021-04-10 10:34:39 INFO::Creating boxplot for categorical data, group vs Sum.Campesterol.and.derived.stanols
+2021-04-10 10:34:40 INFO::Creating boxplot for categorical data, group vs OctadecansÃ¤ure.StearinsÃ¤ure
+2021-04-10 10:34:41 INFO::Creating boxplot for categorical data, group vs Lactose..Milchzucker.
+2021-04-10 10:34:42 INFO::Creating boxplot for categorical data, group vs TetradecensÃ¤ure
+2021-04-10 10:34:42 INFO::Creating boxplot for categorical data, group vs PentadecansÃ¤ure
+2021-04-10 10:34:43 INFO::Creating boxplot for categorical data, group vs HexansÃ¤ure.CapronsÃ¤ure
+2021-04-10 10:34:43 INFO::Creating boxplot for categorical data, group vs Kurzkettige.FettsÃ¤uren
+2021-04-10 10:34:44 INFO::Creating boxplot for categorical data, group vs Mehrfach.ungesÃ¤ttigte.FettsÃ¤uren
+2021-04-10 10:34:44 INFO::Creating boxplot for categorical data, group vs ButansÃ¤ure.ButtersÃ¤ure
+2021-04-10 10:34:45 INFO::Creating boxplot for categorical data, group vs Poly.Hexosen
+2021-04-10 10:34:46 INFO::Creating boxplot for categorical data, group vs DodecansÃ¤ure.LaurinsÃ¤ure
+2021-04-10 10:34:46 INFO::Creating boxplot for categorical data, group vs HeptadecensÃ¤ure
+2021-04-10 10:34:47 INFO::Creating boxplot for categorical data, group vs Vitamin.D.Calciferole
+2021-04-10 10:34:47 INFO::Creating boxplot for categorical data, group vs Oligosaccharide..resorbierbar..3.9.M.
+2021-04-10 10:34:48 INFO::Creating boxplot for categorical data, group vs Glucose..Traubenzucker.
+2021-04-10 10:34:48 INFO::Creating boxplot for categorical data, group vs Summe.Zuckeralkohole
+2021-04-10 10:34:49 INFO::Creating boxplot for categorical data, group vs PentadecensÃ¤ure
+2021-04-10 10:34:50 INFO::Creating boxplot for categorical data, group vs EPA...EicosapentaensÃ¤ure
+2021-04-10 10:34:50 INFO::Creating boxplot for categorical data, group vs OctadecadiensÃ¤ure.LinolsÃ¤ure
+2021-04-10 10:34:51 INFO::Creating boxplot for categorical data, group vs Xylit
+2021-04-10 10:34:51 INFO::Creating boxplot for categorical data, group vs Vitamin.E.Tocopherol
+2021-04-10 10:34:52 INFO::Creating boxplot for categorical data, group vs OctadecatriensÃ¤ure.LinolensÃ¤ure
+2021-04-10 10:34:52 INFO::Creating boxplot for categorical data, group vs HexadecadiensÃ¤ure
+2021-04-10 10:34:53 INFO::Creating boxplot for categorical data, group vs Vitamin.E.TocopherolÃ¤quivalent
+2021-04-10 10:34:53 INFO::Creating boxplot for categorical data, group vs Mangan
+2021-04-10 10:34:54 INFO::Creating boxplot for categorical data, group vs Alkohol..Ethanol.
+2021-04-10 10:34:55 INFO::Creating boxplot for categorical data, group vs Energie..Alkohol..kcal.
+2021-04-10 10:34:55 INFO::Creating boxplot for categorical data, group vs OctadecatetraensÃ¤ure.StearidonsÃ¤ure
+2021-04-10 10:34:56 INFO::Creating boxplot for categorical data, group vs Sum.Sitosterol.and.derived.stanols
+2021-04-10 10:34:56 INFO::Creating boxplot for categorical data, group vs DHA...DocosahexaensÃ¤ure
+2021-04-10 10:34:57 INFO::Creating boxplot for categorical data, group vs Vitamin.B12.Cobalamin
+2021-04-10 10:34:58 INFO::Creating boxplot for categorical data, group vs Kupfer
+2021-04-10 10:34:58 INFO::Creating boxplot for categorical data, group vs Total.Sterols
+2021-04-10 10:34:59 INFO::Creating boxplot for categorical data, group vs Kalium
+2021-04-10 10:34:59 INFO::Creating boxplot for categorical data, group vs DecosensÃ¤ure.ErucasÃ¤ure
+2021-04-10 10:35:00 INFO::Creating boxplot for categorical data, group vs Sum.Plant.Sterols.and.derived.stanols
+2021-04-10 10:35:01 INFO::Creating boxplot for categorical data, group vs Vitamin.B1.Thiamin
+2021-04-10 10:35:02 INFO::Creating boxplot for categorical data, group vs WasserlÃ¶sliche.Ballaststoffe
+2021-04-10 10:35:03 INFO::Creating boxplot for categorical data, group vs Poly.Pentosen
+2021-04-10 10:35:03 INFO::Creating boxplot for categorical data, group vs DocosatetraensÃ¤ure
+2021-04-10 10:35:04 INFO::Creating boxplot for categorical data, group vs Poly.UronsÃ¤ure
+2021-04-10 10:35:04 INFO::Creating boxplot for categorical data, group vs TetracosensÃ¤ure.NervonsÃ¤ure
+2021-04-10 10:35:05 INFO::Creating boxplot for categorical data, group vs Vitamin.K.Phyllochinon
+2021-04-10 10:35:05 INFO::Creating boxplot for categorical data, group vs WasserunlÃ¶sliche.Ballaststoffe
+"

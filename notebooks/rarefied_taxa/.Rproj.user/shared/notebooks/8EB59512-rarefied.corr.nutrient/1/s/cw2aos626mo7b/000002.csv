@@ -1,0 +1,7 @@
+"0","```r
+
+merge.biom.L6.nutr.U2 <- biom.L6.rel.clr.U2 %>% merge(.,nutr.sum.z.U2,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+```"
+"1","Fehler in h(simpleError(msg, call)) : 
+  Fehler bei der Auswertung des Argumentes 'x' bei der Methodenauswahl fÃ¼r Funktion 'merge': Objekt 'biom.L6.rel.clr.U2' nicht gefunden
+"

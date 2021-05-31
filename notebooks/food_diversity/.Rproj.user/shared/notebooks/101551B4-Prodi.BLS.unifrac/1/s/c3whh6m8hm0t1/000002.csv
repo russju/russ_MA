@@ -1,0 +1,41 @@
+"0","```r
+#unweighted UniFrac per day
+otu.unweighted.samp <- subset(k.bls_prodi,select=c(`file_name`,`item`,`day`))
+
+otu.unweighted.samp$sample_day <- paste(otu.unweighted.samp$file_name,otu.unweighted.samp$day)
+otu.unweighted.samp <- otu.unweighted.samp[ ,-c(1)]
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)
+otu.unweighted.samp <- xtabs(~ item + sample_day , data = otu.unweighted.samp)##how often consumed/d
+
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)  
+otu.unweighted.samp <- pivot_wider(data = otu.unweighted.samp, names_from = 'item', values_from = 'Freq') %>% as.data.frame(.)
+
+# write_tsv(otu.unweighted.samp,path='C:/Users/Juliane/Desktop/project.directory/data/tables/otu.conv.uw.samp.19.08.tsv',append=FALSE)
+
+row.names(otu.unweighted.samp) <- otu.unweighted.samp$sample_day
+otu.unweighted.samp <- otu.unweighted.samp[ ,-1]
+otu.unweighted.samp <- otu_table(otu.unweighted.samp,taxa_are_rows = FALSE)
+
+phylo.conv.uw.samp <- phyloseq(otu.unweighted.samp,tree.conv)
+unifrac.keto.conv.uw.samp <- UniFrac(phylo.conv.uw.samp,weighted = FALSE,fast = TRUE)
+pcoa_keto.uw.samp <- ape::pcoa(unifrac.keto.conv.uw.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.conv.uw.samp <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_keto.uw.samp$vectors %>%  #or pcoa_keto.w/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.uw.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac conventional clusters')
+```"

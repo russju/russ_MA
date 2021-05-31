@@ -1,0 +1,532 @@
+---
+title: "similarity to dge reference"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(ggsignif)
+
+library(ggpubr)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+#data import
+```{r}
+dge <- read.csv(paste0(data_dir, 'dge_reference.csv'),row.names = 1,header = TRUE,sep = ';')
+
+keto.summary <- read_tsv(paste0(table_dir, 'Keto.summary.tsv'))##original df
+keto.summary$file_name <- gsub(keto.summary$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+food_table <- read_tsv(paste0(table_dir, 'otu.conv.w.19.08.tsv'))
+#rm not classified
+
+# keto.summary <- keto.summary[keto.summary$Phenotype != 'not classified', ]
+```
+
+```{r}
+#selecting the nutrients in keto.summary that are in dge
+
+keto.nutrients <- subset(keto.summary,select = c(`file_name`,`day`,`Phenotype`,`Sex`,`Eiweiß, Proteingehalt`, `Ballaststoffe`,`Alkohol (Ethanol)`,`Vitamin B7 Biotin (Vitamin H)`,`Calcium`,`Calcium`,`Eisen`,`Vitamin B9 gesamte Folsäure`,`Iodid`,`Kalium`,`Magnesium`,`Vitamin B3 Niacinäquivalent`,`Vitamin B5 Pantothensäure`,`Phosphor`,`Vitamin A Retinoläquivalent`,`Vitamin B1 Thiamin`,`Vitamin B2 Riboflavin`,`Vitamin B12 Cobalamin`,`Vitamin B6 Pyridoxin`,`Vitamin C Ascorbinsäure`,`Vitamin D Calciferole`,`Vitamin E Tocopherol`,`Vitamin K Phyllochinon`,`Octadecadiensäure/Linolsäure`,`Energie (kcal)`,`Fett`,`Kohlenhydrate`)) %>% as.data.frame(.)
+keto.nutrients[is.na(keto.nutrients)] <- 0
+
+#sex selected
+
+keto.nutrients.f <- subset(keto.nutrients,grepl("f",Sex))
+keto.nutrients.m <- subset(keto.nutrients,grepl("m",Sex))
+
+#sex selected, per week
+
+keto.nutrients.f.week <- apply(X = keto.nutrients.f[ ,5:27],MARGIN = 2,FUN = function(x){with(keto.nutrients.f, ave(x, file_name, FUN = sum))})
+keto.nutrients.f.week <- cbind(keto.nutrients.f$file_name,keto.nutrients.f.week) %>% unique(.)
+
+keto.nutrients.m.week <- apply(X = keto.nutrients.m[ ,5:27],MARGIN = 2,FUN = function(x){with(keto.nutrients.m, ave(x, file_name, FUN = sum))})
+keto.nutrients.m.week <- cbind(keto.nutrients.m$file_name,keto.nutrients.m.week) %>% unique(.)
+```
+
+```{r}
+#tolerance section of  +-2.5% 
+dge.tolerance <- apply(dge,2,function(x){k = (x/100)*2.5}) %>% as.data.frame(.)
+
+#2.5 percent more or less than recommendation
+
+dge$f.week.min <- dge$per_week_f - dge.tolerance$per_week_f
+dge$f.week.max <- dge$per_week_f + dge.tolerance$per_week_f
+
+dge$m.week.min <- dge$per_week_m - dge.tolerance$per_week_m
+dge$m.week.max <- dge$per_week_m + dge.tolerance$per_week_m
+
+```
+
+#female nutrients per week
+met dge recommendation?
+```{r}
+#bar plots per nutrient
+
+keto.nutrients.f.week <- as.data.frame(keto.nutrients.f.week)
+names(keto.nutrients.f.week)[names(keto.nutrients.f.week) == 'V1'] <- 'samples'
+# row.names(keto.nutrients.f.week) <- keto.nutrients.f.week$samples
+# keto.nutrients.f.week <- keto.nutrients.f.week[ ,-1]
+
+#turn nutrient columns into numeric
+
+keto.nutrients.f.week[ ,2:24] <- sapply( keto.nutrients.f.week[ ,2:24], as.numeric )
+
+#delete rows with only zero
+
+keto.nutrients.f.week <- keto.nutrients.f.week[rowSums(keto.nutrients.f.week != 0) != 0, ]
+
+#plotting different nutrients with dge-reference line
+
+##increase in iron in U2 because more meat?
+iron <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = Eisen, fill = stringr::str_sub(samples, -2, -1))) +
+  labs(fill = "U") +  ylab('Iron [mg]') +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Iron distribution among PRE and POST female samples') 
+
+iron <- iron + geom_hline(yintercept=105, color = 'grey', size = 2)
+
+##more b12 in U2 because of increased animal-derived foods?
+b12 <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = `Vitamin B12 Cobalamin`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Vitamin B12 [µg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin B12 distribution among PRE and POST female samples') 
+
+b12 <- b12 + geom_hline(yintercept=28, color = 'grey', size = 2)
+
+##
+d <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = `Vitamin D Calciferole`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Vitamin D [µg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin D distribution among PRE and POST female samples') 
+
+d <- d + geom_hline(yintercept=140, color = 'grey', size = 2)
+
+##Iodide increased in U2?
+iodid <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = `Iodid`, fill = stringr::str_sub(samples, -2, -1))) +
+  labs(fill = "U") +  ylab('Iodide [µg]') +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Iodide distribution among PRE and POST female samples') 
+
+iodid <- iodid + geom_hline(yintercept=1050, color = 'grey', size = 2)
+
+##Vitamin E reduced in U2 due to lesser plant consumption?
+e <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = `Vitamin E Tocopherol`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Vitamin E [µg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin E distribution among PRE and POST female samples') 
+
+e <- e + geom_hline(yintercept=84, color = 'grey', size = 2)
+
+##increased protein consumption in U2?
+protein <- ggplot(keto.nutrients.f.week) +
+  geom_col(aes(x = samples, y = `Eiweiß, Proteingehalt`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Protein [mg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Protein distribution among PRE and POST female samples') 
+
+protein <- protein + geom_hline(yintercept=336, color = 'grey', size = 2)
+```
+
+#male nutrients per week
+met dge recommendation?
+```{r}
+#bar plots per nutrient
+
+keto.nutrients.m.week <- as.data.frame(keto.nutrients.m.week)
+names(keto.nutrients.m.week)[names(keto.nutrients.m.week) == 'V1'] <- 'samples'
+# row.names(keto.nutrients.f.week) <- keto.nutrients.f.week$samples
+# keto.nutrients.f.week <- keto.nutrients.f.week[ ,-1]
+
+#turn nutrient columns into numeric
+
+keto.nutrients.m.week[ ,2:24] <- sapply( keto.nutrients.m.week[ ,2:24], as.numeric )
+
+#delete rows with only zero
+
+keto.nutrients.m.week <- keto.nutrients.m.week[rowSums(keto.nutrients.m.week != 0) != 0, ]
+
+#plotting different nutrients with dge-reference line
+
+##increase in iron in U2 because more meat?
+iron_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = Eisen, fill = stringr::str_sub(samples, -2, -1))) +
+  labs(fill = "U") +  ylab('Iron [mg]') +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Iron distribution among PRE and POST male samples') 
+
+iron_m <- iron_m + geom_hline(yintercept=70, color = 'grey', size = 2)
+
+##more b12 in U2 because of increased animal-derived foods?
+b12_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = `Vitamin B12 Cobalamin`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Vitamin B12 [mg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin B12 distribution among PRE and POST male samples') 
+
+b12_m <- b12_m + geom_hline(yintercept=28, color = 'grey', size = 2)
+
+##
+d_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = `Vitamin D Calciferole`, fill = stringr::str_sub(samples, -2, -1))) +  ylab('Vitamin D [µg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin D distribution among PRE and POST male samples') 
+
+d_m <- d_m + geom_hline(yintercept=140, color = 'grey', size = 2)
+
+##Iodide increased in U2?
+iodid_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = `Iodid`, fill = stringr::str_sub(samples, -2, -1))) +
+  labs(fill = "U") + ylab('Iodide [µg]') +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Iodide distribution among PRE and POST male samples') 
+
+iodid_m <- iodid_m + geom_hline(yintercept=1400, color = 'grey', size = 2)
+
+##Vitamin E reduced in U2 due to lesser plant consumption?
+e_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = `Vitamin E Tocopherol`, fill = stringr::str_sub(samples, -2, -1))) + ylab('Vitamin E [µg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Vitamin E distribution among PRE and POST male samples') 
+
+e_m <- e_m + geom_hline(yintercept=105, color = 'grey', size = 2)
+
+##increased protein consumption in U2?
+protein_m <- ggplot(keto.nutrients.m.week) +
+  geom_col(aes(x = samples, y = `Eiweiß, Proteingehalt`, fill = stringr::str_sub(samples, -2, -1))) + ylab('Protein [mg]') +
+  labs(fill = "U") +
+  theme_light() + theme(axis.text = element_text(angle = 90))+ ggtitle('Protein distribution among PRE and POST male samples') 
+
+protein_m <- protein_m + geom_hline(yintercept=399, color = 'grey', size = 2)
+
+# +
+#   geom_text(mapping=aes(x=5,y=399),label='dge reference') 
+```
+
+#compare male and female directly
+boxplots
+```{r}
+#calculations per week
+
+keto.nutrients.week <- apply(X = keto.nutrients[ ,5:31],MARGIN = 2,FUN = function(x){with(keto.nutrients, ave(x, file_name, FUN = sum))})
+
+sub.keto.nutrients <- subset(keto.nutrients,select = c(`file_name`,`Phenotype`,`Sex`))
+keto.nutrients.week <- cbind(sub.keto.nutrients,keto.nutrients.week) %>% unique(.)
+
+#turned out that keto.summary is incomplete
+
+keto.nutrients.week$Sex[keto.nutrients.week$Sex == 0] <- 'f'
+keto.nutrients.week$Phenotype[keto.nutrients.week$Phenotype == 0 & keto.nutrients.week$file_name == '34WF.U2'] <- 'not classified'
+keto.nutrients.week$Phenotype[keto.nutrients.week$Phenotype == 0 & keto.nutrients.week$file_name == '49RJ.U2'] <- 'low converter'
+
+#delete rows with only zero
+
+keto.nutrients.week <- keto.nutrients.week[keto.nutrients.week$file_name != 0, ]
+
+#add group column
+
+keto.nutrients.week$group <- ifelse(grepl('U2',keto.nutrients.week$file_name), 'keto', 'non keto')
+
+
+#rm not classified
+
+# keto.nutrients.week <- keto.nutrients.week[keto.nutrients.week$Phenotype != 'not classified', ]
+
+```
+
+#Linolsäure
+```{r}
+#energy percent per week 2.5
+
+#sum of energy intake in one week
+#energy proportion Linolsäure
+
+#calculating Linolsäure percent
+
+ls <- as.matrix(keto.nutrients.week$`Octadecadiensäure/Linolsäure`)
+keto.nutrients.week$Linolsäure_energy <- apply(ls,1,function(x){x*9.3})
+keto.nutrients.week$Linolsäure_proportion_energy <- (100/keto.nutrients.week$`Energie (kcal)`)*keto.nutrients.week$Linolsäure_energy
+
+
+#sex grouped, with phenotype column
+
+keto.nutrients.f.week <- subset(keto.nutrients.week,grepl('f',keto.nutrients.week$Sex))
+
+keto.nutrients.m.week <- subset(keto.nutrients.week,grepl('m',keto.nutrients.week$Sex))
+
+#boxplots
+
+ls <- ggplot(keto.nutrients.week,aes(x=group, y=`Linolsäure_proportion_energy`, fill=group)) +
+  geom_boxplot()+ggtitle('linolic acid intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('linolic acid [energy%]')
+ls <- ls + geom_hline(yintercept=2.5, color = 'black', size = 1)
+
+ls.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Linolsäure_proportion_energy`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('linolic acid intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('not classified','high converter')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('linolic acid [energy%]')
+ls.pheno <- ls.pheno + geom_hline(yintercept=2.5, color = 'black', size = 1)
+
+#sex
+
+ls.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=`Linolsäure_proportion_energy`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female linolic acid intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('linolic acid [energy%]')
+ls.f<- ls.f + geom_hline(yintercept=105, color = 'black', size = 1)
+
+ls.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=`Linolsäure_proportion_energy`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male linolic acid intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('linolic acid [energy%]')
+ls.m <- ls.m + geom_hline(yintercept=70, color = 'black', size = 1)
+
+```
+
+#fe boxplot
+```{r}
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+##in stat_compare_means  ,symnum.args = symnum.args
+
+fe <- ggplot(keto.nutrients.week,aes(x=group, y=Eisen)) +
+  geom_boxplot()+ggtitle('Iron intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 2) + ylab('iron [mg]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+fe <- fe + geom_hline(yintercept=((105+70)/2), color = 'black', size = 1)##87.5
+
+fe.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=Eisen)) +
+  geom_boxplot()+ggtitle('Iron intake')+geom_jitter(shape = 21) + ylab('iron [mg]')+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2)+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+fe.pheno <- fe.pheno + geom_hline(yintercept=((105+70)/2), color = 'black', size = 1)
+
+#sex
+
+fe.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=Eisen, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female Iron intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('iron [mg]')
+fe.f<- fe.f + geom_hline(yintercept=105, color = 'black', size = 1)
+
+fe.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=Eisen, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male Iron intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('iron [mg]')
+fe.m <- fe.m + geom_hline(yintercept=70, color = 'black', size = 1)
+```
+
+#b12 boxplot
+```{r}
+b12 <- ggplot(keto.nutrients.week,aes(x=group, y=`Vitamin B12 Cobalamin`)) +
+  geom_boxplot()+ggtitle('Vitamin B12 intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 2) + ylab('Vitamin B12 [µg]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+b12 <- b12 + geom_hline(yintercept=28, color = 'black', size = 1)##28
+
+b12.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Vitamin B12 Cobalamin`)) +
+  geom_boxplot()+ggtitle('Vitamin B12 intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('Vitamin B12 [µg]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+b12.pheno <- b12.pheno + geom_hline(yintercept=28, color = 'black', size = 1)
+
+#sex
+
+b12.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=`Vitamin B12 Cobalamin`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female Vitamin B12 intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Vitamin B12 [µg]')+ theme(plot.title = element_text(size=10))
+b12.f<- b12.f + geom_hline(yintercept=28, color = 'black', size = 1)
+
+b12.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=`Vitamin B12 Cobalamin`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male Vitamin B12 intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Vitamin B12 [µg]')+ theme(plot.title = element_text(size=10))
+b12.m <- b12.m + geom_hline(yintercept=28, color = 'black', size = 1)
+```
+
+#e boxplot
+```{r}
+#`Vitamin E Tocopherol` ylab('Vitamin E [µg]'
+
+e <- ggplot(keto.nutrients.week,aes(x=group, y=`Vitamin E Tocopherol`)) +
+  geom_boxplot()+ggtitle('Vitamin E intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 2) + ylab('Vitamin E [µg]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+e <- e + geom_hline(yintercept=((84+105)/2), color = 'black', size = 1)##94.5
+
+e.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Vitamin E Tocopherol`)) +
+  geom_boxplot()+ggtitle('Vitamin E intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('Vitamin E [µg]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+e.pheno <- e.pheno + geom_hline(yintercept=94.5, color = 'black', size = 1)
+
+#sex
+
+e.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=`Vitamin E Tocopherol`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female Vitamin E intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Vitamin E [µg]')+ theme(plot.title = element_text(size=10))
+e.f<- e.f + geom_hline(yintercept=84, color = 'black', size = 1)
+
+e.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=`Vitamin E Tocopherol`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male Vitamin E intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Vitamin E [µg]')+ theme(plot.title = element_text(size=10))
+e.m <- e.m + geom_hline(yintercept=108, color = 'black', size = 1)
+```
+
+#protein boxplot
+```{r}
+#`Eiweiß, Proteingehalt`,'Protein [mg]'
+
+prot <- ggplot(keto.nutrients.week,aes(x=group, y=`Eiweiß, Proteingehalt`)) +
+  geom_boxplot()+ggtitle('Protein intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 2)+ ylab('Protein [g]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+prot <- prot + geom_hline(yintercept=((336+399)/2), color = 'black', size = 1)##367.5
+
+prot.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Eiweiß, Proteingehalt`)) +
+  geom_boxplot()+ggtitle('Protein intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('Protein [g]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+prot.pheno <- prot.pheno + geom_hline(yintercept=((336+399)/2), color = 'black', size = 1)
+
+#sex
+
+prot.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=`Eiweiß, Proteingehalt`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female Protein intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Protein [g]')
+prot.f<- prot.f + geom_hline(yintercept=336, color = 'black', size = 1)
+
+prot.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=`Eiweiß, Proteingehalt`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male Protein intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('Protein [g]')
+prot.m <- prot.m + geom_hline(yintercept=399, color = 'black', size = 1)
+```
+
+#fiber boxplot
+```{r}
+#`Eiweiß, Proteingehalt`,'Protein [mg]'
+
+fiber <- ggplot(keto.nutrients.week,aes(x=group, y=`Ballaststoffe`)) +
+  geom_boxplot()+ggtitle('fiber intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 2)+ ylab('fiber [g]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+fiber <- fiber + geom_hline(yintercept=(210), color = 'black', size = 1)##210
+
+fiber.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Ballaststoffe`)) +
+  geom_boxplot()+ggtitle('fiber intake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('fiber [g]')+ theme(plot.title = element_text(size=10),axis.title = element_text(size = 9))
+fiber.pheno <- fiber.pheno + geom_hline(yintercept=(210), color = 'black', size = 1)
+
+#sex
+
+fiber.f <- ggplot(keto.nutrients.f.week,aes(x=group, y=`Ballaststoffe`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('female fiber intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('fiber [g]')
+fiber.f<- fiber.f + geom_hline(yintercept=210, color = 'black', size = 1)
+
+fiber.m <- ggplot(keto.nutrients.m.week,aes(x=group, y=`Ballaststoffe`, fill=Phenotype)) +
+  geom_boxplot()+ggtitle('male fiber intake')+geom_jitter(shape = 21)+
+  geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test') + ylab('fiber [g]')
+fiber.m <- fiber.m + geom_hline(yintercept=210, color = 'black', size = 1)
+```
+
+#energy boxplot
+```{r}
+energy <- ggplot(keto.nutrients.week,aes(x=group, y=`Energie (kcal)`)) +
+  geom_boxplot()+ggtitle('energy uptake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 2) + ylab('energy [kcal]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7))
+
+energy.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Energie (kcal)`)) +
+  geom_boxplot()+ggtitle('energy uptake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('energy [kcal]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7))##,symnum.args = symnum.args
+
+```
+
+#biomass
+```{r}
+food_table <- dplyr::select(food_table, -contains(c('wasser','saft','drink','schorle','nektar','soße','tee','cappuccino','kaffee','espresso','latte macchiato','bier','getränke','cola','essig','wein','milch','pils'))) ##,'aubergine gebraten (zubereitet ohne fett)'
+food_table <- food_table %>%
+  as.data.frame(.) %>%
+  column_to_rownames(.,'file_name') %>%
+  data.matrix(.,rownames.force = 'automatic')
+
+class(food_table) <- 'numeric'
+food_table[is.infinite(food_table)] <- 0
+
+rowSum <- rowSums(food_table) 
+rowSum[is.infinite(rowSum)] <- 0
+
+rowSum.top <- rowSum[order(-rowSum)]
+
+rowSum <- rowSum %>%
+  cbind(food_table,.)
+
+
+rowSum <- rowSum %>% as.data.frame(.) %>% rownames_to_column(.)
+colnames(rowSum)[colnames(rowSum) %in% c("rowname", ".")] <- c("file_name", "rowSum")
+
+# write_tsv(rowSum,'C:/Users/Juliane/Desktop/project.directory/results/biomass_30.11.tsv')
+
+rowSum <- subset(rowSum,select = c('file_name','rowSum'))
+
+keto.nutrients.week <- left_join(keto.nutrients.week,rowSum,by='file_name')
+
+
+biomass <- ggplot(keto.nutrients.week,aes(x=group, y=`rowSum`)) +
+  geom_boxplot()+ggtitle('biomass')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 2) + ylab('biomass [g]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7),rect = element_rect(size = 4))
+
+biomass.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`rowSum`)) +
+  geom_boxplot()+ggtitle('biomass')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('biomass [g]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7),rect = element_rect(size = 2))#,symnum.args = symnum.args
+
+#with macronutrients
+
+keto.macro <- dplyr::select(keto.nutrients.week,starts_with(c('Eiweiß, Proteingehalt','Fett','Kohlenhydrate','Ballaststoffe','Phenotype','group')))
+keto.macro$sum <- rowSums(keto.macro[ ,1:4])
+
+biomass.nut <- ggplot(keto.macro,aes(x=group, y=`sum`)) +
+  geom_boxplot()+ggtitle('macronutrients biomass')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 2) + ylab('weighted macronutrients [g]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7),rect = element_rect(size = 2))
+
+biomass.pheno.nut <- ggplot(keto.macro,aes(x=Phenotype, y=sum)) +
+  geom_boxplot()+ggtitle('macronutrients biomass')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 2) + ylab('weighted macronutrients [g]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7),rect = element_rect(size = 2))
+
+```
+
+summary statistics
+```{r}
+analyzed <- dplyr::select(keto.nutrients.week,everything(),-ends_with(c('Calcium.1','Sum','Sex')))
+
+analyzed.low <- analyzed[grepl('low',analyzed$`Phenotype`),]
+analyzed.high <- analyzed[grepl('high',analyzed$`Phenotype`),]
+analyzed.not <- analyzed[grepl('not',analyzed$`Phenotype`),]
+
+analyzed.U1 <- analyzed[grepl('U1',analyzed$file_name),]
+analyzed.U2 <- analyzed[grepl('U2',analyzed$file_name),]
+
+df <- dplyr::select(analyzed.U2,everything(),-starts_with(c('file_name','Phenotype')))
+summary <- sapply(df,FUN = function(c){
+  summary(c)
+})
+sd <- sapply(df,FUN = function(c){
+  sd(c)
+})
+```
+
+###export
+```{r}
+
+# pdf(paste0(diet_dir,'dge.reference.pdf'))
+
+ggarrange(e.pheno,fiber.pheno,b12.pheno,prot.pheno,fe.pheno,
+          labels = c("A", "B", "C","D","E"),
+          ncol = 2, nrow = 3)
+
+ggarrange(e,fiber,b12,prot,fe,
+          labels = c("A", "B", "C","D","E"),
+          ncol = 2, nrow = 3)
+# dev.off()
+
+
+
+# pdf(paste0(diet_dir,'dge.energy.biomass.pdf'))
+
+ggarrange(energy.pheno,biomass.pheno.nut,
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+# dev.off()
+
+# write_tsv(keto.macro,paste0(table_dir,'biomass.macronut.tsv'))
+```
+```{r}
+
+```
+

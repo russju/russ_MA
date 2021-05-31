@@ -1,0 +1,49 @@
+"0","```r
+##U1
+
+merge.L6.convU1 <- L6.U1 %>% merge(.,conv.sumU1,by = 'file_name',all.x=T,all.y = T) %>% column_to_rownames(.,'file_name')
+
+merge.L6.convU1[is.na(merge.L6.convU1)] <- 0
+merge.L6.convU1 <- dplyr::select(merge.L6.convU1,everything(),-ends_with('rowsum'))
+
+cor.test.convU1 <- merge.L6.convU1 %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Alkoholfreie GetrÃ¤nke`:`Wurst, Fleischwaren`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  summarize(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.convU1 [is.na(cor.test.convU1)] <- 0
+
+p.adj.convU1 <- subset(cor.test.convU1,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.convU1 <- subset(cor.test.convU1,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log.convU1 <- log2(r.cor.convU1) %>% as.numeric(.)
+cor.test.log.convU1 [is.nan(cor.test.log.convU1)] <- 0
+cor.test.log.convU1 [is.infinite(cor.test.log.convU1)] <- 0
+cor.test.log.convU1 <- as.data.frame(cor.test.log.convU1)
+
+r.cor.convU1[is.nan(r.cor.convU1)] <- 0
+r.cor.convU1[is.infinite(r.cor.convU1)] <- 0
+r.cor.convU1 <- as.data.frame(r.cor.convU1)
+
+#y axis -log10 p.value
+
+p.adj.log.convU1 <- -log10(p.adj.convU1)
+p.adj.log.convU1[is.infinite(p.adj.log.convU1)] <- 0
+p.adj.log.convU1 <- as.data.frame(p.adj.log.convU1)
+
+cor.test.adj.convU1 <- cbind(cor.test.convU1[ ,c(1,2)],p.adj.log.convU1) %>% cbind(.,r.cor.convU1) %>% as.data.frame(.)
+colnames(cor.test.adj.convU1) <- c('conv cluster','genus','p.adj.log','estimate')
+
+cor.test.adj.convU1 <- cor.test.adj.convU1[cor.test.adj.convU1$p.adj.log != 0 & cor.test.adj.convU1$estimate != 0,]
+
+write_tsv(cor.test.adj.convU1,paste0(table_dir,'corr.convclust.L6.U1.tsv'))
+
+sig.convU1 <- cor.test.adj.convU1[cor.test.adj.convU1$p.adj.log >= -log10(0.05) & cor.test.adj.convU1$p.adj.log > 0.00000,]
+top.sig.convU1 <- sig.convU1[order(-sig.convU1$p.adj.log),]
+
+```"

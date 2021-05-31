@@ -1,0 +1,16 @@
+"0","df <- read_tsv('C:/Users/Juliane/Desktop/project.directory/data/tables/conv.clust.df.weighted.01.10.tsv')
+"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","conv.clust <- df"
+"0","conv.clust <- column_to_rownames(conv.clust,'file_name')"
+"0",""
+"0","conv.clust.z <- apply(conv.clust,2,scale) %>% as.data.frame(.)"
+"0","conv.clust.z <- cbind(df$file_name,conv.clust.z)"
+"0","colnames(conv.clust.z)[colnames(conv.clust.z) == 'df$file_name'] <- 'file_name'"

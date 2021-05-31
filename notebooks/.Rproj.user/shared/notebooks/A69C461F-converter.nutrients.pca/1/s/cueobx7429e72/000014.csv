@@ -1,0 +1,2 @@
+"0","nutr.sum.z[is.na(nutr.sum.z)] <- 0"
+"0","nutr.pca <- PCA(nutr.sum.z,scale.unit = FALSE)"

@@ -1,0 +1,74 @@
+"0","#otu_table per week"
+"0","otu.week <- read_tsv(paste0(table_dir,'otu.conv.uw.19.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","otu.week <- as.data.frame(otu.week)"
+"0","row.names(otu.week) <- otu.week$file_name"
+"0","otu.week <- otu.week[ ,-1]"
+"0","otu.week <- otu_table(otu.week,taxa_are_rows = FALSE)"
+"0",""
+"0","#otu_table per day"
+"0","otu.day <- read_tsv(paste0(table_dir,'otu.conv.uw.samp.19.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  sample_day = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","otu.day  <- as.data.frame(otu.day )"
+"0","row.names(otu.day) <- otu.day$sample_day"
+"0","otu.day  <- otu.day [ ,-1]"
+"0","otu.day  <- otu_table(otu.day ,taxa_are_rows = FALSE)"
+"0",""
+"0","#trees"
+"0","tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))"
+"0",""
+"0","tree.nutr <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))"
+"0","#df"
+"0","k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------------[39m
+cols(
+  .default = col_character(),
+  day = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Sex = [33mcol_logical()[39m,
+  Energie_bls = [32mcol_double()[39m,
+  `Eiweiß, Proteingehalt` = [32mcol_double()[39m,
+  Kohlenhydrate = [32mcol_double()[39m,
+  Fett = [32mcol_double()[39m,
+  Ballaststoffe = [32mcol_double()[39m,
+  `Gesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Einfach ungesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Alkohol (Ethanol)` = [32mcol_double()[39m,
+  `Energie (kcal)` = [32mcol_double()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"2","5624 parsing failures.
+ row col           expected actual                                      file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... .........................................
+See problems(...) for more details.
+"
+"0","k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"
+"0",""
+"0","k.bls_prodi$Sex[k.bls_prodi$Sex == FALSE] <- 'female'"
+"0","k.bls_prodi$Sex[is.na(k.bls_prodi$Sex)] <- 0"
+"0","k.bls_prodi$Sex[k.bls_prodi$Sex == 0] <- 'male'"
+"0",""

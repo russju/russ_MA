@@ -1,0 +1,7 @@
+"0","```r
+select.keepX = data.tune.splsda$choice.keepX[1:2]
+select.keepX # c(15, 5)
+```"
+"1","comp1 comp2 
+   15    15 
+"

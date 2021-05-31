@@ -1,0 +1,51 @@
+"0","library(ggplot2)"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","library(ggtern)"
+"2","Registered S3 methods overwritten by 'ggtern':
+  method           from   
+  grid.draw.ggplot ggplot2
+  plot.ggplot      ggplot2
+  print.ggplot     ggplot2
+"
+"2","--
+Remember to cite, run citation(package = 'ggtern') for further info.
+--
+"
+"2","
+Attache Paket: ‘ggtern’
+
+"
+"2","The following objects are masked from ‘package:ggplot2’:
+
+    aes, annotate, ggplot, ggplot_build, ggplot_gtable, ggplotGrob, ggsave,
+    layer_data, theme_bw, theme_classic, theme_dark, theme_gray, theme_light,
+    theme_linedraw, theme_minimal, theme_void
+
+"
+"0","library(FactoMineR)"
+"0","library(tidyverse)"
+"0",""
+"0","library(ggtern)"
+"0",""
+"0","library(gmodels)"
+"2","Paket ‘gmodels’ wurde unter R Version 4.0.2 erstellt"
+"0","library(ape)"
+"0","library(phyloseq)"
+"2","Registered S3 method overwritten by 'vegan':
+  method     from      
+  rev.hclust dendextend
+"
+"0","library(dada2)"
+"2","Lade nötiges Paket: Rcpp
+"
+"2","Paket ‘Rcpp’ wurde unter R Version 4.0.3 erstellt"
+"0","library(ggpubr)"

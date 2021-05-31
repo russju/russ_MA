@@ -1,0 +1,17 @@
+"0","df.data.clr.pca <- read_tsv(paste0(table_dir,'df.data.clr.pca.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------------------[39m
+cols(
+  Name = [31mcol_character()[39m,
+  Dim.1 = [32mcol_double()[39m,
+  Dim.2 = [32mcol_double()[39m,
+  Dim.3 = [32mcol_double()[39m,
+  Dim.4 = [32mcol_double()[39m,
+  Dim.5 = [32mcol_double()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+
+"
+"0"," "

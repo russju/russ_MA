@@ -1,0 +1,7 @@
+"0","##U1 L6.rel.clr"
+"0","TF <- grepl(pattern = 'U1',x = row.names(biom.rel.clr))"
+"0","biom.rel.clr.TF <- cbind(biom.rel.clr,TF)"
+"0","biom.rel.clr.U1 <- split(biom.rel.clr.TF,sub('\\d+','',biom.rel.clr.TF$TF))"
+"0","biom.rel.clr.U1 <- as.data.frame(biom.rel.clr.U1[[""TRUE""]])"
+"0",""
+"0","##U2 L6.rel.clr"

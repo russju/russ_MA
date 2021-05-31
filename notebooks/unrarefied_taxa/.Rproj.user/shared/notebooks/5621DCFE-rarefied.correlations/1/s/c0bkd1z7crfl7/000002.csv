@@ -1,0 +1,16 @@
+"0","```r
+corr.L7 <- select(nutr.L7.sig,ends_with(c('faecis','pallens','bacilliformis')))
+corr.L6.t <- nutr.L6.sig[grepl('Tenericutes',nutr.L6.sig$genus),]##tenericutes
+corr.L6.b <- nutr.L6.sig[grepl('Butyrivibrio',nutr.L6.sig$genus),]##butyrivibrio
+corr.L6.c <- nutr.L6.sig[grepl('Clostridiales._',nutr.L6.sig$genus),]##clostridiales
+
+
+#clostridiales
+c <- ggplot(corr.L6.c,aes(x=nutrient,y=estimate)) + geom_col() + scale_y_continuous(limits = c(-0.6, 0.6)) + theme(axis.text.x = element_text(angle = 30)) + ggtitle('Clostridiales sprearman correlation')
+
+#Butyrivibrio
+b <- ggplot(corr.L6.b,aes(x=nutrient,y=estimate)) + geom_col() + scale_y_continuous(limits = c(-0.6, 0.6))+ theme(axis.text.x = element_text(angle = 30)) + ggtitle('Butyrivibrio sprearman correlation')
+
+#tenericutes
+t <- ggplot(corr.L6.t,aes(x=nutrient,y=estimate)) + geom_col() + scale_y_continuous(limits = c(-0.6, 0.6))+ theme(axis.text.x = element_text(angle = 30))+ ggtitle('Tenericutes sprearman correlation')
+```"

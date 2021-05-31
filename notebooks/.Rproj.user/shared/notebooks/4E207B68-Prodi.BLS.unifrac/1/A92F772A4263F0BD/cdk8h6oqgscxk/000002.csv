@@ -1,0 +1,77 @@
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","bls.extended <- read_tsv(paste0(table_dir,'bls.extended_01.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_character(),
+  day = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Sex = [33mcol_logical()[39m,
+  Energie_bls = [32mcol_double()[39m,
+  `Eiweiß, Proteingehalt` = [32mcol_double()[39m,
+  Kohlenhydrate = [32mcol_double()[39m,
+  Fett = [32mcol_double()[39m,
+  Ballaststoffe = [32mcol_double()[39m,
+  `Gesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Einfach ungesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Alkohol (Ethanol)` = [32mcol_double()[39m,
+  `Energie (kcal)` = [32mcol_double()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"2","5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","pca.bls <- read_tsv(paste0(table_dir,'pca.bls_14.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  Dim.1 = [32mcol_double()[39m,
+  Dim.2 = [32mcol_double()[39m,
+  Dim.3 = [32mcol_double()[39m,
+  Dim.4 = [32mcol_double()[39m,
+  Dim.5 = [32mcol_double()[39m
+)
+"
+"0","nutr.sum <- read_tsv(paste0(table_dir,'nutr.sum_14.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

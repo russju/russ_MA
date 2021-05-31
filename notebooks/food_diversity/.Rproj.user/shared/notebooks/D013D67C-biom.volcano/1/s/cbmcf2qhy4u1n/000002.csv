@@ -1,0 +1,44 @@
+"0","```r
+L2.rel <- select(L2.rel,everything(),-starts_with('row'))
+L2.rel.clr <- clr(acomp(L2.rel)) %>% as.data.frame(.)
+
+nutr.sum <- clr(acomp(nutr.sum)) %>% as.data.frame(.)
+```"
+"1","Negative values in composition are used as detection limits
+"
+"0","```r
+##plotting relative abundances firmicutes bacteroidetes
+
+# L2.rel <- L2.rel[!grepl(pattern = 'U3',row.names(L2.rel)),]
+
+fb <- L2.rel %>% as.data.frame(.) %>% dplyr::select(.,starts_with(c('D_0__Bacteria.D_1__Bacteroidetes','D_0__Bacteria.D_1__Firmicutes','D_0__Bacteria.D_1__Proteobacteria','D_0__Bacteria.D_1__Actinobacteria','D_0__Bacteria.D_1__Tenericutes')))
+fb$diet <- ifelse(grepl('U1',row.names(fb)),'non keto','keto')
+colnames(fb) <- c('rel.Bacteroidetes','rel.Firmicutes','rel.Proteobacteria','rel.Actinobacteria','rel.Tenericutes','diet')
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c(\"****\", \"***\", \"**\", \"*\", \"ns\"))
+
+firm <- ggplot(fb,aes(x = diet,y = rel.Firmicutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)#,symnum.args = symnum.args)
+
+bact <- ggplot(fb,aes(x = diet,y = rel.Bacteroidetes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+proteo <- ggplot(fb,aes(x = diet,y = rel.Proteobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+actinobacteria <- ggplot(fb,aes(x = diet,y = rel.Actinobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+tenericutes <- ggplot(fb,aes(x = diet,y = rel.Tenericutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bact.firm.rel <- ggscatter(fb,x='rel.Bacteroidetes',y='rel.Firmicutes',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+##plotting rel. clr abundances nutr sum
+
+nutr.sum.z <- column_to_rownames(nutr.sum.z,'file_name')
+```"
+"1","Fehler: `.data` must be a data frame without row names.
+"

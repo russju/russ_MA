@@ -1,0 +1,57 @@
+"0","```r
+
+pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 0
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'
+
+X.metadata <- left_join(rowSum,pheno,by = 'file_name')
+
+X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','row'))) %>% 
+  column_to_rownames(.,var = 'file_name')
+
+Y = X.metadata$Phenotype %>% as.factor(.)
+
+
+
+nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) 
+```"
+"1","
+-- Column specification --------------------------------------------------------
+cols(
+  sample = col_character(),
+  `1.veg.fruit` = col_double(),
+  `2.carbs.bread` = col_double(),
+  `3.fatty.sweet` = col_double(),
+  `4.carbs.cereal` = col_double(),
+  `5.seed` = col_double(),
+  `6.nut` = col_double(),
+  `7.kohl` = col_double(),
+  `8.fish.sauce` = col_double(),
+  `9.egg` = col_double(),
+  `10.alcohol` = col_double(),
+  `11.wurst` = col_double(),
+  `12.soft.drinks` = col_double(),
+  `13.white.meat` = col_double(),
+  `14.fatty.dairy` = col_double(),
+  `15.cheese` = col_double()
+)
+"
+"0","```r
+colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'
+
+pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))
+# nutr.clust$file_name <- row.names(nutr.clust)
+
+# pheno.X <- pheno.X[grepl('U1',pheno.X$file_name),]
+pheno.X <- pheno.X[grepl('U2',pheno.X$file_name),]
+
+nutr.clust <- merge(nutr.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('type'))
+
+# nutr.clust <- nutr.clust[grepl('U1',row.names(nutr.clust)),]
+nutr.clust <- nutr.clust[grepl('U2',row.names(nutr.clust)),]
+
+Y =pheno.X$Phenotype %>% as.factor(.)
+
+```"

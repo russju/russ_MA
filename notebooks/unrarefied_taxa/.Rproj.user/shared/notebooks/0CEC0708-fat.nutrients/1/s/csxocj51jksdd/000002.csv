@@ -1,0 +1,15 @@
+"0","```r
+##total fecal fatty acids and Fett
+
+fa <- ggscatter(merge.fa.nutr,x='total',y='Fett',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman',xlab = 'fecal fatty acids', ylab = 'dietary fats')
+
+sat <- ggscatter(merge.fa.nutr,x='sat',y='GesÃ¤ttigte FettsÃ¤uren',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman',xlab = 'fecal saturated fatty acids', ylab = 'dietary saturated fats')
+
+unsat <- ggscatter(merge.fa.nutr,x='mono.unsat',y='Einfach ungesÃ¤ttigte FettsÃ¤uren',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman',xlab = 'fecal mono unsaturated fatty acids', ylab = 'dietary mono unsaturated fats')
+```"

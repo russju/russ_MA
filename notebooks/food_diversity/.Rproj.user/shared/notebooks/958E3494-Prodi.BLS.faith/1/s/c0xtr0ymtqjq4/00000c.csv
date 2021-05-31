@@ -1,0 +1,4 @@
+"0","ggarrange(pd.conv.group,pd.nutr.group,"
+"0","          labels = c(""A"", ""B""),"
+"0","          ncol = 2, nrow = 1)"
+"2","cannot compute exact p-value with ties"

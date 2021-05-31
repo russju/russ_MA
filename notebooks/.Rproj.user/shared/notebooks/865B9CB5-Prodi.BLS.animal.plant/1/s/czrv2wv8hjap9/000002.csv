@@ -1,0 +1,13 @@
+"0","```r
+pa.pheno.not <- pa.pheno[grepl('not',pa.pheno$Phenotype),]
+summary(pa.pheno.not$percent.animal)
+
+```"
+"1","   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+                                                
+"
+"0","```r
+sd(pa.pheno.not$percent.animal)
+```"
+"1","[1] NA
+"

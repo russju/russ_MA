@@ -1,0 +1,5 @@
+"0","pc.tree$tip.label <- full_join(tree.conv$tip.label,pc.tree$tip.label,by = 'item_prodi')
+"
+"2","Fehler in UseMethod(""full_join"") : 
+  nicht anwendbare Methode für 'full_join' auf Objekt der Klasse ""character"" angewendet
+"

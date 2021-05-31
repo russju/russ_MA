@@ -1,0 +1,67 @@
+"0","library(tidyverse)"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","library(Rtsne)"
+"0","library(FactoMineR)"
+"0",""
+"0","library(rgr)"
+"2","Lade nötiges Paket: fastICA
+"
+"2","
+Attache Paket: ‘rgr’
+
+"
+"2","The following objects are masked from ‘package:compositions’:
+
+    alr, clr, ilr
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    syms
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    syms
+
+"
+"0","library(colorspace)"
+"0","library(dendextend)"
+"2","Paket ‘dendextend’ wurde unter R Version 4.0.2 erstellt"
+"2","
+---------------------
+Welcome to dendextend version 1.14.0
+Type citation('dendextend') for how to cite the package.
+
+Type browseVignettes(package = 'dendextend') for the package vignette.
+The github page is: https://github.com/talgalili/dendextend/
+
+Suggestions and bug-reports can be submitted at: https://github.com/talgalili/dendextend/issues
+Or contact: <tal.galili@gmail.com>
+
+	To suppress this message use:  suppressPackageStartupMessages(library(dendextend))
+---------------------
+
+"
+"2","
+Attache Paket: ‘dendextend’
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    cutree
+
+"
+"0","library(factoextra)"
+"2","Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+"
+"0","library(plotly)"

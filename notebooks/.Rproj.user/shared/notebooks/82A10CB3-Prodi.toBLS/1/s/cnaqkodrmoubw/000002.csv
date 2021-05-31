@@ -1,0 +1,3 @@
+"0","bls.food <- bls.gram %>% "
+"0","  dplyr::select(item_id, item_descr, item_info, item_cooking) %>% "
+"0","  mutate(name = str_to_lower(item_descr))"

@@ -1,0 +1,29 @@
+"0","```r
+# if (!requireNamespace(\"BiocManager\", quietly = TRUE))
+#     install.packages(\"BiocManager\")
+# 
+# BiocManager::install(\"biomformat\")
+
+# if (!requireNamespace('BiocManager', quietly = TRUE))
+#     install.packages('BiocManager')
+# 
+#  BiocManager::install('EnhancedVolcano')
+
+# if (!requireNamespace(\"BiocManager\", quietly = TRUE))
+#     install.packages(\"BiocManager\")
+# 
+# BiocManager::install(\"a4Base\")
+  
+
+library(tidyverse)
+library(biomformat)
+# library(data.table)
+library(compositions)
+# library(corrplot)
+# library(EnhancedVolcano)
+library(a4Base)
+library(plotly)
+library(ggpubr)
+
+library(Maaslin2)
+```"

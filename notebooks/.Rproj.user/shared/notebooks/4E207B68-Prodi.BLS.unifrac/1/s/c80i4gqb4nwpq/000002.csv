@@ -1,0 +1,95 @@
+"0","library(tidyverse)"
+"0","library(ape)"
+"2","Paket ‘ape’ wurde unter R Version 4.0.3 erstellt"
+"2","
+Attache Paket: ‘ape’
+
+"
+"2","The following object is masked from ‘package:ggpubr’:
+
+    rotate
+
+"
+"2","The following object is masked from ‘package:compositions’:
+
+    balance
+
+"
+"0","library(phyloseq)"
+"2","
+Attache Paket: ‘phyloseq’
+
+"
+"2","The following object is masked from ‘package:IRanges’:
+
+    distance
+
+"
+"2","The following object is masked from ‘package:Biobase’:
+
+    sampleNames
+
+"
+"0","library(ggplot2)"
+"0","library(devtools)"
+"2","Paket ‘devtools’ wurde unter R Version 4.0.3 erstellt"
+"2","Lade nötiges Paket: usethis
+"
+"2","Paket ‘usethis’ wurde unter R Version 4.0.3 erstellt"
+"2","
+Attache Paket: ‘devtools’
+
+"
+"2","The following object is masked from ‘package:permute’:
+
+    check
+
+"
+"0","library(factoextra)"
+"2","Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+"
+"0","# library(GMDecomp)"
+"0","library(apcluster)"
+"2","Paket ‘apcluster’ wurde unter R Version 4.0.2 erstellt"
+"2","
+Attache Paket: ‘apcluster’
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    heatmap
+
+"
+"0","library(plotly)"
+"0","# library(RFLPtools)"
+"0","# devtools::install_github(""taryue/GMDecomp"")"
+"0",""
+"0","library(Rtsne)"
+"0","library(FactoMineR)"
+"0","library(rgr)"
+"2","Lade nötiges Paket: fastICA
+"
+"2","
+Attache Paket: ‘rgr’
+
+"
+"2","The following objects are masked from ‘package:compositions’:
+
+    alr, clr, ilr
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    syms
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    syms
+
+"
+"0","library(ggdendro)"
+"2","Paket ‘ggdendro’ wurde unter R Version 4.0.3 erstellt"
+"0","# library(DECIPHER)"
+"0",""
+"0","library(ggpubr)"

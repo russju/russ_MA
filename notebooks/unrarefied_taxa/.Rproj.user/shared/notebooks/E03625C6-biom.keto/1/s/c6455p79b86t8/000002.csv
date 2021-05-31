@@ -1,0 +1,46 @@
+"0","```r
+merge.fam.nutr <- fam.U1 %>% merge(.,nutr.U1,by = 'file_name',all.x=T,all.y = T) %>% column_to_rownames(.,'file_name')
+
+merge.fam.nutr[is.na(merge.fam.nutr)] <- 0
+merge.fam.nutr <- dplyr::select(merge.fam.nutr,everything(),-ends_with('rowsum'))
+
+cor.test.U1.fam <- merge.fam.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", Acidaminococcaceae:Xanthomonadaceae) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  summarize(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.U1.fam[is.na(cor.test.U1.fam)] <- 0
+
+p.adj.U1.fam <- subset(cor.test.U1.fam,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.U1.fam <- subset(cor.test.U1.fam,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log.U1.fam <- log2(r.cor.U1.fam) %>% as.numeric(.)
+cor.test.log.U1.fam [is.nan(cor.test.log.U1.fam)] <- 0
+cor.test.log.U1.fam [is.infinite(cor.test.log.U1.fam)] <- 0
+cor.test.log.U1.fam <- as.data.frame(cor.test.log.U1.fam)
+
+r.cor.U1.fam[is.nan(r.cor.U1.fam)] <- 0
+r.cor.U1.fam[is.infinite(r.cor.U1.fam)] <- 0
+r.cor.U1.fam <- as.data.frame(r.cor.U1.fam)
+
+#y axis -log10 p.value
+
+p.adj.log.U1.fam <- -log10(p.adj.U1.fam)
+p.adj.log.U1.fam[is.infinite(p.adj.log.U1.fam)] <- 0
+p.adj.log.U1.fam <- as.data.frame(p.adj.log.U1.fam)
+
+cor.test.adj.U1.fam <- cbind(cor.test.U1.fam[ ,c(1,2)],p.adj.log.U1.fam) %>% cbind(.,r.cor.U1.fam) %>% as.data.frame(.)
+colnames(cor.test.adj.U1.fam) <- c('nutrient','family U1','p.adj.log','estimate')
+
+cor.test.adj.U1.fam <- cor.test.adj.U1.fam[cor.test.adj.U1.fam$p.adj.log != 0 & cor.test.adj.U1.fam$estimate != 0,]
+
+write_tsv(cor.test.adj.U1.fam,paste0(table_dir,'corr.nutr.fam.U1.tsv'))
+
+sig.U1.fam <- cor.test.adj.U1.fam[cor.test.adj.U1.fam$p.adj.log <= 0.050 & cor.test.adj.U1.fam$p.adj.log > 0.00000,]
+top.sig.U1.fam <- sig.U1.fam[order(-sig.U1.fam$p.adj.log),]
+```"

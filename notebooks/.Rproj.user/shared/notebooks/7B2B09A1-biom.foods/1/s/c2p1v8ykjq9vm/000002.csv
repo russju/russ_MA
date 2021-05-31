@@ -1,0 +1,392 @@
+"0","# if (!requireNamespace(""BiocManager"", quietly = TRUE))"
+"0","#     install.packages(""BiocManager"")"
+"0","# "
+"0","# BiocManager::install(""biomformat"")"
+"0",""
+"0","# if (!requireNamespace('BiocManager', quietly = TRUE))"
+"0","#     install.packages('BiocManager')"
+"0","# "
+"0","#  BiocManager::install('EnhancedVolcano')"
+"0",""
+"0","# if (!requireNamespace(""BiocManager"", quietly = TRUE))"
+"0","#     install.packages(""BiocManager"")"
+"0","# "
+"0","# BiocManager::install(""a4Base"")"
+"0","  "
+"0",""
+"0","library(tidyverse)"
+"2","Paket ‘tidyverse’ wurde unter R Version 4.0.2 erstellt"
+"2","Registered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+"
+"2","[37m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.3.0 --[39m
+"
+"2","[37m[32mv[37m [34mggplot2[37m 3.3.2     [32mv[37m [34mpurrr  [37m 0.3.4
+[32mv[37m [34mtibble [37m 3.0.3     [32mv[37m [34mdplyr  [37m 1.0.0
+[32mv[37m [34mtidyr  [37m 1.1.0     [32mv[37m [34mstringr[37m 1.4.0
+[32mv[37m [34mreadr  [37m 1.3.1     [32mv[37m [34mforcats[37m 0.5.0[39m
+"
+"2","Paket ‘ggplot2’ wurde unter R Version 4.0.2 erstellt"
+"2","Paket ‘tibble’ wurde unter R Version 4.0.2 erstellt"
+"2","[37m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
+[31mx[37m [34mdplyr[37m::[32mfilter()[37m masks [34mstats[37m::filter()
+[31mx[37m [34mdplyr[37m::[32mlag()[37m    masks [34mstats[37m::lag()[39m
+"
+"0","library(biomformat)"
+"0","library(compositions)"
+"2","Paket ‘compositions’ wurde unter R Version 4.0.2 erstellt"
+"2","Welcome to compositions, a package for compositional data analysis.
+Find an intro with ""? compositions""
+
+"
+"2","
+Attache Paket: ‘compositions’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    cor, cov, dist, var
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    %*%, norm, scale, scale.default
+
+"
+"0","library(a4Base)"
+"2","Lade nötiges Paket: grid
+"
+"2","Lade nötiges Paket: Biobase
+"
+"2","Lade nötiges Paket: BiocGenerics
+"
+"2","Lade nötiges Paket: parallel
+"
+"2","
+Attache Paket: ‘BiocGenerics’
+
+"
+"2","The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ, clusterExport, clusterMap, parApply, parCapply, parLapply, parLapplyLB, parRapply,
+    parSapply, parSapplyLB
+
+"
+"2","The following objects are masked from ‘package:compositions’:
+
+    normalize, var
+
+"
+"2","The following objects are masked from ‘package:biomformat’:
+
+    colnames, rownames
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    combine, intersect, setdiff, union
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep, grepl,
+    intersect, is.unsorted, lapply, Map, mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce, rownames,
+    sapply, setdiff, sort, table, tapply, union, unique, unsplit, which, which.max, which.min
+
+"
+"2","Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor, see 'citation(""Biobase"")', and for packages
+    'citation(""pkgname"")'.
+
+"
+"2","Lade nötiges Paket: AnnotationDbi
+"
+"2","Paket ‘AnnotationDbi’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: stats4
+"
+"2","Lade nötiges Paket: IRanges
+"
+"2","Lade nötiges Paket: S4Vectors
+"
+"2","
+Attache Paket: ‘S4Vectors’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    first, rename
+
+"
+"2","The following object is masked from ‘package:tidyr’:
+
+    expand
+
+"
+"2","The following object is masked from ‘package:base’:
+
+    expand.grid
+
+"
+"2","
+Attache Paket: ‘IRanges’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    collapse, desc, slice
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    reduce
+
+"
+"2","The following object is masked from ‘package:grDevices’:
+
+    windows
+
+"
+"2","
+Attache Paket: ‘AnnotationDbi’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    select
+
+"
+"2","Lade nötiges Paket: annaffy
+"
+"2","Lade nötiges Paket: GO.db
+"
+"2","
+"
+"2","Lade nötiges Paket: KEGG.db
+"
+"2","
+KEGG.db contains mappings based on older data because the original resource was removed from the the public domain before the most recent update was
+  produced. This package should now be considered deprecated and future versions of Bioconductor may not have it available.  Users who want more
+  current data are encouraged to look at the KEGGREST or reactome.db packages
+
+"
+"2","Package 'KEGG.db' is deprecated and will be removed from Bioconductor version 3.12"
+"2","Lade nötiges Paket: mpm
+"
+"2","Paket ‘mpm’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: MASS
+"
+"2","
+Attache Paket: ‘MASS’
+
+"
+"2","The following object is masked from ‘package:AnnotationDbi’:
+
+    select
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    select
+
+"
+"2","Lade nötiges Paket: KernSmooth
+"
+"2","KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
+"
+"2","
+mpm version 1.0-22
+
+"
+"2","Lade nötiges Paket: genefilter
+"
+"2","
+Attache Paket: ‘genefilter’
+
+"
+"2","The following object is masked from ‘package:MASS’:
+
+    area
+
+"
+"2","The following object is masked from ‘package:readr’:
+
+    spec
+
+"
+"2","Lade nötiges Paket: limma
+"
+"2","
+Attache Paket: ‘limma’
+
+"
+"2","The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+"
+"2","Lade nötiges Paket: multtest
+"
+"2","Lade nötiges Paket: glmnet
+"
+"2","Paket ‘glmnet’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: Matrix
+"
+"2","
+Attache Paket: ‘Matrix’
+
+"
+"2","The following object is masked from ‘package:S4Vectors’:
+
+    expand
+
+"
+"2","The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+"
+"2","Loaded glmnet 4.0-2
+"
+"2","
+Attache Paket: ‘glmnet’
+
+"
+"2","The following object is masked from ‘package:compositions’:
+
+    rmult
+
+"
+"2","Lade nötiges Paket: a4Preproc
+"
+"2","Lade nötiges Paket: a4Core
+"
+"2","
+Attache Paket: ‘a4Core’
+
+"
+"2","The following object is masked from ‘package:limma’:
+
+    topTable
+
+"
+"2","Lade nötiges Paket: gplots
+"
+"2","Paket ‘gplots’ wurde unter R Version 4.0.2 erstellt"
+"2","
+Attache Paket: ‘gplots’
+
+"
+"2","The following object is masked from ‘package:multtest’:
+
+    wapply
+
+"
+"2","The following object is masked from ‘package:IRanges’:
+
+    space
+
+"
+"2","The following object is masked from ‘package:S4Vectors’:
+
+    space
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    lowess
+
+"
+"2","
+a4Base version 1.36.0
+
+"
+"0","library(plotly)"
+"2","Paket ‘plotly’ wurde unter R Version 4.0.2 erstellt"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"2","Registered S3 methods overwritten by 'htmltools':
+  method               from         
+  print.html           tools:rstudio
+  print.shiny.tag      tools:rstudio
+  print.shiny.tag.list tools:rstudio
+"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","
+Attache Paket: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:mpm’:
+
+    export
+
+"
+"2","The following object is masked from ‘package:MASS’:
+
+    select
+
+"
+"2","The following object is masked from ‘package:AnnotationDbi’:
+
+    select
+
+"
+"2","The following object is masked from ‘package:IRanges’:
+
+    slice
+
+"
+"2","The following object is masked from ‘package:S4Vectors’:
+
+    rename
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","library(gridExtra)"
+"2","
+Attache Paket: ‘gridExtra’
+
+"
+"2","The following object is masked from ‘package:Biobase’:
+
+    combine
+
+"
+"2","The following object is masked from ‘package:BiocGenerics’:
+
+    combine
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    combine
+
+"
+"0","library(gridExtra)"

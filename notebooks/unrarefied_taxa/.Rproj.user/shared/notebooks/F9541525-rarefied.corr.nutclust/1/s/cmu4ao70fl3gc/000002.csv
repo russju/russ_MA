@@ -1,0 +1,20 @@
+"0","```r
+##merge together
+merge.L6.nutr <- norm.L6 %>% merge(.,cl.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+
+#correlate every nutrient cluster with every taxa
+cor.test.L6.nutr <- merge.L6.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `1.veg.fruit`:`15.cheese`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.L6.nutr[is.na(cor.test.L6.nutr)] <- 0
+
+p.adj.L6.nutr <- subset(cor.test.L6.nutr,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.L6.nutr <- subset(cor.test.L6.nutr,select = `estimate`) %>% data.matrix(.)
+```"

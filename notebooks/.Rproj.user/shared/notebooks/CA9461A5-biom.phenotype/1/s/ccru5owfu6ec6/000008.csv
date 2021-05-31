@@ -1,0 +1,23 @@
+"0","conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') "
+"0",""
+"0","# conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]"
+"0",""
+"0","matrix.conv <- conv.clust %>% group_by(Phenotype) %>%"
+"0","  summarise_all(.funs = sum) %>%"
+"0","  pivot_longer(-Phenotype) %>%"
+"0","  pivot_wider(names_from = Phenotype,values_from=value) %>% "
+"0","  column_to_rownames(.,'name') %>% data.matrix(.)"
+"0",""
+"0","matrix.conv.z <- scale(matrix.conv)                                                                 "
+"0",""
+"0","l <- stats::heatmap(matrix.conv.z,cexRow = .8,cexCol = .9,Rowv = NA,Colv = NA)"

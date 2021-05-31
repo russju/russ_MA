@@ -1,0 +1,12 @@
+"0","keto.samples %>% "
+"0","  filter(item != 'Leitungswasser Freiburg') %>% "
+"0","  mutate(classified = ifelse(is.na(Calcium), 'unclassified', 'classified')) %>% "
+"0","  group_by(sample, time_point, date, classified) %>% "
+"0","  summarize(kcal = sum(`Energie (kcal)`, na.rm = T)) %>% "
+"0","  pivot_wider(names_from = 'classified', values_from = 'kcal') %>% "
+"0","  mutate_at(.vars = vars(classified, unclassified),"
+"0","            .funs = funs(replace_na(., 0))) %>% "
+"0","  mutate(kcal = classified + unclassified, "
+"0","         classified.p = classified / kcal) %>% View()"
+"2","`summarise()` has grouped output by 'sample', 'time_point', 'date'. You can override using the `.groups` argument.
+"

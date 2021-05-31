@@ -1,0 +1,44 @@
+"0","library(tidyverse)"
+"0","library(FactoMineR)"
+"2","Paket ‘FactoMineR’ wurde unter R Version 4.0.3 erstellt"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"0","library(dendextend)"
+"2","Paket ‘dendextend’ wurde unter R Version 4.0.2 erstellt"
+"2","
+---------------------
+Welcome to dendextend version 1.14.0
+Type citation('dendextend') for how to cite the package.
+
+Type browseVignettes(package = 'dendextend') for the package vignette.
+The github page is: https://github.com/talgalili/dendextend/
+
+Suggestions and bug-reports can be submitted at: https://github.com/talgalili/dendextend/issues
+Or contact: <tal.galili@gmail.com>
+
+	To suppress this message use:  suppressPackageStartupMessages(library(dendextend))
+---------------------
+
+"
+"2","
+Attache Paket: ‘dendextend’
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    cutree
+
+"
+"0","library(ape)"
+"2","Paket ‘ape’ wurde unter R Version 4.0.3 erstellt"
+"2","
+Attache Paket: ‘ape’
+
+"
+"2","The following objects are masked from ‘package:dendextend’:
+
+    ladderize, rotate
+
+"

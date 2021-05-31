@@ -1,0 +1,24 @@
+"0","```r
+nutr.L7.sig <- read_tsv(paste0(table_dir,'nutrients.L7.corr.tsv'))
+```"
+"1","
+-- Column specification -----------------------------------------------------------------
+cols(
+  specy = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L6.sig <- read_tsv(paste0(table_dir,'nutrients.L6.corr.tsv'))
+```"
+"1","
+-- Column specification -----------------------------------------------------------------
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"

@@ -1,0 +1,8 @@
+"0","#extract PCs"
+"0",""
+"0","pca <- get_pca(df.clr.pca_data,'ind')"
+"0","# plot(pca$coord)"
+"0","pca.coord.bls <- as.data.frame(pca$coord)"
+"0",""
+"0",""
+"0",""

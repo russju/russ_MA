@@ -1,0 +1,8 @@
+"0","found.prodi <- Reduce(function(x, y) merge(x, y, all=TRUE), list(found.1,found.2,found.3,found.4,found.5,found.6,found.7,found.8,found.9))"
+"0","bls.gram <- "
+"0","  found.prodi %>% "
+"0","  select(item_prodi, item_id) %>% "
+"0","  full_join(bls.gram, by = 'item_id')"
+"0",""
+"0",""
+"0","bls.gram <- bls.gram[ , -which(names(bls.gram) %in% c('item_group','item_no','item_info','item_cooking','item_weight','item_id_length','Energie, Protein (%)','Energie, Kohlenhydrate (%)','Energie, Fett (%)','Energie, Alkohol (%)'))]"

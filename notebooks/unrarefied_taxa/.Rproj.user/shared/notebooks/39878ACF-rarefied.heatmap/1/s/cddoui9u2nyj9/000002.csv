@@ -1,0 +1,256 @@
+"0","```r
+##nutrients
+nutr.L6 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L6.U1 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L6.U2 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L6.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L7 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L7.U1 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutr.L7.U2 <- read_tsv(paste0(table_dir,'corr.nutr.biom.L7.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+##convclust
+conv.L6 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+conv.L7 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+conv.L6.U1 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+conv.L6.U2 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L6.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+conv.L7.U1 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+conv.L7.U2 <- read_tsv(paste0(table_dir,'corr.convclust.biom.L7.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+##nutclust
+nutclust.L6 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutclust.L7 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutclust.L6.U1 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutclust.L6.U2 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L6.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  genus = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutclust.L7.U1 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.U1.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+nutclust.L7.U2 <- read_tsv(paste0(table_dir,'corr.nutclust.biom.L7.U2.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  specy = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+##family level
+cor.test.family <- read_tsv(paste0(table_dir,'rarefied.corr.nutr.family.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  taxa = col_character(),
+  nutrients = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+cor.test.conv <- read_tsv(paste0(table_dir,'corr.convclust.family.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  family = col_character(),
+  `conv clusters` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+cor.test.nutr <- read_tsv(paste0(table_dir,'rarefied.corr.nutclust.family.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------
+cols(
+  family = col_character(),
+  `nutrient clusters` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"

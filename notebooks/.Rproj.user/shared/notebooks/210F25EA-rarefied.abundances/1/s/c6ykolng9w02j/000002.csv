@@ -1,0 +1,22 @@
+"0","norm.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  rowname = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","norm.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))%>% column_to_rownames(.,'rowname')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  rowname = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)"
+"0","# biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)"

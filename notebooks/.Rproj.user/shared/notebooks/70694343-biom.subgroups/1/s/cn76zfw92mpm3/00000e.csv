@@ -1,0 +1,26 @@
+"0","matrix.sd <- subgr.matrix.nutr %>% group_by(sample_subgroup) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_subgroup) %>%
+  pivot_wider(names_from = sample_subgroup,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+# a <- subset(matrix.sd , grepl( ""sg1"",colnames(matrix.sd)))
+# b <- subset(matrix.sd , grepl( ""sg2"",colnames(matrix.sd)))
+# matrix.sd  <- cbind(a,b)
+# k <- matrix.sd[grepl(pattern = ' 1',colnames(matrix.sd)),]
+matrix.sd[ , grepl(pattern = ' 1',colnames(matrix.sd))]
+"
+"1","                   "
+"1","
+menue compounds (1)"
+"1","
+sweets (2)         "
+"1","
+vegetables (3)     "
+"1","
+fats (4)           "
+"1","
+fruits(5)          "
+"1","
+"
+"0","stats::heatmap(matrix.sd,cexRow = .7,cexCol = .7,main = 'heatmap subgroups')"

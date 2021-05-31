@@ -1,0 +1,311 @@
+"0","```r
+#nutrients
+corr.nutr.L2 <- read_tsv(paste0(table_dir, 'corr.nutr.L2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  phylum = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutr.L6 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  genus = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutr.family <- read_tsv(paste0(table_dir, 'corr.nutr.family.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  taxa = col_character(),
+  nutrients = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#nutrient cluster
+corr.nutclust.L2 <- read_tsv(paste0(table_dir, 'corr.nutclust.L2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  phylum = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutclust.L6 <- read_tsv(paste0(table_dir, 'corr.nutclust.L6.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutclust.family <- read_tsv(paste0(table_dir, 'corr.nutclust.family.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  family = col_character(),
+  `nutrient clusters` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#conventional clusters
+corr.convclust.L2 <- read_tsv(paste0(table_dir, 'corr.convclust.L2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  phylum = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.convclust.L6 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  genus = col_character(),
+  clusters = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.convclust.family <- read_tsv(paste0(table_dir, 'corr.convclust.family.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  family = col_character(),
+  `conv clusters` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#serum fats
+corr.nutr.fats <- read_tsv(paste0(table_dir, 'corr.fat.nut.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  fat = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#feces fat
+corr.nutr.chol <- read_tsv(paste0(table_dir, 'corr.chol.nut.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  `sum fecal chol (derivates)` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#U1
+# write_tsv(cor.test.adj,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.L2.U1.tsv')
+# write_tsv(cor.test.adj.U1.fam,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.fam.U1.tsv')
+
+corr.nutr.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U1.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.convclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.U1.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `conv cluster` = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutrclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U1.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `nutr cluster` = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#U2
+# write_tsv(cor.test.adj,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.L2.U2.tsv')
+# write_tsv(cor.test.adj.U2.fam,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.fam.U2.tsv')
+
+corr.nutr.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.convclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.convrclust.L6.U2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.nutrclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U2.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  nutrient = col_character(),
+  genus = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+#shannon microbiome
+# corr.conv.shannonL6 <- read_tsv(paste0(table_dir, 'corr.convclust.shannon.tsv')) %>% as.data.frame(.)
+# corr.nutclust.shannonL6 <- read_tsv(paste0(table_dir, 'corr.nutrclust.shannon.tsv')) %>% as.data.frame(.)
+# 
+# corr.convclust.shannonL6.U1 <- read_tsv(paste0(table_dir, 'corr.nutr.shannonL6.U1.tsv')) %>% as.data.frame(.)
+# corr.nutclust.shannonL6.U1 <- read_tsv(paste0(table_dir, 'corr.nutclust.shannonL6.U1.tsv')) %>% as.data.frame(.)
+# 
+# corr.conv.shannonL6.U2 <- read_tsv(paste0(table_dir, 'corr.convclust.shannonL6.U2.tsv')) %>% as.data.frame(.)
+# corr.nutclust.shannonL6.U2 <- read_tsv(paste0(table_dir, 'corr.nutclust.shannonL6.U2.tsv')) %>% as.data.frame(.)
+
+#fats in feces z.score
+
+corr.scfa.nut <- read_tsv(paste0(table_dir, 'corr.scfa.nutr.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal scfa` = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.fa.nut <- read_tsv(paste0(table_dir, 'corr.fa.nutr.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal fatty acids` = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.chol.nut <- read_tsv(paste0(table_dir, 'corr.chol.nutr.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `sum fecal chol (derivates)` = col_character(),
+  nutrient = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.scfa.convclust <- read_tsv(paste0(table_dir, 'corr.scfa.convclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal scfa` = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.fa.convclust <- read_tsv(paste0(table_dir, 'corr.fa.convclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal fatty acids` = col_character(),
+  `nutrient cluster` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.chol.convclust <- read_tsv(paste0(table_dir, 'corr.chol.convclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `sum fecal chol (derivates)` = col_character(),
+  `nutrient cluster` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.scfa.nutclust <- read_tsv(paste0(table_dir, 'corr.scfa.nutclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal scfa` = col_character(),
+  cluster = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.fa.nutclust <- read_tsv(paste0(table_dir, 'corr.fa.nutclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `fecal fatty acids` = col_character(),
+  `nutrient cluster` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"
+"0","```r
+corr.chol.nutclust <- read_tsv(paste0(table_dir, 'corr.chol.nutclust.tsv')) %>% as.data.frame(.)
+```"
+"1","Parsed with column specification:
+cols(
+  `sum fecal chol (derivates)` = col_character(),
+  `nutrient cluster` = col_character(),
+  p.adj.log = col_double(),
+  estimate = col_double()
+)
+"

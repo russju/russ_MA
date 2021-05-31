@@ -1,0 +1,8 @@
+"0","```r
+#L6 conv
+div.L7.conv <- merge(div.L7,div.conv,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L7.conv,x='Shannon Index conv.clust',y='Shannon Index specy',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```"

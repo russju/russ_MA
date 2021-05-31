@@ -1,0 +1,6 @@
+"0","```r
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+plotIndiv(data.splsda)
+```"

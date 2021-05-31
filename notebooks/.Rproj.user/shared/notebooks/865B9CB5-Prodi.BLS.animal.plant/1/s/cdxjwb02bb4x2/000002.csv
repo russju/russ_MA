@@ -1,0 +1,44 @@
+"0","```r
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c(\"****\", \"***\", \"**\", \"*\", \"ns\"))
+
+#calculating animal and plant percent, per day
+
+plant.animal <- merge(plant, animal, by = c(\"sample_day\",\"source\",\"Energie_bls\"),all.x = TRUE, all.y = TRUE)
+plant.animal <- subset(plant.animal,select = c('sample_day','source','Energie_bls'))
+
+#sum of energy intake in one day
+
+plant.animal$energy_sum_source <- with(plant.animal, ave(Energie_bls, sample_day, source, FUN = sum))
+
+plant.animal$energy_sum_total <- with(plant.animal, ave(Energie_bls, sample_day, FUN = sum))
+
+plant.animal$percent <- (100/plant.animal$energy_sum_total)*plant.animal$energy_sum_source
+
+plant.animal$percent.plant <- with(plant.animal, ifelse(source=='plant', percent,0))
+plant.animal$percent.animal <- with(plant.animal, ifelse(source=='animal', percent,0))
+
+pa <- plant.animal %>% group_by(sample_day,percent.animal,percent.plant)
+
+pa <- plant.animal  %>%
+    group_by(sample_day) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+```"
+"1","`summarise()` has grouped output by 'sample_day'. You can override using the `.groups` argument.
+"
+"0","```r
+pa$correct_percent <- pa$percent.plant+pa$percent.animal == 100
+
+#coloring by U1 U2
+
+pa$U1 <- grepl('U1',pa$sample_day)
+pa$color <- ifelse(pa$U1 == 'TRUE','U1','U2')
+
+#density plot
+
+p <- ggplot(pa, aes(x=`percent.plant`, y=`percent.animal`, color=`color`)) +
+  geom_point() + ggtitle('density plot PRE and POST nutritional protocols\nper day')
+# + geom_smooth(method=lm) 
+
+# ggplotly(p, tooltip = c('x','y','text'))
+```"

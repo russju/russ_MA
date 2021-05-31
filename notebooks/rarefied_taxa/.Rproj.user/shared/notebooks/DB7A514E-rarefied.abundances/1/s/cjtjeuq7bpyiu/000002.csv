@@ -1,0 +1,44 @@
+"0","```r
+##Firmicutes abundance
+firmi <- biom.L6[grepl('irmicutes',colnames(biom.L6))]
+firmi.r <- rowSums(firmi) %>% data.frame(.)
+# firmi$file_name <- row.names(biom.L6)
+colnames(firmi.r) <- 'Firmicutes'
+# firmi <- cbind(firmi.r,firmi)
+
+#Bacteroidetes abundance
+bacteroi <- biom.L6[grepl('acteroidetes',colnames(biom.L6))]
+# bacteroi$file_name <- row.names(biom.L6)
+bacteroi.r <- rowSums(bacteroi) %>% data.frame(.)
+colnames(bacteroi.r) <- 'Bacteroidetes'
+# bacteroi <- cbind(bacteroi.r,bacteroi)
+
+#Actinobacteria abundance
+actino <- biom.L6[grepl('ctinobacteria',colnames(biom.L6))]
+# actino$file_name <- row.names(biom.L6)
+actino.r <- rowSums(actino) %>% data.frame(.)
+colnames(actino.r) <- 'Actinobacteria'
+# actino <- cbind(actino.r,actino)
+
+phyla <- merge(firmi.r,bacteroi.r,by = 'row.names') %>% column_to_rownames(.,'Row.names') %>%
+  merge(.,actino.r, by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+##relative abundance, clr
+
+phyla.sub <- data.matrix(phyla)
+phyla.sub <- phyla.sub+0.5
+rowsum <- rowSums(phyla.sub)
+
+phyla <- cbind(phyla.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+phyla <- as.data.frame(phyla)
+phyla.rel <- phyla/phyla$rowsum
+phyla.rel <- select(phyla.rel,everything(),-starts_with('row'))
+
+phyla.rel.clr <- clr(phyla.rel) %>% as.data.frame(.)
+
+
+phyla.rel.clr$diet <- ifelse(grepl('U1',row.names(phyla.rel.clr)),'non keto','keto')
+```"

@@ -1,0 +1,7 @@
+"0","```r
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA phenotypes')
+```"

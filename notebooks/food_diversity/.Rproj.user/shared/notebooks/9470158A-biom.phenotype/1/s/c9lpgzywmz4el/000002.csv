@@ -1,0 +1,27 @@
+"0","```r
+data.splsda = mixOmics::splsda(X = nutr.clust + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               # keepX = select.keepX, 
+                               logratio= \"CLR\",
+                               near.zero.var = T,
+)
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+```"
+"1","$overall
+       max.dist
+comp1 0.4451613
+comp2 0.4709677
+
+$BER
+       max.dist
+comp1 0.6263305
+comp2 0.6336134
+"
+"0","```r
+h <- mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA phenotypes')
+```"

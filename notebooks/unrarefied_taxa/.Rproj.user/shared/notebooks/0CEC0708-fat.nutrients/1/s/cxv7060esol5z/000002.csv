@@ -1,0 +1,42 @@
+"0","```r
+##data preparation
+chol.sub <- dplyr::select(choly,starts_with(c('Sample','Sum','Total'))) %>% .[-1, ]
+chol.sub <- chol.sub[!grepl(\"U3\", chol.sub$Sample.Name),]
+chol.sub[is.na(chol.sub)] <- 0
+row.names(chol.sub) <- chol.sub$Sample.Name
+row.names(chol.sub) <- str_replace(row.names(chol.sub),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+chol.samples <- row.names(chol.sub)
+chol.sub <- dplyr::select(chol.sub,everything(),-starts_with('Sample'))
+
+fa_feces.sub <- dplyr::select(fa_feces,ends_with(c('sat','SampleID','4','8','Omega3','Omega6','total')))
+fa_feces.sub <- fa_feces.sub[!grepl(\"U3\", fa_feces.sub$SampleID),]
+fa_feces.sub[is.na(fa_feces.sub)] <- 0
+fa_feces.sub <- column_to_rownames(fa_feces.sub,'SampleID')
+row.names(fa_feces.sub) <- str_replace(row.names(fa_feces.sub),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+fa_feces.sub.samples <- row.names(fa_feces.sub)
+
+scfa.sub <- dplyr::select(scfa_stool,ends_with(c('Acetate','SampleID','Propionate','Butyrate','Iso.Butyrate','Total.SCFA')))
+scfa.sub <- scfa.sub[!grepl(\"U3\", scfa.sub$SampleID),]
+scfa.sub[is.na(scfa.sub)] <- 0
+scfa.sub <- column_to_rownames(scfa.sub,'SampleID')
+row.names(scfa.sub) <- str_replace(row.names(scfa.sub),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+scfa.sub.samples <- row.names(scfa.sub)
+
+
+##z.score
+chol.sub <- data.matrix(chol.sub)
+chol.sub.z <- apply(chol.sub,2,scale) %>% as.data.frame(.)
+chol.sub.z <- cbind(chol.samples,chol.sub.z)
+
+fa_feces.sub <- data.matrix(fa_feces.sub)
+fa_feces.sub.z <- apply(fa_feces.sub,2,scale) %>% as.data.frame(.)
+fa_feces.sub.z <- cbind(fa_feces.sub.samples,fa_feces.sub.z)
+
+scfa.sub <- data.matrix(scfa.sub)
+scfa.sub.z <- apply(scfa.sub,2,scale) %>% as.data.frame(.)
+scfa.sub.z <- cbind(scfa.sub.samples,scfa.sub.z)
+
+```"

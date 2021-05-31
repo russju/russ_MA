@@ -1,0 +1,35 @@
+"0","```r
+data.splsda = mixOmics::splsda(X = conv.clust + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               # keepX = select.keepX, 
+                               logratio= \"CLR\",
+                               near.zero.var = T,
+)
+```"
+"1","Zero- or near-zero variance predictors.
+ Reset
+            predictors matrix to not near-zero variance predictors.
+
+            See $nzv for problematic predictors.
+"
+"0","```r
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+```"
+"1","$overall
+      max.dist
+comp1     0.45
+comp2     0.45
+
+$BER
+       max.dist
+comp1 0.6026611
+comp2 0.5788515
+"
+"0","```r
+h <- mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA phenotypes')
+```"

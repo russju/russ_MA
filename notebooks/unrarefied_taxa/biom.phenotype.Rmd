@@ -1,0 +1,561 @@
+---
+title: "SPLSDA-which foods/clusters explain phenotypes the best?"
+output: html_notebook
+---
+
+#libraries
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("mixOmics")
+  
+
+library(tidyverse)
+library(mixOmics)
+library(plotly)
+
+library(grid)
+library(gplots)
+
+# library(pheatmap)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+converter_dir = paste0(output_dir,'converter/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))
+
+rowSum <- read_tsv(paste0(output_dir,'biomass_30.11.tsv'))
+
+nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) 
+colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))
+```
+possible to explain data based on food/ nutrient cluster/ conventional cluster intake of converter phenotypes?
+
+sPLS DA with weighted per sample input food/ nutrient cluster/ conventional cluster   and belonging to phenotype
+
+heatmap for intuitive consumtion overview
+
+#food
+food distribution explainable through Phenotype?
+```{r}
+pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 0
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'
+
+X.metadata <- left_join(rowSum,pheno,by = 'file_name')
+
+X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','row'))) %>% 
+  column_to_rownames(.,var = 'file_name')
+
+Y = X.metadata$Phenotype %>% as.factor(.)
+
+```
+
+## sparse PLS Discriminant Analysis
+
+### Initial sPLS-DA
+```{r}
+pseudo = 1e-6
+
+data.plsda = mixOmics::plsda(X = X + pseudo,Y = Y, ncomp = 3 , logratio = 'CLR', scale = T)
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10)
+
+plot(data.perf.plsda, sd=TRUE,legend.position = 'horizontal')
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+### Cross-Validate features
+5x10 CV
+```{r}
+set.seed(100)
+data.tune.splsda = mixOmics::tune.splsda(X + pseudo, 
+                          Y = Y, 
+                          ncomp = 3, 
+                          multilevel = NULL, 
+                          logratio = 'CLR',
+                          validation = c('Mfold'), 
+                          folds = 5, 
+                          dist = 'max.dist', 
+                          nrepeat = 10,
+                          progressBar = FALSE)
+
+plot(data.tune.splsda)
+select.keepX = data.tune.splsda$choice.keepX[1:2]
+select.keepX # c(15, 5)
+```
+
+### Apply CV features
+```{r}
+data.splsda = mixOmics::splsda(X = X + pseudo,  Y = Y, 
+                               ncomp = 3, 
+                               keepX = select.keepX, 
+                               logratio= "CLR",
+                               near.zero.var = T,
+)
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+
+mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+Plot loadings 
+```{r}
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .4, size.legend = .75)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+# pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+#                        comp = 2, method = 'median', contrib = 'max', 
+#                        size.title = rel(1), border = T, 
+#                        size.name = .35, size.legend = .3)
+#                        # legend.color = colors.discrete[c(4, 1)])
+
+```
+
+#heatmap
+weighted food per samples as input
+```{r}
+X.metadata <- X.metadata %>% dplyr::select(.,everything(),-starts_with('file_name')) 
+
+matrix <- X.metadata %>% group_by(Phenotype) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-Phenotype) %>%
+  pivot_wider(names_from = Phenotype,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+matrix.z <- scale(matrix)
+                                                                    stats::heatmap(matrix.z,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes')
+                                                                        
+#per sample
+                                                                        
+df <- left_join(rowSum,pheno,by = 'file_name')
+
+df$sample_pheno <- paste(df$file_name,df$Phenotype)
+df <- df %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','file_name','row')))
+
+matrix.pheno <- df %>% group_by(sample_pheno) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_pheno) %>%
+  pivot_wider(names_from = sample_pheno,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes')                                                                        
+```
+###export
+```{r}
+pdf(paste0(converter_dir,'foods.sPLS-DA.pdf'))
+
+mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA foods-phenotypes')
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+
+stats::heatmap(matrix.z,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes',scale = 'none')
+
+heatmap.2(matrix.z,cexRow = .85,cexCol = .95,trace = 'none',notecol = 'black',srtCol = 30)
+
+dev.off()
+
+```
+
+
+#nutrient clusters
+weighted nutrient cluster as input for sPLS-DA
+```{r}
+
+pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 0
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'
+
+X.metadata <- left_join(rowSum,pheno,by = 'file_name')
+
+X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','row'))) %>% 
+  column_to_rownames(.,var = 'file_name')
+
+Y = X.metadata$Phenotype %>% as.factor(.)
+
+
+
+nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) 
+colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'
+
+pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))
+# nutr.clust$file_name <- row.names(nutr.clust)
+
+# pheno.X <- pheno.X[grepl('U1',pheno.X$file_name),]
+pheno.X <- pheno.X[grepl('U2',pheno.X$file_name),]
+
+nutr.clust <- merge(nutr.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('type'))
+
+# nutr.clust <- nutr.clust[grepl('U1',row.names(nutr.clust)),]
+nutr.clust <- nutr.clust[grepl('U2',row.names(nutr.clust)),]
+
+Y =pheno.X$Phenotype %>% as.factor(.)
+
+```
+
+## sparse PLS Discriminant Analysis
+
+### Initial sPLS-DA
+```{r}
+pseudo = 1e-6
+
+#standard Partial Least Squares regression to classify samples
+
+data.plsda = mixOmics::plsda(X = nutr.clust + pseudo,Y = Y, ncomp = 2 , logratio = 'CLR', scale = T)
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10,auc = TRUE)
+
+plot(data.perf.plsda, sd=TRUE,legend.position = 'horizontal')
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA phenotypes')
+```
+
+### Apply Cross Validation features
+prediction whether sample belongs to sg1 or sg2
+Cross Validation tries how stable prediction is
+```{r}
+data.splsda = mixOmics::splsda(X = nutr.clust + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               # keepX = select.keepX, 
+                               logratio= "CLR",
+                               near.zero.var = T,
+)
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+
+h <- mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA phenotypes')
+
+
+```
+
+
+Plot loadings 
+```{r}
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .75)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .75)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+plotIndiv(data.splsda)
+```
+
+#heatmap
+weighted nutrient clusters as input
+```{r}
+nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv'))
+colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'
+
+
+nutr.clust <- merge(nutr.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') 
+
+# nutr.clust <- nutr.clust[grepl('U1',row.names(nutr.clust)),]
+nutr.clust <- nutr.clust[grepl('U2',row.names(nutr.clust)),]
+
+matrix.nutr <- nutr.clust %>% group_by(Phenotype) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-Phenotype) %>%
+  pivot_wider(names_from = Phenotype,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+matrix.nutr.z <- scale(matrix.nutr)
+                                                                  
+heatmap.2(matrix.nutr.z,cexRow = .85,cexCol = .95,trace = 'none',notecol = 'black',srtCol = 30)
+
+l <- stats::heatmap(matrix.nutr.z,cexRow = .9,cexCol = .9,Colv = NA,Rowv = NA)
+                                                                        
+#per sample
+                                                                        
+                                                                        
+df <- nutr.clust
+df$file_name <- row.names(df)
+
+df$sample_pheno <- paste(df$file_name,df$Phenotype)
+df <- df %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','file_name')))
+
+matrix.pheno <- df %>% group_by(sample_pheno) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_pheno) %>%
+  pivot_wider(names_from = sample_pheno,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+
+k <- stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,verbose = TRUE) 
+
+# mp1 <- matrix.pheno[,grepl(pattern = 'U1',colnames(matrix.pheno))]
+# mp2 <- matrix.pheno[,grepl(pattern = 'U2',colnames(matrix.pheno))]
+# mp <- cbind(mp1,mp2)
+# stats::heatmap(mp,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes') 
+```
+###export
+```{r}
+pdf(paste0(converter_dir,'U2.nutclust.sPLS-DA.pdf'))
+
+h
+
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA nutrient clusters',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+stats::heatmap(matrix.nutr.z,cexRow = .9,cexCol = .9,Colv = NA,Rowv = NA,scale = 'none')
+
+stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,scale = c('row')) 
+
+heatmap.2(matrix.nutr.z,cexRow = .85,cexCol = .75,trace = 'none',notecol = 'black',srtCol = 30)
+
+dev.off()
+
+```
+
+
+#conv cluster
+weighted conventional clusters as sPLS DA input
+```{r}
+pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 0
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'
+
+X.metadata <- left_join(rowSum,pheno,by = 'file_name')
+
+X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','row'))) %>% 
+  column_to_rownames(.,var = 'file_name')
+
+Y = X.metadata$Phenotype %>% as.factor(.)
+
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))
+
+
+pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))
+# nutr.clust$file_name <- row.names(nutr.clust)
+
+# pheno.X <- pheno.X[grepl('U1',pheno.X$file_name),]
+# pheno.X <- pheno.X[grepl('U2',pheno.X$file_name),]
+
+conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('type'))
+
+# conv.clust <- conv.clust[grepl('U1',row.names(conv.clust)),]
+# conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]
+
+Y =pheno.X$Phenotype %>% as.factor(.)
+
+```
+
+## sparse PLS Discriminant Analysis
+
+### Initial sPLS-DA
+```{r}
+pseudo = 1e-6
+
+#standard Partial Least Squares regression to classify samples
+
+data.plsda = mixOmics::plsda(X = conv.clust + pseudo,Y = Y, ncomp = 2 , logratio = 'CLR', scale = T)
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10)
+
+plot(data.perf.plsda, sd=TRUE)
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA phenotypes')
+```
+
+### Apply Cross Validation features
+prediction whether sample belongs to sg1 or sg2
+Cross Validation tries how stable prediction is
+```{r}
+data.splsda = mixOmics::splsda(X = conv.clust + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               # keepX = select.keepX, 
+                               logratio= "CLR",
+                               near.zero.var = T,
+)
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+
+h <- mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA phenotypes')
+
+
+```
+
+
+Plot loadings 
+```{r}
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .45)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .75)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+```
+
+#heatmap
+weighted conventional clusters as input
+```{r}
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))
+
+conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') 
+
+# conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]
+
+matrix.conv <- conv.clust %>% group_by(Phenotype) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-Phenotype) %>%
+  pivot_wider(names_from = Phenotype,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+matrix.conv.z <- scale(matrix.conv)                                                                 
+
+l <- stats::heatmap(matrix.conv.z,cexRow = .8,cexCol = .9,Rowv = NA,Colv = NA)
+                                                                    heatmap.2(matrix.conv.z,cexRow = .85,cexCol = .95,trace = 'none' ,notecol = 'black',srtCol = 30)  
+#per sample
+                                                                        
+                                                                        
+df <- conv.clust
+df$file_name <- row.names(df)
+
+df$sample_pheno <- paste(df$file_name,df$Phenotype)
+df <- df %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','file_name')))
+
+matrix.pheno <- df %>% group_by(sample_pheno) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_pheno) %>%
+  pivot_wider(names_from = sample_pheno,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+
+k <- stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7) 
+
+# mp1 <- matrix.pheno[,grepl(pattern = 'U1',colnames(matrix.pheno))]
+# mp2 <- matrix.pheno[,grepl(pattern = 'U2',colnames(matrix.pheno))]
+# mp <- cbind(mp1,mp2)
+# stats::heatmap(mp,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes') 
+```
+###export
+```{r}
+pdf(paste0(converter_dir,'convclust.sPLS-DA.pdf'))
+
+h
+
+# COMP 1
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA conventional clusters',
+                       comp = 1, method = 'median', contrib = 'max',
+                       size.title = rel(1), border = T,
+                       size.name = .75, legend = FALSE)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max',
+                       size.title = rel(1), border = T,
+                       size.name = .75, legend = FALSE)
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+heatmap.2(matrix.conv.z,cexRow = .85,cexCol = .95,trace = 'none',notecol = 'black',srtCol = 30) 
+
+stats::heatmap(matrix.conv.z,cexRow = .8,cexCol = .9,Rowv = NA,Colv = NA,scale = 'none')  
+#per sample
+# COMP 1
+
+
+dev.off()
+
+```
+high and low converter U1 and U1 getrennt
+```{r}
+
+```
+

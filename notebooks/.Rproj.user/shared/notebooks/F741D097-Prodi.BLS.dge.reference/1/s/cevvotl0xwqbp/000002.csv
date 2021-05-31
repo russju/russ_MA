@@ -1,0 +1,5 @@
+"0","output_dir = '../results/'"
+"0","diet_dir = paste0(output_dir,'diet.protocols/')"
+"0","data_dir = '../data/'"
+"0","table_dir = paste0(data_dir, 'tables/')"
+"0","biom_dir = paste0(data_dir,'silva.feces/')"

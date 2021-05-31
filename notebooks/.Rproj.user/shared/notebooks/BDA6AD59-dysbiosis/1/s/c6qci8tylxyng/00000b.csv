@@ -1,0 +1,8 @@
+"0",""
+"0","pcoa_bc.L7$vectors %>%  "
+"0","  as.data.frame(.) %>% "
+"0","  rownames_to_column('Name') %>% "
+"0","  dplyr::select(Name, Axis.1:Axis.5) %>%"
+"0","  ggplot(aes(Axis.1, Axis.2)) + "
+"0","  geom_point(aes(fill = meta7$`sample`),"
+"0","    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\nspecy')"

@@ -1,0 +1,29 @@
+"0","```r
+#x axis log2 correlation
+
+# cor.test.log.L7 <- log2(r.cor.L7) %>% as.numeric(.)
+# cor.test.log.L7[is.nan(cor.test.log.L7)] <- 0
+# cor.test.log.L7[is.infinite(cor.test.log.L7)] <- 0
+# cor.test.log.L7 <- as.data.frame(cor.test.log.L7)
+
+r.cor.L7.nutr[is.nan(r.cor.L7.nutr)] <- 0
+r.cor.L7.nutr[is.infinite(r.cor.L7.nutr)] <- 0
+r.cor.L7.nutr <- as.data.frame(r.cor.L7.nutr)
+
+#y axis -log10 p.value
+
+p.adj.log.L7.nutr <- -log10(p.adj.L7.nutr)
+p.adj.log.L7.nutr[is.infinite(p.adj.log.L7.nutr)] <- 0
+p.adj.log.L7.nutr <- as.data.frame(p.adj.log.L7.nutr)
+
+cor.test.adj.L7.nutr <- cbind(cor.test.L7.nutr[ ,c(1,3)],p.adj.log.L7.nutr) %>% cbind(.,r.cor.L7.nutr) %>% as.data.frame(.)
+colnames(cor.test.adj.L7.nutr) <- c('specy','clusters','p.adj.log','estimate')
+
+cor.test.adj.L7.nutr <- cor.test.adj.L7.nutr[cor.test.adj.L7.nutr$p.adj.log != 0 & cor.test.adj.L7.nutr$estimate != 0,]
+
+write_tsv(cor.test.adj.L7.nutr,paste0(table_dir,'corr.convclust.biom.L7.tsv'))
+
+sig.nutr.L7 <- cor.test.adj.L7.nutr[cor.test.adj.L7.nutr$p.adj.log >= -log10(0.05) & cor.test.adj.L7.nutr$p.adj.log > 0.00000  ,] 
+top.sig.nutr.L7 <- sig.nutr[order(-sig.nutr$p.adj.log ),]
+
+```"

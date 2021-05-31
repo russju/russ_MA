@@ -1,0 +1,30 @@
+"0","```r
+##sig. correlations
+sig.biom.L6 <- cor.test.adj.biom.L6[cor.test.adj.biom.L6$p.adj.log >= -log10(0.050) & cor.test.adj.biom.L6$p.adj.log > 0.00000,]
+top.sig.biom.L6 <- sig.biom.L6[order(-sig.biom.L6$p.adj.log ),] #[1:11,]
+
+sig.biom.L7 <- cor.test.adj.biom.L7[cor.test.adj.biom.L7$p.adj.log >= -log10(0.050) & cor.test.adj.biom.L7$p.adj.log > 0.00000,]
+top.sig.biom.L7 <- sig.biom.L7[order(-sig.biom.L7$p.adj.log ),] #[1:11,]
+
+##L6
+vp.biom.L6 <- ggplot(cor.test.adj.biom.L6,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle(\"Volcano plot\") +
+  xlab(\"correlation\") + 
+  ylab(\"-log10 adjusted p-value\")
+
+vp.biom.L6 <- vp.biom.L6+xlim(c(-1,1)) + geom_vline(xintercept=c(-0.6, 0.6), col=\"red\") +
+    geom_hline(yintercept=-log10(0.05), col=\"red\") 
+
+##L7
+vp.biom.L7 <- ggplot(cor.test.adj.biom.L7,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle(\"Volcano plot\") +
+  xlab(\"correlation\") + 
+  ylab(\"-log10 adjusted p-value\")
+
+vp.biom.L7 <- vp.biom.L7+xlim(c(-1,1)) + geom_vline(xintercept=c(-0.6, 0.6), col=\"red\") +
+    geom_hline(yintercept=-log10(0.05), col=\"red\")
+```"

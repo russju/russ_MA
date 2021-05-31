@@ -1,0 +1,3 @@
+"0","                       # legend.color = colors.discrete[c(4, 1)])"
+"0",""
+"0","stats::heatmap(matrix.nutr.z,cexRow = .9,cexCol = .9,Colv = NA,Rowv = NA,scale = 'none')"

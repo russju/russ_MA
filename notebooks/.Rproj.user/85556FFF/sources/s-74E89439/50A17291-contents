@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(tidyverse)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```
+
+# Data Import
+```{r}
+bls.scale <- read_tsv(paste0(table_dir, 'BLS.scale.15Jun2020.tsv'))
+bls.properties <- read_tsv(paste0(table_dir, 'BLS.properties.15Jun2020.tsv'))
+```
+
+```{r}
+foods = list('C133001' = 40, # Haferflocken
+             'C333011' = 10, # Hirseflocken
+             'F110000' = 50, # Apfel
+             'F503000' = 50) # Banane
+
+df <-
+  bls.scale %>% 
+  select(everything(), -starts_with('item'), item_id) %>% 
+  filter(item_id %in% names(foods)) %>% 
+  column_to_rownames('item_id')
+
+quantities = unlist(foods[rownames(df)])
+
+props <- c('Energie (kcal)',
+           'Kohlenhydrate', 'Fett', 'Eiweiß, Proteingehalt', 
+           'Ballaststoffe', 'Eisen')
+df.q <- 
+   data.frame(Value = colSums(df * quantities)) %>% 
+   rownames_to_column('Property') #%>% 
+   # filter(Property %in% props)
+
+df.q %>% 
+  mutate(Value = round(Value, 5)) %>% 
+  arrange(desc(Value))
+```

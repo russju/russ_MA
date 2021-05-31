@@ -1,0 +1,12 @@
+"0","```r
+ggplot(bile.pheno,aes(x=Phenotype,y=`stand.bile.acid`)) +
+
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+3: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','low converter'),c('not classified','high converter')),hide.ns = FALSE)
+```"

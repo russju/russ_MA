@@ -1,0 +1,52 @@
+"0","```r
+
+
+#weighted UniFrac per day
+
+df.unifrac.samp <- subset(k.bls_prodi,select=c(`file_name`,`item`,`Energie_bls`,`Energie (kcal)`,`day`))
+
+##calculation for weighted UniFrac
+df.unifrac.samp$calculation <- apply(X=df.unifrac.samp,MARGIN=2,FUN=function(line){(100/df.unifrac$`Energie_bls`)*df.unifrac$`Energie (kcal)`})
+df.unifrac.samp <- as.data.frame(df.unifrac.samp)
+df.unifrac.samp$sample_day <- paste(df.unifrac.samp$file_name,df.unifrac.samp$day)
+df.unifrac.samp <- df.unifrac.samp[ ,-c(1)]
+
+#otu_table generation for weighted UniFrac
+otu.unifrac.samp <- subset(df.unifrac.samp,select = c(`item`,`calculation`,`sample_day`))
+
+otu.unifrac.samp <- otu.unifrac.samp %>% group_by(item,sample_day) %>% summarize(sum = sum(calculation)) %>% pivot_wider(names_from = 'item',values_from = 'sum') %>% as.data.frame(.)
+```"
+"1","`summarise()` regrouping output by 'item' (override with `.groups` argument)
+"
+"0","```r
+otu.unifrac.samp[is.na(otu.unifrac.samp)] <- 0
+row.names(otu.unifrac.samp) <- otu.unifrac.samp$sample_day
+otu.unifrac.samp <- otu.unifrac.samp[ ,-1]
+
+
+otu.weighted.samp <- otu_table(otu.unifrac.samp,taxa_are_rows = FALSE)
+
+phylo.conv.w.samp <- phyloseq(otu.weighted.samp,tree.conv)
+unifrac.keto.conv.w.samp <- UniFrac(phylo.conv.w.samp,weighted = FALSE,fast = TRUE)
+pcoa_keto.w.samp <- ape::pcoa(unifrac.keto.conv.w.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.conv.w.samp <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_keto.w.samp$vectors %>%  ##error
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.w.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac conventional clusters')
+
+```"

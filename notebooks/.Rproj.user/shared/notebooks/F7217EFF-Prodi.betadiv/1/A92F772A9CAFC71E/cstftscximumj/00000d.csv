@@ -1,0 +1,24 @@
+"0","tmp <- subset(keto.bls,select = c(`item_cat`,`item_subcat`,`item_descr`))
+"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","3: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","4: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","5: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"

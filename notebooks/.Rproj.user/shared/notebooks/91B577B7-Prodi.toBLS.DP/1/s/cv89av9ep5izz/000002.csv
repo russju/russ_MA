@@ -1,0 +1,4 @@
+"0","output_dir = '../results/'"
+"0","bin_dir = '../bin/'"
+"0","data_dir = '../data/'"
+"0","table_dir = paste0(data_dir, 'tables/')"

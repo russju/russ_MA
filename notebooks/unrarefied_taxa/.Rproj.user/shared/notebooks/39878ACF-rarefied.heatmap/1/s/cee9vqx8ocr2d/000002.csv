@@ -1,0 +1,190 @@
+"0","```r
+##L6
+nutr.L6.sub <- nutr.L6  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.sub2 <- nutr.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sub2 <- ifelse(nutr.L6.sub2 >= -log10(0.05),'*','')
+
+nutr.L6.U1.sub <- nutr.L6.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.U1.sub2 <- nutr.L6.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sub2 <- ifelse(nutr.L6.U1.sub2 >= -log10(0.05),'*','')
+
+nutr.L6.U2.sub <- nutr.L6.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L6.U2.sub2 <- nutr.L6.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sub2 <- ifelse(nutr.L6.U2.sub2 >= -log10(0.05),'*','')
+
+##L7
+nutr.L7.sub <- nutr.L7  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.sub2 <- nutr.L7 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sub2 <- ifelse(nutr.L7.sub2 >= -log10(0.05),'*','')
+
+nutr.L7.U1.sub <- nutr.L7.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.U1.sub2 <- nutr.L7.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sub2 <- ifelse(nutr.L7.U1.sub2 >= -log10(0.05),'*','')
+
+nutr.L7.U2.sub <- nutr.L7.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+nutr.L7.U2.sub2 <- nutr.L7.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sub2 <- ifelse(nutr.L7.U2.sub2 >= -log10(0.05),'*','')
+
+##only spearman not -0.35 until 0.35, finding out interesting taxa
+#L6
+nutr.L6 <- nutr.L6 %>% distinct(.)
+nutr.L6.sig <- filter(nutr.L6,nutr.L6$estimate >= 0.35 | nutr.L6$estimate <= -0.35)
+nutr.L6.sig <- nutr.L6.sig %>% as.data.frame() %>% filter(nutr.L6.sig$p.adj.log >= -log10(0.05))
+# nutr.L6.sig <- nutr.L6[nutr.L6$estimate >= 0.2 | nutr.L6$estimate <= -0.2,]
+# nutr.L6.sig.min <- nutr.L6[order(nutr.L6$estimate ),][1:30,]
+# nutr.L6.sig.plus <- nutr.L6[order(-nutr.L6$estimate ),][1:30,]
+# nutr.L6.sig <- rbind(nutr.L6.sig.min,nutr.L6.sig.plus) %>% distinct(.)
+
+write_tsv(nutr.L6.sig,paste0(table_dir,'nutrients.L6.corr.tsv'))
+
+#subset of high correlations with interesting taxa
+
+nutr.L6.sig <- nutr.L6[grepl('_Actinomyces',nutr.L6$genus) | grepl('_Streptomyces',nutr.L6$genus) | grepl('Clostridiales._',nutr.L6$genus)| grepl('Butyrivibrio',nutr.L6$genus)| grepl('Bacteroides',nutr.L6$genus) ,]
+
+nutr.L6.sig <- nutr.L6.sig[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig$nutrient)|grepl('Glucose',nutr.L6.sig$nutrient)| grepl('Energie,',nutr.L6.sig$nutrient) | grepl('Polysaccharide',nutr.L6.sig$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L6.sig$nutrient)| grepl('Protein',nutr.L6.sig$nutrient),]
+
+# nutr.L6.sig <- nutr.L6.sig[!grepl('Vitamin',nutr.L6.sig$nutrient) & !grepl('Kalium',nutr.L6.sig$nutrient) &!grepl('Iodid',nutr.L6.sig$nutrient)& !grepl('Kupfer',nutr.L6.sig$nutrient)& !grepl('asser',nutr.L6.sig$nutrient)& !grepl('Fluorid',nutr.L6.sig$nutrient)& !grepl('Sorbit',nutr.L6.sig$nutrient)& !grepl('Schwefel',nutr.L6.sig$nutrient)& !grepl('Chlorid',nutr.L6.sig$nutrient)& !grepl('Zink',nutr.L6.sig$nutrient)& !grepl('Mangan',nutr.L6.sig$nutrient)& !grepl('ium',nutr.L6.sig$nutrient)& !grepl('Eisen',nutr.L6.sig$nutrient)& !grepl('Phosphor',nutr.L6.sig$nutrient)& !grepl('Mannit',nutr.L6.sig$nutrient)& !grepl('Harn',nutr.L6.sig$nutrient)& !grepl('Purin',nutr.L6.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig$nutrient)& !grepl('Alkohol',nutr.L6.sig$nutrient)& !grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Zuckeralkohol',nutr.L6.sig$nutrient)&!grepl('Alkohol',nutr.L6.sig$nutrient),]
+
+
+nutr.L6.sig.sub <- nutr.L6.sig  %>%  dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sig.sub[is.na(nutr.L6.sig.sub)] <- 0
+
+nutr.L6.sig.sub2 <- nutr.L6.sig  %>%  dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.sig.sub2 <- ifelse(nutr.L6.sig.sub2 >= -log10(0.05),'*','')
+
+##U1 with sub of taxa and nutrients
+
+nutr.L6.U1 <- nutr.L6.U1 %>% distinct(.)
+
+nutr.L6.sig.U1 <- nutr.L6.U1[grepl('_Actinomyces',nutr.L6.U1$genus) | grepl('_Streptomyces',nutr.L6.U1$genus) | grepl('Clostridiales._',nutr.L6.U1$genus)| grepl('Butyrivibrio',nutr.L6.U1$genus)| grepl('Bacteroides',nutr.L6.U1$genus),]
+
+nutr.L6.sig.U1 <- nutr.L6.sig.U1[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig.U1$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig.U1$nutrient)|grepl('Glucose',nutr.L6.sig.U1$nutrient)| grepl('Energie,',nutr.L6.sig.U1$nutrient) | grepl('Polysaccharide',nutr.L6.sig.U1$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L6.sig.U1$nutrient)| grepl('Protein',nutr.L6.sig.U1$nutrient),]
+
+
+# nutr.L6.sig.U1 <- nutr.L6.sig.U1[!grepl('Vitamin',nutr.L6.sig.U1$nutrient) & !grepl('Kalium',nutr.L6.sig.U1$nutrient) &!grepl('Iodid',nutr.L6.sig.U1$nutrient)& !grepl('Kupfer',nutr.L6.sig.U1$nutrient)& !grepl('asser',nutr.L6.sig.U1$nutrient)& !grepl('Fluorid',nutr.L6.sig.U1$nutrient)& !grepl('Sorbit',nutr.L6.sig.U1$nutrient)& !grepl('Schwefel',nutr.L6.sig.U1$nutrient)& !grepl('Chlorid',nutr.L6.sig.U1$nutrient)& !grepl('Zink',nutr.L6.sig.U1$nutrient)& !grepl('Mangan',nutr.L6.sig.U1$nutrient)& !grepl('ium',nutr.L6.sig.U1$nutrient)& !grepl('Eisen',nutr.L6.sig.U1$nutrient)& !grepl('Phosphor',nutr.L6.sig.U1$nutrient)& !grepl('Mannit',nutr.L6.sig.U1$nutrient)& !grepl('Harn',nutr.L6.sig.U1$nutrient)& !grepl('Purin',nutr.L6.sig.U1$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig.U1$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L6.sig.U1$nutrient),]
+
+# nutr.L6.U1.sig <- nutr.L6.U1[nutr.L6.U1$estimate >= 0.2 | nutr.L6.U1$estimate <= -0.2,]
+# nutr.L6.U1.sig <- nutr.L6.U1.sig[order(-nutr.L6.U1.sig$estimate ),][1:50,]
+
+nutr.L6.U1.sig.sub <- nutr.L6.sig.U1 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sig.sub[is.na(nutr.L6.U1.sig.sub)] <- 0
+
+nutr.L6.U1.sig.sub2 <- nutr.L6.sig.U1  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U1.sig.sub2 <- ifelse(nutr.L6.U1.sig.sub2 >= -log10(0.05),'*','')
+
+
+
+##U2 with sub of taxa and nutrients
+
+nutr.L6.U2 <- nutr.L6.U2 %>% distinct(.)
+
+nutr.L6.sig.U2 <- nutr.L6.U2[grepl('_Actinomyces',nutr.L6.U2$genus) | grepl('_Streptomyces',nutr.L6.U2$genus) | grepl('Clostridiales._',nutr.L6.U2$genus)| grepl('Butyrivibrio',nutr.L6.U2$genus)| grepl('Bacteroides',nutr.L6.U2$genus),]
+
+nutr.L6.sig.U2 <- nutr.L6.sig.U2[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig.U2$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L6.sig.U2$nutrient)|grepl('Glucose',nutr.L6.sig.U2$nutrient)| grepl('Energie,',nutr.L6.sig.U2$nutrient) | grepl('Polysaccharide',nutr.L6.sig.U2$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L6.sig.U2$nutrient)| grepl('Protein',nutr.L6.sig.U2$nutrient),]
+
+# nutr.L6.sig.U2 <- nutr.L6.sig.U2[!grepl('Vitamin',nutr.L6.sig.U2$nutrient) & !grepl('Kalium',nutr.L6.sig.U2$nutrient) &!grepl('Iodid',nutr.L6.sig.U2$nutrient)& !grepl('Kupfer',nutr.L6.sig.U2$nutrient)& !grepl('asser',nutr.L6.sig.U2$nutrient)& !grepl('Fluorid',nutr.L6.sig.U2$nutrient)& !grepl('Sorbit',nutr.L6.sig.U2$nutrient)& !grepl('Schwefel',nutr.L6.sig.U2$nutrient)& !grepl('Chlorid',nutr.L6.sig.U2$nutrient)& !grepl('Zink',nutr.L6.sig.U2$nutrient)& !grepl('Mangan',nutr.L6.sig.U2$nutrient)& !grepl('ium',nutr.L6.sig.U2$nutrient)& !grepl('Eisen',nutr.L6.sig.U2$nutrient)& !grepl('Phosphor',nutr.L6.sig.U2$nutrient)& !grepl('Mannit',nutr.L6.sig.U2$nutrient)& !grepl('Harn',nutr.L6.sig.U2$nutrient)& !grepl('Purin',nutr.L6.sig.U2$nutrient)& !grepl('Zuckeralkohol',nutr.L6.sig.U2$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L6.sig.U2$nutrient),]
+
+# nutr.L6.U2.sig <- nutr.L6.U2[nutr.L6.U2$estimate >= 0.2 | nutr.L6.U2$estimate <= -0.2,]
+# nutr.L6.U2.sig <- nutr.L6.U2.sig[order(-nutr.L6.U2.sig$estimate ),][1:50,]
+nutr.L6.U2.sig.sub <- nutr.L6.sig.U2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sig.sub[is.na(nutr.L6.U2.sig.sub)] <- 0
+
+nutr.L6.U2.sig.sub2 <- nutr.L6.sig.U2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L6.U2.sig.sub2 <- ifelse(nutr.L6.U2.sig.sub2 >= -log10(0.05),'*','')
+
+##only spearman not -0.35 until 0.35, finding o ut interesting taxa
+#L7
+nutr.L7 <- nutr.L7 %>% distinct(.)
+nutr.L7.sig <- nutr.L7[nutr.L7$estimate >= 0.35 | nutr.L7$estimate <= -0.35,]
+nutr.L7.sig <- nutr.L7[nutr.L7$p.adj.log >= -log10(0.05),]
+
+# nutr.L7.sig.min <- nutr.L7.sig[order(nutr.L7.sig$estimate ),][1:30,]
+# nutr.L7.sig.plus <- nutr.L7.sig[order(-nutr.L7.sig$estimate ),][1:30,]
+# nutr.L7.sig <- rbind(nutr.L7.sig.min,nutr.L7.sig.plus) %>% distinct(.)
+
+write_tsv(nutr.L7.sig,paste0(table_dir,'nutrients.L7.corr.tsv'))
+
+nutr.L7.sig <- nutr.L7[grepl('pallens',nutr.L7$specy) | grepl('bacilliformis',nutr.L7$specy)| grepl('faecis',nutr.L7$specy)|  grepl('bifidum',nutr.L7$specy)| grepl('catus',nutr.L7$specy)| grepl('_obeum',nutr.L7$specy) ,]
+
+nutr.L7.sig <- nutr.L7.sig[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L7.sig$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L7.sig$nutrient)|grepl('Glucose',nutr.L7.sig$nutrient)| grepl('Energie,',nutr.L7.sig$nutrient) | grepl('Polysaccharide',nutr.L7.sig$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L7.sig$nutrient)| grepl('Protein',nutr.L7.sig$nutrient),]
+
+# nutr.L7.sig <- nutr.L7.sig[!grepl('Vitamin',nutr.L7.sig$nutrient) & !grepl('Kalium',nutr.L7.sig$nutrient) &!grepl('Iodid',nutr.L7.sig$nutrient)& !grepl('Kupfer',nutr.L7.sig$nutrient)& !grepl('asser',nutr.L7.sig$nutrient)& !grepl('Fluorid',nutr.L7.sig$nutrient)& !grepl('Sorbit',nutr.L7.sig$nutrient)& !grepl('Schwefel',nutr.L7.sig$nutrient)& !grepl('Chlorid',nutr.L7.sig$nutrient)& !grepl('Zink',nutr.L7.sig$nutrient)& !grepl('Mangan',nutr.L7.sig$nutrient)& !grepl('ium',nutr.L7.sig$nutrient)& !grepl('Eisen',nutr.L7.sig$nutrient)& !grepl('Phosphor',nutr.L7.sig$nutrient)& !grepl('Mannit',nutr.L7.sig$nutrient)& !grepl('Harn',nutr.L7.sig$nutrient)& !grepl('Purin',nutr.L7.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.sig$nutrient)&!grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&   !grepl('Alkohol',nutr.L7.sig$nutrient),]
+
+nutr.L7.sig.sub <- nutr.L7.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sig.sub[is.na(nutr.L7.sig.sub)] <- 0
+
+nutr.L7.sig.sub2 <- nutr.L7.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.sig.sub2 <- ifelse(nutr.L7.sig.sub2 >= -log10(0.05),'*','')
+
+#U1 with subset of taxa and nutrients
+
+nutr.L7.U1 <- nutr.L7.U1 %>% distinct(.)
+
+nutr.L7.U1.sig <- nutr.L7.U1[grepl('pallens',nutr.L7.U1$genus) | grepl('bacilliformis',nutr.L7.U1$genus)| grepl('faecis',nutr.L7.U1$genus)| grepl('bifidum',nutr.L7.U1$genus)| grepl('catus',nutr.L7.U1$genus)| grepl('_obeum',nutr.L7.U1$genus) ,]
+
+nutr.L7.U1.sig <- nutr.L7.U1.sig[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L7.U1.sig$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L7.U1.sig$nutrient)|grepl('Glucose',nutr.L7.U1.sig$nutrient)| grepl('Energie,',nutr.L7.U1.sig$nutrient) | grepl('Polysaccharide',nutr.L7.U1.sig$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L7.U1.sig$nutrient)| grepl('Protein',nutr.L7.U1.sig$nutrient),]
+
+
+# nutr.L7.U1.sig <- nutr.L7.U1.sig[!grepl('Vitamin',nutr.L7.U1.sig$nutrient) & !grepl('Kalium',nutr.L7.U1.sig$nutrient) &!grepl('Iodid',nutr.L7.U1.sig$nutrient)& !grepl('Kupfer',nutr.L7.U1.sig$nutrient)& !grepl('asser',nutr.L7.U1.sig$nutrient)& !grepl('Fluorid',nutr.L7.U1.sig$nutrient)& !grepl('Sorbit',nutr.L7.U1.sig$nutrient)& !grepl('Schwefel',nutr.L7.U1.sig$nutrient)& !grepl('Chlorid',nutr.L7.U1.sig$nutrient)& !grepl('Zink',nutr.L7.U1.sig$nutrient)& !grepl('Mangan',nutr.L7.U1.sig$nutrient)& !grepl('ium',nutr.L7.U1.sig$nutrient)& !grepl('Eisen',nutr.L7.U1.sig$nutrient)& !grepl('Phosphor',nutr.L7.U1.sig$nutrient)& !grepl('Mannit',nutr.L7.U1.sig$nutrient)& !grepl('Harn',nutr.L7.U1.sig$nutrient)& !grepl('Purin',nutr.L7.U1.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.U1.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L7.U1.sig$nutrient),]
+# nutr.L7.U1.sig <- nutr.L7.U1[nutr.L7.U1$estimate >= 0.2 | nutr.L7.U1$estimate <= -0.2,]
+# nutr.L7.U1.sig <- nutr.L7.U1.sig[order(-nutr.L7.U1.sig$estimate ),][1:50,]
+nutr.L7.U1.sig.sub <- nutr.L7.U1.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sig.sub[is.na(nutr.L7.U1.sig.sub)] <- 0
+
+nutr.L7.U1.sig.sub2 <- nutr.L7.U1.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U1.sig.sub2 <- ifelse(nutr.L7.U1.sig.sub2 >= -log10(0.05),'*','')
+
+#sub of taxa and nutrients
+nutr.L7.U2 <- nutr.L7.U2 %>% distinct(.)
+nutr.L7.U2.sig <- nutr.L7.U2[grepl('pallens',nutr.L7.U2$specy) | grepl('bacilliformis',nutr.L7.U2$specy)| grepl('faecis',nutr.L7.U2$specy)| grepl('bifidum',nutr.L7.U2$specy)| grepl('catus',nutr.L7.U2$specy)| grepl('_obeum',nutr.L7.U2$specy) ,]
+
+nutr.L7.U2.sig <- nutr.L7.U2.sig[grepl('GesÃ¤ttigte FettsÃ¤uren',nutr.L7.U2.sig$nutrient) |grepl('ungesÃ¤ttigte FettsÃ¤uren',nutr.L7.U2.sig$nutrient)|grepl('Glucose',nutr.L7.U2.sig$nutrient)| grepl('Energie,',nutr.L7.U2.sig$nutrient) | grepl('Polysaccharide',nutr.L7.U2.sig$nutrient)|grepl('Essentielle AminosÃ¤uren',nutr.L7.U2.sig$nutrient)| grepl('Protein',nutr.L7.U2.sig$nutrient),]
+
+# nutr.L7.U2.sig <- nutr.L7.U2.sig[!grepl('Vitamin',nutr.L7.U2.sig$nutrient) & !grepl('Kalium',nutr.L7.U2.sig$nutrient) &!grepl('Iodid',nutr.L7.U2.sig$nutrient)& !grepl('Kupfer',nutr.L7.U2.sig$nutrient)& !grepl('asser',nutr.L7.U2.sig$nutrient)& !grepl('Fluorid',nutr.L7.U2.sig$nutrient)& !grepl('Sorbit',nutr.L7.U2.sig$nutrient)& !grepl('Schwefel',nutr.L7.U2.sig$nutrient)& !grepl('Chlorid',nutr.L7.U2.sig$nutrient)& !grepl('Zink',nutr.L7.U2.sig$nutrient)& !grepl('Mangan',nutr.L7.U2.sig$nutrient)& !grepl('ium',nutr.L7.U2.sig$nutrient)& !grepl('Eisen',nutr.L7.U2.sig$nutrient)& !grepl('Phosphor',nutr.L7.U2.sig$nutrient)& !grepl('Mannit',nutr.L7.U2.sig$nutrient)& !grepl('Harn',nutr.L7.U2.sig$nutrient)& !grepl('Purin',nutr.L7.U2.sig$nutrient)& !grepl('Zuckeralkohol',nutr.L7.U2.sig$nutrient)&!grepl('Xylit',nutr.L6.sig$nutrient)& !grepl('Gesamt',nutr.L6.sig$nutrient)& !grepl('Cellulose',nutr.L6.sig$nutrient)& !grepl('Ballast',nutr.L6.sig$nutrient)& !grepl('Broteinheiten',nutr.L6.sig$nutrient)&!grepl('Glycerin',nutr.L6.sig$nutrient)&!grepl('Uron',nutr.L6.sig$nutrient)&  !grepl('Alkohol',nutr.L7.U2.sig$nutrient),]
+
+# nutr.L7.U2.sig <- nutr.L7.U2[nutr.L7.U2$estimate >= 0.2 | nutr.L7.U2$estimate <= -0.2,]
+# nutr.L7.U2.sig <- nutr.L7.U2.sig[order(-nutr.L7.U2.sig$estimate ),][1:50,]
+nutr.L7.U2.sig.sub <- nutr.L7.U2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'specy',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sig.sub[is.na(nutr.L7.U2.sig.sub)] <- 0
+
+nutr.L7.U2.sig.sub2 <- nutr.L7.U2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'specy',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+nutr.L7.U2.sig.sub2 <- ifelse(nutr.L7.U2.sig.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c(\"blue\", \"white\", \"red\"))(n = 299)
+
+# pdf(paste0(output_heatmap,'21.02_nutrients.rarefied.heatmaps.pdf'))
+
+heatmap.2(nutr.L6.sub,cexRow = .35,cexCol = .4,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = nutr.L6.sub2)
+```"
+"1","Fehler in plot.new() : figure margins too large
+"

@@ -1,0 +1,17 @@
+"0","keto.mapping <- read_tsv(paste0(keto_dir, 'Mappingfile_converter.txt'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------------------[39m
+cols(
+  SampleID = [31mcol_character()[39m,
+  SampleID_mean = [31mcol_character()[39m,
+  Proband = [31mcol_character()[39m,
+  St_complet = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  Timepoint = [31mcol_character()[39m,
+  Day = [32mcol_double()[39m,
+  Sex = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  converter = [31mcol_character()[39m
+)
+
+"

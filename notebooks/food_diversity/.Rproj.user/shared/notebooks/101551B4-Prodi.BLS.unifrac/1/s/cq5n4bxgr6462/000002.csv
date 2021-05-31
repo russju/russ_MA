@@ -1,0 +1,13 @@
+"0","```r
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))
+bls.extended <- read_tsv(paste0(table_dir,'bls.extended_01.08.tsv'))
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+
+pca.bls <- read_tsv(paste0(table_dir,'pca.bls_14.10.tsv'))
+nutr.sum <- read_tsv(paste0(table_dir,'nutr.sum_14.10.tsv'))
+
+# #trees
+tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))
+tree.keto.bls <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))
+# tree.keto.bls <- DECIPHER::ReadDendrogram(paste0(table_dir,'tree.keto.bls.19.08.tre')) %>% as.hclust(.) %>% ape::as.phylo(.)
+```"

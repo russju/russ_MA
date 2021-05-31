@@ -1,0 +1,46 @@
+"0",""
+"0","L6.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L6.normalized.correlation_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  sample = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","# L6.rel.clr.U1.U2 <- column_to_rownames(L6.rel.clr.U1.U2,'sample')"
+"0",""
+"0","L2.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L2.normalized.correlation_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  D_0__Archaea.D_1__Euryarchaeota = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Actinobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Bacteroidetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Cyanobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Deinococcus.Thermus = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Epsilonbacteraeota = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Firmicutes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Fusobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Lentisphaerae = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Patescibacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Proteobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Spirochaetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Synergistetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Tenericutes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Verrucomicrobia = [32mcol_double()[39m,
+  D_0__Eukaryota.D_1__SAR = [32mcol_double()[39m,
+  sample = [31mcol_character()[39m
+)
+"
+"0","# L2.rel.clr.U1.U2 <- column_to_rownames(L2.rel.clr.U1.U2,'sample')"
+"0",""
+"0","nutr.sum <- read_tsv(paste0(table_dir, 'norm.keto.bls.06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","nutr.sum$file_name <- gsub(nutr.sum$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"

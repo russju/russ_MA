@@ -1,0 +1,7 @@
+"0","pca.6 <- PCA(biom.L6.rel.clr,scale.unit = FALSE,graph = FALSE)"
+"0","pca.7 <- PCA(biom.L7.rel.clr,scale.unit = FALSE,graph = FALSE)"
+"0",""
+"0",""
+"0","biom.L6.rel.clr$diet <- ifelse(grepl('U1',row.names(biom.L6.rel.clr)),'non keto','FOLLOW-UP')"
+"0",""
+"0","biom.L7.rel.clr$diet <- ifelse(grepl('U1',row.names(biom.L7.rel.clr)),'non keto','FOLLOW-UP')"

@@ -1,0 +1,44 @@
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","keto.bls <- keto.bls[!(keto.bls$item_cat == 'Gewürze, Würzmittel, Hilfsstoffe' ),]##| keto.bls$item_cat =='Menükomponenten'"
+"0","tmp <- unique(subset(keto.bls,select = c(`item_cat`,`item_subcat`,`item_prodi`))) %>% distinct(.)"
+"0","r <- tmp"
+"0","colnames(r) <- c('item_cat.select','item_subcat.select','item_prodi.select') "
+"0",""
+"0",""
+"0",""
+"0","r <- tidyr::uncount(r, dplyr::n())"
+"0","# tmp <- tmp[rep(seq_len(nrow(tmp)), nrow(r)), ]"
+"0","tmp <- purrr::map_dfr(seq_len(1250), ~tmp)##nrow(tmp)/nrow(r)=1044  ##w/o gewürze 1280"
+"0","tmp <- cbind(tmp,r)"
+"0",""
+"0","cat.dist <-"
+"0","  tmp %>% "
+"0","  mutate(same_subcat = item_subcat.select == item_subcat,"
+"0","         same_cat = item_cat.select == item_cat) %>% "
+"0","  mutate(total = (as.numeric(!same_cat) + as.numeric(!same_subcat)) / 2) %>% "
+"0","  dplyr::select(item_prodi.select, item_prodi, total) %>%"
+"0","  "
+"0","  pivot_wider(names_from = 'item_prodi.select', values_from = 'total') %>% "
+"0","  column_to_rownames('item_prodi') %>%"
+"0","  as.dist(.)"
+"0",""
+"0","cat.dist[is.na(cat.dist)] <- 0"
+"0",""
+"0","d.cat_data <- hclust(cat.dist, method = 'complete')"
+"0","dend.cat <- as.dendrogram(d.cat_data)"
+"0","tree.conv <- ape::as.phylo(d.cat_data,use.labels = keto.bls$item_cat)"

@@ -1,0 +1,102 @@
+"0","```r
+#otu_table per week
+otu.week <- read_tsv(paste0(table_dir,'otu.conv.uw.19.08.tsv'))
+```"
+"1","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+See spec(...) for full column specifications.
+"
+"0","```r
+otu.week <- as.data.frame(otu.week)
+row.names(otu.week) <- otu.week$file_name
+otu.week <- otu.week[ ,-1]
+
+#otu_table per day
+otu.day <- read_tsv(paste0(table_dir,'otu.conv.uw.samp.19.08.tsv'))
+```"
+"1","Parsed with column specification:
+cols(
+  .default = col_double(),
+  sample_day = col_character()
+)
+See spec(...) for full column specifications.
+"
+"0","```r
+otu.day  <- as.data.frame(otu.day )
+row.names(otu.day) <- otu.day$sample_day
+otu.day  <- otu.day [ ,-1]
+
+
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+```"
+"1","Parsed with column specification:
+cols(
+  .default = col_character(),
+  day = col_double(),
+  date = col_date(format = \"\"),
+  Sex = col_logical(),
+  Energie_bls = col_double(),
+  `Eiweiæ¼ã¹¦, Proteingehalt` = col_double(),
+  Kohlenhydrate = col_double(),
+  Fett = col_double(),
+  Ballaststoffe = col_double(),
+  `Gesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Einfach ungesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Alkohol (Ethanol)` = col_double(),
+  `Energie (kcal)` = col_double()
+)
+See spec(...) for full column specifications.
+5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","```r
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+k.bls_prodi$Sex[k.bls_prodi$Sex == FALSE] <- 'female'
+k.bls_prodi$Sex[is.na(k.bls_prodi$Sex)] <- 0
+k.bls_prodi <-k.bls_prodi[complete.cases(k.bls_prodi), ]
+k.bls_prodi$Sex[k.bls_prodi$Sex == 0] <- 'male'
+
+#clusters
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.01.10.tsv')) %>% column_to_rownames(.,'file_name')
+```"
+"1","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+See spec(...) for full column specifications.
+"
+"0","```r
+nutr.clust <- read_tsv(paste0(table_dir,'nutr.clust.df.01.10.tsv')) %>% column_to_rownames(.,'file_name')
+```"
+"1","Parsed with column specification:
+cols(
+  `1` = col_double(),
+  `2` = col_double(),
+  `3` = col_double(),
+  `4` = col_double(),
+  `5` = col_double(),
+  `6` = col_double(),
+  `7` = col_double(),
+  `8` = col_double(),
+  `9` = col_double(),
+  `10` = col_double(),
+  `11` = col_double(),
+  `12` = col_double(),
+  `13` = col_double(),
+  `14` = col_double(),
+  `15` = col_double(),
+  file_name = col_character()
+)
+"

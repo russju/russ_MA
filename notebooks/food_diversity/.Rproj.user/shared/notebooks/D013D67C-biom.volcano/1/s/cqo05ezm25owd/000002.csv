@@ -1,0 +1,28 @@
+"0","```r
+pdf('C:/Users/Juliane/Desktop/project.directory/results/boxplots.taxa.asso/17.02_nutr.taxa.pdf')
+ggarrange(bifido.clr.L6,bacteroides.clr.L6,prevo.clr.L6,ncol = 2,nrow = 2)
+
+# ggarrange(firm.clr,bact.clr,proteo.clr,actino.clr,ncol = 2,nrow = 2)
+
+ggarrange(fett.clr,carbs.clr,ncol = 2,nrow = 1)
+```"
+"0","```r
+
+ggarrange(bifido.rel,bact.rel,prevotella.rel,pseudomonas.rel,blautia.rel,streptococcus.rel,lactococcus.rel,ncol = 3, nrow = 3)
+
+ggarrange(firm,bact,proteo,actinobacteria,tenericutes,bact.firm.rel,ncol = 3, nrow = 2)
+```"
+"1","`geom_smooth()` using formula 'y ~ x'
+"
+"0","```r
+ggarrange(firm.clr.L2,bact.clr.L2 ,proteo.clr.L2,actino.clr.L2,ncol = 2, nrow = 2)
+
+ggarrange(akkermansia.clr.L6,pseudomonas.clr.L6,roseburia.clr.L6,blautia.clr.L6 ,streptococcus.clr.L6,lactococcus.2.clr.L6,prevotella.2.clr.L6,prevotella.clr.L6,prevotella.7.clr.L6,prevotella.9.clr.L6,ncol = 3,nrow = 4)
+```"
+"0","```r
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

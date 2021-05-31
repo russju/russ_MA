@@ -1,0 +1,16 @@
+"0","subgr.matrix <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv')) %>% dplyr::select(.,everything(),-starts_with('file_name'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","matrix <- subgr.matrix %>% group_by(subgroup) %>%"
+"0","  summarise_all(.funs = sum) %>%"
+"0","  pivot_longer(-subgroup) %>%"
+"0","  pivot_wider(names_from = subgroup,values_from=value) %>% "
+"0","  column_to_rownames(.,'name') %>% data.matrix(.)"
+"0",""
+"0","                                                                        stats::heatmap(matrix,cexRow = .7,cexCol = .7,main = 'heatmap subgroups')"

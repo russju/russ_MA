@@ -1,0 +1,15 @@
+"0","```r
+#L6 nut
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+3: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+div.L7.nut <- merge(div.L7,div.nut,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L7.nut,x='Shannon Index nut.clust',y='Shannon Index specy',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```"

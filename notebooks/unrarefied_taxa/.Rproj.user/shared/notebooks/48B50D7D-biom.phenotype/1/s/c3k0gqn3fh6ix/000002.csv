@@ -1,0 +1,39 @@
+"0","```r
+pheno <- dplyr::select(keto.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 0
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '34WF.U2'] <- 'not classified'
+pheno$Phenotype[pheno$Phenotype == 0 & pheno$file_name == '49RJ.U2'] <- 'low converter'
+
+X.metadata <- left_join(rowSum,pheno,by = 'file_name')
+
+X <- X.metadata %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','row'))) %>% 
+  column_to_rownames(.,var = 'file_name')
+
+Y = X.metadata$Phenotype %>% as.factor(.)
+
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))
+```"
+"1","
+-- Column specification --------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))
+# nutr.clust$file_name <- row.names(nutr.clust)
+
+# pheno.X <- pheno.X[grepl('U1',pheno.X$file_name),]
+# pheno.X <- pheno.X[grepl('U2',pheno.X$file_name),]
+
+conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('type'))
+
+# conv.clust <- conv.clust[grepl('U1',row.names(conv.clust)),]
+# conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]
+
+Y =pheno.X$Phenotype %>% as.factor(.)
+
+```"

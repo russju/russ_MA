@@ -1,0 +1,35 @@
+"0","#community matrix"
+"0",""
+"0",""
+"0","#richness calculation"
+"0",""
+"0","conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.weighted.01.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m----------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","div.conv <- diversity(conv.clust, index = 'shannon', base = 2) %>% as.data.frame(.) "
+"0","colnames(div.conv) <- 'Shannon Index'"
+"0","div.conv$file_name <- row.names(div.conv)"
+"0",""
+"0","write_tsv(div.conv,paste0(table_dir,'shannon.conv.tsv'))"
+"0",""
+"0","#adding Sex,group and Phenotype,subgroups"
+"0",""
+"0","dv <- merge(div.conv, k.bls_prodi, by=c('file_name'))"
+"0","div.conv <- subset(dv,select = c(`file_name`,`Sex`,`Phenotype`,`Shannon Index`))"
+"0","div.conv$Sex <- ifelse(div.conv$Sex == FALSE,'f','m')"
+"0",""
+"0","div.conv$group <- ifelse(grepl('U1', div.conv$file_name), 'non keto', 'keto')"
+"0",""
+"0",""
+"0","#deleting not classified,NA"
+"0",""
+"0","# div.conv <- div.conv[div.conv$Phenotype != 'not classified', ] "
+"0","div.conv <- div.conv[!is.na(div.conv$Phenotype), ]"
+"0","div.conv[complete.cases(div.conv), ]"

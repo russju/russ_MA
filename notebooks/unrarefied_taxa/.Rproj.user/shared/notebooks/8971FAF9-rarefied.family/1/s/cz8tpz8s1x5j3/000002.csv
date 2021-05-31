@@ -1,0 +1,44 @@
+"0","```r
+merge.L6.nutr <- biom.L6.family %>% merge(.,cl.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-ends_with('rowsum'))
+
+
+cor.test.nutr <- merge.L6.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", .Barnesiellaceae:Xanthomonadaceae) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `1.veg.fruit`:`15.cheese`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.nutr[is.na(cor.test.nutr)] <- 0
+
+p.adj <- subset(cor.test.nutr,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test.nutr,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.nutr <- cbind(cor.test.nutr[ ,c(2,4)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.nutr) <- c('family','nutrient clusters','p.adj.log','estimate')
+
+cor.test.nutr <- cor.test.nutr[cor.test.nutr$p.adj.log != 0 & cor.test.nutr$estimate != 0,]
+
+write_tsv(cor.test.nutr,paste0(table_dir,'rarefied.corr.nutclust.family.tsv'))
+```"

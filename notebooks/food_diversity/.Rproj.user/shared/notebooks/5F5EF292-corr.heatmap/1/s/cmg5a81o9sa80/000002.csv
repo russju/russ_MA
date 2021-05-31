@@ -1,0 +1,35 @@
+"0","```r
+my_palette <- colorRampPalette(c(\"blue\", \"white\", \"red\"))(n = 299)
+
+pdf('C:/Users/Juliane/Desktop/project.directory/results/18.02_corr.scfa.pdf',onefile = T)
+
+nutr.scfa <- heatmap.2(corr.scfa.nut.sub ,cexRow = .4,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.nut.sub2, notecol = 'black',srtCol = 30 )
+
+nutclust.scfa <- heatmap.2(corr.scfa.nutclust.sub ,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.nutclust.sub2, notecol = 'black',srtCol = 30 )
+
+convclust.scfa <- heatmap.2(corr.scfa.convclust.sub ,cexRow = .8,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.convclust.sub2, notecol = 'black',srtCol = 30 )
+
+dev.off()
+
+```"
+"1","null device 
+          1 
+"
+"0","```r
+pdf('C:/Users/Juliane/Desktop/project.directory/results/corr.fa.pdf',onefile = T)
+
+nutr.fa <- heatmap.2(corr.fa.nut.sub ,cexRow = .4,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.nut.sub2, notecol = 'black',srtCol = 30 )
+```"
+"0","```r
+
+nutclust.fa <- heatmap.2(corr.fa.nutclust.sub ,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.nutclust.sub2, notecol = 'black',srtCol = 30 )
+
+convclust.fa <- heatmap.2(corr.fa.convclust.sub ,cexRow = .8,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.convclust.sub2, notecol = 'black',srtCol = 30 )
+```"
+"0","```r
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

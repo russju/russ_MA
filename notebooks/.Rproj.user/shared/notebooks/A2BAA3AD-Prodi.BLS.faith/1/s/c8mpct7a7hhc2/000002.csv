@@ -1,0 +1,48 @@
+"0","library(tidyverse)"
+"0","library(picante)"
+"2","Paket ‘picante’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: ape
+"
+"2","Paket ‘ape’ wurde unter R Version 4.0.3 erstellt"
+"2","
+Attache Paket: ‘ape’
+
+"
+"2","The following object is masked from ‘package:ggpubr’:
+
+    rotate
+
+"
+"2","Lade nötiges Paket: vegan
+"
+"2","Paket ‘vegan’ wurde unter R Version 4.0.3 erstellt"
+"2","Lade nötiges Paket: permute
+"
+"2","Lade nötiges Paket: lattice
+"
+"2","This is vegan 2.5-7
+"
+"2","Lade nötiges Paket: nlme
+"
+"2","Paket ‘nlme’ wurde unter R Version 4.0.3 erstellt"
+"2","
+Attache Paket: ‘nlme’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    collapse
+
+"
+"0","library(vegan)"
+"0","library(ggplot2)"
+"0","library(plotly)"
+"0","library(phyloseq)"
+"0","library(ggsignif)"
+"0","library(ggpubr)"
+"0","# library('DECIPHER')"
+"0","library(ape)"
+"0","# if (!requireNamespace(""BiocManager"", quietly = TRUE))"
+"0","#     install.packages(""BiocManager"")"
+"0","# "
+"0","# BiocManager::install(""DECIPHER"")"

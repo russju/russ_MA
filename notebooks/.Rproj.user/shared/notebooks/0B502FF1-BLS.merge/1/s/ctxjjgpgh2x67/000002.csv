@@ -1,0 +1,24 @@
+"0","```r
+bls.scale <-
+  bls %>% 
+  select(-Value, -Unit) %>% 
+  pivot_wider(names_from = 'Property', 
+              values_from = 'Value_Scale') %>% 
+  mutate(`Energie, Protein (kcal)` = `EiweiÃŸ, Proteingehalt` * 4.1, 
+         `Energie, Kohlenhydrate (kcal)` = Kohlenhydrate * 4.1, 
+         `Energie, Fett (kcal)` = Fett * 9.3, 
+         `Energie, Alkohol (kcal)` = `Alkohol (Ethanol)` * 7.1, 
+         `Energie, Gesamt (kcal)` = `Energie, Protein (kcal)` + 
+                                    `Energie, Kohlenhydrate (kcal)` + 
+                                    `Energie, Fett (kcal)` + 
+                                    `Energie, Alkohol (kcal)`,
+         `Energie, Protein (%)` = `Energie, Protein (kcal)` / `Energie, Gesamt (kcal)`, 
+         `Energie, Kohlenhydrate (%)` = `Energie, Kohlenhydrate (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Fett (%)` = `Energie, Fett (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Alkohol (%)` = `Energie, Alkohol (kcal)` / `Energie, Gesamt (kcal)`
+         ) %>% 
+  select(item_id, item_cat, item_subcat, item_descr, `EiweiÃŸ, Proteingehalt`, Kohlenhydrate, Fett, everything())
+
+fname = paste0(table_dir, 'BLS.scale.', date, '.tsv')
+write_tsv(bls.scale, path = fname)
+```"

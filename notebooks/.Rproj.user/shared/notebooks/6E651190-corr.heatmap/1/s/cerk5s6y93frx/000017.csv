@@ -1,0 +1,2 @@
+"0",""
+"0","convclust.fa <- heatmap.2(corr.fa.convclust.sub ,cexRow = .8,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.convclust.sub2, notecol = 'black',srtCol = 30 )"

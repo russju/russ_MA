@@ -1,0 +1,67 @@
+"0","```r
+# ba <- read_tsv(paste0(biom_dir,'Ba_feces_short.tsv'))
+BA <- read_excel(paste0(biom_dir,'BAFecesFricke.xlsx'))
+```"
+"1","New names:
+* `` -> ...20
+"
+"0","```r
+samples <- read_tsv(paste0(biom_dir,'BA_Feces_Fricke_Sample_Assignment.txt'))
+```"
+"1","Missing column names filled in: 'X10' [10], 'X16' [16]Duplicated column names deduplicated: 'Sample Name' => 'Sample Name_1' [12], 'Sample Material' => 'Sample Material_1' [14]
+-- Column specification ---------------------------------------------------------
+cols(
+  `Sample Identifier` = col_character(),
+  `Material code` = col_character(),
+  `Sample Number` = col_double(),
+  `Sample Name` = col_character(),
+  `Sample Material` = col_character(),
+  `Sample amount` = col_double(),
+  `Unit amount` = col_character(),
+  `Sample concentration` = col_double(),
+  `Unit concentration` = col_character(),
+  X10 = col_logical(),
+  Cupnummer = col_character(),
+  `Sample Name_1` = col_character(),
+  `Proband ID` = col_character(),
+  `Sample Material_1` = col_character(),
+  Time = col_character(),
+  X16 = col_character()
+)
+"
+"0","```r
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+```"
+"1","
+-- Column specification ---------------------------------------------------------
+cols(
+  .default = col_character(),
+  day = col_double(),
+  date = col_date(format = \"\"),
+  Sex = col_logical(),
+  Energie_bls = col_double(),
+  `Eiweiæ¼ã¹¦, Proteingehalt` = col_double(),
+  Kohlenhydrate = col_double(),
+  Fett = col_double(),
+  Ballaststoffe = col_double(),
+  `Gesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Einfach ungesæ”¼ã¸´ttigte Fettsæ”¼ã¸´uren` = col_double(),
+  `Alkohol (Ethanol)` = col_double(),
+  `Energie (kcal)` = col_double()
+)
+i Use `spec()` for the full column specifications.
+
+5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","```r
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') 
+k.bls_prodi <- dplyr::select(k.bls_prodi,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+```"

@@ -1,0 +1,5 @@
+"0","div.L6 <- diversity(biom.L6.rel,index = ""shannon"",base = 2) %>% as.data.frame(.)"
+"0","colnames(div.L6) <- 'Shannon Index genus'"
+"0",""
+"0","div.L7 <- diversity(biom.L7.rel,index = ""shannon"",base = 2)%>% as.data.frame(.)"
+"0","colnames(div.L7) <- 'Shannon Index specy'"

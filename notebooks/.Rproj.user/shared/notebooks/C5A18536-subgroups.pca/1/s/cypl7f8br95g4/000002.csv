@@ -1,0 +1,45 @@
+"0","# bls.scale <- read_tsv(paste0(table_dir, 'BLS.scale.15Jun2020.tsv'))"
+"0","bls.properties <- read_tsv(paste0(table_dir, 'BLS.properties.15Jun2020.tsv'))"
+"2","Parsed with column specification:
+cols(
+  Category = [31mcol_character()[39m,
+  Property = [31mcol_character()[39m
+)
+"
+"0","bls.extended <- read_tsv(paste0(table_dir, 'bls.extended_01.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","subclusters <- read_tsv(paste0(table_dir, 'subclusters_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

@@ -1,0 +1,88 @@
+"0","```r
+#percentage stacked bar plots
+
+pa.w$count <- pa.w$percent.animal+pa.w$percent.plant
+pa.w <- subset(pa.w,select = c(`file_name`,`percent.plant`,`percent.animal`,`count`))
+
+#Melt and plot
+perc.w <- pa.w %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position=\"fill\", stat=\"identity\")+
+  theme(axis.text = element_text(angle = 90))
+
+##only U1
+
+pa.w.u1 <- pa.w[grepl(pattern = 'U1',pa.w$file_name), ]
+
+summary(pa.w.u1$percent.animal)
+```"
+"1","   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  25.96   34.14   47.25   45.95   55.87   68.39 
+"
+"0","```r
+sd(pa.w.u1$percent.animal)
+```"
+"1","[1] 13.01489
+"
+"0","```r
+perc.w.u1 <- pa.w.u1 %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position=\"fill\", stat=\"identity\")+
+  theme(axis.text = element_text(angle = 90)) +ggtitle('animal and plant derived food\nPRE nutritional protocols')
+
+##only U2
+
+pa.w.u2 <- pa.w[grepl(pattern = 'U2',pa.w$file_name), ]
+
+summary(pa.w.u2$percent.animal)
+```"
+"1","   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  16.61   29.65   40.32   43.93   54.46   95.80 
+"
+"0","```r
+sd(pa.w.u2$percent.animal)
+```"
+"1","[1] 19.43134
+"
+"0","```r
+perc.w.u2 <- pa.w.u2 %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position=\"fill\", stat=\"identity\")+
+  theme(axis.text = element_text(angle = 90)) +ggtitle('animal and plant derived food\nketo nutritional protocols')
+
+
+#absolute stacked bar plots,per week
+
+plant.animal.w.a <- merge(plant, animal, by = c(\"file_name\",\"source\"),all.x = TRUE, all.y = TRUE)
+plant.animal.w.a <- subset(plant.animal.w,select = c('file_name','source'))
+
+#count occurrences of plant and animal in plant.animal.w.a$source, conditioned by file_name
+
+plant.animal.w.a <- plant.animal.w.a %>% group_by(file_name,source) %>% summarise(N=n()) %>% as.data.frame(.)
+```"
+"1","`summarise()` has grouped output by 'file_name'. You can override using the `.groups` argument.
+"
+"0","```r
+colnames(plant.animal.w.a) <- c('file_name','source','count')
+
+##only U1
+
+pa.w.a.u1 <- plant.animal.w.a[grepl(pattern = 'U1',plant.animal.w.a$file_name), ]
+
+abs.U1 <- ggplot(pa.w.a.u1, aes(x = `file_name`,y = `count`))  + geom_bar(
+    aes(fill = `source`),
+    stat = \"identity\", position = position_stack())+ ggtitle('PRE protocols absolut number plant and animal foods')+ theme(axis.text = element_text(angle = 90))
+
+##only U2
+
+pa.w.a.u2 <- plant.animal.w.a[grepl(pattern = 'U2',plant.animal.w.a$file_name), ]
+
+abs.U2 <- ggplot(pa.w.a.u2, aes(x = `file_name`,y = `count`))  + geom_bar(
+    aes(fill = `source`),
+    stat = \"identity\", position = position_stack())+ ggtitle('keto protocols absolut number plant and animal foods')+ theme(axis.text = element_text(angle = 90))
+
+
+```"

@@ -1,0 +1,5 @@
+"0","                       # legend.color = colors.discrete[c(4, 1)])"
+"0",""
+"0",""
+"0",""
+"0","stats::heatmap(matrix.z,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes',scale = 'none')"

@@ -1,0 +1,19 @@
+"0","biom.L6.rel <- dplyr::select(biom.L6.rel,everything(),-starts_with('row'))
+
+#L7  relative abundance, clr
+
+biom.L7.sub <- data.matrix(biom.L7)
+biom.L7.sub <- biom.L7.sub+0.5
+rowsum <- rowSums(biom.L7.sub)
+
+biom.L7 <- cbind(biom.L7.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+biom.L7 <- as.data.frame(biom.L7)
+biom.L7.rel <- biom.L7/biom.L7$rowsum
+biom.L7.rel <- select(biom.L7.rel,everything(),-starts_with('row'))
+"
+"2","Fehler in select(biom.L7.rel, everything(), -starts_with(""row"")) : 
+  unbenutzte Argumente (everything(), -starts_with(""row""))
+"

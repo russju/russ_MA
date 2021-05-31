@@ -1,0 +1,27 @@
+"0","##Bray Curtis with relative abundance"
+"0","biom.L6.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L6.tsv')) %>% column_to_rownames(.,'rowname')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  rowname = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","meta <- row.names(biom.L6.rel) %>% as.data.frame(.)"
+"0","meta$diet <- ifelse(grepl('U1',meta$.),'non keto','keto')"
+"0","colnames(meta) <- c('file_name','diet')"
+"0","meta$sample <- meta$file_name %>% str_replace(.,pattern = '.U1',replacement = '') %>%"
+"0","  str_replace(.,pattern = '.U2',replacement = '')"
+"0","# norm.L6.bc <- dplyr::select(norm.L6,everything(),-starts_with(c('samples','diet')))"
+"0","bc.L6 <- vegdist(biom.L6.rel, method=""bray"")"
+"0","pcoa_bc.L6 <- ape::pcoa(bc.L6)"
+"0",""
+"0","pcoa_bc.L6$vectors %>%  "
+"0","  as.data.frame(.) %>% "
+"0","  rownames_to_column('Name') %>% "
+"0","  dplyr::select(Name, Axis.1:Axis.5) %>%"
+"0","  ggplot(aes(Axis.1, Axis.2, label = Name)) + "
+"0","  geom_point(aes(fill = meta$diet),"
+"0","    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\ngenus')"

@@ -1,0 +1,9 @@
+"0","```r
+library(factoextra)
+
+```"
+"1","Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+"
+"0","```r
+library(FactoMineR)
+```"

@@ -1,0 +1,4 @@
+"0","tree.conv <- force.ultrametric(tree.conv,'extend')
+"
+"2","Fehler in prop_part2(obj, nTips) : std::bad_alloc
+"

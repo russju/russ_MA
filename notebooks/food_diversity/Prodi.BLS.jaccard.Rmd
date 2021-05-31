@@ -1,0 +1,247 @@
+---
+title: "Jaccard Distance"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(ape)
+library(phyloseq)
+library(ggplot2)
+library(plotly)
+library(ggpubr)
+# library(DECIPHER)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+#Data Import
+```{r}
+#otu_table per week
+otu.week <- read_tsv(paste0(table_dir,'otu.conv.uw.19.08.tsv'))
+
+otu.week <- as.data.frame(otu.week)
+row.names(otu.week) <- otu.week$file_name
+otu.week <- otu.week[ ,-1]
+otu.week <- otu_table(otu.week,taxa_are_rows = FALSE)
+
+#otu_table per day
+otu.day <- read_tsv(paste0(table_dir,'otu.conv.uw.samp.19.08.tsv'))
+
+otu.day  <- as.data.frame(otu.day )
+row.names(otu.day) <- otu.day$sample_day
+otu.day  <- otu.day [ ,-1]
+otu.day  <- otu_table(otu.day ,taxa_are_rows = FALSE)
+
+#trees
+tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))
+
+tree.nutr <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))
+#df
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+k.bls_prodi$Sex[k.bls_prodi$Sex == FALSE] <- 'female'
+k.bls_prodi$Sex[is.na(k.bls_prodi$Sex)] <- 0
+k.bls_prodi$Sex[k.bls_prodi$Sex == 0] <- 'male'
+
+```
+
+
+#how many identical foods/clusters
+diversity in sample sets
+#conventional clustering
+```{r}
+#conventional clustering
+
+#per week samples Jaccard distance
+physeq.week <- phyloseq(otu.week,tree.conv)
+jac.conv.week <- phyloseq::distance(physeq.week, method = "jaccard", binary = TRUE)
+pcoa_jac.conv.week <- ape::pcoa(jac.conv.week)
+
+#variance
+
+get_explained_variance <- function(pcoa) {
+  return(paste0(round(pcoa$values$Rel_corr_eig * 100, 2), '%'))
+}
+get_explained_variance(pcoa_jac.conv.week)[1:2]
+
+pcoa_jac.conv.week$vectors <- pcoa_jac.conv.week$vectors %>% as.data.frame(.)
+var.jacAxis.1 <- var(pcoa_jac.conv.week$vectors$Axis.1)##0.02580485
+var.jacAxis.2 <- var(pcoa_jac.conv.week$vectors$Axis.2)##0.02279566
+
+#per day samples Jaccard distance
+physeq.day <- phyloseq(otu.day,tree.conv)
+jac.conv.day <- phyloseq::distance(physeq.day, method = "jaccard", binary = TRUE)
+pcoa_jac.conv.day <- ape::pcoa(jac.conv.day)
+
+#visualizations per week
+
+#Phenotype
+metadata.pheno <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+a <- pcoa_jac.conv.week$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.pheno, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nconventional clusters samples per week')
+
+#Sex
+metadata.sex <- 
+  k.bls_prodi %>% 
+  select(file_name:Sex) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+as <- pcoa_jac.conv.week$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.sex, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nconventional clusters samples per week')
+
+#visualizations per day
+
+#Phenotype
+pcoa_jac.conv.day$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.pheno, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nconventional clusters samples per day')
+
+#Sex
+pcoa_jac.conv.day$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.sex, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nconventional clusters samples per day')
+```
+#nutrient clustering
+```{r}
+#nutrient clustering
+
+# tree.nutr <- tree.keto.bls
+
+#per week samples Jaccard distance
+physeq.week.nut <- phyloseq(otu.week,tree.nutr)
+jac.week.nut <- phyloseq::distance(physeq.week.nut, method = "jaccard", binary = TRUE)
+pcoa_jac.week.nut <- ape::pcoa(jac.week.nut)
+
+#variance
+get_explained_variance(pcoa_jac.week.nut)[1:2]
+
+pcoa_jac.week.nut$vectors <- pcoa_jac.week.nut$vectors %>% as.data.frame(.)
+var.jacnutAxis.1 <- var(pcoa_jac.week.nut$vectors$Axis.1)##0.02590604
+var.jacnutAxis.2 <- var(pcoa_jac.week.nut$vectors$Axis.2)##0.02255687
+
+
+#per day samples Jaccard distance
+physeq.day.nut <- phyloseq(otu.day,tree.nutr)
+jac.day.nut <- phyloseq::distance(physeq.day.nut, method = "jaccard", binary = TRUE)
+pcoa_jac.day.nut <- ape::pcoa(jac.day.nut)
+
+#visualizations per week
+
+#Phenotype
+b <- pcoa_jac.week.nut$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.pheno, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nnutrient clusters samples per week')
+
+#Sex
+bs <- pcoa_jac.week.nut$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.sex, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nnutrient clusters samples per week')
+
+#visualizations per day
+
+#Phenotype
+pcoa_jac.day.nut$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.pheno, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nnutrient clusters samples per day')
+
+#Sex
+pcoa_jac.day.nut$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.sex, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Jaccard distance\nnutrient clusters samples per day')
+
+```
+###export
+```{r}
+pdf(paste0(diet.protocols,'jaccard.pc.pdf'))
+ggarrange(a, as, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2)
+
+ggarrange(b,bs,
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2)
+dev.off()
+```
+

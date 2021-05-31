@@ -1,0 +1,58 @@
+"0","```r
+##U1
+
+merge.L2.nutr <- L2.U1 %>% merge(.,nutr.U1,by = 'file_name',all.x=T,all.y = T) %>% column_to_rownames(.,'file_name')
+
+merge.L2.nutr[is.na(merge.L2.nutr)] <- 0
+merge.L2.nutr <- dplyr::select(merge.L2.nutr,everything(),-ends_with('rowsum'))
+
+cor.test <- merge.L2.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota:D_0__Eukaryota.D_1__SAR) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  summarize(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test [is.na(cor.test)] <- 0
+
+p.adj <- subset(cor.test,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.adj <- cbind(cor.test[ ,c(1,2)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.adj) <- c('nutrient','phylum','p.adj.log','estimate')
+
+cor.test.adj <- cor.test.adj[cor.test.adj$p.adj.log != 0 & cor.test.adj$estimate != 0,]
+
+write_tsv(cor.test.adj,paste0(table_dir,'corr.nutr.L2.U1.tsv'))
+
+sig <- cor.test.adj[cor.test.adj$p.adj.log <= 0.050 & cor.test.adj$p.adj.log > 0.00000,]
+top.sig <- sig[order(-sig$p.adj.log ),]
+
+#volcano plot ggplot()
+
+vp <- ggplot(cor.test.adj,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle(\"Volcano plot\") +
+  xlab(\"correlation\") + 
+  ylab(\"-log10 adjusted p-value\")
+
+```"

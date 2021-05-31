@@ -1,0 +1,250 @@
+---
+title: "rarefied family correlation matrices to nutrients,nutclust,convclust"
+output: html_notebook
+---
+
+#libraries
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("biomformat")
+
+# if (!requireNamespace('BiocManager', quietly = TRUE))
+#     install.packages('BiocManager')
+# 
+#  BiocManager::install('EnhancedVolcano')
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("a4Base")
+  
+
+library(tidyverse)
+library(biomformat)
+# library(data.table)
+library(compositions)
+# library(corrplot)
+# library(EnhancedVolcano)
+library(a4Base)
+library(plotly)
+library(gridExtra)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')##von biom.volcano
+cl.sum.z <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_17.02.tsv')) %>% column_to_rownames(.,'file_name')##von biom.foods
+conv.clust.z <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_17.02.tsv'))%>% column_to_rownames(.,'file_name')##von biom.microbiome
+
+```
+
+#cleaning up L6
+```{r}
+#two samples for U1,U2 and U3
+#merging them ore deleting?
+
+biom.L6 <- biom.L6[!grepl(pattern = 'U3',row.names(biom.L6)),]
+row.names(biom.L6) <- str_replace(row.names(biom.L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+biom.L6 <- biom.L6[!grepl('.2U',row.names(biom.L6)),]
+biom.L6 <- select(biom.L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+
+```
+
+#family taxa groups
+```{r}
+
+biom.L6.family <- sapply(split.default(biom.L6, sub('.*_(.*ceae).*', '\\1', names(biom.L6))), rowSums) %>% as.data.frame(.)
+
+biom.L6.family <- dplyr::select(biom.L6.family,ends_with('ceae'))
+```
+
+#data transformation L6 family
+```{r}
+#sum of the rows
+
+#taxa
+
+biom.L6.family <- data.matrix(biom.L6.family)
+biom.L6.family <- biom.L6.family+0.5##pseudocount
+rowsum <- rowSums(biom.L6.family)
+
+
+biom.L6.family <- cbind(biom.L6.family,rowsum) %>% as.data.frame(.)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+biom.L6.family <- biom.L6.family/biom.L6.family$rowsum
+
+#clr transformation
+biom.L6.family <- clr(biom.L6.family) %>% as.data.frame(.) ##acomp
+
+biom.L6.family <- select(biom.L6.family,everything(), -starts_with(c('row','file')))
+biom.L6.family$file_name <- row.names(biom.L6.family)
+write_tsv(biom.L6.family,paste0(table_dir,'rarefied.family.correlation.24.02.tsv'))
+
+
+```
+
+##nutrients correlated with family
+```{r}
+merge.L6.family <- biom.L6.family %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.family[is.na(merge.L6.family)] <- 0
+# merge.L6.family <- dplyr::select(merge.L6.family,everything(),-ends_with('rowsum'))
+
+cor.test.family <- merge.L6.family %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", .Barnesiellaceae:Xanthomonadaceae) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.family[is.na(cor.test.family)] <- 0
+
+p.adj <- subset(cor.test.family,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test.family,select = `estimate`) %>% data.matrix(.)
+
+
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.family <- cbind(cor.test.family[ ,c(2,4)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.family) <- c('taxa','nutrients','p.adj.log','estimate')
+
+cor.test.family <- cor.test.family[cor.test.family$p.adj.log != 0 & cor.test.family$estimate != 0,]
+
+# write_tsv(cor.test.family,paste0(table_dir,'rarefied.corr.nutr.family.tsv'))
+```
+
+
+##conv cluster correlated with family taxa
+```{r}
+merge.L6.conv <- biom.L6.family %>% merge(.,conv.clust.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.conv [is.na(merge.L6.conv )] <- 0
+merge.L6.conv  <- dplyr::select(merge.L6.conv ,everything(),-ends_with('rowsum'))
+
+cor.test.conv <- merge.L6.conv  %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", .Barnesiellaceae:Xanthomonadaceae) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Alkoholfreie Getränke`:`Wurst, Fleischwaren`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.conv [is.na(cor.test.conv )] <- 0
+
+p.adj <- subset(cor.test.conv ,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test.conv ,select = `estimate`) %>% data.matrix(.)
+
+
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.conv  <- cbind(cor.test.conv [ ,c(2,4)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.conv ) <- c('family','conv clusters','p.adj.log','estimate')
+
+cor.test.conv <- cor.test.conv[cor.test.conv$p.adj.log != 0 & cor.test.conv$estimate != 0,]
+
+# write_tsv(cor.test.conv ,paste0(table_dir,'corr.convclust.family.tsv'))
+```
+
+##nutr cluster correlated with family
+```{r}
+merge.L6.nutr <- biom.L6.family %>% merge(.,cl.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-ends_with('rowsum'))
+
+
+cor.test.nutr <- merge.L6.nutr %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", .Barnesiellaceae:Xanthomonadaceae) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `1.veg.fruit`:`15.cheese`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.nutr[is.na(cor.test.nutr)] <- 0
+
+p.adj <- subset(cor.test.nutr,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test.nutr,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.nutr <- cbind(cor.test.nutr[ ,c(2,4)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.nutr) <- c('family','nutrient clusters','p.adj.log','estimate')
+
+cor.test.nutr <- cor.test.nutr[cor.test.nutr$p.adj.log != 0 & cor.test.nutr$estimate != 0,]
+
+# write_tsv(cor.test.nutr,paste0(table_dir,'rarefied.corr.nutclust.family.tsv'))
+```

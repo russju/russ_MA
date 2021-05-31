@@ -1,0 +1,5 @@
+"0","pseudo = 1e-15 # 1e-9"
+"0","df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))"

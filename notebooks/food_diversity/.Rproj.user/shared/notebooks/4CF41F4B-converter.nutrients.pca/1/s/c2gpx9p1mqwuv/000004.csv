@@ -1,0 +1,19 @@
+"0","```r
+
+##PCA with diet coloring
+
+pdf(paste0(output_converter,'pca.food.pdf'))
+factoextra::fviz_pca_biplot(X = food.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA foods',label = 'none',invisible = c(\"ind.sup\", \"quali\", \"var\", \"quanti.sup\")) 
+```"
+"0","```r
+
+dev.off()
+```"
+"1","png 
+  2 
+"

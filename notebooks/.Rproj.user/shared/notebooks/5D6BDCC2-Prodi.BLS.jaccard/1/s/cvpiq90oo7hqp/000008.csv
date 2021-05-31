@@ -1,0 +1,6 @@
+"0","pdf('C:/Users/Juliane/Desktop/project.directory/results/diet.protocols/jaccard.pc.pdf')"
+"0","ggarrange(a, as, "
+"0","          labels = c(""A"", ""B""),"
+"0","          ncol = 1, nrow = 2)"
+"2","Using alpha for a discrete variable is not advised."
+"2","Using alpha for a discrete variable is not advised."

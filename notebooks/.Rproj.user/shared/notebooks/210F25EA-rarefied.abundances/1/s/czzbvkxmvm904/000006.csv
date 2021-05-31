@@ -1,0 +1,5 @@
+"0","df <- dplyr::select(specy.U2,everything(),-starts_with(c('diet')))
+"
+"2","Fehler in dplyr::select(specy.U2, everything(), -starts_with(c(""diet""))) : 
+  Objekt 'specy.U2' nicht gefunden
+"

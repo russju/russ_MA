@@ -1,0 +1,140 @@
+"0","#serum"
+"0","# fats <- read.table(paste0(biom_dir, 'R_serum_lipids.txt'),sep = '\t',header = T,row.names = 1) "
+"0",""
+"0",""
+"0","nutr.sum <- read_tsv(paste0(table_dir, 'norm.keto.bls.06.10.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","nutr.sum$file_name <- gsub(nutr.sum$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') "
+"0","nutr.sum <- nutr.sum%>% as.data.frame(.) %>% column_to_rownames(.,'file_name')"
+"0",""
+"0","cl.sum <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_22.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  `1.veg.fruit` = [32mcol_double()[39m,
+  `2.carbs.bread` = [32mcol_double()[39m,
+  `3.fatty.sweet` = [32mcol_double()[39m,
+  `4.carbs.cereal` = [32mcol_double()[39m,
+  `5.seed` = [32mcol_double()[39m,
+  `6.nut` = [32mcol_double()[39m,
+  `7.kohl` = [32mcol_double()[39m,
+  `8.fish.sauce` = [32mcol_double()[39m,
+  `9.egg` = [32mcol_double()[39m,
+  `10.alcohol` = [32mcol_double()[39m,
+  `11.wurst` = [32mcol_double()[39m,
+  `12.soft.drinks` = [32mcol_double()[39m,
+  `13.white.meat` = [32mcol_double()[39m,
+  `14.fatty.dairy` = [32mcol_double()[39m,
+  `15.cheese` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+
+"
+"0","conv.sum <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_26.10.tsv'))%>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","cl.sum.z <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_17.02.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  file_name = [31mcol_character()[39m,
+  `1.veg.fruit` = [32mcol_double()[39m,
+  `2.carbs.bread` = [32mcol_double()[39m,
+  `3.fatty.sweet` = [32mcol_double()[39m,
+  `4.carbs.cereal` = [32mcol_double()[39m,
+  `5.seed` = [32mcol_double()[39m,
+  `6.nut` = [32mcol_double()[39m,
+  `7.kohl` = [32mcol_double()[39m,
+  `8.fish.sauce` = [32mcol_double()[39m,
+  `9.egg` = [32mcol_double()[39m,
+  `10.alcohol` = [32mcol_double()[39m,
+  `11.wurst` = [32mcol_double()[39m,
+  `12.soft.drinks` = [32mcol_double()[39m,
+  `13.white.meat` = [32mcol_double()[39m,
+  `14.fatty.dairy` = [32mcol_double()[39m,
+  `15.cheese` = [32mcol_double()[39m
+)
+
+"
+"0","conv.clust.z <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_17.02.tsv'))%>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","#fatty acid in feces"
+"0","fatty <- read.xlsx(paste0(data_dir, 'Sum_Short_0034SE.xlsx'))"
+"0",""
+"0","#cholesterol and derivates in feces"
+"0","choly <- read.xlsx(paste0(data_dir, 'Sterols_Feces_Fricke_0018FE.xlsx'),rowNames = FALSE)"
+"0","choly[is.na(choly)] <- 0"
+"0",""
+"0",""
+"0","fa_feces <- read_tsv(paste0(data_dir, 'FA_feces.txt'),col_names = T)"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  SampleID = [31mcol_character()[39m,
+  SampleID_mean = [31mcol_character()[39m,
+  converter = [31mcol_character()[39m,
+  ST_complet = [31mcol_character()[39m,
+  Bodyside = [31mcol_character()[39m,
+  Proband = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  Timepoint = [31mcol_character()[39m,
+  Sample_Identifier = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","scfa_stool <- read_tsv(paste0(data_dir, 'SCFA_stool.txt'),col_names = T)"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  SampleID = [31mcol_character()[39m,
+  SampleID_mean = [31mcol_character()[39m,
+  converter = [31mcol_character()[39m,
+  ST_complet = [31mcol_character()[39m,
+  Bodyside = [31mcol_character()[39m,
+  Proband = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  Timepoint = [31mcol_character()[39m,
+  Sample_Identifier = [31mcol_character()[39m,
+  Acetate = [32mcol_double()[39m,
+  Propionate = [32mcol_double()[39m,
+  Butyrate = [32mcol_double()[39m,
+  Iso.Butyrate = [32mcol_double()[39m,
+  Total.SCFA = [32mcol_double()[39m
+)
+
+"

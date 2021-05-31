@@ -1,0 +1,16 @@
+"0","```r
+sd(high$stand.bile.acid)
+
+```"
+"1","[1] 1.030723
+"
+"0","```r
+sd(low$stand.bile.acid)
+```"
+"1","[1] 1.098901
+"
+"0","```r
+sd(not$stand.bile.acid)
+```"
+"1","[1] 0.4956048
+"

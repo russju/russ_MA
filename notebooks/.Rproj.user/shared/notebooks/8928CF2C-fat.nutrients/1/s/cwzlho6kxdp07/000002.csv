@@ -1,0 +1,17 @@
+"0","##Total.Sterols in feces and Cholesterol in diet"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","ggscatter(merge.chol.nutr,x='Total.Sterols',y='Cholesterin',"
+"0","          add = 'reg.line',conf.int = TRUE,"
+"0","          cor.coef = TRUE,cor.method = 'spearman',xlab = 'total sterols feces', ylab = 'dietary cholesterol')"
+"2","Fehler in ggscatter(merge.chol.nutr, x = ""Total.Sterols"", y = ""Cholesterin"",  : 
+  Objekt 'merge.chol.nutr' nicht gefunden
+"

@@ -1,0 +1,63 @@
+"0","# ba <- read_tsv(paste0(biom_dir,'Ba_feces_short.tsv'))"
+"0","BA <- read_excel(paste0(biom_dir,'BAFecesFricke.xlsx'))"
+"2","New names:
+* `` -> ...20
+"
+"0","samples <- read_tsv(paste0(biom_dir,'BA_Feces_Fricke_Sample_Assignment.txt'))"
+"2","Missing column names filled in: 'X10' [10], 'X16' [16]"
+"2","Duplicated column names deduplicated: 'Sample Name' => 'Sample Name_1' [12], 'Sample Material' => 'Sample Material_1' [14]"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------[39m
+cols(
+  `Sample Identifier` = [31mcol_character()[39m,
+  `Material code` = [31mcol_character()[39m,
+  `Sample Number` = [32mcol_double()[39m,
+  `Sample Name` = [31mcol_character()[39m,
+  `Sample Material` = [31mcol_character()[39m,
+  `Sample amount` = [32mcol_double()[39m,
+  `Unit amount` = [31mcol_character()[39m,
+  `Sample concentration` = [32mcol_double()[39m,
+  `Unit concentration` = [31mcol_character()[39m,
+  X10 = [33mcol_logical()[39m,
+  Cupnummer = [31mcol_character()[39m,
+  `Sample Name_1` = [31mcol_character()[39m,
+  `Proband ID` = [31mcol_character()[39m,
+  `Sample Material_1` = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  X16 = [31mcol_character()[39m
+)
+
+"
+"0","k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------[39m
+cols(
+  .default = col_character(),
+  day = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Sex = [33mcol_logical()[39m,
+  Energie_bls = [32mcol_double()[39m,
+  `Eiweiß, Proteingehalt` = [32mcol_double()[39m,
+  Kohlenhydrate = [32mcol_double()[39m,
+  Fett = [32mcol_double()[39m,
+  Ballaststoffe = [32mcol_double()[39m,
+  `Gesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Einfach ungesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Alkohol (Ethanol)` = [32mcol_double()[39m,
+  `Energie (kcal)` = [32mcol_double()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"2","5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') "
+"0","k.bls_prodi <- dplyr::select(k.bls_prodi,starts_with(c('file_name','Phenotype'))) %>% distinct(.)"

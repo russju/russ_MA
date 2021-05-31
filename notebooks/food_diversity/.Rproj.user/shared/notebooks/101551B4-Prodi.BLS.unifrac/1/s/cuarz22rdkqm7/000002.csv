@@ -1,0 +1,6 @@
+"0","```r
+otu.unifrac <- otu.unifrac  %>% group_by(file_name,item) %>% summarize(sum = sum(calculation)) %>% pivot_wider(names_from = 'item',values_from = 'sum') %>% as.data.frame(.)
+
+```"
+"1","`summarise()` regrouping output by 'file_name' (override with `.groups` argument)
+"

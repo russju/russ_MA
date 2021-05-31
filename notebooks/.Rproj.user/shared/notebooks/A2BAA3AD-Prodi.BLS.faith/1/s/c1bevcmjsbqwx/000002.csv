@@ -1,0 +1,6 @@
+"0","#adding subcluster"
+"0",""
+"0","subclusters <- select(subclusters,starts_with(c('file_name','subgroup')))"
+"2","Fehler in select(subclusters, starts_with(c(""file_name"", ""subgroup""))) : 
+  unbenutztes Argument (starts_with(c(""file_name"", ""subgroup"")))
+"

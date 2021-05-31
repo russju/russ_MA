@@ -1,0 +1,176 @@
+"0","#nutrients"
+"0","corr.nutr.L2 <- read_tsv(paste0(table_dir, 'corr.nutr.L2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  phylum = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutr.L6 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutr.family <- read_tsv(paste0(table_dir, 'corr.nutr.family.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  taxa = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#nutrient cluster"
+"0","corr.nutclust.L2 <- read_tsv(paste0(table_dir, 'corr.nutclust.L2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  clusters = [31mcol_character()[39m,
+  phylum = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutclust.L6 <- read_tsv(paste0(table_dir, 'corr.nutclust.L6.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  clusters = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutclust.family <- read_tsv(paste0(table_dir, 'corr.nutclust.family.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  family = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#conventional clusters"
+"0","corr.convclust.L2 <- read_tsv(paste0(table_dir, 'corr.convclust.L2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  clusters = [31mcol_character()[39m,
+  phylum = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.convclust.L6 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  clusters = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.convclust.family <- read_tsv(paste0(table_dir, 'corr.convclust.family.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  clusters = [31mcol_character()[39m,
+  family = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#serum fats"
+"0","corr.nutr.fats <- read_tsv(paste0(table_dir, 'corr.fat.nut.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  fat = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#feces fat"
+"0","corr.nutr.chol <- read_tsv(paste0(table_dir, 'corr.chol.nut.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  `sum fecal chol (derivates)` = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#U1"
+"0","# write_tsv(cor.test.adj,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.L2.U1.tsv')"
+"0","# write_tsv(cor.test.adj.U1.fam,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.fam.U1.tsv')"
+"0",""
+"0","corr.nutr.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U1.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.convclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.U1.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  `conv cluster` = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutrclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U1.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  `nutr cluster` = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#U2"
+"0","# write_tsv(cor.test.adj,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.L2.U2.tsv')"
+"0","# write_tsv(cor.test.adj.U2.fam,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.fam.U2.tsv')"
+"0",""
+"0","corr.nutr.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.convclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.convrclust.L6.U2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","corr.nutrclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U2.tsv')) %>% as.data.frame(.)"
+"2","Parsed with column specification:
+cols(
+  nutrient = [31mcol_character()[39m,
+  genus = [31mcol_character()[39m,
+  p.adj.log = [32mcol_double()[39m,
+  estimate = [32mcol_double()[39m
+)
+"
+"0","#shannon microbiome"
+"0","# corr.conv.shannonL6 <- read_tsv(paste0(table_dir, 'corr.convclust.shannon.tsv')) %>% as.data.frame(.)"
+"0","# corr.nutclust.shannonL6 <- read_tsv(paste0(table_dir, 'corr.nutrclust.shannon.tsv')) %>% as.data.frame(.)"
+"0","# "
+"0","# corr.convclust.shannonL6.U1 <- read_tsv(paste0(table_dir, 'corr.nutr.shannonL6.U1.tsv')) %>% as.data.frame(.)"
+"0","# corr.nutclust.shannonL6.U1 <- read_tsv(paste0(table_dir, 'corr.nutclust.shannonL6.U1.tsv')) %>% as.data.frame(.)"
+"0","# "
+"0","# corr.conv.shannonL6.U2 <- read_tsv(paste0(table_dir, 'corr.convclust.shannonL6.U2.tsv')) %>% as.data.frame(.)"
+"0","# corr.nutclust.shannonL6.U2 <- read_tsv(paste0(table_dir, 'corr.nutclust.shannonL6.U2.tsv')) %>% as.data.frame(.)"
+"0",""

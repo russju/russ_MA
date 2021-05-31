@@ -1,0 +1,1013 @@
+"0","#x axis log2 correlation"
+"0",""
+"0","cor.test.log <- log2(r.cor) %>% as.numeric(.)"
+"2","NaNs wurden erzeugt"
+"0","cor.test.log [is.nan(cor.test.log)] <- 0"
+"0","cor.test.log [is.infinite(cor.test.log)] <- 0"
+"0","cor.test.log <- as.data.frame(cor.test.log)"
+"0",""
+"0","r.cor[is.nan(r.cor)] <- 0"
+"0","r.cor[is.infinite(r.cor)] <- 0"
+"0","r.cor<- as.data.frame(r.cor)"
+"0",""
+"0","#y axis -log10 p.value"
+"0",""
+"0","p.adj.log <- -log10(p.adj)"
+"0","p.adj.log[is.infinite(p.adj.log)] <- 0"
+"0","p.adj.log <- as.data.frame(p.adj.log)"
+"0",""
+"0","cor.test.adj <- cbind(cor.test[ ,c(2,4)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)"
+"0","colnames(cor.test.adj) <- c('phylum','nutrient','p.adj.log','estimate')"
+"0",""
+"0","cor.test.adj <- cor.test.adj[cor.test.adj$p.adj.log != 0 & cor.test.adj$estimate != 0,]"
+"0",""
+"0","# write_tsv(cor.test.adj,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.nutr.L2.tsv')"
+"0",""
+"0","sig <- cor.test.adj[cor.test.adj$p.adj.log >= -log10(0.050) & cor.test.adj$p.adj.log > 0.00000,]"
+"0","top.sig <- sig[order(-sig$p.adj.log ),]"
+"0",""
+"0","#volcano plot ggplot()"
+"0",""
+"0","vp <- ggplot(cor.test.adj,"
+"0","    aes(x = `estimate`, y = `p.adj.log`)) +"
+"0","  geom_point() +"
+"0","  ggtitle(""Volcano plot"") +"
+"0","  xlab(""correlation"") + "
+"0","  ylab(""-log10 adjusted p-value"")"
+"0",""
+"0","# ggplotly(vp,tooltip = c('x','y','taxa','nutrient'))"
+"0",""
+"0","#not working"
+"0",""
+"0","# volcano <- volcanoPlot(x = cor.test.adj$estimate, y = p.adj,pointLabels = cor.test.adj$nutrient)"
+"0","# "
+"0","# volcano <- EnhancedVolcano(toptable = cor.test,"
+"0","#     lab = cor.test$variable_left ,"
+"0","#     x = cor.test$p.value ,"
+"0","#     y = cor.test$estimate)"
+"0",""
+"0","###maaslin"
+"0",""
+"0","df <- row.names(merge.L2.nutr) %>% as.data.frame(.)"
+"0","colnames(df) <- 'file_name'"
+"0","df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  "
+"0","df <- column_to_rownames(df,'file_name')"
+"0",""
+"0","maaslin.L2.nutrients <- Maaslin2(input_data = merge.L2.nutr,input_metadata = df,"
+"0","                                 fixed_effects = 'group',"
+"0","                                 output = 'L2.nutrients_maaslin',"
+"0","                                 min_abundance = -Inf,"
+"0","                                 normalization = 'NONE',"
+"0","                                 transform = 'NONE',"
+"0","                                 standardize = F, "
+"0","                                 random_effects = 'row.names')"
+"1","[1]"
+"1"," ""Warning: Deleting existing log file: L2.nutrients_maaslin/maaslin2.log"""
+"1","
+"
+"1","[0m2021-02-15 15:33:48 INFO::Writing function arguments to log file[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Verifying options selected are valid[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Determining format of input files[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Input format is data samples as rows and metadata samples as rows[0m[0m[0m
+"
+"1","[38;5;214m2021-02-15 15:33:48 WARNING::Feature name not found in metadata so not applied to formula as random effect: row.names[39m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Formula for fixed effects: expr ~  group[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Running selected normalization method: NONE[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Filter data based on min abundance and min prevalence[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Total samples in data: 64[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Min samples required with min abundance for a feature not to be filtered: 6.400000[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Total filtered features: 0[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Filtered feature names:[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Bypass z-score application to metadata[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Running selected transform method: NONE[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:48 INFO::Running selected analysis method: LM[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |                                                  |"
+"1"," "
+"1","0 % ~calculating  "
+"1","[0m2021-02-15 15:33:48 INFO::Fitting model to feature number 1, D_0__Archaea.D_1__Euryarchaeota[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 2, D_0__Bacteria.D_1__Actinobacteria[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+                                                 |"
+"1"," "
+"1","1 % ~17s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 3, D_0__Bacteria.D_1__Bacteroidetes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 4, D_0__Bacteria.D_1__Cyanobacteria[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++                                                |"
+"1"," "
+"1","3 % ~09s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 5, D_0__Bacteria.D_1__Deinococcus.Thermus[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 6, D_0__Bacteria.D_1__Epsilonbacteraeota[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++                                                |"
+"1"," "
+"1","4 % ~07s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 7, D_0__Bacteria.D_1__Firmicutes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 8, D_0__Bacteria.D_1__Fusobacteria[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++                                               |"
+"1"," "
+"1","5 % ~06s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 9, D_0__Bacteria.D_1__Lentisphaerae[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 10, D_0__Bacteria.D_1__Patescibacteria[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++                                              |"
+"1"," "
+"1","6 % ~05s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 11, D_0__Bacteria.D_1__Proteobacteria[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 12, D_0__Bacteria.D_1__Spirochaetes[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++                                              |"
+"1"," "
+"1","8 % ~04s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 13, D_0__Bacteria.D_1__Synergistetes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 14, D_0__Bacteria.D_1__Tenericutes[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++                                             |"
+"1"," "
+"1","9 % ~04s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 15, D_0__Bacteria.D_1__Verrucomicrobia[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 16, D_0__Eukaryota.D_1__SAR[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++                                            |"
+"1"," "
+"1","10% ~04s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 17, sample[0m[0m[0m
+"
+"2","NAs durch Umwandlung erzeugt"
+"2","Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) : 
+  contrasts can be applied only to factors with 2 or more levels
+"
+"1","[38;5;214m2021-02-15 15:33:49 WARNING::Fitting problem for feature 17 returning NA[39m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 18, Energie..kcal.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++                                            |"
+"1"," "
+"1","12% ~04s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 19, Eiweiß..Proteingehalt[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 20, Fett[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++                                           |"
+"1"," "
+"1","13% ~04s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 21, Kohlenhydrate[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 22, Ballaststoffe[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++                                          |"
+"1"," "
+"1","14% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 23, Cholesterin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 24, Einfach.ungesättigte.Fettsäuren[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++                                          |"
+"1"," "
+"1","16% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 25, Gesättigte.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 26, Alkohol..Ethanol.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++                                         |"
+"1"," "
+"1","17% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 27, Vitamin.B7.Biotin..Vitamin.H.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 28, EPA...Eicosapentaensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","18% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 29, DHA...Docosahexaensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 30, Calcium[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","19% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 31, Eisen[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 32, Vitamin.B9.gesamte.Folsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++                                       |"
+"1"," "
+"1","21% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 33, Iodid[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 34, Kalium[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++                                      |"
+"1"," "
+"1","22% ~03s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 35, Octadecadiensäure.Linolsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 36, Octadecatriensäure.Linolensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++                                      |"
+"1"," "
+"1","23% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 37, Magnesium[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 38, Mehrfach.ungesättigte.Fettsäuren[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++                                     |"
+"1"," "
+"1","25% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 39, Vitamin.B3.Niacinäquivalent[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 40, Vitamin.B5.Pantothensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++                                     |"
+"1"," "
+"1","26% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 41, Phosphor[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 42, Vitamin.A.Retinoläquivalent[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++                                    |"
+"1"," "
+"1","27% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 43, Vitamin.B1.Thiamin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 44, Vitamin.B2.Riboflavin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++                                   |"
+"1"," "
+"1","29% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 45, Vitamin.B12.Cobalamin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 46, Vitamin.B6.Pyridoxin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++                                   |"
+"1"," "
+"1","30% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 47, Vitamin.C.Ascorbinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 48, Vitamin.D.Calciferole[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++                                  |"
+"1"," "
+"1","31% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 49, Vitamin.E.Tocopherol[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 50, Vitamin.K.Phyllochinon[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","32% ~02s          "
+"1","[0m2021-02-15 15:33:49 INFO::Fitting model to feature number 51, Nichtessentielle.Aminosäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 52, Cellulose[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","34% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 53, Vitamin.A.Beta.Carotin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 54, Monosaccharide..1.M.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++                                |"
+"1"," "
+"1","35% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 55, Lactose..Milchzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 56, Wasserunlösliche.Ballaststoffe[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++                               |"
+"1"," "
+"1","36% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 57, Butansäure.Buttersäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 58, Glycin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++                               |"
+"1"," "
+"1","38% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 59, Mannit[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 60, Glucose..Traubenzucker.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++                              |"
+"1"," "
+"1","39% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 61, Poly.Pentosen[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 62, Pentadecansäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++                             |"
+"1"," "
+"1","40% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 63, Serin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 64, Polysaccharide....9.M.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++                             |"
+"1"," "
+"1","42% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 65, Hexadecansäure.Palmitinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 66, Tetradecensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++                            |"
+"1"," "
+"1","43% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 67, Dodecansäure.Laurinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 68, Arginin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++                           |"
+"1"," "
+"1","44% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 69, Eicosensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 70, Histidin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++                           |"
+"1"," "
+"1","45% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 71, Xylit[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 72, Leucin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++                          |"
+"1"," "
+"1","47% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 73, Poly.Uronsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 74, Broteinheiten_DE_UNIT[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++                         |"
+"1"," "
+"1","48% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 75, Poly.Hexosen[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 76, Oligosaccharide..resorbierbar..3.9.M.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++                         |"
+"1"," "
+"1","49% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 77, Methionin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 78, Fructose..Fruchtzucker.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++                        |"
+"1"," "
+"1","51% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 79, Lysin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 80, Eicosadiensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++                        |"
+"1"," "
+"1","52% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 81, Tetradecansäure.Myristinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 82, Alanin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++                       |"
+"1"," "
+"1","53% ~02s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 83, Mittelkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 84, Maltose..Malzzucker.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++                      |"
+"1"," "
+"1","55% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 85, Glycerin.und.Lipoide[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 86, Valin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++                      |"
+"1"," "
+"1","56% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 87, organische.Säuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 88, Vitamin.A.Retinol[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++                     |"
+"1"," "
+"1","57% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 89, Saccharose..Rübenzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 90, Decansäure.Caprinsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++                    |"
+"1"," "
+"1","58% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 91, Purin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 92, Broteinheiten_EN_UNIT[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++                    |"
+"1"," "
+"1","60% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 93, Natrium[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 94, Wasser[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++                   |"
+"1"," "
+"1","61% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 95, Chlorid[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 96, Isoleucin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++                  |"
+"1"," "
+"1","62% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 97, Hexadecadiensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 98, Kupfer[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++                  |"
+"1"," "
+"1","64% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 99, Phenylalanin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 100, Heptadecansäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++                 |"
+"1"," "
+"1","65% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 101, Asparaginsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 102, Fluorid[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","66% ~01s          "
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 103, Vitamin.B3.Niacin..Nicotinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:50 INFO::Fitting model to feature number 104, Essentielle.Aminosäuren[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","68% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 105, Docosadiensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 106, Hexansäure.Capronsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++               |"
+"1"," "
+"1","69% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 107, Octadecansäure.Stearinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 108, Tyrosin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++              |"
+"1"," "
+"1","70% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 109, Hexadecensäure.Palmitoleinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 110, Heptadecensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++              |"
+"1"," "
+"1","71% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 111, Langkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 112, Prolin[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++             |"
+"1"," "
+"1","73% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 113, Vitamin.E.Tocopheroläquivalent[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 114, Eicosatriensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++            |"
+"1"," "
+"1","74% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 115, Lignin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 116, Hexadecatetraensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++            |"
+"1"," "
+"1","75% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 117, Cystein[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 118, Docosatriensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++           |"
+"1"," "
+"1","77% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 119, Wasserlösliche.Ballaststoffe[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 120, Octansäure.Caprylsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++           |"
+"1"," "
+"1","78% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 121, Schwefel[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 122, Docosapentaensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++          |"
+"1"," "
+"1","79% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 123, Galactose..Schleimzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 124, Summe.Zuckeralkohole[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++         |"
+"1"," "
+"1","81% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 125, Harnsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 126, Zink[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++         |"
+"1"," "
+"1","82% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 127, Eicosatetraensäure.Arachidonsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 128, Nonadecatriensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++        |"
+"1"," "
+"1","83% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 129, Eicosansäure.Arachinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 130, Docosatetraensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++       |"
+"1"," "
+"1","84% ~01s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 131, Mineralstoffe..Rohasche.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 132, Glykogen..tierische.Stärke.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++       |"
+"1"," "
+"1","86% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 133, Disaccharide..2.M.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 134, Decosansäure.Behensäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++      |"
+"1"," "
+"1","87% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 135, Pentadecensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 136, Oligosaccharide..nicht.resorbierbar[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++     |"
+"1"," "
+"1","88% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 137, Tryptophan[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 138, Tetracosensäure.Nervonsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++     |"
+"1"," "
+"1","90% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 139, Glutaminsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 140, Decosensäure.Erucasäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++    |"
+"1"," "
+"1","91% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 141, Octadecatetraensäure.Stearidonsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 142, Sorbit[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++   |"
+"1"," "
+"1","92% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 143, Threonin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 144, Tetracosansäure.Lignocerinsäure[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++   |"
+"1"," "
+"1","94% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 145, Kurzkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 146, Mangan[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++  |"
+"1"," "
+"1","95% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 147, Octadecensäure.Ölsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 148, Stärke[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++++ |"
+"1"," "
+"1","96% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 149, Broteinheiten_CH_UNIT[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 150, Energie..Protein..kcal.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++++ |"
+"1"," "
+"1","97% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 151, Energie..Kohlenhydrate..kcal.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 152, Energie..Fett..kcal.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","99% ~00s          "
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 153, Energie..Alkohol..kcal.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:51 INFO::Fitting model to feature number 154, Energie..Gesamt..kcal.[0m[0m[0m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","100% elapsed=03s  "
+"1","
+"
+"1","[0m2021-02-15 15:33:52 INFO::Counting total values for each feature[0m[0m[0m
+"
+"1","[38;5;214m2021-02-15 15:33:52 WARNING::Deleting existing residuals file: L2.nutrients_maaslin/residuals.rds[39m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Writing residuals to file L2.nutrients_maaslin/residuals.rds[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Writing all results to file (ordered by increasing q-values): L2.nutrients_maaslin/all_results.tsv[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): L2.nutrients_maaslin/significant_results.tsv[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Writing heatmap of significant results to file: L2.nutrients_maaslin/heatmap.pdf[0m[0m[0m
+"
+"1","[1]"
+"1"," ""There is not enough metadata in the associations to create a heatmap plot. Please review the associations in text output file."""
+"1","
+"
+"1","[0m2021-02-15 15:33:52 INFO::Writing association plots (one for each significant association) to output folder: L2.nutrients_maaslin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Plotting associations from most to least significant, grouped by metadata[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Plotting data for metadata number 1, group[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Creating boxplot for categorical data, group vs Energie..Kohlenhydrate..kcal.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:52 INFO::Creating boxplot for categorical data, group vs Kohlenhydrate[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:53 INFO::Creating boxplot for categorical data, group vs Energie..Fett..kcal.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:53 INFO::Creating boxplot for categorical data, group vs Hexadecensäure.Palmitoleinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:53 INFO::Creating boxplot for categorical data, group vs Broteinheiten_CH_UNIT[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:53 INFO::Creating boxplot for categorical data, group vs Broteinheiten_DE_UNIT[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:54 INFO::Creating boxplot for categorical data, group vs Broteinheiten_EN_UNIT[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:54 INFO::Creating boxplot for categorical data, group vs Saccharose..Rübenzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:54 INFO::Creating boxplot for categorical data, group vs Oligosaccharide..resorbierbar..3.9.M.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:55 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:55 INFO::Creating boxplot for categorical data, group vs Eicosansäure.Arachinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:55 INFO::Creating boxplot for categorical data, group vs Disaccharide..2.M.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:55 INFO::Creating boxplot for categorical data, group vs Glycerin.und.Lipoide[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:56 INFO::Creating boxplot for categorical data, group vs Octadecansäure.Stearinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:56 INFO::Creating boxplot for categorical data, group vs Tetradecansäure.Myristinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:56 INFO::Creating boxplot for categorical data, group vs Octadecensäure.Ölsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:56 INFO::Creating boxplot for categorical data, group vs Einfach.ungesättigte.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:57 INFO::Creating boxplot for categorical data, group vs Octadecatriensäure.Linolensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:57 INFO::Creating boxplot for categorical data, group vs Stärke[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:57 INFO::Creating boxplot for categorical data, group vs Fructose..Fruchtzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:57 INFO::Creating boxplot for categorical data, group vs Polysaccharide....9.M.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:57 INFO::Creating boxplot for categorical data, group vs Nonadecatriensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:58 INFO::Creating boxplot for categorical data, group vs Hexadecansäure.Palmitinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:58 INFO::Creating boxplot for categorical data, group vs Eicosensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:58 INFO::Creating boxplot for categorical data, group vs Wasser[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:58 INFO::Creating boxplot for categorical data, group vs Mehrfach.ungesättigte.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:59 INFO::Creating boxplot for categorical data, group vs Kurzkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:59 INFO::Creating boxplot for categorical data, group vs Mittelkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:59 INFO::Creating boxplot for categorical data, group vs Decansäure.Caprinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:33:59 INFO::Creating boxplot for categorical data, group vs Butansäure.Buttersäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:00 INFO::Creating boxplot for categorical data, group vs Sorbit[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:00 INFO::Creating boxplot for categorical data, group vs Gesättigte.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:00 INFO::Creating boxplot for categorical data, group vs Heptadecansäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:00 INFO::Creating boxplot for categorical data, group vs Octadecadiensäure.Linolsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:00 INFO::Creating boxplot for categorical data, group vs Langkettige.Fettsäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:01 INFO::Creating boxplot for categorical data, group vs Summe.Zuckeralkohole[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:01 INFO::Creating boxplot for categorical data, group vs Tetradecensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:01 INFO::Creating boxplot for categorical data, group vs Hexansäure.Capronsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:01 INFO::Creating boxplot for categorical data, group vs Magnesium[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:02 INFO::Creating boxplot for categorical data, group vs Hexadecadiensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:02 INFO::Creating boxplot for categorical data, group vs Monosaccharide..1.M.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:02 INFO::Creating boxplot for categorical data, group vs Pentadecansäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:02 INFO::Creating boxplot for categorical data, group vs Glucose..Traubenzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:03 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Fusobacteria[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:03 INFO::Creating boxplot for categorical data, group vs Octansäure.Caprylsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:03 INFO::Creating boxplot for categorical data, group vs Dodecansäure.Laurinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:03 INFO::Creating boxplot for categorical data, group vs Poly.Hexosen[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:03 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:04 INFO::Creating boxplot for categorical data, group vs Vitamin.E.Tocopherol[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:04 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:04 INFO::Creating boxplot for categorical data, group vs Fett[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:04 INFO::Creating boxplot for categorical data, group vs Kupfer[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:05 INFO::Creating boxplot for categorical data, group vs Vitamin.E.Tocopheroläquivalent[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:05 INFO::Creating boxplot for categorical data, group vs Alkohol..Ethanol.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:05 INFO::Creating boxplot for categorical data, group vs Eicosadiensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:05 INFO::Creating boxplot for categorical data, group vs Heptadecensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:06 INFO::Creating boxplot for categorical data, group vs EPA...Eicosapentaensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:06 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:06 INFO::Creating boxplot for categorical data, group vs Cholesterin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:06 INFO::Creating boxplot for categorical data, group vs Lactose..Milchzucker.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:06 INFO::Creating boxplot for categorical data, group vs Mangan[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:07 INFO::Creating boxplot for categorical data, group vs Lysin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:07 INFO::Creating boxplot for categorical data, group vs Energie..Alkohol..kcal.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:07 INFO::Creating boxplot for categorical data, group vs Decosensäure.Erucasäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:07 INFO::Creating boxplot for categorical data, group vs Ballaststoffe[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:08 INFO::Creating boxplot for categorical data, group vs Eicosatriensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:08 INFO::Creating boxplot for categorical data, group vs Kalium[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:08 INFO::Creating boxplot for categorical data, group vs Vitamin.B1.Thiamin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:09 INFO::Creating boxplot for categorical data, group vs Octadecatetraensäure.Stearidonsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:09 INFO::Creating boxplot for categorical data, group vs Arginin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:09 INFO::Creating boxplot for categorical data, group vs Pentadecensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:10 INFO::Creating boxplot for categorical data, group vs Histidin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:10 INFO::Creating boxplot for categorical data, group vs Docosapentaensäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:10 INFO::Creating boxplot for categorical data, group vs Purin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:10 INFO::Creating boxplot for categorical data, group vs Oligosaccharide..nicht.resorbierbar[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:11 INFO::Creating boxplot for categorical data, group vs Harnsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:11 INFO::Creating boxplot for categorical data, group vs Threonin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:12 INFO::Creating boxplot for categorical data, group vs Vitamin.B7.Biotin..Vitamin.H.[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:13 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Spirochaetes[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:13 INFO::Creating boxplot for categorical data, group vs Essentielle.Aminosäuren[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:14 INFO::Creating boxplot for categorical data, group vs Vitamin.A.Retinol[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:15 INFO::Creating boxplot for categorical data, group vs Tyrosin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:15 INFO::Creating boxplot for categorical data, group vs Tetracosansäure.Lignocerinsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:16 INFO::Creating boxplot for categorical data, group vs Methionin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:17 INFO::Creating boxplot for categorical data, group vs Vitamin.A.Retinoläquivalent[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:17 INFO::Creating boxplot for categorical data, group vs Vitamin.A.Beta.Carotin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:18 INFO::Creating boxplot for categorical data, group vs Leucin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:19 INFO::Creating boxplot for categorical data, group vs Poly.Uronsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:19 INFO::Creating boxplot for categorical data, group vs Asparaginsäure[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:20 INFO::Creating boxplot for categorical data, group vs Isoleucin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:21 INFO::Creating boxplot for categorical data, group vs Alanin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:21 INFO::Creating boxplot for categorical data, group vs Valin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:22 INFO::Creating boxplot for categorical data, group vs Lignin[0m[0m[0m
+"
+"1","[0m2021-02-15 15:34:23 INFO::Creating boxplot for categorical data, group vs D_0__Eukaryota.D_1__SAR[0m[0m[0m
+"

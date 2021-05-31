@@ -1,0 +1,20 @@
+"0","keep <- !bls.scale$item_cat %in% c('Gewürze, Würzmittel, Hilfsstoffe')"
+"0","#%in% c() #'Menükomponenten','Gewürze, Würzmittel, Hilfsstoffe' "
+"0","metadata <- bls.scale[keep, c('item_id','item_cat','item_subcat','item_descr')]"
+"0","df <- bls.scale[keep,] %>%"
+"0","  dplyr::select(everything(), -starts_with('item'), item_id) %>%"
+"0","  mutate_at(.vars = vars(everything(), -item_id), "
+"0","            .funs = funs(replace_na(., 0))) %>% "
+"0","  column_to_rownames('item_id') %>% "
+"0","  as.matrix()"
+"2","`funs()` was deprecated in dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
+
+  # Simple named list: 
+  list(mean = mean, median = median)
+
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
+
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))"

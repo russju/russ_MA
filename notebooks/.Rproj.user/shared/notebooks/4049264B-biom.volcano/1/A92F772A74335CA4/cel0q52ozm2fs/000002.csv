@@ -1,0 +1,3 @@
+"0","biom.rel.clr <- clr(acomp(biom.rel)) %>% as.data.frame(.)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"

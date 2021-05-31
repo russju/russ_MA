@@ -1,0 +1,28 @@
+"0","```r
+pdf(paste0(converter_dir,'foods.sPLS-DA.pdf'))
+
+mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA foods-phenotypes')
+# COMP 1
+pL.pc1 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .7)
+```"
+"0","```r
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+
+stats::heatmap(matrix.z,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes',scale = 'none')
+
+heatmap.2(matrix.z,cexRow = .85,cexCol = .95,trace = 'none',notecol = 'black',srtCol = 30)
+```"
+"0","```r
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

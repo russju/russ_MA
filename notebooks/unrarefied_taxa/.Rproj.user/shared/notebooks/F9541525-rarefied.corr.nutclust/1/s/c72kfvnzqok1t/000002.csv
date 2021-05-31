@@ -1,0 +1,26 @@
+"0","```r
+cor.test.log.biom.L7.U1 <- log2(r.cor.biom.L7.U1) %>% as.numeric(.)
+
+```"
+"1","NaNs wurden erzeugt
+"
+"0","```r
+cor.test.log.biom.L7.U1[is.nan(cor.test.log.biom.L7.U1)] <- 0
+cor.test.log.biom.L7.U1[is.infinite(cor.test.log.biom.L7.U1)] <- 0
+cor.test.log.biom.L7.U1 <- as.data.frame(cor.test.log.biom.L7.U1)
+
+r.cor.biom.L7.U1[is.nan(r.cor.biom.L7.U1)] <- 0
+r.cor.biom.L7.U1[is.infinite(r.cor.biom.L7.U1)] <- 0
+r.cor.biom.L7.U1 <- as.data.frame(r.cor.biom.L7.U1)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L7.U1 <- -log10(p.adj.biom.L7.U1)
+p.adj.log.biom.L7.U1[is.infinite(p.adj.log.biom.L7.U1)] <- 0
+p.adj.log.biom.L7.U1 <- as.data.frame(p.adj.log.biom.L7.U1)
+
+cor.test.adj.biom.L7.U1 <- cbind(cor.test.biom.L7.U1[ ,c(1,3)],p.adj.log.biom.L7.U1) %>% cbind(.,r.cor.biom.L7.U1) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L7.U1) <- c('specy','cluster','p.adj.log','estimate')
+
+cor.test.adj.biom.L7.U1 <- cor.test.adj.biom.L7.U1[cor.test.adj.biom.L7.U1$p.adj.log != 0 & cor.test.adj.biom.L7.U1$estimate != 0,]
+```"

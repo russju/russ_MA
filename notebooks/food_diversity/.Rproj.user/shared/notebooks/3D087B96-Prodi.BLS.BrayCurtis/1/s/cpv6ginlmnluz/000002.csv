@@ -1,0 +1,36 @@
+"0","```r
+library(tidyverse)
+library(ecodist)
+```"
+"1","Paket ã¤¼ã¸±ecodistã¤¼ã¸² wurde unter R Version 4.0.2 erstellt
+Attache Paket: ã¤¼ã¸±ecodistã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:phyloseqã¤¼ã¸²:
+
+    distance
+"
+"0","```r
+library(ggplot2)
+library(plotly)
+library(vegan)
+```"
+"1","Paket ã¤¼ã¸±veganã¤¼ã¸² wurde unter R Version 4.0.3 erstelltLade næ˜¼ã¸¶tiges Paket: permute
+
+Attache Paket: ã¤¼ã¸±permuteã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:devtoolsã¤¼ã¸²:
+
+    check
+
+Lade næ˜¼ã¸¶tiges Paket: lattice
+This is vegan 2.5-7
+
+Attache Paket: ã¤¼ã¸±veganã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:ecodistã¤¼ã¸²:
+
+    mantel
+"
+"0","```r
+library(ggpubr)
+```"

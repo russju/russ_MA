@@ -1,0 +1,5 @@
+"0","pdf(paste0(converter_dir,'foods.sPLS-DA.pdf'))"
+"0",""
+"0","mixOmics::plotIndiv(data.splsda , comp = c(1,2),"
+"0","          group = Y, ind.names = T, "
+"0","          ellipse = TRUE, legend = TRUE, title = 'PLSDA foods-phenotypes')"

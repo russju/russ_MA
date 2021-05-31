@@ -1,0 +1,2193 @@
+nutrient	phylum	p.adj.log	estimate
+Alanin	D_0__Archaea.D_1__Euryarchaeota	0.6821440971208526	0.2582526295778392
+Alanin	D_0__Bacteria.D_1__Actinobacteria	0.3061692199623457	0.16652876768715405
+Alanin	D_0__Bacteria.D_1__Bacteroidetes	0.053016474536057255	-0.051045680629752815
+Alanin	D_0__Bacteria.D_1__Cyanobacteria	0.557729344019054	-0.2324618015425605
+Alanin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Alanin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1246090068488592	0.09359022660162163
+Alanin	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	-0.02124440283913924
+Alanin	D_0__Bacteria.D_1__Fusobacteria	0.008255250374276782	-0.008669966079517906
+Alanin	D_0__Bacteria.D_1__Lentisphaerae	0.03603200339656107	-0.03771518006864286
+Alanin	D_0__Bacteria.D_1__Patescibacteria	0.3025813329515455	0.16527399108073107
+Alanin	D_0__Bacteria.D_1__Proteobacteria	0.1415560185608356	-0.0999866400705615
+Alanin	D_0__Bacteria.D_1__Spirochaetes	0.061213647945057924	-0.05904945599055744
+Alanin	D_0__Bacteria.D_1__Synergistetes	0.4152144131770056	-0.1981891201514552
+Alanin	D_0__Bacteria.D_1__Tenericutes	0.11603118822433563	0.09003448075663004
+Alanin	D_0__Bacteria.D_1__Verrucomicrobia	0.4625024623157809	-0.21134923328762886
+Alanin	D_0__Eukaryota.D_1__SAR	0.27050419859240504	0.15261170884333747
+Alkohol (Ethanol)	D_0__Archaea.D_1__Euryarchaeota	0.13203017856877075	-0.09678858350784915
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Actinobacteria	0.362956914106184	-0.18292834276891523
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Bacteroidetes	0.244810000044613	0.14349615523404724
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Cyanobacteria	0.04022771178903619	0.04160576738381945
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.05937724110676637	-0.056973161876432366
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Firmicutes	0.05937724110676637	0.05691107899987148
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Fusobacteria	0.46890671663960926	-0.21346495030857016
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Lentisphaerae	0.38623581520607914	0.18906029831958912
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Patescibacteria	0.4528118938760093	-0.20898710265997236
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Proteobacteria	0.7662631122705106	0.2743011578507019
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Spirochaetes	0.1460311767442165	-0.10231537179105922
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Synergistetes	0.008255250374276782	0.008763736686227501
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Tenericutes	0.005600181287302202	-0.00418132985750677
+Alkohol (Ethanol)	D_0__Bacteria.D_1__Verrucomicrobia	0.7010759344395251	0.26174618964838686
+Alkohol (Ethanol)	D_0__Eukaryota.D_1__SAR	0.07915244547246106	-0.07050852997148387
+Arginin	D_0__Archaea.D_1__Euryarchaeota	0.6995507129657574	0.26145108864918704
+Arginin	D_0__Bacteria.D_1__Actinobacteria	0.4281490066213391	0.20123984651829088
+Arginin	D_0__Bacteria.D_1__Bacteroidetes	0.06187074045619441	-0.06015775941221094
+Arginin	D_0__Bacteria.D_1__Cyanobacteria	0.649347621046644	-0.2517315986475607
+Arginin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Arginin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.11603118822433563	0.08969531339363966
+Arginin	D_0__Bacteria.D_1__Firmicutes	0.007042218830413096	-0.006795531142829874
+Arginin	D_0__Bacteria.D_1__Fusobacteria	0.009696900983029638	-0.009996574043671533
+Arginin	D_0__Bacteria.D_1__Lentisphaerae	0.08061414432847262	-0.07250092521095196
+Arginin	D_0__Bacteria.D_1__Patescibacteria	0.42908512187071157	0.2017485571844599
+Arginin	D_0__Bacteria.D_1__Proteobacteria	0.1645634690837046	-0.1131064456305666
+Arginin	D_0__Bacteria.D_1__Spirochaetes	0.06889462662390947	-0.06546617902117964
+Arginin	D_0__Bacteria.D_1__Synergistetes	0.2890174353761434	-0.1600074594453601
+Arginin	D_0__Bacteria.D_1__Tenericutes	0.07189207675257392	0.06672060447562264
+Arginin	D_0__Bacteria.D_1__Verrucomicrobia	0.46031050334592294	-0.21073138370194033
+Arginin	D_0__Eukaryota.D_1__SAR	0.2525964853431909	0.1461581410059746
+Asparaginsäure	D_0__Archaea.D_1__Euryarchaeota	0.4670113562148794	0.21269895400587374
+Asparaginsäure	D_0__Bacteria.D_1__Actinobacteria	0.5023811616933413	0.22088718985327044
+Asparaginsäure	D_0__Bacteria.D_1__Bacteroidetes	0.06322573246925012	-0.062236659613976654
+Asparaginsäure	D_0__Bacteria.D_1__Cyanobacteria	0.6245243703125528	-0.24785584492757104
+Asparaginsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Asparaginsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16078537566644152	0.10956658823580617
+Asparaginsäure	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	-0.021459889733251487
+Asparaginsäure	D_0__Bacteria.D_1__Fusobacteria	0.0332468222257699	0.034572425576340535
+Asparaginsäure	D_0__Bacteria.D_1__Lentisphaerae	0.10498367671813483	-0.08535165759284394
+Asparaginsäure	D_0__Bacteria.D_1__Patescibacteria	0.5672099371818119	0.2347184932964196
+Asparaginsäure	D_0__Bacteria.D_1__Proteobacteria	0.27114223044775193	-0.15306020094997475
+Asparaginsäure	D_0__Bacteria.D_1__Spirochaetes	0.10048120587980713	-0.0832321759599682
+Asparaginsäure	D_0__Bacteria.D_1__Synergistetes	0.27050419859240504	-0.15243683665113356
+Asparaginsäure	D_0__Bacteria.D_1__Tenericutes	0.0640963190103429	0.06310569152787908
+Asparaginsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.5171375852215739	-0.22442684114547204
+Asparaginsäure	D_0__Eukaryota.D_1__SAR	0.30998391702108424	0.1673070349154166
+Ballaststoffe	D_0__Archaea.D_1__Euryarchaeota	0.16086410452724895	-0.10967452352680916
+Ballaststoffe	D_0__Bacteria.D_1__Actinobacteria	0.8844209277842938	-0.2970441022123756
+Ballaststoffe	D_0__Bacteria.D_1__Bacteroidetes	0.027321574764244346	-0.029728814798538488
+Ballaststoffe	D_0__Bacteria.D_1__Cyanobacteria	0.6141557772844964	0.24620860335913816
+Ballaststoffe	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Ballaststoffe	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2375367958128528	-0.14056444083148065
+Ballaststoffe	D_0__Bacteria.D_1__Firmicutes	0.006765843121249416	-0.0054546376282713655
+Ballaststoffe	D_0__Bacteria.D_1__Fusobacteria	0.03400311812949427	-0.03581611629455493
+Ballaststoffe	D_0__Bacteria.D_1__Lentisphaerae	0.017935298253809052	0.01980019134893038
+Ballaststoffe	D_0__Bacteria.D_1__Patescibacteria	0.5171375852215739	-0.2249870174967625
+Ballaststoffe	D_0__Bacteria.D_1__Proteobacteria	0.12656137456755628	0.09453493483283074
+Ballaststoffe	D_0__Bacteria.D_1__Spirochaetes	0.28521684285285914	0.15788272249633997
+Ballaststoffe	D_0__Bacteria.D_1__Synergistetes	0.07189207675257392	0.06708513581547335
+Ballaststoffe	D_0__Bacteria.D_1__Tenericutes	0.01466254009354245	-0.013932010112938284
+Ballaststoffe	D_0__Bacteria.D_1__Verrucomicrobia	1.2410400672219808	0.3419437968168793
+Ballaststoffe	D_0__Eukaryota.D_1__SAR	0.3205182300403753	-0.17025296830178593
+Broteinheiten_CH_UNIT	D_0__Archaea.D_1__Euryarchaeota	0.14785136430061036	-0.10291582826011325
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Actinobacteria	0.9607365851687814	-0.3096777758853984
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Bacteroidetes	0.1683282562613563	-0.11449725543523598
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Cyanobacteria	0.8895553405225182	0.29833188848826203
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Epsilonbacteraeota	0.14930865527082426	-0.10366621834439838
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Firmicutes	0.15647767584232197	-0.10773820331812946
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Fusobacteria	0.05123635172996293	0.0482856688134772
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Lentisphaerae	0.0622724233596438	0.061429828988773576
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Patescibacteria	0.32094926538489305	-0.17085170503973132
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Proteobacteria	0.061244326290196154	-0.05946804401923967
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Spirochaetes	0.43693829531526446	0.2042542816503489
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Synergistetes	0.11672462624641344	0.09034975988622446
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Tenericutes	0.01885661905526331	0.022967394759916136
+Broteinheiten_CH_UNIT	D_0__Bacteria.D_1__Verrucomicrobia	0.5389234798373191	0.228906569429717
+Broteinheiten_CH_UNIT	D_0__Eukaryota.D_1__SAR	0.16026201973740575	-0.1093866440781033
+Broteinheiten_DE_UNIT	D_0__Archaea.D_1__Euryarchaeota	0.14930865527082426	-0.10420027199866268
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Actinobacteria	0.9575858105318683	-0.30883462069900536
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Bacteroidetes	0.16086410452724895	-0.109807307952716
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Cyanobacteria	0.8829858952116758	0.2964749826372444
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Epsilonbacteraeota	0.152228455858043	-0.10541307990156487
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Firmicutes	0.14930865527082426	-0.10383389519322948
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Fusobacteria	0.045175722511511536	0.045422282440792994
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Lentisphaerae	0.06187074045619441	0.05991378927714984
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Patescibacteria	0.3279809676696189	-0.17389906454699297
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Proteobacteria	0.054983404402600855	-0.052749203550692327
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Spirochaetes	0.42908512187071157	0.20214702560178846
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Synergistetes	0.11603118822433563	0.0897364701472483
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.021374897997525746
+Broteinheiten_DE_UNIT	D_0__Bacteria.D_1__Verrucomicrobia	0.5589968919867697	0.23293451632792833
+Broteinheiten_DE_UNIT	D_0__Eukaryota.D_1__SAR	0.16086410452724895	-0.11120611558870522
+Broteinheiten_EN_UNIT	D_0__Archaea.D_1__Euryarchaeota	0.14930865527082426	-0.10379451905305273
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Actinobacteria	0.9593633395200104	-0.3091697696107651
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Bacteroidetes	0.15221951516454252	-0.1052455995979818
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Cyanobacteria	0.8844209277842938	0.2971788641019193
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Epsilonbacteraeota	0.15221951516454252	-0.1051111449724442
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Firmicutes	0.1415560185608356	-0.10014430084731228
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Fusobacteria	0.041213038182403905	0.042721362672552866
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Lentisphaerae	0.06199685568159733	0.060908014839251484
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Patescibacteria	0.34552372362971984	-0.17897316184160003
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Proteobacteria	0.04622610478049867	-0.04599804300302325
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Spirochaetes	0.4096243096240108	0.1971108391189193
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Synergistetes	0.10982757234512966	0.08743448198430072
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.020347654737415982
+Broteinheiten_EN_UNIT	D_0__Bacteria.D_1__Verrucomicrobia	0.5662830666067985	0.23406423128130854
+Broteinheiten_EN_UNIT	D_0__Eukaryota.D_1__SAR	0.1683282562613563	-0.1143471740740249
+Butansäure/Buttersäure	D_0__Archaea.D_1__Euryarchaeota	0.01396004158625736	-0.012933434772423634
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Actinobacteria	0.047406082497227164	0.04651380910992317
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Bacteroidetes	0.29408910331877947	0.16174402964417697
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Cyanobacteria	0.180958633592167	-0.12125815007678971
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.035886068946192146	0.03749492049400064
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Firmicutes	0.05268573363683467	0.05009842436495317
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Fusobacteria	0.23763919808557155	-0.14072167552767484
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Lentisphaerae	0.2846077784830008	0.15701021742948526
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Patescibacteria	0.03400311812949427	-0.03583524180011599
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Proteobacteria	1.1596698927685016	0.33336173406488645
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Spirochaetes	0.9249184153966263	-0.304557883845578
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Synergistetes	0.03603200339656107	0.03767799971512499
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	0.007031796262512618
+Butansäure/Buttersäure	D_0__Bacteria.D_1__Verrucomicrobia	0.16086410452724895	-0.10992535990866391
+Butansäure/Buttersäure	D_0__Eukaryota.D_1__SAR	0.07959404585777584	-0.0717006555359909
+Calcium	D_0__Archaea.D_1__Euryarchaeota	0.017915293974319464	-0.019090523378182813
+Calcium	D_0__Bacteria.D_1__Actinobacteria	0.5662830666067985	-0.23432195829233768
+Calcium	D_0__Bacteria.D_1__Bacteroidetes	0.06199685568159733	-0.060828991862461594
+Calcium	D_0__Bacteria.D_1__Cyanobacteria	0.05917874077039892	0.05667483442297238
+Calcium	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Calcium	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1352582557818558	0.09771973277818825
+Calcium	D_0__Bacteria.D_1__Firmicutes	0.043684484395156375	-0.04396092145113077
+Calcium	D_0__Bacteria.D_1__Fusobacteria	0.08137861837751036	-0.07312205106233534
+Calcium	D_0__Bacteria.D_1__Lentisphaerae	0.03400311812949427	0.036130065156551955
+Calcium	D_0__Bacteria.D_1__Patescibacteria	0.03400311812949427	0.036177443912502244
+Calcium	D_0__Bacteria.D_1__Proteobacteria	0.009696900983029638	-0.010112759847457149
+Calcium	D_0__Bacteria.D_1__Spirochaetes	0.03218163764087498	0.033099156677407496
+Calcium	D_0__Bacteria.D_1__Synergistetes	0.019556721790935188	-0.023616685798034685
+Calcium	D_0__Bacteria.D_1__Tenericutes	0.014803133276958994	-0.01705377971312132
+Calcium	D_0__Bacteria.D_1__Verrucomicrobia	0.4417510690760639	0.2060020491004485
+Calcium	D_0__Eukaryota.D_1__SAR	0.08236548690209294	-0.07432368612965475
+Cellulose	D_0__Archaea.D_1__Euryarchaeota	0.02007633171376764	-0.02387325256769815
+Cellulose	D_0__Bacteria.D_1__Actinobacteria	0.34552372362971984	0.1788724447255825
+Cellulose	D_0__Bacteria.D_1__Bacteroidetes	0.17540160945938105	-0.11926654852260381
+Cellulose	D_0__Bacteria.D_1__Cyanobacteria	0.32056661455991686	-0.17045864707529443
+Cellulose	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Cellulose	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1175109762570001	0.09079409739903822
+Cellulose	D_0__Bacteria.D_1__Firmicutes	0.05074625447453096	-0.04796098295210418
+Cellulose	D_0__Bacteria.D_1__Fusobacteria	0.17540160945938105	0.1188976351636391
+Cellulose	D_0__Bacteria.D_1__Lentisphaerae	0.38556255976840886	-0.18860438463003903
+Cellulose	D_0__Bacteria.D_1__Patescibacteria	1.55032542833616	0.3711823761898152
+Cellulose	D_0__Bacteria.D_1__Proteobacteria	0.7570345873263504	-0.27198340732525855
+Cellulose	D_0__Bacteria.D_1__Spirochaetes	0.02007633171376764	0.02418882964306373
+Cellulose	D_0__Bacteria.D_1__Synergistetes	0.027044201916956265	0.029074079797167317
+Cellulose	D_0__Bacteria.D_1__Tenericutes	0.01320963210248646	0.012242326608963057
+Cellulose	D_0__Bacteria.D_1__Verrucomicrobia	0.157503305948236	-0.10831112981972833
+Cellulose	D_0__Eukaryota.D_1__SAR	0.2333777136755727	0.13972239772613268
+Chlorid	D_0__Archaea.D_1__Euryarchaeota	0.06698620864891147	0.0644843212758322
+Chlorid	D_0__Bacteria.D_1__Actinobacteria	1.6695469783116206	0.38191445122188106
+Chlorid	D_0__Bacteria.D_1__Bacteroidetes	0.09361619033172984	0.07895631324631218
+Chlorid	D_0__Bacteria.D_1__Cyanobacteria	0.45442259913805405	-0.20930567819340354
+Chlorid	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Chlorid	D_0__Bacteria.D_1__Epsilonbacteraeota	0.047468219454590406	0.046626469950528944
+Chlorid	D_0__Bacteria.D_1__Firmicutes	0.11550096458484953	0.08936235941950753
+Chlorid	D_0__Bacteria.D_1__Fusobacteria	0.04048815371060695	-0.04205681314703649
+Chlorid	D_0__Bacteria.D_1__Lentisphaerae	0.02877098377498699	-0.031010296784049804
+Chlorid	D_0__Bacteria.D_1__Patescibacteria	0.20863228518478646	0.13008052629913944
+Chlorid	D_0__Bacteria.D_1__Proteobacteria	0.09797506585239453	-0.08154642848823475
+Chlorid	D_0__Bacteria.D_1__Spirochaetes	0.2221463636947891	-0.13402494684518138
+Chlorid	D_0__Bacteria.D_1__Synergistetes	0.06440654859912753	-0.06341105811330651
+Chlorid	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	-0.019808149102699915
+Chlorid	D_0__Bacteria.D_1__Verrucomicrobia	0.387541467382801	-0.1895210221600872
+Chlorid	D_0__Eukaryota.D_1__SAR	0.16086410452724895	0.10989970983971895
+Cholesterin	D_0__Archaea.D_1__Euryarchaeota	0.028423756043510568	0.030693240830771237
+Cholesterin	D_0__Bacteria.D_1__Actinobacteria	0.649347621046644	-0.2517216641990204
+Cholesterin	D_0__Bacteria.D_1__Bacteroidetes	0.17173526636157077	0.11609292439523082
+Cholesterin	D_0__Bacteria.D_1__Cyanobacteria	0.14930865527082426	0.10385423414087042
+Cholesterin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Cholesterin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.05598070435585557	-0.05376443416119177
+Cholesterin	D_0__Bacteria.D_1__Firmicutes	0.03726886909813065	0.03910695698079561
+Cholesterin	D_0__Bacteria.D_1__Fusobacteria	0.45199855893652013	-0.2085817632545684
+Cholesterin	D_0__Bacteria.D_1__Lentisphaerae	0.4384042620742076	0.20527203840863048
+Cholesterin	D_0__Bacteria.D_1__Patescibacteria	0.8630157793732555	-0.2923392876914699
+Cholesterin	D_0__Bacteria.D_1__Proteobacteria	1.0775068679348265	0.3236641583338707
+Cholesterin	D_0__Bacteria.D_1__Spirochaetes	0.03768128219375493	-0.039352317412224835
+Cholesterin	D_0__Bacteria.D_1__Synergistetes	0.01466254009354245	0.01409128878901444
+Cholesterin	D_0__Bacteria.D_1__Tenericutes	0.028504031479779635	0.030827018054821097
+Cholesterin	D_0__Bacteria.D_1__Verrucomicrobia	0.1701079998968903	0.11554650827139269
+Cholesterin	D_0__Eukaryota.D_1__SAR	0.2184569394450411	-0.13289104513763195
+Cystein	D_0__Archaea.D_1__Euryarchaeota	0.9422904452015204	0.30706894844910504
+Cystein	D_0__Bacteria.D_1__Actinobacteria	0.05074625447453096	-0.04801653799803447
+Cystein	D_0__Bacteria.D_1__Bacteroidetes	0.1683282562613563	-0.11443285209732955
+Cystein	D_0__Bacteria.D_1__Cyanobacteria	0.03969524098778208	-0.04063811811243119
+Cystein	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Cystein	D_0__Bacteria.D_1__Epsilonbacteraeota	0.040081921293819406	-0.040820091591911786
+Cystein	D_0__Bacteria.D_1__Firmicutes	0.0147115005686739	-0.014333412799570983
+Cystein	D_0__Bacteria.D_1__Fusobacteria	0.06159592634513455	-0.059701012804820576
+Cystein	D_0__Bacteria.D_1__Lentisphaerae	0.006765843121249416	0.005199518884362577
+Cystein	D_0__Bacteria.D_1__Patescibacteria	0.10369293523512474	-0.0849579369762677
+Cystein	D_0__Bacteria.D_1__Proteobacteria	0.047468219454590406	-0.04672442622984572
+Cystein	D_0__Bacteria.D_1__Spirochaetes	0.0812773701892329	0.07273443588805863
+Cystein	D_0__Bacteria.D_1__Synergistetes	0.7696389028598989	-0.27531810868265677
+Cystein	D_0__Bacteria.D_1__Tenericutes	0.11035081634064615	0.08762497093484845
+Cystein	D_0__Bacteria.D_1__Verrucomicrobia	0.16086410452724895	0.11097192784244062
+Cystein	D_0__Eukaryota.D_1__SAR	0.005636601152462003	-0.004406743363879045
+Decansäure/Caprinsäure	D_0__Archaea.D_1__Euryarchaeota	0.03603200339656107	-0.03801004028805459
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Actinobacteria	0.22299554482510883	0.13470943019167342
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.5718942983945571	0.23595263562259666
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.4625024623157809	-0.2114437812113384
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.12784584030510457	0.09544380355964711
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Firmicutes	0.17237557186237235	0.11631253675793973
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Fusobacteria	0.3884037252964265	-0.18982714119242916
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.21908255186554607	0.13315749414479924
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Patescibacteria	0.16978815766616762	-0.11526135928553398
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Proteobacteria	2.2093001058242763	0.4256827536449032
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Spirochaetes	0.7522057750792448	-0.2711978924528356
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Synergistetes	0.15389118124624515	0.106066479656099
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Tenericutes	0.11793756757912054	-0.0909784217345835
+Decansäure/Caprinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.05905567009565652	-0.0562204522761722
+Decansäure/Caprinsäure	D_0__Eukaryota.D_1__SAR	0.19735403286236763	-0.12576454688871513
+Decosansäure/Behensäure	D_0__Archaea.D_1__Euryarchaeota	0.03603200339656107	-0.038107995445136746
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Actinobacteria	0.20550449831489662	-0.12859081818338702
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Bacteroidetes	0.014803133276958994	0.016913781138936577
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Cyanobacteria	0.39042377070117773	0.1915097701618288
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.20613411653257868	-0.12893449468980078
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Firmicutes	0.06665617320742465	0.06420024037333535
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Fusobacteria	0.047406082497227164	-0.046469506326659034
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Lentisphaerae	0.0147115005686739	-0.016306127550664358
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Patescibacteria	0.6425878274953378	-0.25069318757620546
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Proteobacteria	0.3025813329515455	0.1657110300847259
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Spirochaetes	0.1227617047935788	0.09276763394122692
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Synergistetes	0.1003890393808652	0.08298041211815094
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Tenericutes	0.15389118124624515	-0.10620320919259134
+Decosansäure/Behensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.5171375852215739	0.2245669196285815
+Decosansäure/Behensäure	D_0__Eukaryota.D_1__SAR	0.22226660609427176	-0.1341510136946476
+Decosensäure/Erucasäure	D_0__Archaea.D_1__Euryarchaeota	0.2525964853431909	-0.14619634166421275
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Actinobacteria	0.2890174353761434	-0.16001136558239598
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Bacteroidetes	0.093516563517874	0.07875995822513526
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Cyanobacteria	0.5002007403896007	0.22006645216232476
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2232710898222989	-0.1351384918833353
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Firmicutes	0.0332468222257699	0.03456292869095182
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Fusobacteria	0.0147115005686739	-0.01433920482699282
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Lentisphaerae	0.0211999118382057	0.02511538778494058
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Patescibacteria	0.8160889140777177	-0.2841095995499238
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Proteobacteria	0.08822524366103567	0.07647764386030421
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Spirochaetes	0.42908512187071157	0.20235635723900175
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Synergistetes	0.17540160945938105	0.1193504453069171
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Tenericutes	0.17401998958407963	-0.11740579324415988
+Decosensäure/Erucasäure	D_0__Bacteria.D_1__Verrucomicrobia	0.62705443562363	0.24827290325048226
+Decosensäure/Erucasäure	D_0__Eukaryota.D_1__SAR	0.07959404585777584	-0.07175550378268396
+DHA - Docosahexaensäure	D_0__Archaea.D_1__Euryarchaeota	0.006765843121249416	-0.005235870026065483
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Actinobacteria	0.37569144926718545	-0.18632740878754578
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Bacteroidetes	0.4417510690760639	0.20624218288814614
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Cyanobacteria	0.10297799142200902	0.0845787963239966
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.5669598998063159	-0.23457926551933458
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Firmicutes	0.28719757222202963	0.15904050267562903
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Fusobacteria	0.5975981007632981	-0.24266809572999515
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Lentisphaerae	0.30998391702108424	0.1673615434516596
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Patescibacteria	0.9593633395200104	-0.3092996616528588
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Proteobacteria	0.7358745315874768	0.26775237339588825
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Spirochaetes	0.16086410452724895	0.1113540753771218
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Synergistetes	0.04477687706860603	-0.04482027063107785
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Tenericutes	0.093516563517874	-0.07866842972135343
+DHA - Docosahexaensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.7892990921075543	0.2791568243045909
+DHA - Docosahexaensäure	D_0__Eukaryota.D_1__SAR	0.034024537189902365	-0.036313186510037475
+Disaccharide (2 M)	D_0__Archaea.D_1__Euryarchaeota	0.0147115005686739	0.015985826460906412
+Disaccharide (2 M)	D_0__Bacteria.D_1__Actinobacteria	0.4372946689071562	0.2048756104290418
+Disaccharide (2 M)	D_0__Bacteria.D_1__Bacteroidetes	0.37144481716272604	-0.1850125790343402
+Disaccharide (2 M)	D_0__Bacteria.D_1__Cyanobacteria	0.16086410452724895	-0.11095618018119223
+Disaccharide (2 M)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Disaccharide (2 M)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.24373388106703517	0.14295473233109068
+Disaccharide (2 M)	D_0__Bacteria.D_1__Firmicutes	0.27200589308718237	-0.1537650245791358
+Disaccharide (2 M)	D_0__Bacteria.D_1__Fusobacteria	0.5120034960737796	0.2234481883761611
+Disaccharide (2 M)	D_0__Bacteria.D_1__Lentisphaerae	0.12054298573259394	-0.0919886838937519
+Disaccharide (2 M)	D_0__Bacteria.D_1__Patescibacteria	1.7332349604048471	0.38695063592800727
+Disaccharide (2 M)	D_0__Bacteria.D_1__Proteobacteria	2.201688577873308	-0.4249899631613322
+Disaccharide (2 M)	D_0__Bacteria.D_1__Spirochaetes	0.0147115005686739	0.015930958697386238
+Disaccharide (2 M)	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	0.014815170534538983
+Disaccharide (2 M)	D_0__Bacteria.D_1__Tenericutes	0.044865161905935515	0.04497328899851114
+Disaccharide (2 M)	D_0__Bacteria.D_1__Verrucomicrobia	0.9068409883694841	-0.3012963510091054
+Disaccharide (2 M)	D_0__Eukaryota.D_1__SAR	0.4861995533534495	0.21750500927696828
+Docosadiensäure	D_0__Archaea.D_1__Euryarchaeota	0.03584792093010914	0.03741364659755557
+Docosadiensäure	D_0__Bacteria.D_1__Actinobacteria	0.025675031578029958	-0.028509156872782694
+Docosadiensäure	D_0__Bacteria.D_1__Bacteroidetes	0.17540160945938105	0.11910842836324795
+Docosadiensäure	D_0__Bacteria.D_1__Cyanobacteria	0.16978815766616762	-0.11528605271313318
+Docosadiensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Docosadiensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.40121718961164354	-0.19405296576630598
+Docosadiensäure	D_0__Bacteria.D_1__Firmicutes	0.25991855958709414	0.14854037970327638
+Docosadiensäure	D_0__Bacteria.D_1__Fusobacteria	0.1255948173182886	0.09409985922822145
+Docosadiensäure	D_0__Bacteria.D_1__Lentisphaerae	0.04022771178903619	0.04156445318354565
+Docosadiensäure	D_0__Bacteria.D_1__Patescibacteria	0.0773567865053041	-0.06935374317801803
+Docosadiensäure	D_0__Bacteria.D_1__Proteobacteria	0.28719757222202963	0.15917599317177164
+Docosadiensäure	D_0__Bacteria.D_1__Spirochaetes	0.14842131327406544	0.1031079342588131
+Docosadiensäure	D_0__Bacteria.D_1__Synergistetes	0.0029335156749840064	0.002087375854387601
+Docosadiensäure	D_0__Bacteria.D_1__Tenericutes	0.6060690241806654	-0.24392053517791146
+Docosadiensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.06272421129768334	0.061874140202591306
+Docosadiensäure	D_0__Eukaryota.D_1__SAR	0.07959404585777584	-0.07171919518930626
+Docosapentaensäure	D_0__Archaea.D_1__Euryarchaeota	0.06440654859912753	-0.06337455129848431
+Docosapentaensäure	D_0__Bacteria.D_1__Actinobacteria	0.4861995533534495	-0.2171802256191235
+Docosapentaensäure	D_0__Bacteria.D_1__Bacteroidetes	0.09118111000992543	0.07796642782281858
+Docosapentaensäure	D_0__Bacteria.D_1__Cyanobacteria	0.6827761681429055	0.258533281383211
+Docosapentaensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Docosapentaensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.40266626089288077	-0.19443666722791728
+Docosapentaensäure	D_0__Bacteria.D_1__Firmicutes	0.0332468222257699	0.034002684481153095
+Docosapentaensäure	D_0__Bacteria.D_1__Fusobacteria	0.17540160945938105	-0.11961041991252379
+Docosapentaensäure	D_0__Bacteria.D_1__Lentisphaerae	0.09571045715961024	0.0801753552470172
+Docosapentaensäure	D_0__Bacteria.D_1__Patescibacteria	0.7299126037950524	-0.2664667941600235
+Docosapentaensäure	D_0__Bacteria.D_1__Proteobacteria	0.13425762764826496	0.09743113402849832
+Docosapentaensäure	D_0__Bacteria.D_1__Spirochaetes	0.21538850510276839	0.13174562841720397
+Docosapentaensäure	D_0__Bacteria.D_1__Synergistetes	0.0332468222257699	-0.03420256087662672
+Docosapentaensäure	D_0__Bacteria.D_1__Tenericutes	0.040081921293819406	-0.04126010633136928
+Docosapentaensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.7873320649819959	0.2787063499909667
+Docosapentaensäure	D_0__Eukaryota.D_1__SAR	0.024048457757636553	0.027267560268750005
+Docosatetraensäure	D_0__Archaea.D_1__Euryarchaeota	0.16086410452724895	-0.11158143294876577
+Docosatetraensäure	D_0__Bacteria.D_1__Actinobacteria	0.16731048370860344	-0.1139547105197561
+Docosatetraensäure	D_0__Bacteria.D_1__Bacteroidetes	0.0622724233596438	-0.06113943020418464
+Docosatetraensäure	D_0__Bacteria.D_1__Cyanobacteria	0.6750171424986532	0.256675594903755
+Docosatetraensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Docosatetraensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.017935298253809052	-0.01973266828834692
+Docosatetraensäure	D_0__Bacteria.D_1__Firmicutes	0.06159592634513455	-0.05970469987405095
+Docosatetraensäure	D_0__Bacteria.D_1__Fusobacteria	0.5674821182754185	0.23486062826697923
+Docosatetraensäure	D_0__Bacteria.D_1__Lentisphaerae	0.05393984733859039	-0.05208599639273492
+Docosatetraensäure	D_0__Bacteria.D_1__Patescibacteria	0.5792819169144602	-0.23798393508480783
+Docosatetraensäure	D_0__Bacteria.D_1__Proteobacteria	0.017935298253809052	0.020311605135651202
+Docosatetraensäure	D_0__Bacteria.D_1__Spirochaetes	0.017935298253809052	0.02164824376309436
+Docosatetraensäure	D_0__Bacteria.D_1__Synergistetes	0.007042218830413096	-0.005905255750579408
+Docosatetraensäure	D_0__Bacteria.D_1__Tenericutes	0.0622724233596438	0.06117615674814342
+Docosatetraensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.005492744975968575	0.0038088660466828804
+Docosatetraensäure	D_0__Eukaryota.D_1__SAR	0.26694531853444353	-0.1507610184985997
+Docosatriensäure	D_0__Archaea.D_1__Euryarchaeota	0.45199855893652013	-0.20859223724281226
+Docosatriensäure	D_0__Bacteria.D_1__Actinobacteria	0.0637857660492827	0.062600517234025585
+Docosatriensäure	D_0__Bacteria.D_1__Bacteroidetes	0.21538850510276839	0.1316794740228112
+Docosatriensäure	D_0__Bacteria.D_1__Cyanobacteria	0.05905567009565652	-0.05604060097784319
+Docosatriensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Docosatriensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.154921466589969	-0.10712656729105383
+Docosatriensäure	D_0__Bacteria.D_1__Firmicutes	0.33630388094681835	0.17675338620491798
+Docosatriensäure	D_0__Bacteria.D_1__Fusobacteria	0.09608182197414927	-0.08061998071970436
+Docosatriensäure	D_0__Bacteria.D_1__Lentisphaerae	0.007042218830413096	-0.00729964654628243
+Docosatriensäure	D_0__Bacteria.D_1__Patescibacteria	0.19735403286236763	-0.1257443995634577
+Docosatriensäure	D_0__Bacteria.D_1__Proteobacteria	0.0822513005341723	0.07394238480177727
+Docosatriensäure	D_0__Bacteria.D_1__Spirochaetes	0.05123635172996293	-0.04823643585471326
+Docosatriensäure	D_0__Bacteria.D_1__Synergistetes	0.2846496645277164	0.15730320893325972
+Docosatriensäure	D_0__Bacteria.D_1__Tenericutes	0.02368716226155177	-0.026902581307516264
+Docosatriensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.519663820415428	0.22560321476142942
+Docosatriensäure	D_0__Eukaryota.D_1__SAR	0.038105931094779166	-0.039592444048291216
+Dodecansäure/Laurinsäure	D_0__Archaea.D_1__Euryarchaeota	0.11800130895011085	-0.09113536522561917
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Actinobacteria	0.712347488144735	0.2635105170501689
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.30204215064467854	0.1649430081223232
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.6074780609548462	-0.2444325169105598
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.3984439249066227	0.19355939743245304
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Firmicutes	0.08505411967867575	0.07550000159354561
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Fusobacteria	0.10077964197503268	-0.08354227410877499
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.06187074045619441	0.059954586512839886
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Patescibacteria	0.0147115005686739	-0.014232157130481015
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Proteobacteria	1.2068844658952576	0.33877561073420437
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Spirochaetes	0.30998391702108424	-0.16722664252786001
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Synergistetes	0.43693829531526446	0.20417866495100373
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Tenericutes	0.4832329194381489	-0.21668430201996047
+Dodecansäure/Laurinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.23995506923018356	-0.1412132779927352
+Dodecansäure/Laurinsäure	D_0__Eukaryota.D_1__SAR	0.15389118124624515	-0.1062763077629603
+Eicosadiensäure	D_0__Archaea.D_1__Euryarchaeota	0.05905567009565652	-0.05598497499398022
+Eicosadiensäure	D_0__Bacteria.D_1__Actinobacteria	0.2608633506435837	-0.14884832750976476
+Eicosadiensäure	D_0__Bacteria.D_1__Bacteroidetes	0.46942904221297077	0.2138266987830191
+Eicosadiensäure	D_0__Bacteria.D_1__Cyanobacteria	0.32298834679790034	0.17188972101859665
+Eicosadiensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eicosadiensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.32842441475215206	-0.17405457884482392
+Eicosadiensäure	D_0__Bacteria.D_1__Firmicutes	0.17540160945938105	0.11867027429096225
+Eicosadiensäure	D_0__Bacteria.D_1__Fusobacteria	0.46890671663960926	-0.21351182511046743
+Eicosadiensäure	D_0__Bacteria.D_1__Lentisphaerae	0.14453883582627458	0.10165779713894309
+Eicosadiensäure	D_0__Bacteria.D_1__Patescibacteria	1.4484100484536915	-0.36155873408532274
+Eicosadiensäure	D_0__Bacteria.D_1__Proteobacteria	1.4291105635804853	0.3597988365813826
+Eicosadiensäure	D_0__Bacteria.D_1__Spirochaetes	0.16679573839200937	-0.11370415473790108
+Eicosadiensäure	D_0__Bacteria.D_1__Synergistetes	0.11405995604916538	-0.08889432309382302
+Eicosadiensäure	D_0__Bacteria.D_1__Tenericutes	0.03603200339656107	0.037881044293772835
+Eicosadiensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.7662631122705106	0.2743041169638176
+Eicosadiensäure	D_0__Eukaryota.D_1__SAR	0.37144481716272604	-0.18495048647554302
+Eicosansäure/Arachinsäure	D_0__Archaea.D_1__Euryarchaeota	0.0147115005686739	0.01664077693711303
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Actinobacteria	0.017935298253809052	-0.020641927553282508
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.3690386398217922	0.18436079281583384
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.06409305531487171	0.06294595776445763
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1352764021800377	-0.09784126063432491
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Firmicutes	0.32056661455991686	0.1703463601730598
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Fusobacteria	0.4372946689071562	-0.20455160333422073
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.05228790269047017	0.04934825681617759
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Patescibacteria	1.1717608607227428	-0.3347894231754398
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Proteobacteria	2.1221947864047555	0.41941014787747166
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Spirochaetes	0.34940919887154515	-0.17981734278889694
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Synergistetes	0.0568284893487121	-0.05464588899519567
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Tenericutes	0.17622685397432267	-0.12018297454239212
+Eicosansäure/Arachinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8610112117123817	0.2915536888964614
+Eicosansäure/Arachinsäure	D_0__Eukaryota.D_1__SAR	0.5120034960737796	-0.22363016591300636
+Eicosatetraensäure/Arachidonsäure	D_0__Archaea.D_1__Euryarchaeota	0.0773567865053041	-0.0692914036732516
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Actinobacteria	0.329387764497247	-0.17450163909965796
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Bacteroidetes	0.2846077784830008	0.15702247255257096
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Cyanobacteria	0.38623128645007415	0.18888125192147062
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.20863228518478646	-0.13010768975754694
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Firmicutes	0.07956857356925001	0.07118141634674996
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Fusobacteria	0.15389118124624515	-0.10604810494978607
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Lentisphaerae	0.28719757222202963	0.15891999939646104
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Patescibacteria	1.156643622266623	-0.33291765373481386
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Proteobacteria	0.570311390019466	0.2355915179235009
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Spirochaetes	0.038105931094779166	0.03968058563413434
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Synergistetes	0.17540160945938105	-0.11841227485133965
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.019511424330351072
+Eicosatetraensäure/Arachidonsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.30998391702108424	0.16752411643154222
+Eicosatetraensäure/Arachidonsäure	D_0__Eukaryota.D_1__SAR	0.27050419859240504	-0.1521410256234027
+Eicosatriensäure	D_0__Archaea.D_1__Euryarchaeota	0.2730923722340549	-0.15410922737551924
+Eicosatriensäure	D_0__Bacteria.D_1__Actinobacteria	0.4072091358809833	-0.19584151402678027
+Eicosatriensäure	D_0__Bacteria.D_1__Bacteroidetes	0.1683282562613563	0.11430644764612259
+Eicosatriensäure	D_0__Bacteria.D_1__Cyanobacteria	0.5009056364231347	0.22055078457276836
+Eicosatriensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eicosatriensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.09797506585239453	-0.08192498138444305
+Eicosatriensäure	D_0__Bacteria.D_1__Firmicutes	0.12600541176117314	0.0942697328041729
+Eicosatriensäure	D_0__Bacteria.D_1__Fusobacteria	0.16585807273501146	-0.11344151648345498
+Eicosatriensäure	D_0__Bacteria.D_1__Lentisphaerae	0.16086410452724895	0.10965511526385918
+Eicosatriensäure	D_0__Bacteria.D_1__Patescibacteria	0.6759082880581733	-0.25693596374777666
+Eicosatriensäure	D_0__Bacteria.D_1__Proteobacteria	0.2232710898222989	0.13551399595456687
+Eicosatriensäure	D_0__Bacteria.D_1__Spirochaetes	0.1876963887232756	0.1229415577254761
+Eicosatriensäure	D_0__Bacteria.D_1__Synergistetes	0.0069819262257402245	-0.005635538766779695
+Eicosatriensäure	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	0.007228136569531318
+Eicosatriensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.2846496645277164	0.15720425498025425
+Eicosatriensäure	D_0__Eukaryota.D_1__SAR	0.17237557186237235	-0.11642893822953332
+Eicosensäure	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	-0.021021342531362862
+Eicosensäure	D_0__Bacteria.D_1__Actinobacteria	0.007042218830413096	0.0059388114007714885
+Eicosensäure	D_0__Bacteria.D_1__Bacteroidetes	0.7873320649819959	0.27856389923400876
+Eicosensäure	D_0__Bacteria.D_1__Cyanobacteria	0.05886428734752111	0.05582109157030217
+Eicosensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eicosensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.3225043626051108	-0.17166832307630572
+Eicosensäure	D_0__Bacteria.D_1__Firmicutes	0.4642987214915823	0.21193381472929002
+Eicosensäure	D_0__Bacteria.D_1__Fusobacteria	0.7175341214837502	-0.26467806546713424
+Eicosensäure	D_0__Bacteria.D_1__Lentisphaerae	0.1240658668946058	0.09330738988163703
+Eicosensäure	D_0__Bacteria.D_1__Patescibacteria	1.9128960209516952	-0.4030706592201971
+Eicosensäure	D_0__Bacteria.D_1__Proteobacteria	2.934095601090994	0.4718546394930585
+Eicosensäure	D_0__Bacteria.D_1__Spirochaetes	0.291373802328081	-0.16096907446539974
+Eicosensäure	D_0__Bacteria.D_1__Synergistetes	0.09403580099233634	-0.07921334215890108
+Eicosensäure	D_0__Bacteria.D_1__Tenericutes	0.09608182197414927	-0.08071151143006484
+Eicosensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8696148933717281	0.29389433576559815
+Eicosensäure	D_0__Eukaryota.D_1__SAR	0.3978574149413093	-0.19338271901154622
+Einfach ungesättigte Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.14659064446247527	0.10250562075151974
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.9716567643444793	0.31150912001147496
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.038105931094779166	0.03954627112707781
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.8696148933717281	-0.29413279652347807
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.27050419859240504	0.15207994393243457
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.04396613413809781	0.04431068826986085
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.04096514711587761	-0.04230336321957186
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.06188305097780485	-0.060692815048660025
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.5721702263603635	0.2361305247528027
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	0.03048453372005797	-0.03216441387987251
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.32572149029189174	-0.17328681288695197
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.04096514711587761	-0.042263994366663
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.0025973093255137226	-0.0016052202856162692
+Einfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.6033939904497944	-0.24348362570887291
+Einfach ungesättigte Fettsäuren	D_0__Eukaryota.D_1__SAR	0.19676727292806676	0.12540228564230926
+Eisen	D_0__Archaea.D_1__Euryarchaeota	0.14453883582627458	0.10128141201507113
+Eisen	D_0__Bacteria.D_1__Actinobacteria	0.46031050334592294	0.2106587520849719
+Eisen	D_0__Bacteria.D_1__Bacteroidetes	0.15521533085991437	-0.10736800489107132
+Eisen	D_0__Bacteria.D_1__Cyanobacteria	0.39042377070117773	-0.19123513819790797
+Eisen	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eisen	D_0__Bacteria.D_1__Epsilonbacteraeota	0.20111185571112203	0.12715971386725983
+Eisen	D_0__Bacteria.D_1__Firmicutes	0.11118656422128752	-0.08790033439344254
+Eisen	D_0__Bacteria.D_1__Fusobacteria	0.19735403286236763	0.1258303404413435
+Eisen	D_0__Bacteria.D_1__Lentisphaerae	0.06822715513913807	-0.06508403167810432
+Eisen	D_0__Bacteria.D_1__Patescibacteria	1.2008028204459569	0.3380640889067412
+Eisen	D_0__Bacteria.D_1__Proteobacteria	0.7111339174466116	-0.26312901803464156
+Eisen	D_0__Bacteria.D_1__Spirochaetes	0.04022771178903619	-0.041563585934462986
+Eisen	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	0.014331954792783775
+Eisen	D_0__Bacteria.D_1__Tenericutes	0.005636601152462003	-0.004364586227983808
+Eisen	D_0__Bacteria.D_1__Verrucomicrobia	0.9235239656965968	-0.30403469220446583
+Eisen	D_0__Eukaryota.D_1__SAR	0.4372946689071562	0.20441981810433071
+Eiweiß, Proteingehalt	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	0.01972064039096394
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Actinobacteria	0.8448194041858634	-0.2890236965646828
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Bacteroidetes	0.008255250374276782	0.00840187961696241
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Cyanobacteria	0.4417510690760639	0.20615471813767985
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2567456109320757	-0.14727311016288944
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Firmicutes	0.0147115005686739	0.014675796846885839
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Fusobacteria	0.09797506585239453	-0.08144297084572996
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Lentisphaerae	0.10153335505013222	0.08403038488926032
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Patescibacteria	0.9202089031835753	-0.30325144929698383
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Proteobacteria	0.3138670045165138	0.1684358743931558
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Spirochaetes	0.13581479793639825	0.09805415445877257
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Synergistetes	0.05171498200556164	-0.04901750714717455
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.019975568960078984
+Eiweiß, Proteingehalt	D_0__Bacteria.D_1__Verrucomicrobia	0.8288631344912669	0.2865132987877422
+Eiweiß, Proteingehalt	D_0__Eukaryota.D_1__SAR	0.2873714447969616	-0.15940140372464906
+Energie (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.17434708936542656	0.11787017973759635
+Energie (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.7349598250134601	0.2674015527882906
+Energie (kcal)	D_0__Bacteria.D_1__Bacteroidetes	0.29607859704085215	-0.1623991153845963
+Energie (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.5519830630242653	-0.23109324267894554
+Energie (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.8160889140777177	0.28409526675990737
+Energie (kcal)	D_0__Bacteria.D_1__Firmicutes	0.17540160945938105	-0.11847258148813573
+Energie (kcal)	D_0__Bacteria.D_1__Fusobacteria	0.05521556715743906	0.05302234160789947
+Energie (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.03712412078925129	-0.03862916195535676
+Energie (kcal)	D_0__Bacteria.D_1__Patescibacteria	1.1382414105690604	0.3310888952413808
+Energie (kcal)	D_0__Bacteria.D_1__Proteobacteria	0.690782508941262	-0.2597292277704116
+Energie (kcal)	D_0__Bacteria.D_1__Spirochaetes	0.09774601651949807	-0.08129564656908499
+Energie (kcal)	D_0__Bacteria.D_1__Synergistetes	0.016216711920346266	-0.017712493555884813
+Energie (kcal)	D_0__Bacteria.D_1__Tenericutes	0.03536839805822787	0.03716771210257802
+Energie (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.7594124334994217	-0.2726095859637883
+Energie (kcal)	D_0__Eukaryota.D_1__SAR	0.1576281600458017	0.10840973354338376
+Energie, Alkohol (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.24280338315343658	-0.14241396519673932
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.27177388331917113	-0.15364574867943118
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Bacteroidetes	0.26099901639841727	0.14895016637602806
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.07437863705451633	0.06819401857085405
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.05162847400299928	-0.04874860786368069
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Firmicutes	0.041213038182403905	0.042705256978917305
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Fusobacteria	0.32298834679790034	-0.1718376268618394
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.40758103006236107	0.19653542152981296
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Patescibacteria	0.46136971014435385	-0.21104089144725954
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Proteobacteria	0.737999452098835	0.2681133520769139
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Spirochaetes	0.11793756757912054	-0.09102472298614801
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Synergistetes	0.05521556715743906	0.05312927740058386
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Tenericutes	0.02158453930032127	-0.025797953026067088
+Energie, Alkohol (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.42908512187071157	0.2017923509743948
+Energie, Alkohol (kcal)	D_0__Eukaryota.D_1__SAR	0.08137861837751036	-0.07316894129973639
+Energie, Fett (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.053016474536057255	0.0508620313575686
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.07930935411078874	0.07083362914706502
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Bacteroidetes	0.8069126891223386	0.28222302809576066
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.3690386398217922	-0.18428419821936426
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.0549378482760326	0.05266065801379709
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Firmicutes	0.5171375852215739	0.22477944883162998
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Fusobacteria	1.33396270009251	-0.35063008535690426
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.10077964197503268	0.08349877367583522
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Patescibacteria	0.5171375852215739	-0.22458225974129134
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Proteobacteria	4.034484424892998	0.5307216102457878
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Spirochaetes	0.8452084929837917	-0.2892068607114129
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Synergistetes	0.0010288273363758035	-3.815352861632618e-4
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Tenericutes	0.05684875116059738	-0.05472131307706783
+Energie, Fett (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.1683282562613563	0.11455179934651002
+Energie, Fett (kcal)	D_0__Eukaryota.D_1__SAR	0.4170996427359396	-0.19901862893256259
+Energie, Gesamt (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.17778550938549048	0.12056330394235636
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.7689384711967928	0.2749826792628566
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Bacteroidetes	0.26536535328054195	-0.15041059241893417
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.5792819169144602	-0.23825793079098895
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.8023869576683424	0.28150293371531426
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Firmicutes	0.16086410452724895	-0.1097479499649015
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Fusobacteria	0.043684484395156375	0.04395040253811304
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.034024537189902365	-0.03633173924828194
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Patescibacteria	1.085881516864693	0.3249680442556879
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Proteobacteria	0.6133785460301636	-0.24563896569914184
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Spirochaetes	0.1240658668946058	-0.0932707466182917
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Synergistetes	0.017935298253809052	-0.01953041610171724
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Tenericutes	0.03034233765427022	0.031991914832916475
+Energie, Gesamt (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.7491625610754143	-0.270608333366059
+Energie, Gesamt (kcal)	D_0__Eukaryota.D_1__SAR	0.16086410452724895	0.10969087936400586
+Energie, Kohlenhydrate (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.17275812224564124	-0.11673981675444335
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.6118789483778171	-0.24523621191358597
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Bacteroidetes	1.2505788050331237	-0.343123946687795
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.8696148933717281	0.29406371237316886
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.017935298253809052	0.019577219311646275
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Firmicutes	0.9692173949869438	-0.3111083050564744
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Fusobacteria	0.5938384032299732	0.24206438248806225
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.005600181287302202	0.004052446328192774
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Patescibacteria	0.22299554482510883	0.13487160863563874
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Proteobacteria	2.9340252948874816	-0.4716887891770864
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Spirochaetes	1.1968449327001156	0.3375396010436852
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Synergistetes	0.2996087698055929	0.16344236353426347
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Tenericutes	0.10134450416146551	0.08391523553148975
+Energie, Kohlenhydrate (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.017935298253809052	0.021115004745940105
+Energie, Kohlenhydrate (kcal)	D_0__Eukaryota.D_1__SAR	0.053016474536057255	0.05094145344267458
+Energie, Protein (kcal)	D_0__Archaea.D_1__Euryarchaeota	0.16086410452724895	0.11090956986284296
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Actinobacteria	0.7689384711967928	-0.2749661763061518
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Bacteroidetes	0.0147115005686739	-0.015201881703510904
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Cyanobacteria	0.28521684285285914	0.1578349549091264
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2232710898222989	-0.13523767160992264
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Firmicutes	0.006765843121249416	0.005373264800167962
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Fusobacteria	0.12368015554391336	-0.09304279910139476
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Lentisphaerae	0.09840174184095388	0.08231983760581767
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Patescibacteria	0.8143589635132406	-0.283732951706381
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Proteobacteria	0.26866155406456077	0.15121299377434388
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Spirochaetes	0.1255948173182886	0.093894040780224175
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Synergistetes	0.1931941614869163	-0.12437581314607674
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Tenericutes	0.053016474536057255	0.05167048839470854
+Energie, Protein (kcal)	D_0__Bacteria.D_1__Verrucomicrobia	0.6975450503620206	0.2611013479729834
+Energie, Protein (kcal)	D_0__Eukaryota.D_1__SAR	0.22022072984619226	-0.13351870231638024
+EPA - Eicosapentaensäure	D_0__Archaea.D_1__Euryarchaeota	0.001314222314757918	7.736390662548622e-4
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Actinobacteria	0.4035991301580311	-0.19485611070781708
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Bacteroidetes	0.5555614593240559	0.23177300124084965
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Cyanobacteria	0.044865161905935515	0.044923132411272985
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.45991401696218276	-0.21044831784961987
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Firmicutes	0.244810000044613	0.14338827111450428
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Fusobacteria	0.5810968916813607	-0.2396370872948309
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Lentisphaerae	0.19351989065841604	0.12458769616078968
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Patescibacteria	1.02507873277703	-0.3174282813130658
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Proteobacteria	1.33588716080816	0.35096652954128316
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Spirochaetes	0.01396004158625736	-0.013036631036294247
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Synergistetes	0.06987519541663585	-0.0659944200994046
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	-0.006499042599795067
+EPA - Eicosapentaensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8814202960383384	0.29598626255584554
+EPA - Eicosapentaensäure	D_0__Eukaryota.D_1__SAR	0.1415560185608356	-0.10004352819799657
+Essentielle Aminosäuren	D_0__Archaea.D_1__Euryarchaeota	0.2739296715614775	0.1544911563936311
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Actinobacteria	0.6750171424986532	0.25659488039477135
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Bacteroidetes	0.04022771178903619	-0.04156166865210236
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Cyanobacteria	0.6827761681429055	-0.2584455146837504
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.22336313979592984	0.13576323413421096
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	-0.019575268288995033
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Fusobacteria	0.0332468222257699	0.034134746659357035
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Lentisphaerae	0.0773567865053041	-0.06932393594393474
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Patescibacteria	0.7354697356992712	0.2675827021276114
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Proteobacteria	0.2679879984418074	-0.15101876781239518
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Spirochaetes	0.11866399722291214	-0.09135504222821474
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Synergistetes	0.14930865527082426	-0.10388783368969486
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Tenericutes	0.043684484395156375	0.0439355121292919
+Essentielle Aminosäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.7392157631587561	-0.2685232190908958
+Essentielle Aminosäuren	D_0__Eukaryota.D_1__SAR	0.32196235476188273	0.17149758738514048
+Fett	D_0__Archaea.D_1__Euryarchaeota	0.05228790269047017	-0.0498368704222521
+Fett	D_0__Bacteria.D_1__Actinobacteria	0.49398282176957015	-0.21902512945439795
+Fett	D_0__Bacteria.D_1__Bacteroidetes	0.1895142217434164	0.12336783140131295
+Fett	D_0__Bacteria.D_1__Cyanobacteria	0.25237031709832375	0.14580730019170307
+Fett	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Fett	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16086410452724895	-0.11043212705204762
+Fett	D_0__Bacteria.D_1__Firmicutes	0.12999445520672845	0.09600218002194369
+Fett	D_0__Bacteria.D_1__Fusobacteria	0.3247157120357412	-0.17269983623355062
+Fett	D_0__Bacteria.D_1__Lentisphaerae	0.13203017856877075	0.09666096761605898
+Fett	D_0__Bacteria.D_1__Patescibacteria	1.1725070054750846	-0.3350300022980079
+Fett	D_0__Bacteria.D_1__Proteobacteria	1.1180804243849978	0.3289177048946763
+Fett	D_0__Bacteria.D_1__Spirochaetes	0.0147115005686739	-0.015758441864282203
+Fett	D_0__Bacteria.D_1__Synergistetes	0.027044201916956265	0.0291853627742291
+Fett	D_0__Bacteria.D_1__Tenericutes	0.02929577630897189	-0.031311149465557915
+Fett	D_0__Bacteria.D_1__Verrucomicrobia	0.8505619011720459	0.28990318506462925
+Fett	D_0__Eukaryota.D_1__SAR	0.4861995533534495	-0.21760793839307713
+Fluorid	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	0.021011082087210562
+Fluorid	D_0__Bacteria.D_1__Actinobacteria	0.3300132506309789	-0.17525446565192107
+Fluorid	D_0__Bacteria.D_1__Bacteroidetes	0.005636601152462003	-0.004419889430102975
+Fluorid	D_0__Bacteria.D_1__Cyanobacteria	0.06150056967636398	0.05960561928755567
+Fluorid	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Fluorid	D_0__Bacteria.D_1__Epsilonbacteraeota	0.06187074045619441	-0.06013999672316254
+Fluorid	D_0__Bacteria.D_1__Firmicutes	0.05905567009565652	0.05624644312374664
+Fluorid	D_0__Bacteria.D_1__Fusobacteria	0.03034233765427022	-0.03195921899318915
+Fluorid	D_0__Bacteria.D_1__Lentisphaerae	0.2703209381475871	-0.1518899033032208
+Fluorid	D_0__Bacteria.D_1__Patescibacteria	0.15353388342811586	-0.10581147650569554
+Fluorid	D_0__Bacteria.D_1__Proteobacteria	0.017935298253809052	0.022397640738380787
+Fluorid	D_0__Bacteria.D_1__Spirochaetes	0.2228149646769851	0.13460064973164168
+Fluorid	D_0__Bacteria.D_1__Synergistetes	0.05937724110676637	-0.0568907157381098
+Fluorid	D_0__Bacteria.D_1__Tenericutes	0.05228790269047017	0.04929659870742378
+Fluorid	D_0__Bacteria.D_1__Verrucomicrobia	0.7170900764483924	0.26441295030976825
+Fluorid	D_0__Eukaryota.D_1__SAR	0.20665968997009204	-0.12940897211820476
+Fructose (Fruchtzucker)	D_0__Archaea.D_1__Euryarchaeota	0.017719624624512816	0.01866386028542927
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Actinobacteria	0.20613411653257868	0.12903706520086056
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.7662631122705106	-0.2742829669246856
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Cyanobacteria	0.12233516959173885	-0.0926015881076413
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.22226660609427176	0.13422519313318462
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Firmicutes	0.29687966472969357	-0.16272160912928016
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Fusobacteria	0.8643105667352888	0.29319652151691594
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.37388850231842824	-0.1858046382726782
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Patescibacteria	1.8195833183667651	0.39446744284003504
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Proteobacteria	2.907361013839042	-0.469968849875808
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Spirochaetes	0.05228790269047017	0.0494938574585379
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Synergistetes	0.017935298253809052	0.02154543191560614
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Tenericutes	0.05905567009565652	0.056378059913044995
+Fructose (Fruchtzucker)	D_0__Bacteria.D_1__Verrucomicrobia	0.3861284358458673	-0.1887770055232289
+Fructose (Fruchtzucker)	D_0__Eukaryota.D_1__SAR	0.3730052807023354	0.18549580887800687
+Galactose (Schleimzucker)	D_0__Archaea.D_1__Euryarchaeota	0.15389118124624515	0.10636838610756513
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Actinobacteria	0.5171375852215739	-0.22449858389938646
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.00915317299537974	-0.009337666030919194
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Cyanobacteria	0.17377611654698027	0.11709008972859825
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2996087698055929	-0.16358265725405158
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Firmicutes	0.0822513005341723	0.07390120643408261
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Fusobacteria	0.13801541445127888	-0.09867285710366992
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.01396004158625736	0.012771788102130248
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Patescibacteria	0.09252399559630395	-0.07835761970184375
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Proteobacteria	0.0147115005686739	-0.014988982960383429
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Spirochaetes	0.15389118124624515	-0.10673750139140376
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Synergistetes	0.10498367671813483	-0.08532676678554862
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Tenericutes	0.07935722242007118	0.07105851587330282
+Galactose (Schleimzucker)	D_0__Bacteria.D_1__Verrucomicrobia	0.5792819169144602	0.23837858746897303
+Galactose (Schleimzucker)	D_0__Eukaryota.D_1__SAR	0.016179203130288887	-0.01762919676648053
+Gesättigte Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.09031548843435619	0.07754667425503076
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.9040910141782127	0.3008659880549691
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.03838708705949962	0.040048253798640764
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.8160889140777177	-0.28405390108688555
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.28719757222202963	0.15889233848327294
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.01773347929040315	0.018778635103559163
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.008255250374276782	-0.008458801255545854
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.03394649005498887	-0.03565913064027718
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.6561198678453061	0.25342200019653055
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	0.05123635172996293	-0.04843356736553276
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.3146956340437251	-0.1687214971606382
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.0332468222257699	-0.03475955435456513
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.0033855632455773352	0.0026880248016733816
+Gesättigte Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.843760548810128	-0.2887714936538841
+Gesättigte Fettsäuren	D_0__Eukaryota.D_1__SAR	0.225409463701723	0.1367306892983958
+Glucose (Traubenzucker)	D_0__Archaea.D_1__Euryarchaeota	0.07959404585777584	0.07154727923685814
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Actinobacteria	0.22939913798071124	0.13808512646060675
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.5792819169144602	-0.23801660235035843
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Cyanobacteria	0.22655762050034475	-0.13718617846336909
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1691772038319164	0.11506526317225754
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Firmicutes	0.21726764190172362	-0.1324028747645296
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Fusobacteria	0.5792819169144602	0.2378778149347977
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.4861995533534495	-0.21722829432835492
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Patescibacteria	1.3850104307559301	0.35561944077994395
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Proteobacteria	1.876868964021173	-0.39973910968109605
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Spirochaetes	0.05598070435585557	0.05379179252066358
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Synergistetes	0.03603200339656107	-0.03772037019207149
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Tenericutes	0.0948086287019199	0.07963721673405239
+Glucose (Traubenzucker)	D_0__Bacteria.D_1__Verrucomicrobia	0.2785401421481112	-0.15535029778274806
+Glucose (Traubenzucker)	D_0__Eukaryota.D_1__SAR	0.4257694562678962	0.20081017035923407
+Glutaminsäure	D_0__Archaea.D_1__Euryarchaeota	0.2611903206187093	0.14920180101545005
+Glutaminsäure	D_0__Bacteria.D_1__Actinobacteria	0.6118789483778171	0.24519093251412485
+Glutaminsäure	D_0__Bacteria.D_1__Bacteroidetes	0.08041928963926333	-0.07238218479826934
+Glutaminsäure	D_0__Bacteria.D_1__Cyanobacteria	0.5792819169144602	-0.23822435010417234
+Glutaminsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Glutaminsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.27050419859240504	0.15234368352059888
+Glutaminsäure	D_0__Bacteria.D_1__Firmicutes	0.05598070435585557	-0.05372438257407818
+Glutaminsäure	D_0__Bacteria.D_1__Fusobacteria	0.053016474536057255	0.051637642644090036
+Glutaminsäure	D_0__Bacteria.D_1__Lentisphaerae	0.061213647945057924	-0.058684982318140705
+Glutaminsäure	D_0__Bacteria.D_1__Patescibacteria	0.8578400494779447	0.2910837672917134
+Glutaminsäure	D_0__Bacteria.D_1__Proteobacteria	0.39042377070117773	-0.19109534216148352
+Glutaminsäure	D_0__Bacteria.D_1__Spirochaetes	0.08465767166162558	-0.0752618421559487
+Glutaminsäure	D_0__Bacteria.D_1__Synergistetes	0.10074738980293513	-0.08341998025262973
+Glutaminsäure	D_0__Bacteria.D_1__Tenericutes	0.04406166718762417	0.04440772277129619
+Glutaminsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8171017183070237	-0.284718855107571
+Glutaminsäure	D_0__Eukaryota.D_1__SAR	0.3247157120357412	0.17270044782085092
+Glycerin und Lipoide	D_0__Archaea.D_1__Euryarchaeota	0.11748549724276204	0.09061456786868735
+Glycerin und Lipoide	D_0__Bacteria.D_1__Actinobacteria	0.8613111853032182	0.29190340409573146
+Glycerin und Lipoide	D_0__Bacteria.D_1__Bacteroidetes	0.053016474536057255	0.050746793188543214
+Glycerin und Lipoide	D_0__Bacteria.D_1__Cyanobacteria	0.9422904452015204	-0.30702186380408597
+Glycerin und Lipoide	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Glycerin und Lipoide	D_0__Bacteria.D_1__Epsilonbacteraeota	0.39042377070117773	0.19074373840635334
+Glycerin und Lipoide	D_0__Bacteria.D_1__Firmicutes	0.0332468222257699	0.03406595582424304
+Glycerin und Lipoide	D_0__Bacteria.D_1__Fusobacteria	0.05171498200556164	-0.04892548770533394
+Glycerin und Lipoide	D_0__Bacteria.D_1__Lentisphaerae	0.02007633171376764	-0.02415898886017581
+Glycerin und Lipoide	D_0__Bacteria.D_1__Patescibacteria	0.5120034960737796	0.2235027889335459
+Glycerin und Lipoide	D_0__Bacteria.D_1__Proteobacteria	0.0013191697373597278	8.481390832885965e-4
+Glycerin und Lipoide	D_0__Bacteria.D_1__Spirochaetes	0.428434640021345	-0.20146834497919747
+Glycerin und Lipoide	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	-0.016457481389165973
+Glycerin und Lipoide	D_0__Bacteria.D_1__Tenericutes	0.0029335156749840064	0.0021580399322932682
+Glycerin und Lipoide	D_0__Bacteria.D_1__Verrucomicrobia	0.7434722598959757	-0.2692948959029546
+Glycerin und Lipoide	D_0__Eukaryota.D_1__SAR	0.15647767584232197	0.10780666964449546
+Glycin	D_0__Archaea.D_1__Euryarchaeota	0.7873320649819959	0.2785423194103951
+Glycin	D_0__Bacteria.D_1__Actinobacteria	0.2939133628406559	0.16146926849865254
+Glycin	D_0__Bacteria.D_1__Bacteroidetes	0.0948086287019199	-0.07968651499116264
+Glycin	D_0__Bacteria.D_1__Cyanobacteria	0.37569144926718545	-0.1863529697940129
+Glycin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Glycin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.09361619033172984	0.07897768935471307
+Glycin	D_0__Bacteria.D_1__Firmicutes	0.05228790269047017	-0.04989150648688432
+Glycin	D_0__Bacteria.D_1__Fusobacteria	0.017935298253809052	0.02114874017237079
+Glycin	D_0__Bacteria.D_1__Lentisphaerae	0.021332080771616045	-0.025384445495393256
+Glycin	D_0__Bacteria.D_1__Patescibacteria	0.3146956340437251	0.16865234140219992
+Glycin	D_0__Bacteria.D_1__Proteobacteria	0.24738461962919295	-0.1441863860629732
+Glycin	D_0__Bacteria.D_1__Spirochaetes	0.041213038182403905	-0.042730052721482156
+Glycin	D_0__Bacteria.D_1__Synergistetes	0.34552372362971984	-0.17895327418049786
+Glycin	D_0__Bacteria.D_1__Tenericutes	0.0948086287019199	0.07953837701312662
+Glycin	D_0__Bacteria.D_1__Verrucomicrobia	0.6303791184067584	-0.24878394776601787
+Glycin	D_0__Eukaryota.D_1__SAR	0.26099901639841727	0.14900103085114288
+Glykogen (tierische Stärke)	D_0__Archaea.D_1__Euryarchaeota	0.017915293974319464	0.019050481274540988
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Actinobacteria	0.3183129125599251	-0.16973384947474854
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Bacteroidetes	0.061213647945057924	0.05843551727750057
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Cyanobacteria	0.6809056107536754	0.2579901970527255
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2239289403346426	-0.13594297710170908
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Firmicutes	0.035886068946192146	0.037557245588284355
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Fusobacteria	0.32187261766980785	-0.17139836969538674
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Lentisphaerae	0.5792819169144602	-0.23807516781419777
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Patescibacteria	0.32842441475215206	-0.17421640167287025
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Proteobacteria	0.20387968690735844	0.12813382872850484
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Spirochaetes	0.001678697489571784	0.0011133992951135592
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Synergistetes	0.04096514711587761	0.042428268452578854
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Tenericutes	0.24949791151872563	0.14473591736106076
+Glykogen (tierische Stärke)	D_0__Bacteria.D_1__Verrucomicrobia	0.37853706983778534	0.1871181420989662
+Glykogen (tierische Stärke)	D_0__Eukaryota.D_1__SAR	0.0211999118382057	-0.024988846747947564
+Harnsäure	D_0__Archaea.D_1__Euryarchaeota	0.06987519541663585	-0.06592740740673243
+Harnsäure	D_0__Bacteria.D_1__Actinobacteria	1.1667495151561365	-0.33416844924223055
+Harnsäure	D_0__Bacteria.D_1__Bacteroidetes	0.01941552999738668	-0.02350072167840752
+Harnsäure	D_0__Bacteria.D_1__Cyanobacteria	1.1076631087099011	0.32762491539910205
+Harnsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Harnsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.22299554482510883	-0.13472130576182048
+Harnsäure	D_0__Bacteria.D_1__Firmicutes	0.15796820409642265	-0.10869814273143123
+Harnsäure	D_0__Bacteria.D_1__Fusobacteria	0.0147115005686739	0.01439177083591385
+Harnsäure	D_0__Bacteria.D_1__Lentisphaerae	0.23995506923018356	0.1413278705780547
+Harnsäure	D_0__Bacteria.D_1__Patescibacteria	0.5849278248235082	-0.24021892693344823
+Harnsäure	D_0__Bacteria.D_1__Proteobacteria	0.06187074045619441	0.060252005480637055
+Harnsäure	D_0__Bacteria.D_1__Spirochaetes	0.2717174395095314	0.15347657861986727
+Harnsäure	D_0__Bacteria.D_1__Synergistetes	0.17540160945938105	0.11855301699325951
+Harnsäure	D_0__Bacteria.D_1__Tenericutes	0.033348828729873645	0.03492027320271666
+Harnsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.1063256031369166	0.08592048769515326
+Harnsäure	D_0__Eukaryota.D_1__SAR	0.21729726211117023	-0.132525432081402
+Heptadecansäure	D_0__Archaea.D_1__Euryarchaeota	0.05598070435585557	-0.05397471607058708
+Heptadecansäure	D_0__Bacteria.D_1__Actinobacteria	0.36636288120860894	-0.18379361788074197
+Heptadecansäure	D_0__Bacteria.D_1__Bacteroidetes	0.3357114216225662	0.17648754908012154
+Heptadecansäure	D_0__Bacteria.D_1__Cyanobacteria	0.20185504116822192	0.1274505537950951
+Heptadecansäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Heptadecansäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.14842131327406544	-0.10311514581500372
+Heptadecansäure	D_0__Bacteria.D_1__Firmicutes	0.10077964197503268	0.08360896121552819
+Heptadecansäure	D_0__Bacteria.D_1__Fusobacteria	0.3025813329515455	-0.16512179714953804
+Heptadecansäure	D_0__Bacteria.D_1__Lentisphaerae	0.32786767072503153	0.17370932145549312
+Heptadecansäure	D_0__Bacteria.D_1__Patescibacteria	1.015850000420065	-0.316223843065074
+Heptadecansäure	D_0__Bacteria.D_1__Proteobacteria	2.016125378210532	0.4111416307099641
+Heptadecansäure	D_0__Bacteria.D_1__Spirochaetes	0.18326584177412558	-0.12185737718676884
+Heptadecansäure	D_0__Bacteria.D_1__Synergistetes	0.038105931094779166	0.03960588022665325
+Heptadecansäure	D_0__Bacteria.D_1__Tenericutes	0.032494612818583554	-0.03326370090902223
+Heptadecansäure	D_0__Bacteria.D_1__Verrucomicrobia	0.2303387165863366	0.1385133316637316
+Heptadecansäure	D_0__Eukaryota.D_1__SAR	0.4072091358809833	-0.19574402170688043
+Heptadecensäure	D_0__Archaea.D_1__Euryarchaeota	0.15353388342811586	-0.1057580852708197
+Heptadecensäure	D_0__Bacteria.D_1__Actinobacteria	0.35953889790115356	-0.18206356932090023
+Heptadecensäure	D_0__Bacteria.D_1__Bacteroidetes	0.273816375399084	0.1543919087690602
+Heptadecensäure	D_0__Bacteria.D_1__Cyanobacteria	0.20266583006488884	0.1277541117089436
+Heptadecensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Heptadecensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.14253437484032735	-0.1005707261925591
+Heptadecensäure	D_0__Bacteria.D_1__Firmicutes	0.06187074045619441	0.06014351340451067
+Heptadecensäure	D_0__Bacteria.D_1__Fusobacteria	0.19735403286236763	-0.12569601348311682
+Heptadecensäure	D_0__Bacteria.D_1__Lentisphaerae	0.2996087698055929	0.16381792647168164
+Heptadecensäure	D_0__Bacteria.D_1__Patescibacteria	0.7759369480959161	-0.27625072161005265
+Heptadecensäure	D_0__Bacteria.D_1__Proteobacteria	1.5799788147782836	0.37405781074933114
+Heptadecensäure	D_0__Bacteria.D_1__Spirochaetes	0.14453883582627458	-0.10154667266242683
+Heptadecensäure	D_0__Bacteria.D_1__Synergistetes	0.061213647945057924	0.05868632457123738
+Heptadecensäure	D_0__Bacteria.D_1__Tenericutes	0.028504031479779635	-0.030788087216434633
+Heptadecensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.2593904083316842	0.14825107375094743
+Heptadecensäure	D_0__Eukaryota.D_1__SAR	0.39042377070117773	-0.1916109353970337
+Hexadecadiensäure	D_0__Archaea.D_1__Euryarchaeota	0.24949791151872563	-0.14468153581631066
+Hexadecadiensäure	D_0__Bacteria.D_1__Actinobacteria	0.061213647945057924	-0.05876395708094093
+Hexadecadiensäure	D_0__Bacteria.D_1__Bacteroidetes	0.45125095564927753	-0.20826108885019148
+Hexadecadiensäure	D_0__Bacteria.D_1__Cyanobacteria	0.032814570063504175	0.03361821057980345
+Hexadecadiensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Hexadecadiensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.34940919887154515	0.17982090724719613
+Hexadecadiensäure	D_0__Bacteria.D_1__Firmicutes	0.5575105223060929	-0.23232215871055362
+Hexadecadiensäure	D_0__Bacteria.D_1__Fusobacteria	0.42908512187071157	0.20225604572419803
+Hexadecadiensäure	D_0__Bacteria.D_1__Lentisphaerae	0.1063256031369166	0.08595041955312598
+Hexadecadiensäure	D_0__Bacteria.D_1__Patescibacteria	0.07915244547246106	0.07037238287739386
+Hexadecadiensäure	D_0__Bacteria.D_1__Proteobacteria	0.32298834679790034	-0.17206259233263263
+Hexadecadiensäure	D_0__Bacteria.D_1__Spirochaetes	0.39042377070117773	0.19149703183576838
+Hexadecadiensäure	D_0__Bacteria.D_1__Synergistetes	0.46990721307783045	0.21404465687934396
+Hexadecadiensäure	D_0__Bacteria.D_1__Tenericutes	0.014803133276958994	-0.016913170337499176
+Hexadecadiensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.08143840329198374	-0.07334163343936419
+Hexadecadiensäure	D_0__Eukaryota.D_1__SAR	0.1919131406321197	-0.12397998491842166
+Hexadecansäure/Palmitinsäure	D_0__Archaea.D_1__Euryarchaeota	0.11550096458484953	0.08939460525623717
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Actinobacteria	0.884972592806968	0.2974829518714668
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.05499507603534972	0.05288375900761434
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.8613111853032182	-0.2918494710350712
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2730923722340549	0.15413675977824948
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Firmicutes	0.030626079443645822	0.032347639183559124
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Fusobacteria	0.027321574764244346	-0.029654839627466067
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.023943390871971344	-0.027123876469031433
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Patescibacteria	0.5924459854427727	0.241362245395884
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Proteobacteria	0.02347587402457832	-0.026695244792941844
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Spirochaetes	0.3737484601159214	-0.18569530692293462
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Synergistetes	0.044865161905935515	-0.04491514198204551
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Tenericutes	0.008255250374276782	0.008395892778303549
+Hexadecansäure/Palmitinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8132130910834663	-0.2833354975263477
+Hexadecansäure/Palmitinsäure	D_0__Eukaryota.D_1__SAR	0.22299554482510883	0.13471275802649463
+Hexadecatetraensäure	D_0__Archaea.D_1__Euryarchaeota	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Actinobacteria	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Bacteroidetes	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Cyanobacteria	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Firmicutes	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Fusobacteria	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Lentisphaerae	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Patescibacteria	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Proteobacteria	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Spirochaetes	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Synergistetes	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Tenericutes	0	0
+Hexadecatetraensäure	D_0__Bacteria.D_1__Verrucomicrobia	0	0
+Hexadecatetraensäure	D_0__Eukaryota.D_1__SAR	0	0
+Hexadecensäure/Palmitoleinsäure	D_0__Archaea.D_1__Euryarchaeota	0.30998391702108424	0.16751154450078337
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Actinobacteria	0.7786121884480418	0.2770702615159766
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.6557487646334796	0.2530564297427781
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.8696148933717281	-0.2939047290755876
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.027838651402777633	0.030302888250932143
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Firmicutes	0.5092201657256404	0.22287801118947667
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Fusobacteria	0.6726385989524333	-0.25580719121179585
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.033348828729873645	0.034962609101892604
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Patescibacteria	0.09797506585239453	-0.08164436547555382
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Proteobacteria	1.83254961216961	0.39560168409919927
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Spirochaetes	0.9220084283687824	-0.3035875788634306
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Synergistetes	0.2939133628406559	-0.1614899714971234
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Tenericutes	0.05228790269047017	-0.04955252831910558
+Hexadecensäure/Palmitoleinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.061213647945057924	-0.0586194586218021
+Hexadecensäure/Palmitoleinsäure	D_0__Eukaryota.D_1__SAR	0.08137861837751036	-0.07283013802717221
+Hexansäure/Capronsäure	D_0__Archaea.D_1__Euryarchaeota	0.05275022835240759	-0.050603951229708136
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Actinobacteria	0.05228790269047017	-0.0493423247265005
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Bacteroidetes	0.3247157120357412	0.1727551464618087
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Cyanobacteria	0.032814570063504175	-0.03357007393439535
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.0147115005686739	-0.014426259226945215
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Firmicutes	0.06440654859912753	0.06332728388124204
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Fusobacteria	0.29488269884166635	-0.16195647313687098
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Lentisphaerae	0.329387764497247	0.17475808831137973
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Patescibacteria	0.26411718625888353	-0.14995978200016985
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Proteobacteria	1.782601938884481	0.3911897912165916
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Spirochaetes	0.6215727986210434	-0.24738816844828646
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Synergistetes	0.06187074045619441	0.06045247080981278
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	-0.005861490205335338
+Hexansäure/Capronsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.0069819262257402245	0.00566242490661764
+Hexansäure/Capronsäure	D_0__Eukaryota.D_1__SAR	0.24570905828886105	-0.14377983040571815
+Histidin	D_0__Archaea.D_1__Euryarchaeota	0.8895553405225182	0.2983256820415516
+Histidin	D_0__Bacteria.D_1__Actinobacteria	0.17540160945938105	0.11815306668264777
+Histidin	D_0__Bacteria.D_1__Bacteroidetes	0.017935298253809052	-0.02152878098418698
+Histidin	D_0__Bacteria.D_1__Cyanobacteria	0.4892573709811415	-0.21819628980516487
+Histidin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Histidin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.061213647945057924	0.05903043799430906
+Histidin	D_0__Bacteria.D_1__Firmicutes	0.007042218830413096	-0.006064245523082468
+Histidin	D_0__Bacteria.D_1__Fusobacteria	0.061213647945057924	-0.058736052480766666
+Histidin	D_0__Bacteria.D_1__Lentisphaerae	0.032814570063504175	0.03357370495953433
+Histidin	D_0__Bacteria.D_1__Patescibacteria	0.0822513005341723	0.07389532042112121
+Histidin	D_0__Bacteria.D_1__Proteobacteria	0.004319821341886751	0.003097962388582341
+Histidin	D_0__Bacteria.D_1__Spirochaetes	0.0771899643080751	-0.06905028836942893
+Histidin	D_0__Bacteria.D_1__Synergistetes	0.5792819169144602	-0.23785313000785976
+Histidin	D_0__Bacteria.D_1__Tenericutes	0.14842131327406544	0.10314309133382112
+Histidin	D_0__Bacteria.D_1__Verrucomicrobia	0.40266626089288077	-0.19452274121817167
+Histidin	D_0__Eukaryota.D_1__SAR	0.15160187775467043	0.10485131431929176
+Iodid	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	-0.021342498367636117
+Iodid	D_0__Bacteria.D_1__Actinobacteria	0.7111339174466116	-0.26323016268221716
+Iodid	D_0__Bacteria.D_1__Bacteroidetes	0.027044201916956265	0.029154906833102647
+Iodid	D_0__Bacteria.D_1__Cyanobacteria	0.5005205381121288	0.22039759668715775
+Iodid	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Iodid	D_0__Bacteria.D_1__Epsilonbacteraeota	0.4195339915729174	-0.19973999054871336
+Iodid	D_0__Bacteria.D_1__Firmicutes	0.05393984733859039	0.052046169212742625
+Iodid	D_0__Bacteria.D_1__Fusobacteria	0.04544568283502097	-0.04570821557052336
+Iodid	D_0__Bacteria.D_1__Lentisphaerae	0.04722025086204617	0.046347539175490816
+Iodid	D_0__Bacteria.D_1__Patescibacteria	0.7937737029575185	-0.2797701570667008
+Iodid	D_0__Bacteria.D_1__Proteobacteria	0.2556678766544157	0.14700683572803724
+Iodid	D_0__Bacteria.D_1__Spirochaetes	0.1276313344105296	0.0951985171503509
+Iodid	D_0__Bacteria.D_1__Synergistetes	0.07189207675257392	-0.0668957304745469
+Iodid	D_0__Bacteria.D_1__Tenericutes	0.018912707982651177	-0.023056285292007064
+Iodid	D_0__Bacteria.D_1__Verrucomicrobia	1.117668853619384	0.32870822453456905
+Iodid	D_0__Eukaryota.D_1__SAR	0.2611903206187093	-0.14914010947973086
+Isoleucin	D_0__Archaea.D_1__Euryarchaeota	0.6134614408598682	0.24584031313597954
+Isoleucin	D_0__Bacteria.D_1__Actinobacteria	0.37628479531256326	0.1866052643415418
+Isoleucin	D_0__Bacteria.D_1__Bacteroidetes	0.06069895562315101	-0.05807457825917042
+Isoleucin	D_0__Bacteria.D_1__Cyanobacteria	0.6759990254395913	-0.2571855202200058
+Isoleucin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Isoleucin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16086410452724895	0.10999942715660556
+Isoleucin	D_0__Bacteria.D_1__Firmicutes	0.017247171146992896	-0.018264938751855583
+Isoleucin	D_0__Bacteria.D_1__Fusobacteria	0.006765843121249416	-0.005244148502913409
+Isoleucin	D_0__Bacteria.D_1__Lentisphaerae	0.053016474536057255	-0.05136276914409059
+Isoleucin	D_0__Bacteria.D_1__Patescibacteria	0.4187223313971113	0.19935499122833097
+Isoleucin	D_0__Bacteria.D_1__Proteobacteria	0.16978815766616762	-0.11540145597632052
+Isoleucin	D_0__Bacteria.D_1__Spirochaetes	0.07915244547246106	-0.07047301570557277
+Isoleucin	D_0__Bacteria.D_1__Synergistetes	0.40758103006236107	-0.19658651294586071
+Isoleucin	D_0__Bacteria.D_1__Tenericutes	0.10604644274499334	0.08578508267153705
+Isoleucin	D_0__Bacteria.D_1__Verrucomicrobia	0.42908512187071157	-0.20209021892985618
+Isoleucin	D_0__Eukaryota.D_1__SAR	0.27242548296468544	0.1539161618091099
+Kalium	D_0__Archaea.D_1__Euryarchaeota	0.1957104227717122	0.12508284993035831
+Kalium	D_0__Bacteria.D_1__Actinobacteria	0.22673363897068333	0.1372947427323488
+Kalium	D_0__Bacteria.D_1__Bacteroidetes	0.39137516072395656	-0.19225638623281285
+Kalium	D_0__Bacteria.D_1__Cyanobacteria	0.1740766137517559	-0.11759398963663449
+Kalium	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Kalium	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16086410452724895	0.11068133379183086
+Kalium	D_0__Bacteria.D_1__Firmicutes	0.17540160945938105	-0.11980242323492071
+Kalium	D_0__Bacteria.D_1__Fusobacteria	0.4642987214915823	0.21194678325362393
+Kalium	D_0__Bacteria.D_1__Lentisphaerae	0.42908512187071157	-0.2018852199134096
+Kalium	D_0__Bacteria.D_1__Patescibacteria	1.6425092509836068	0.3794739762198003
+Kalium	D_0__Bacteria.D_1__Proteobacteria	1.897730516025501	-0.4014331034618647
+Kalium	D_0__Bacteria.D_1__Spirochaetes	0.08172873311077669	0.07348358490154593
+Kalium	D_0__Bacteria.D_1__Synergistetes	0.093516563517874	-0.07866478123969306
+Kalium	D_0__Bacteria.D_1__Tenericutes	0.009036175535010597	0.009225424184809934
+Kalium	D_0__Bacteria.D_1__Verrucomicrobia	0.3885213158878785	-0.18993413298953687
+Kalium	D_0__Eukaryota.D_1__SAR	0.4163789788457069	0.19844834264195238
+Kohlenhydrate	D_0__Archaea.D_1__Euryarchaeota	0.1740766137517559	-0.11764962039562064
+Kohlenhydrate	D_0__Bacteria.D_1__Actinobacteria	0.9249184153966263	-0.3044965074916646
+Kohlenhydrate	D_0__Bacteria.D_1__Bacteroidetes	0.49669632045131723	-0.21948510298239132
+Kohlenhydrate	D_0__Bacteria.D_1__Cyanobacteria	1.0294414314587113	0.318373634199691
+Kohlenhydrate	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Kohlenhydrate	D_0__Bacteria.D_1__Epsilonbacteraeota	0.061213647945057924	-0.05853749339806891
+Kohlenhydrate	D_0__Bacteria.D_1__Firmicutes	0.42908512187071157	-0.2020103015730927
+Kohlenhydrate	D_0__Bacteria.D_1__Fusobacteria	0.2232710898222989	0.13546697011884953
+Kohlenhydrate	D_0__Bacteria.D_1__Lentisphaerae	0.040081921293819406	0.041212053106375754
+Kohlenhydrate	D_0__Bacteria.D_1__Patescibacteria	0.05521556715743906	-0.053021764791668945
+Kohlenhydrate	D_0__Bacteria.D_1__Proteobacteria	0.5797932236057568	-0.2393446945508196
+Kohlenhydrate	D_0__Bacteria.D_1__Spirochaetes	0.7789896753552629	0.27737813673579903
+Kohlenhydrate	D_0__Bacteria.D_1__Synergistetes	0.20549971306807135	0.12851503113683285
+Kohlenhydrate	D_0__Bacteria.D_1__Tenericutes	0.05268573363683467	0.05032864916018665
+Kohlenhydrate	D_0__Bacteria.D_1__Verrucomicrobia	0.27889281536525246	0.15548969286707237
+Kohlenhydrate	D_0__Eukaryota.D_1__SAR	0.05228790269047017	-0.04950424260374207
+Kupfer	D_0__Archaea.D_1__Euryarchaeota	0.32786767072503153	0.1737513115319861
+Kupfer	D_0__Bacteria.D_1__Actinobacteria	0.0332468222257699	-0.034193741078380684
+Kupfer	D_0__Bacteria.D_1__Bacteroidetes	0.5937368886591103	-0.2417453458933409
+Kupfer	D_0__Bacteria.D_1__Cyanobacteria	0.0147115005686739	-0.015192557285794805
+Kupfer	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Kupfer	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1640663812773479	0.11271226197804593
+Kupfer	D_0__Bacteria.D_1__Firmicutes	0.41229480868580526	-0.1975859733771216
+Kupfer	D_0__Bacteria.D_1__Fusobacteria	0.4072091358809833	0.19564626761332696
+Kupfer	D_0__Bacteria.D_1__Lentisphaerae	0.42908512187071157	-0.20187465038231958
+Kupfer	D_0__Bacteria.D_1__Patescibacteria	1.5496683192089489	0.3709551508734884
+Kupfer	D_0__Bacteria.D_1__Proteobacteria	2.0240071737761465	-0.4119344788307398
+Kupfer	D_0__Bacteria.D_1__Spirochaetes	0.634036151845087	0.2493337193547021
+Kupfer	D_0__Bacteria.D_1__Synergistetes	0.07190601690319394	-0.06721904562404735
+Kupfer	D_0__Bacteria.D_1__Tenericutes	0.024986336184017063	0.027942867149205
+Kupfer	D_0__Bacteria.D_1__Verrucomicrobia	0.4372946689071562	-0.2044558650988832
+Kupfer	D_0__Eukaryota.D_1__SAR	0.3573558876686305	0.18146625301235494
+Kurzkettige Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.0147115005686739	0.015914495880553277
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.28719757222202963	0.15902055809067608
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.2232710898222989	0.13517251365828886
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.45252678484374204	-0.2088499782412379
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.12774487762063427	0.09529487457024416
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.03668327377404702	0.038429816123593905
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.14842131327406544	-0.10320904390859498
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.1567570544434824	0.10798381714038421
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.10772518431824088	0.08662835399821853
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	0.5662830666067985	0.2341661112541926
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.9607365851687814	-0.309629887154522
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.020818872406657463	0.024797342545370093
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.009696900983029638	0.009672224441793454
+Kurzkettige Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.4753289310784212	-0.21502189707888514
+Kurzkettige Fettsäuren	D_0__Eukaryota.D_1__SAR	0.0018853519532573341	0.0012730360945599761
+Lactose (Milchzucker)	D_0__Archaea.D_1__Euryarchaeota	0.06665617320742465	-0.06419227253044649
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Actinobacteria	0.8829858952116758	0.2962946687446297
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.05162847400299928	-0.048763620821960306
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Cyanobacteria	0.2839200447981551	-0.1568148955358098
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.30186543997360654	0.16483116205901394
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Firmicutes	0.11603118822433563	-0.08972350240431139
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Fusobacteria	0.7521825117327445	0.2710678674186003
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.017935298253809052	0.019959904850327434
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Patescibacteria	0.6951392298545459	0.26046333599715493
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Proteobacteria	0.7576893143401321	-0.2721832264737802
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Spirochaetes	0.09020139413988057	-0.07744841571140629
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Synergistetes	0.027044201916956265	-0.029484707042916974
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Tenericutes	0.11169624230831983	-0.08814474899049311
+Lactose (Milchzucker)	D_0__Bacteria.D_1__Verrucomicrobia	1.0289825522818687	-0.3180788816905369
+Lactose (Milchzucker)	D_0__Eukaryota.D_1__SAR	0.33299584127550536	0.1758053697846779
+Langkettige Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.11748549724276204	0.09059194178445246
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.9068409883694841	0.30143814418776216
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.018912707982651177	0.023248842488417375
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.8069126891223386	-0.282373264624757
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2911475820790785	0.16084986334104817
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	0.02224855604725726
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.007042218830413096	-0.006146751486185628
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.06889462662390947	-0.06549655913743327
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.6956127611290158	0.26063845302320193
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	0.07959404585777584	-0.07194121965361215
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.2715885302468116	-0.1533749552219617
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.034024537189902365	-0.03648142814333406
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.00520391800881309	0.0035842234361565944
+Langkettige Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.7531246260431353	-0.2714265608248838
+Langkettige Fettsäuren	D_0__Eukaryota.D_1__SAR	0.2278167871924757	0.13756821856766113
+Leucin	D_0__Archaea.D_1__Euryarchaeota	0.4642987214915823	0.2121017487433086
+Leucin	D_0__Bacteria.D_1__Actinobacteria	0.5044699276419339	0.22142943562161768
+Leucin	D_0__Bacteria.D_1__Bacteroidetes	0.05540882180166471	-0.05328376779021061
+Leucin	D_0__Bacteria.D_1__Cyanobacteria	0.712347488144735	-0.26357166337038945
+Leucin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Leucin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1988918697280952	0.1266624944787494
+Leucin	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	-0.02080851736546555
+Leucin	D_0__Bacteria.D_1__Fusobacteria	0.011187424393695	0.010898334158896414
+Leucin	D_0__Bacteria.D_1__Lentisphaerae	0.05937724110676637	-0.05723538098785506
+Leucin	D_0__Bacteria.D_1__Patescibacteria	0.5674821182754185	0.23489069696496553
+Leucin	D_0__Bacteria.D_1__Proteobacteria	0.2184569394450411	-0.13293191534036317
+Leucin	D_0__Bacteria.D_1__Spirochaetes	0.09797506585239453	-0.08143416207294675
+Leucin	D_0__Bacteria.D_1__Synergistetes	0.29558095373141996	-0.16223532022095905
+Leucin	D_0__Bacteria.D_1__Tenericutes	0.07302214590519798	0.06767192097886046
+Leucin	D_0__Bacteria.D_1__Verrucomicrobia	0.5721702263603635	-0.2360959204631498
+Leucin	D_0__Eukaryota.D_1__SAR	0.2996087698055929	0.1634346957347764
+Lignin	D_0__Archaea.D_1__Euryarchaeota	0.0580685212316544	-0.05525855217650731
+Lignin	D_0__Bacteria.D_1__Actinobacteria	0.0147115005686739	0.01589040525734941
+Lignin	D_0__Bacteria.D_1__Bacteroidetes	0.0948086287019199	-0.07975665844793692
+Lignin	D_0__Bacteria.D_1__Cyanobacteria	0.24738461962919295	-0.1441536257607852
+Lignin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Lignin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.013004953155860744	-0.012020013869123712
+Lignin	D_0__Bacteria.D_1__Firmicutes	0.0029335156749840064	0.0018778212170712082
+Lignin	D_0__Bacteria.D_1__Fusobacteria	0.13011667509910826	-0.09610934867113569
+Lignin	D_0__Bacteria.D_1__Lentisphaerae	0.25102160060228673	-0.14533742216047607
+Lignin	D_0__Bacteria.D_1__Patescibacteria	0.25189800453688627	0.14564670427888235
+Lignin	D_0__Bacteria.D_1__Proteobacteria	0.041213038182403905	0.04268524554208693
+Lignin	D_0__Bacteria.D_1__Spirochaetes	0.263656815391326	0.14980184076870673
+Lignin	D_0__Bacteria.D_1__Synergistetes	0.037230177823466284	-0.03887027403294096
+Lignin	D_0__Bacteria.D_1__Tenericutes	0.07959404585777584	0.07137501690458102
+Lignin	D_0__Bacteria.D_1__Verrucomicrobia	0.5555614593240559	0.23172978750881196
+Lignin	D_0__Eukaryota.D_1__SAR	0.0549378482760326	-0.05259717478960612
+Lysin	D_0__Archaea.D_1__Euryarchaeota	0.5320621371339419	0.2277133795717524
+Lysin	D_0__Bacteria.D_1__Actinobacteria	0.4417510690760639	0.20625230636425881
+Lysin	D_0__Bacteria.D_1__Bacteroidetes	0.008235681624550092	-0.008015451834782382
+Lysin	D_0__Bacteria.D_1__Cyanobacteria	0.7442093183547118	-0.2695549796487647
+Lysin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Lysin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.157503305948236	0.10823937397495531
+Lysin	D_0__Bacteria.D_1__Firmicutes	0.0029335156749840064	-0.0022048946863346625
+Lysin	D_0__Bacteria.D_1__Fusobacteria	0.020385083463017366	-0.02455749954310833
+Lysin	D_0__Bacteria.D_1__Lentisphaerae	0.0147115005686739	-0.014935496992872225
+Lysin	D_0__Bacteria.D_1__Patescibacteria	0.36118058783562407	0.18248903242151135
+Lysin	D_0__Bacteria.D_1__Proteobacteria	0.05810586064976349	-0.05547835763666689
+Lysin	D_0__Bacteria.D_1__Spirochaetes	0.15389118124624515	-0.10640764728273451
+Lysin	D_0__Bacteria.D_1__Synergistetes	0.329387764497247	-0.1749102052192057
+Lysin	D_0__Bacteria.D_1__Tenericutes	0.09040991179292952	0.07764023004455853
+Lysin	D_0__Bacteria.D_1__Verrucomicrobia	0.6561198678453061	-0.2533348235762381
+Lysin	D_0__Eukaryota.D_1__SAR	0.2592315882100215	0.14778415519336183
+Magnesium	D_0__Archaea.D_1__Euryarchaeota	0.0211999118382057	-0.025169342354957887
+Magnesium	D_0__Bacteria.D_1__Actinobacteria	1.0630000842704672	-0.32198267897565425
+Magnesium	D_0__Bacteria.D_1__Bacteroidetes	0.08874115560741161	-0.0769109500012486
+Magnesium	D_0__Bacteria.D_1__Cyanobacteria	0.9946749173106733	0.3138797132585782
+Magnesium	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Magnesium	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2024555833759341	-0.1276393604542209
+Magnesium	D_0__Bacteria.D_1__Firmicutes	0.05409101612788867	-0.05222707946928049
+Magnesium	D_0__Bacteria.D_1__Fusobacteria	0.011187424393695	0.011011726660904147
+Magnesium	D_0__Bacteria.D_1__Lentisphaerae	0.017935298253809052	0.01931982111185367
+Magnesium	D_0__Bacteria.D_1__Patescibacteria	0.3025813329515455	-0.1656474775159116
+Magnesium	D_0__Bacteria.D_1__Proteobacteria	0.01821211269448814	-0.02268975830208945
+Magnesium	D_0__Bacteria.D_1__Spirochaetes	0.39035473109867813	0.19056304170731075
+Magnesium	D_0__Bacteria.D_1__Synergistetes	0.03508261869360702	0.03697735312500274
+Magnesium	D_0__Bacteria.D_1__Tenericutes	0.03400311812949427	-0.03589722901242902
+Magnesium	D_0__Bacteria.D_1__Verrucomicrobia	0.6065426837517615	0.24409153029434547
+Magnesium	D_0__Eukaryota.D_1__SAR	0.22921652438980275	-0.1379754340286678
+Maltose (Malzzucker)	D_0__Archaea.D_1__Euryarchaeota	0.2232710898222989	-0.13558309789960893
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Actinobacteria	0.39042377070117773	-0.19153085310271215
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.2703209381475871	-0.1519633577988317
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Cyanobacteria	1.1180804243849978	0.32896494950417093
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.017935298253809052	-0.019277156090620234
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Firmicutes	0.3690386398217922	-0.18428926481549748
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Fusobacteria	0.010767828917369677	-0.010611136605368677
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.5044699276419339	0.22166333173854072
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Patescibacteria	0.02007633171376764	-0.02419846482223122
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Proteobacteria	0.16086410452724895	-0.11086114125142414
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Spirochaetes	1.2410400672219808	0.3421074708550474
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Synergistetes	0.2303387165863366	0.13840859421309223
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Tenericutes	0.03712412078925129	-0.038678326165368364
+Maltose (Malzzucker)	D_0__Bacteria.D_1__Verrucomicrobia	0.08822524366103567	-0.07657041706383866
+Maltose (Malzzucker)	D_0__Eukaryota.D_1__SAR	0.017935298253809052	0.01930256257016116
+Mangan	D_0__Archaea.D_1__Euryarchaeota	0.008255250374276782	0.008380140488229965
+Mangan	D_0__Bacteria.D_1__Actinobacteria	0.17540160945938105	0.1185327304806466
+Mangan	D_0__Bacteria.D_1__Bacteroidetes	0.5589968919867697	-0.23282971444884806
+Mangan	D_0__Bacteria.D_1__Cyanobacteria	0.11550096458484953	-0.0894582345673025
+Mangan	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Mangan	D_0__Bacteria.D_1__Epsilonbacteraeota	0.32540097173690313	0.17306471131906104
+Mangan	D_0__Bacteria.D_1__Firmicutes	0.40758103006236107	-0.19648107872166204
+Mangan	D_0__Bacteria.D_1__Fusobacteria	0.32155632850538635	0.17116793512929393
+Mangan	D_0__Bacteria.D_1__Lentisphaerae	0.14565888698870863	-0.1021648146296488
+Mangan	D_0__Bacteria.D_1__Patescibacteria	1.8731026869128768	0.399285591925862
+Mangan	D_0__Bacteria.D_1__Proteobacteria	2.2814004313780707	-0.43067013835923507
+Mangan	D_0__Bacteria.D_1__Spirochaetes	0.28545142668654194	0.15824465029695112
+Mangan	D_0__Bacteria.D_1__Synergistetes	0.19735403286236763	0.1260828114965567
+Mangan	D_0__Bacteria.D_1__Tenericutes	0.004600469429166112	0.0032713948344406767
+Mangan	D_0__Bacteria.D_1__Verrucomicrobia	0.5363066068037927	-0.2284671508534449
+Mangan	D_0__Eukaryota.D_1__SAR	0.329387764497247	0.17456599788228083
+Mannit	D_0__Archaea.D_1__Euryarchaeota	0.008235681624550092	-0.008258071737108229
+Mannit	D_0__Bacteria.D_1__Actinobacteria	0.16086410452724895	-0.11011887828568166
+Mannit	D_0__Bacteria.D_1__Bacteroidetes	0.045175722511511536	0.04552838478527514
+Mannit	D_0__Bacteria.D_1__Cyanobacteria	0.05268573363683467	0.05016400894892443
+Mannit	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Mannit	D_0__Bacteria.D_1__Epsilonbacteraeota	0.7625018684711262	-0.2734566160041017
+Mannit	D_0__Bacteria.D_1__Firmicutes	0.10077964197503268	0.08361313015035339
+Mannit	D_0__Bacteria.D_1__Fusobacteria	0.01396004158625736	-0.01293299294623231
+Mannit	D_0__Bacteria.D_1__Lentisphaerae	0.13801541445127888	0.09868083982459333
+Mannit	D_0__Bacteria.D_1__Patescibacteria	0.2996087698055929	-0.16338808020522724
+Mannit	D_0__Bacteria.D_1__Proteobacteria	0.27050419859240504	0.1524551546691801
+Mannit	D_0__Bacteria.D_1__Spirochaetes	0.4787385511420741	0.21578114860035874
+Mannit	D_0__Bacteria.D_1__Synergistetes	0.37421597939032997	0.18594204591831653
+Mannit	D_0__Bacteria.D_1__Tenericutes	0.4372946689071562	-0.20450603398194714
+Mannit	D_0__Bacteria.D_1__Verrucomicrobia	0.2333777136755727	0.13957146230866477
+Mannit	D_0__Eukaryota.D_1__SAR	0.11529655089555302	-0.08924510645820187
+Mehrfach ungesättigte Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.122189291481331	0.0924813455037935
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.819470145383573	0.2851078468635008
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.0147115005686739	0.014388374059726516
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.89174998763574	-0.2988721534127737
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.48165509905473414	0.21627150286785984
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.040081921293819406	0.04083935908416956
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.013371947437913225	-0.012500515806059348
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.20834035912062815	-0.1299504994393453
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.7272447171865298	0.26592153203556396
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	0.05905567009565652	-0.056059836716327
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.27050419859240504	-0.15267739478027129
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.009696900983029638	-0.009696935757048194
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	0.00648416651955562
+Mehrfach ungesättigte Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.656421100836951	-0.2536058853308126
+Mehrfach ungesättigte Fettsäuren	D_0__Eukaryota.D_1__SAR	0.11603118822433563	0.08975134711525597
+Methionin	D_0__Archaea.D_1__Euryarchaeota	0.9235239656965968	0.3038959371774012
+Methionin	D_0__Bacteria.D_1__Actinobacteria	0.05905567009565652	0.05635996511665245
+Methionin	D_0__Bacteria.D_1__Bacteroidetes	0.007042218830413096	-0.006007867989780771
+Methionin	D_0__Bacteria.D_1__Cyanobacteria	0.4373180689929252	-0.20500034268963815
+Methionin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Methionin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.024986336184017063	0.027949403628540117
+Methionin	D_0__Bacteria.D_1__Firmicutes	0.0332468222257699	0.03449154346048392
+Methionin	D_0__Bacteria.D_1__Fusobacteria	0.15521533085991437	-0.10732260815141084
+Methionin	D_0__Bacteria.D_1__Lentisphaerae	0.0147115005686739	0.015626403308144517
+Methionin	D_0__Bacteria.D_1__Patescibacteria	0.005600181287302202	-0.0039230023611467255
+Methionin	D_0__Bacteria.D_1__Proteobacteria	0.05171498200556164	0.04897178838338043
+Methionin	D_0__Bacteria.D_1__Spirochaetes	0.053016474536057255	-0.05103268358609395
+Methionin	D_0__Bacteria.D_1__Synergistetes	0.9326753942939667	-0.3059198207843119
+Methionin	D_0__Bacteria.D_1__Tenericutes	0.23058830830956076	0.13868387723248896
+Methionin	D_0__Bacteria.D_1__Verrucomicrobia	0.06187074045619441	-0.06001943905795065
+Methionin	D_0__Eukaryota.D_1__SAR	0.07173904587970323	0.06661131058529943
+Mineralstoffe (Rohasche)	D_0__Archaea.D_1__Euryarchaeota	0.06409305531487171	-0.0629635479386936
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Actinobacteria	0.7458308028728206	-0.27011403092666814
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Bacteroidetes	0.027321574764244346	0.02965170271687582
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Cyanobacteria	0.5792819169144602	0.23817396795804946
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.28545142668654194	-0.15843412962634562
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Firmicutes	0.027351155705326525	0.029871731743150026
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Fusobacteria	0.0727134449743064	-0.06749307432064727
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Lentisphaerae	0.07302214590519798	0.06764142779571725
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Patescibacteria	0.884972592806968	-0.2974650923586155
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Proteobacteria	0.2846496645277164	0.1574855243517564
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Spirochaetes	0.14094827492326298	0.09966089663484423
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	0.015932389836648936
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Tenericutes	0.01320963210248646	-0.012178808043248964
+Mineralstoffe (Rohasche)	D_0__Bacteria.D_1__Verrucomicrobia	0.9249184153966263	0.3043524729333731
+Mineralstoffe (Rohasche)	D_0__Eukaryota.D_1__SAR	0.32056661455991686	-0.17034492394751874
+Mittelkettige Fettsäuren	D_0__Archaea.D_1__Euryarchaeota	0.024265587489754784	-0.027620559771495752
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Actinobacteria	0.6395088942348958	0.25021351189777136
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Bacteroidetes	0.5054670405540063	0.2221690384100384
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Cyanobacteria	0.8630157793732555	-0.2925756781210476
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2873714447969616	0.1593916140935286
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Firmicutes	0.16679573839200937	0.11374899187834081
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Fusobacteria	0.26252342496202574	-0.14952761061215059
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Lentisphaerae	0.11118656422128752	0.08788643116144527
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Patescibacteria	0.0147115005686739	-0.015869561573929946
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Proteobacteria	1.3592478133521917	0.35328643968161044
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Spirochaetes	0.7442093183547118	-0.26965496806331535
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Synergistetes	0.17401998958407963	0.11746945868001366
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Tenericutes	0.1985291782466302	-0.126518486104967
+Mittelkettige Fettsäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.2593904083316842	-0.14802722345985728
+Mittelkettige Fettsäuren	D_0__Eukaryota.D_1__SAR	0.08137861837751036	-0.07296999352273115
+Monosaccharide (1 M)	D_0__Archaea.D_1__Euryarchaeota	0.06199685568159733	0.060793087606398614
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Actinobacteria	0.3208213176931958	0.17063858427208478
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Bacteroidetes	0.5088833471909626	-0.22273015072908353
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Cyanobacteria	0.24237976484318138	-0.14226146619289562
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2205378861086538	0.1336526562392678
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Firmicutes	0.19735403286236763	-0.12599325661336094
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Fusobacteria	0.5488409475912253	0.23048372942589768
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Lentisphaerae	0.38408152647202776	-0.18820744889814536
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Patescibacteria	1.593315609484447	0.3752835765606346
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Proteobacteria	1.9038895966280185	-0.402239446017996
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Spirochaetes	0.01773347929040315	0.018785016671670096
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Synergistetes	0.02007633171376764	-0.023928840688870204
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Tenericutes	0.06272421129768334	0.06177329373381931
+Monosaccharide (1 M)	D_0__Bacteria.D_1__Verrucomicrobia	0.41229480868580526	-0.19767547351869688
+Monosaccharide (1 M)	D_0__Eukaryota.D_1__SAR	0.4163789788457069	0.19848624456233244
+Natrium	D_0__Archaea.D_1__Euryarchaeota	0.10759709816151641	0.08642591935068313
+Natrium	D_0__Bacteria.D_1__Actinobacteria	1.787876250697628	0.3917593658514851
+Natrium	D_0__Bacteria.D_1__Bacteroidetes	0.250471946471847	0.14511833645105648
+Natrium	D_0__Bacteria.D_1__Cyanobacteria	0.428434640021345	-0.20153991475051042
+Natrium	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Natrium	D_0__Bacteria.D_1__Epsilonbacteraeota	0.07959404585777584	-0.07132913470018709
+Natrium	D_0__Bacteria.D_1__Firmicutes	0.329387764497247	0.17501701416109192
+Natrium	D_0__Bacteria.D_1__Fusobacteria	0.15221951516454252	-0.10505260887648825
+Natrium	D_0__Bacteria.D_1__Lentisphaerae	0.02158453930032127	0.025706635503123396
+Natrium	D_0__Bacteria.D_1__Patescibacteria	0.03726886909813065	-0.03902166404294913
+Natrium	D_0__Bacteria.D_1__Proteobacteria	0.040081921293819406	0.04098397274579203
+Natrium	D_0__Bacteria.D_1__Spirochaetes	0.2422347367755746	-0.1421545988138594
+Natrium	D_0__Bacteria.D_1__Synergistetes	0.26866155406456077	-0.15128709371730548
+Natrium	D_0__Bacteria.D_1__Tenericutes	0.0030615207804998465	-0.0024983095124510918
+Natrium	D_0__Bacteria.D_1__Verrucomicrobia	0.10297799142200902	-0.0846563524657616
+Natrium	D_0__Eukaryota.D_1__SAR	0.053016474536057255	0.05094647136350291
+Nichtessentielle Aminosäuren	D_0__Archaea.D_1__Euryarchaeota	0.23995506923018356	0.1412229308663856
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Actinobacteria	0.6726385989524333	0.2560785728011105
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Bacteroidetes	0.05810586064976349	-0.05550369624272927
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Cyanobacteria	0.6141557772844964	-0.24603886137990796
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.24402184662522258	0.1431711027935372
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Firmicutes	0.033348828729873645	-0.035091446210457296
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Fusobacteria	0.05228790269047017	0.04948718889443831
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Lentisphaerae	0.07930935411078874	-0.07096377822864307
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Patescibacteria	0.8160889140777177	0.28435572063018666
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Proteobacteria	0.3369669064599287	-0.1769431230818427
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Spirochaetes	0.10048120587980713	-0.0831150554829319
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Synergistetes	0.10772518431824088	-0.08658209226190483
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Tenericutes	0.03824011770773163	0.03987347815156341
+Nichtessentielle Aminosäuren	D_0__Bacteria.D_1__Verrucomicrobia	0.776529929596828	-0.27657716329464704
+Nichtessentielle Aminosäuren	D_0__Eukaryota.D_1__SAR	0.329387764497247	0.17446387797613958
+Nonadecatriensäure	D_0__Archaea.D_1__Euryarchaeota	0.06987519541663585	-0.0659978426613293
+Nonadecatriensäure	D_0__Bacteria.D_1__Actinobacteria	0.03393628297022894	0.035586042586711164
+Nonadecatriensäure	D_0__Bacteria.D_1__Bacteroidetes	1.5205929525911714	0.36793562875938157
+Nonadecatriensäure	D_0__Bacteria.D_1__Cyanobacteria	0.08172873311077669	0.07360824772068301
+Nonadecatriensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Nonadecatriensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.557729344019054	-0.23245645724694614
+Nonadecatriensäure	D_0__Bacteria.D_1__Firmicutes	1.0828420979630293	0.3243389873832244
+Nonadecatriensäure	D_0__Bacteria.D_1__Fusobacteria	0.17540160945938105	-0.11831356972443566
+Nonadecatriensäure	D_0__Bacteria.D_1__Lentisphaerae	0.04427304098353228	0.04453762976960601
+Nonadecatriensäure	D_0__Bacteria.D_1__Patescibacteria	1.4620977110970232	-0.36285401203339246
+Nonadecatriensäure	D_0__Bacteria.D_1__Proteobacteria	2.840439588163139	0.4658597339765029
+Nonadecatriensäure	D_0__Bacteria.D_1__Spirochaetes	0.4861995533534495	-0.2172405195077365
+Nonadecatriensäure	D_0__Bacteria.D_1__Synergistetes	0.2873714447969616	-0.15952057935493227
+Nonadecatriensäure	D_0__Bacteria.D_1__Tenericutes	0.1255948173182886	-0.09390203929800461
+Nonadecatriensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.16086410452724895	0.10980915001112208
+Nonadecatriensäure	D_0__Eukaryota.D_1__SAR	0.3430060669481305	-0.1783109170739311
+Octadecadiensäure/Linolsäure	D_0__Archaea.D_1__Euryarchaeota	0.13803433119060587	0.09881932256393908
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Actinobacteria	0.7976567976351269	0.280727080090257
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Bacteroidetes	0.0029335156749840064	-0.0019406427345653279
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Cyanobacteria	1.0190355696949362	-0.3166912609592764
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.5555614593240559	0.23165103594475675
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Firmicutes	0.032494612818583554	0.033286264943305
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Fusobacteria	0.03141121793662377	-0.0327259511106044
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Lentisphaerae	0.16086410452724895	-0.10985983576390179
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Patescibacteria	0.7594124334994217	0.2725001718903217
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Proteobacteria	0.08189592325875586	-0.07373761269620444
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Spirochaetes	0.22960343839091887	-0.13819877227537194
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Synergistetes	0.009696900983029638	0.010033642170682039
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Tenericutes	0.0147115005686739	0.015978463208984276
+Octadecadiensäure/Linolsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.6759082880581733	-0.25700766513060835
+Octadecadiensäure/Linolsäure	D_0__Eukaryota.D_1__SAR	0.17237557186237235	0.1163255122346364
+Octadecansäure/Stearinsäure	D_0__Archaea.D_1__Euryarchaeota	0.09094958317928226	0.0778401777816722
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Actinobacteria	0.8613111853032182	0.29172893572671044
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.15221951516454252	0.10507921224532146
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.9028858937878942	-0.3005895453704022
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.29687966472969357	0.16269486749041734
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Firmicutes	0.052715976573613404	0.05048243495425567
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Fusobacteria	0.05905567009565652	-0.056356681380526706
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.01180369662950853	0.01132394986664071
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Patescibacteria	0.4900392702839744	0.21840191366065542
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Proteobacteria	0.01773347929040315	0.01885536395001701
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Spirochaetes	0.5002007403896007	-0.22017338855716048
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Synergistetes	0.11603118822433563	-0.0899788429477101
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.019953958275866303
+Octadecansäure/Stearinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8312451018086588	-0.28718684073759326
+Octadecansäure/Stearinsäure	D_0__Eukaryota.D_1__SAR	0.16136627372573503	0.11194411369994371
+Octadecatetraensäure/Stearidonsäure	D_0__Archaea.D_1__Euryarchaeota	0.5516375439287732	-0.23094351680593675
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Actinobacteria	0.4072091358809833	-0.19609633433685814
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Bacteroidetes	0.06822715513913807	-0.06519413073025283
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Cyanobacteria	1.5436091653562372	0.37012446381885594
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.007042218830413096	0.00580057422394701
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Firmicutes	0.2717174395095314	-0.15354249560953398
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Fusobacteria	0.14368934131017808	0.10096036244591446
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Lentisphaerae	0.03034233765427022	0.03184353897426709
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Patescibacteria	0.35851267209851057	-0.1817445265222539
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Proteobacteria	0.008235681624550092	0.00811083904788904
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Spirochaetes	0.011124696035956687	0.010805430014390731
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Synergistetes	0.1255948173182886	0.09401983148040029
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Tenericutes	0.04022771178903619	0.04160885674451248
+Octadecatetraensäure/Stearidonsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.0637857660492827	0.06262122940395806
+Octadecatetraensäure/Stearidonsäure	D_0__Eukaryota.D_1__SAR	0.08236548690209294	0.07432613511846937
+Octadecatriensäure/Linolensäure	D_0__Archaea.D_1__Euryarchaeota	0.03603200339656107	0.03768075614723192
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Actinobacteria	0.25991855958709414	0.14844971299206136
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Bacteroidetes	0.1246090068488592	0.09353351783857539
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Cyanobacteria	0.25237031709832375	-0.1458282788676034
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.27114223044775193	0.15313674350269327
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Firmicutes	0.1809824285237088	0.12133776631661207
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Fusobacteria	0.0147115005686739	-0.015244765472258375
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Lentisphaerae	0.5441287134556438	-0.22967438542362298
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Patescibacteria	0.09361619033172984	0.07890101288537184
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Proteobacteria	0.468389918735048	0.2130116283735922
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Spirochaetes	0.5054670405540063	-0.22207703748028998
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Synergistetes	0.020385083463017366	-0.024518085285307405
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Tenericutes	0.06272421129768334	-0.06175972653293793
+Octadecatriensäure/Linolensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.05661525057789379	-0.05440251549646088
+Octadecatriensäure/Linolensäure	D_0__Eukaryota.D_1__SAR	0.2846496645277164	-0.157562595421569
+Octadecensäure/Ölsäure	D_0__Archaea.D_1__Euryarchaeota	0.14453883582627458	0.10140865786283833
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Actinobacteria	0.9647483798643034	0.31034662381202105
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Bacteroidetes	0.03603200339656107	0.03781590051622476
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Cyanobacteria	0.8829858952116758	-0.2964149261547652
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.28056815201594043	0.1560918650214648
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Firmicutes	0.044716563559957616	0.04473332138326802
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Fusobacteria	0.047468219454590406	-0.046809027991653
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Lentisphaerae	0.0622724233596438	-0.06127997405276606
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Patescibacteria	0.5792819169144602	0.23792174357521456
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Proteobacteria	0.03034233765427022	-0.03184075388090822
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Spirochaetes	0.32540097173690313	-0.1731106167514425
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Synergistetes	0.03421879968210192	-0.03665141155889422
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Tenericutes	0.0029335156749840064	-0.0018725078622842941
+Octadecensäure/Ölsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.5849278248235082	-0.24024303916124548
+Octadecensäure/Ölsäure	D_0__Eukaryota.D_1__SAR	0.19333180939458947	0.12447689721314742
+Octansäure/Caprylsäure	D_0__Archaea.D_1__Euryarchaeota	0.15389118124624515	-0.10661956613851016
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Actinobacteria	0.0773567865053041	0.06964666534959696
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Bacteroidetes	0.6141557772844964	0.24605075544201277
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Cyanobacteria	0.17237557186237235	-0.11641202373648217
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.0771899643080751	0.06912648029189729
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Firmicutes	0.22837504049130586	0.13774616610743967
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Fusobacteria	0.32374034179216854	-0.1723965219320909
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Lentisphaerae	0.20610161568457191	0.12885338705712512
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Patescibacteria	0.5924459854427727	-0.24137058383801635
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Proteobacteria	3.007877557429735	0.4762863570307921
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Spirochaetes	0.2996087698055929	-0.16401452894006313
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Synergistetes	0.3378698211192774	0.17734444518433065
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Tenericutes	0.4072091358809833	-0.19605895415486593
+Octansäure/Caprylsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.0773567865053041	0.06951332503112197
+Octansäure/Caprylsäure	D_0__Eukaryota.D_1__SAR	0.4625024623157809	-0.2112936457209991
+Oligosaccharide, nicht resorbierbar	D_0__Archaea.D_1__Euryarchaeota	0.4499743421839723	-0.20791344813998205
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Actinobacteria	0.07189207675257392	-0.06702966649195449
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Bacteroidetes	0.01466254009354245	-0.014067330914684619
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Cyanobacteria	0.4384042620742076	0.2052478248003211
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Epsilonbacteraeota	0.37144481716272604	-0.1849093791911343
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Firmicutes	0.1352764021800377	0.09779489372448091
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Fusobacteria	0.04033176993457906	0.04194176163214604
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Lentisphaerae	0.244810000044613	-0.14343745848798378
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Patescibacteria	0.32842441475215206	-0.17411127859130013
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Proteobacteria	0.06187074045619441	0.06010340947583423
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Spirochaetes	0.06665617320742465	0.06418755798724757
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	0.015223828140415565
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Tenericutes	0.08473614737700848	0.07535197520103215
+Oligosaccharide, nicht resorbierbar	D_0__Bacteria.D_1__Verrucomicrobia	0.5937368886591103	0.2418441882870004
+Oligosaccharide, nicht resorbierbar	D_0__Eukaryota.D_1__SAR	0.05540882180166471	-0.053298503426653036
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Archaea.D_1__Euryarchaeota	0.250471946471847	-0.14508557847429912
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Actinobacteria	0.09625425671221599	-0.08087386849237078
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Bacteroidetes	0.39042377070117773	-0.19066324210890007
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Cyanobacteria	0.2885622789865156	0.15985051980372111
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.061213647945057924	0.0584056567688822
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Firmicutes	0.4497249755273302	-0.2076845919879114
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Fusobacteria	0.4753289310784212	0.21509150595839216
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Lentisphaerae	0.021332080771616045	0.025410344593823873
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Patescibacteria	0.5046430963963352	0.22186570117148022
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Proteobacteria	1.5676134633641268	-0.37272933407808384
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Spirochaetes	0.690782508941262	0.2597242698218405
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Synergistetes	0.4062300749402367	0.1953275474363231
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Tenericutes	0.047468219454590406	-0.04664118639752681
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Bacteria.D_1__Verrucomicrobia	0.2846496645277164	-0.15725619715286296
+Oligosaccharide, resorbierbar (3-9 M)	D_0__Eukaryota.D_1__SAR	0.11173266741234925	0.08827569550546939
+organische Säuren	D_0__Archaea.D_1__Euryarchaeota	0.13203017856877075	-0.09671046638544385
+organische Säuren	D_0__Bacteria.D_1__Actinobacteria	0.8569591051086584	-0.2908493084083057
+organische Säuren	D_0__Bacteria.D_1__Bacteroidetes	0.017719624624512816	0.018604192359105265
+organische Säuren	D_0__Bacteria.D_1__Cyanobacteria	0.5732477544762443	0.23677717338884272
+organische Säuren	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+organische Säuren	D_0__Bacteria.D_1__Epsilonbacteraeota	0.25237031709832375	-0.14599957627283985
+organische Säuren	D_0__Bacteria.D_1__Firmicutes	0.027044201916956265	0.029086944238489558
+organische Säuren	D_0__Bacteria.D_1__Fusobacteria	0.03362174768333816	-0.03528204102866768
+organische Säuren	D_0__Bacteria.D_1__Lentisphaerae	0.017915293974319464	0.019067410102544986
+organische Säuren	D_0__Bacteria.D_1__Patescibacteria	0.7175341214837502	-0.2645860171670301
+organische Säuren	D_0__Bacteria.D_1__Proteobacteria	0.3025813329515455	0.16581501151785394
+organische Säuren	D_0__Bacteria.D_1__Spirochaetes	0.15796820409642265	0.10868198944485045
+organische Säuren	D_0__Bacteria.D_1__Synergistetes	0.032814570063504175	0.03370800656003461
+organische Säuren	D_0__Bacteria.D_1__Tenericutes	0.011187424393695	0.01094707038686519
+organische Säuren	D_0__Bacteria.D_1__Verrucomicrobia	0.8643105667352888	0.29291082738088475
+organische Säuren	D_0__Eukaryota.D_1__SAR	0.4417510690760639	-0.20613769080056135
+Pentadecansäure	D_0__Archaea.D_1__Euryarchaeota	0.08172873311077669	-0.07351901119657742
+Pentadecansäure	D_0__Bacteria.D_1__Actinobacteria	0.2996458066018602	-0.1643042107681893
+Pentadecansäure	D_0__Bacteria.D_1__Bacteroidetes	0.2996087698055929	0.1636421913525695
+Pentadecansäure	D_0__Bacteria.D_1__Cyanobacteria	0.17377611654698027	0.11719551083043493
+Pentadecansäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Pentadecansäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.12406088650480489	-0.09319844528742674
+Pentadecansäure	D_0__Bacteria.D_1__Firmicutes	0.07189207675257392	0.06696707921282159
+Pentadecansäure	D_0__Bacteria.D_1__Fusobacteria	0.24297341476503573	-0.14257614812033498
+Pentadecansäure	D_0__Bacteria.D_1__Lentisphaerae	0.3356729238751524	0.1763078159140773
+Pentadecansäure	D_0__Bacteria.D_1__Patescibacteria	0.7625018684711262	-0.2734574813850262
+Pentadecansäure	D_0__Bacteria.D_1__Proteobacteria	1.7929738979481518	0.39231573605187786
+Pentadecansäure	D_0__Bacteria.D_1__Spirochaetes	0.27889281536525246	-0.155547342718574
+Pentadecansäure	D_0__Bacteria.D_1__Synergistetes	0.03726886909813065	0.039059005168282465
+Pentadecansäure	D_0__Bacteria.D_1__Tenericutes	0.01723506633737874	-0.018190178911064468
+Pentadecansäure	D_0__Bacteria.D_1__Verrucomicrobia	0.16086410452724895	0.1106424035490163
+Pentadecansäure	D_0__Eukaryota.D_1__SAR	0.3572499372940385	-0.18132142566476434
+Pentadecensäure	D_0__Archaea.D_1__Euryarchaeota	0.1683282562613563	-0.11466100234369342
+Pentadecensäure	D_0__Bacteria.D_1__Actinobacteria	0.46990721307783045	-0.21399176774251927
+Pentadecensäure	D_0__Bacteria.D_1__Bacteroidetes	0.20550449831489662	0.128599996417184
+Pentadecensäure	D_0__Bacteria.D_1__Cyanobacteria	0.27114223044775193	0.15309786714245938
+Pentadecensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Pentadecensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16425183012244152	-0.11296995638512787
+Pentadecensäure	D_0__Bacteria.D_1__Firmicutes	0.05268573363683467	0.050297632445387715
+Pentadecensäure	D_0__Bacteria.D_1__Fusobacteria	0.14659064446247527	-0.10256311529580084
+Pentadecensäure	D_0__Bacteria.D_1__Lentisphaerae	0.2644194146320493	0.15009044085669632
+Pentadecensäure	D_0__Bacteria.D_1__Patescibacteria	0.8001076211072763	-0.2811241698475165
+Pentadecensäure	D_0__Bacteria.D_1__Proteobacteria	1.1908903144633884	0.33683812645140954
+Pentadecensäure	D_0__Bacteria.D_1__Spirochaetes	0.061213647945057924	-0.0584110087393668
+Pentadecensäure	D_0__Bacteria.D_1__Synergistetes	0.0742186216842572	0.06808324293419654
+Pentadecensäure	D_0__Bacteria.D_1__Tenericutes	0.03824011770773163	-0.03986541964817271
+Pentadecensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.39042377070117773	0.1907496120785919
+Pentadecensäure	D_0__Eukaryota.D_1__SAR	0.4163789788457069	-0.19865150273455687
+Phenylalanin	D_0__Archaea.D_1__Euryarchaeota	0.6884808068430012	0.2593403594931609
+Phenylalanin	D_0__Bacteria.D_1__Actinobacteria	0.3430060669481305	0.17832024989237727
+Phenylalanin	D_0__Bacteria.D_1__Bacteroidetes	0.10772518431824088	-0.08663960521167988
+Phenylalanin	D_0__Bacteria.D_1__Cyanobacteria	0.5792819169144602	-0.23804021797973632
+Phenylalanin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Phenylalanin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.14116616864385595	0.0997788672295138
+Phenylalanin	D_0__Bacteria.D_1__Firmicutes	0.027044201916956265	-0.029355700058199007
+Phenylalanin	D_0__Bacteria.D_1__Fusobacteria	0.008235681624550092	0.008157011623845198
+Phenylalanin	D_0__Bacteria.D_1__Lentisphaerae	0.07601368416979666	-0.0686740069555445
+Phenylalanin	D_0__Bacteria.D_1__Patescibacteria	0.42908512187071157	0.20237015461416072
+Phenylalanin	D_0__Bacteria.D_1__Proteobacteria	0.2556678766544157	-0.14692917278674772
+Phenylalanin	D_0__Bacteria.D_1__Spirochaetes	0.05598070435585557	-0.05357828674660503
+Phenylalanin	D_0__Bacteria.D_1__Synergistetes	0.4497249755273302	-0.20772649646159103
+Phenylalanin	D_0__Bacteria.D_1__Tenericutes	0.1063256031369166	0.08598210549212934
+Phenylalanin	D_0__Bacteria.D_1__Verrucomicrobia	0.329387764497247	-0.1745762637302098
+Phenylalanin	D_0__Eukaryota.D_1__SAR	0.27050419859240504	0.15214676510203673
+Phosphor	D_0__Archaea.D_1__Euryarchaeota	0.16086410452724895	0.11094601931534588
+Phosphor	D_0__Bacteria.D_1__Actinobacteria	0.0580685212316544	-0.055276117681329735
+Phosphor	D_0__Bacteria.D_1__Bacteroidetes	0.32298834679790034	-0.17197192719860685
+Phosphor	D_0__Bacteria.D_1__Cyanobacteria	0.290147260852621	-0.16035760277460992
+Phosphor	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Phosphor	D_0__Bacteria.D_1__Epsilonbacteraeota	1.0299090028536668	0.3187222688032218
+Phosphor	D_0__Bacteria.D_1__Firmicutes	0.4163789788457069	-0.19875701385398903
+Phosphor	D_0__Bacteria.D_1__Fusobacteria	0.04096514711587761	-0.04252680481599875
+Phosphor	D_0__Bacteria.D_1__Lentisphaerae	0.4417510690760639	0.20609793763059353
+Phosphor	D_0__Bacteria.D_1__Patescibacteria	1.085881516864693	0.3249449130397691
+Phosphor	D_0__Bacteria.D_1__Proteobacteria	0.4555838926577125	-0.20956264117726886
+Phosphor	D_0__Bacteria.D_1__Spirochaetes	0.22226660609427176	0.13413786606522637
+Phosphor	D_0__Bacteria.D_1__Synergistetes	0.10772518431824088	0.08672870669065488
+Phosphor	D_0__Bacteria.D_1__Tenericutes	0.028388029566784094	0.030612042379091816
+Phosphor	D_0__Bacteria.D_1__Verrucomicrobia	1.3365850274352706	-0.35119958666983847
+Phosphor	D_0__Eukaryota.D_1__SAR	0.10772518431824088	0.08652652321211979
+Poly-Hexosen	D_0__Archaea.D_1__Euryarchaeota	0.06069895562315101	-0.058059366014009364
+Poly-Hexosen	D_0__Bacteria.D_1__Actinobacteria	0.27050419859240504	0.1524934541245019
+Poly-Hexosen	D_0__Bacteria.D_1__Bacteroidetes	0.4688099647062075	-0.21324138096091205
+Poly-Hexosen	D_0__Bacteria.D_1__Cyanobacteria	0.14453883582627458	-0.10121310098469251
+Poly-Hexosen	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Poly-Hexosen	D_0__Bacteria.D_1__Epsilonbacteraeota	0.32028438517640256	0.1701316087126032
+Poly-Hexosen	D_0__Bacteria.D_1__Firmicutes	0.32094926538489305	-0.17082805199390494
+Poly-Hexosen	D_0__Bacteria.D_1__Fusobacteria	0.3025813329515455	0.16556818791321382
+Poly-Hexosen	D_0__Bacteria.D_1__Lentisphaerae	0.1415560185608356	-0.1002820233778082
+Poly-Hexosen	D_0__Bacteria.D_1__Patescibacteria	2.0240071737761465	0.41187678055576465
+Poly-Hexosen	D_0__Bacteria.D_1__Proteobacteria	2.040071399075993	-0.41355053530870617
+Poly-Hexosen	D_0__Bacteria.D_1__Spirochaetes	0.18984587048647453	0.12350656317271598
+Poly-Hexosen	D_0__Bacteria.D_1__Synergistetes	0.2257751062622227	0.13696717828934904
+Poly-Hexosen	D_0__Bacteria.D_1__Tenericutes	0.009696900983029638	0.009669445872432824
+Poly-Hexosen	D_0__Bacteria.D_1__Verrucomicrobia	0.4644992575616753	-0.21225962996708303
+Poly-Hexosen	D_0__Eukaryota.D_1__SAR	0.3025813329515455	0.16541491042828976
+Poly-Pentosen	D_0__Archaea.D_1__Euryarchaeota	0.06187074045619441	-0.06012671763546816
+Poly-Pentosen	D_0__Bacteria.D_1__Actinobacteria	0.39042377070117773	0.19079614867903036
+Poly-Pentosen	D_0__Bacteria.D_1__Bacteroidetes	0.2525964853431909	-0.1462669391145166
+Poly-Pentosen	D_0__Bacteria.D_1__Cyanobacteria	0.2593904083316842	-0.14800970429229382
+Poly-Pentosen	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Poly-Pentosen	D_0__Bacteria.D_1__Epsilonbacteraeota	0.31653485126480474	0.16927259348669496
+Poly-Pentosen	D_0__Bacteria.D_1__Firmicutes	0.12682323205586232	-0.09484806852234141
+Poly-Pentosen	D_0__Bacteria.D_1__Fusobacteria	0.08137861837751036	0.07307626169187457
+Poly-Pentosen	D_0__Bacteria.D_1__Lentisphaerae	0.18326584177412558	-0.12190776547000436
+Poly-Pentosen	D_0__Bacteria.D_1__Patescibacteria	1.9031510946200896	0.4020052461075238
+Poly-Pentosen	D_0__Bacteria.D_1__Proteobacteria	1.0294414314587113	-0.31834100668978105
+Poly-Pentosen	D_0__Bacteria.D_1__Spirochaetes	0.12682323205586232	0.09480664529666818
+Poly-Pentosen	D_0__Bacteria.D_1__Synergistetes	0.09797506585239453	0.08174502231498126
+Poly-Pentosen	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	0.006213152505782773
+Poly-Pentosen	D_0__Bacteria.D_1__Verrucomicrobia	0.2996087698055929	-0.16352006177359302
+Poly-Pentosen	D_0__Eukaryota.D_1__SAR	0.2375367958128528	0.14054967480952524
+Poly-Uronsäure	D_0__Archaea.D_1__Euryarchaeota	0.0147115005686739	-0.015410845152619082
+Poly-Uronsäure	D_0__Bacteria.D_1__Actinobacteria	0.39042377070117773	0.19097109259236403
+Poly-Uronsäure	D_0__Bacteria.D_1__Bacteroidetes	0.42908512187071157	-0.20188314723909404
+Poly-Uronsäure	D_0__Bacteria.D_1__Cyanobacteria	0.2333777136755727	-0.13958878251427273
+Poly-Uronsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Poly-Uronsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.08381584042685347	0.07491567646620509
+Poly-Uronsäure	D_0__Bacteria.D_1__Firmicutes	0.05937724110676637	-0.05702029898107236
+Poly-Uronsäure	D_0__Bacteria.D_1__Fusobacteria	0.4625024623157809	0.2113404088162583
+Poly-Uronsäure	D_0__Bacteria.D_1__Lentisphaerae	0.7955965506599217	-0.2802355536466439
+Poly-Uronsäure	D_0__Bacteria.D_1__Patescibacteria	1.6630308464652594	0.38123627232516616
+Poly-Uronsäure	D_0__Bacteria.D_1__Proteobacteria	1.8462761649049613	-0.3971449884357961
+Poly-Uronsäure	D_0__Bacteria.D_1__Spirochaetes	0.017935298253809052	-0.021820262145575066
+Poly-Uronsäure	D_0__Bacteria.D_1__Synergistetes	0.03061361949937625	-0.03227374737417995
+Poly-Uronsäure	D_0__Bacteria.D_1__Tenericutes	0.05162847400299928	0.04869289921340251
+Poly-Uronsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.007042218830413096	-0.007112113982772392
+Poly-Uronsäure	D_0__Eukaryota.D_1__SAR	0.2695749930812385	0.15160562241545048
+Polysaccharide (> 9 M)	D_0__Archaea.D_1__Euryarchaeota	0.03097961242630026	-0.03252503568832588
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Actinobacteria	0.2703209381475871	0.15181210140016757
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Bacteroidetes	0.5662830666067985	-0.23419185326372544
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Cyanobacteria	0.15021711330246734	-0.1044885732780444
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.35376678322582206	0.18065765462870664
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Firmicutes	0.5044699276419339	-0.22157130161657348
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Fusobacteria	0.36118058783562407	0.18248421643676685
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Lentisphaerae	0.014803133276958994	-0.01688640938003631
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Patescibacteria	1.5267203821506572	0.368600384762234
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Proteobacteria	1.94097267608541	-0.4052681303661725
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Spirochaetes	0.4072091358809833	0.1959272113100388
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Synergistetes	0.14930865527082426	0.10394684192742261
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Tenericutes	0.14464971631760193	0.1018786471849151
+Polysaccharide (> 9 M)	D_0__Bacteria.D_1__Verrucomicrobia	1.4620977110970232	-0.3628520427346546
+Polysaccharide (> 9 M)	D_0__Eukaryota.D_1__SAR	0.39134296150776937	0.19216009578068885
+Prolin	D_0__Archaea.D_1__Euryarchaeota	0.2846496645277164	0.15718642766629812
+Prolin	D_0__Bacteria.D_1__Actinobacteria	0.5555614593240559	0.23174698057359766
+Prolin	D_0__Bacteria.D_1__Bacteroidetes	0.08236548690209294	-0.07425682884984273
+Prolin	D_0__Bacteria.D_1__Cyanobacteria	0.6452264356116633	-0.25112049243956963
+Prolin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Prolin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.28545142668654194	0.1583241826189684
+Prolin	D_0__Bacteria.D_1__Firmicutes	0.061213647945057924	-0.05918522499716445
+Prolin	D_0__Bacteria.D_1__Fusobacteria	0.0332468222257699	0.03422869390700466
+Prolin	D_0__Bacteria.D_1__Lentisphaerae	0.044865161905935515	-0.044917264928573085
+Prolin	D_0__Bacteria.D_1__Patescibacteria	0.8963380483085653	0.29963822535709955
+Prolin	D_0__Bacteria.D_1__Proteobacteria	0.37628479531256326	-0.18666373450846013
+Prolin	D_0__Bacteria.D_1__Spirochaetes	0.06272421129768334	-0.06194629720541567
+Prolin	D_0__Bacteria.D_1__Synergistetes	0.16086410452724895	-0.11155182843166014
+Prolin	D_0__Bacteria.D_1__Tenericutes	0.05798568587304759	0.05516643678444272
+Prolin	D_0__Bacteria.D_1__Verrucomicrobia	0.7392157631587561	-0.26837341611960225
+Prolin	D_0__Eukaryota.D_1__SAR	0.30135339281111334	0.16466489767486173
+Purin	D_0__Archaea.D_1__Euryarchaeota	0.08137861837751036	-0.0729059821427776
+Purin	D_0__Bacteria.D_1__Actinobacteria	1.0630000842704672	-0.3220439632989376
+Purin	D_0__Bacteria.D_1__Bacteroidetes	0.0029335156749840064	0.002265875611894812
+Purin	D_0__Bacteria.D_1__Cyanobacteria	0.89174998763574	0.2988546988820118
+Purin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Purin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2593904083316842	-0.14788966347601973
+Purin	D_0__Bacteria.D_1__Firmicutes	0.05161537413915219	-0.04861975473532467
+Purin	D_0__Bacteria.D_1__Fusobacteria	0.02007633171376764	-0.024131902339338478
+Purin	D_0__Bacteria.D_1__Lentisphaerae	0.17540160945938105	0.11829003399223649
+Purin	D_0__Bacteria.D_1__Patescibacteria	0.7955965506599217	-0.28032440171222417
+Purin	D_0__Bacteria.D_1__Proteobacteria	0.17540160945938105	0.11848195886989295
+Purin	D_0__Bacteria.D_1__Spirochaetes	0.2068102138866529	0.12958774577483065
+Purin	D_0__Bacteria.D_1__Synergistetes	0.09608182197414927	0.08063345943850649
+Purin	D_0__Bacteria.D_1__Tenericutes	0.01320963210248646	0.012285338131902234
+Purin	D_0__Bacteria.D_1__Verrucomicrobia	0.39042377070117773	0.1911067566047308
+Purin	D_0__Eukaryota.D_1__SAR	0.2846496645277164	-0.15717746250599005
+Saccharose (Rübenzucker)	D_0__Archaea.D_1__Euryarchaeota	0.00520391800881309	-0.0035609000279654616
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Actinobacteria	0.21726764190172362	0.13224535734648976
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Bacteroidetes	0.5589968919867697	-0.23285133309948097
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Cyanobacteria	0.05937724110676637	-0.05723214878412555
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1415560185608356	0.1000324461420203
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Firmicutes	0.38419920781253664	-0.18831374885441585
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Fusobacteria	0.6543515708282934	0.25265871608460344
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Lentisphaerae	0.2422347367755746	-0.14208161471019207
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Patescibacteria	1.83254961216961	0.39561865642103705
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Proteobacteria	3.1937744468681046	-0.4869546684775077
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Spirochaetes	0.16237662146078916	0.1122228005446467
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Synergistetes	0.06187074045619441	0.06054849893714362
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Tenericutes	0.08236548690209294	0.07414186634634642
+Saccharose (Rübenzucker)	D_0__Bacteria.D_1__Verrucomicrobia	0.6141557772844964	-0.2461829268286855
+Saccharose (Rübenzucker)	D_0__Eukaryota.D_1__SAR	0.4282150486479673	0.20134323151631928
+Schwefel	D_0__Archaea.D_1__Euryarchaeota	0.5002007403896007	0.22004849976830437
+Schwefel	D_0__Bacteria.D_1__Actinobacteria	0.16086410452724895	-0.10979803232729628
+Schwefel	D_0__Bacteria.D_1__Bacteroidetes	0.05905567009565652	-0.05594213371356894
+Schwefel	D_0__Bacteria.D_1__Cyanobacteria	0.017935298253809052	-0.01926923947682698
+Schwefel	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Schwefel	D_0__Bacteria.D_1__Epsilonbacteraeota	0.07915244547246106	-0.07043679080265473
+Schwefel	D_0__Bacteria.D_1__Firmicutes	0.021863273148299226	0.026075033934428345
+Schwefel	D_0__Bacteria.D_1__Fusobacteria	0.06727970969978196	-0.06472160427461114
+Schwefel	D_0__Bacteria.D_1__Lentisphaerae	0.08313692546821831	-0.07467984795182797
+Schwefel	D_0__Bacteria.D_1__Patescibacteria	0.16086410452724895	-0.1110568206885608
+Schwefel	D_0__Bacteria.D_1__Proteobacteria	0.05499507603534972	0.052822218573656085
+Schwefel	D_0__Bacteria.D_1__Spirochaetes	0.03712412078925129	0.038688113437031865
+Schwefel	D_0__Bacteria.D_1__Synergistetes	0.9261608800769766	-0.3049571009336366
+Schwefel	D_0__Bacteria.D_1__Tenericutes	0.2319569008172779	0.13916155502511474
+Schwefel	D_0__Bacteria.D_1__Verrucomicrobia	0.4187223313971113	0.1993429291806312
+Schwefel	D_0__Eukaryota.D_1__SAR	0.04869119798976787	-0.04724805552534223
+Serin	D_0__Archaea.D_1__Euryarchaeota	0.6726385989524333	0.25595138560686725
+Serin	D_0__Bacteria.D_1__Actinobacteria	0.38798745988192324	0.18967625261853635
+Serin	D_0__Bacteria.D_1__Bacteroidetes	0.10291976250032743	-0.08449400594949967
+Serin	D_0__Bacteria.D_1__Cyanobacteria	0.6560297765078338	-0.25320668211870173
+Serin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Serin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.15448730966188848	0.10696415407400552
+Serin	D_0__Bacteria.D_1__Firmicutes	0.018912707982651177	-0.023132852587663115
+Serin	D_0__Bacteria.D_1__Fusobacteria	0.002760947045501843	-0.0017372775291501445
+Serin	D_0__Bacteria.D_1__Lentisphaerae	0.07956857356925001	-0.07119556739364072
+Serin	D_0__Bacteria.D_1__Patescibacteria	0.468389918735048	0.21298484152635827
+Serin	D_0__Bacteria.D_1__Proteobacteria	0.25991855958709414	-0.1484959637258627
+Serin	D_0__Bacteria.D_1__Spirochaetes	0.05937724110676637	-0.057492573069238516
+Serin	D_0__Bacteria.D_1__Synergistetes	0.4372946689071562	-0.2045298993926971
+Serin	D_0__Bacteria.D_1__Tenericutes	0.10048120587980713	0.08307307267801559
+Serin	D_0__Bacteria.D_1__Verrucomicrobia	0.3146956340437251	-0.16874105285772728
+Serin	D_0__Eukaryota.D_1__SAR	0.28176441802360047	0.1563730336533245
+Sorbit	D_0__Archaea.D_1__Euryarchaeota	0.040081921293819406	-0.04124719051913133
+Sorbit	D_0__Bacteria.D_1__Actinobacteria	0.0147115005686739	-0.014734675428411455
+Sorbit	D_0__Bacteria.D_1__Bacteroidetes	0.044865161905935515	-0.04494397353728171
+Sorbit	D_0__Bacteria.D_1__Cyanobacteria	0.11603118822433563	0.08969630165814797
+Sorbit	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Sorbit	D_0__Bacteria.D_1__Epsilonbacteraeota	0.021863273148299226	0.02602645230074944
+Sorbit	D_0__Bacteria.D_1__Firmicutes	0.0332468222257699	0.0341712190558185
+Sorbit	D_0__Bacteria.D_1__Fusobacteria	0.09571045715961024	0.08023000830560263
+Sorbit	D_0__Bacteria.D_1__Lentisphaerae	0.033348828729873645	-0.03493374473021793
+Sorbit	D_0__Bacteria.D_1__Patescibacteria	0.01396004158625736	-0.013117108280142259
+Sorbit	D_0__Bacteria.D_1__Proteobacteria	0.5792819169144602	-0.23816930209327392
+Sorbit	D_0__Bacteria.D_1__Spirochaetes	0.09797506585239453	0.08169560247906425
+Sorbit	D_0__Bacteria.D_1__Synergistetes	0.15521533085991437	0.10725978000278334
+Sorbit	D_0__Bacteria.D_1__Tenericutes	0.05598070435585557	-0.053593784719766904
+Sorbit	D_0__Bacteria.D_1__Verrucomicrobia	0.0211999118382057	0.024996525626901054
+Sorbit	D_0__Eukaryota.D_1__SAR	0.03141121793662377	-0.03276689220198204
+Stärke	D_0__Archaea.D_1__Euryarchaeota	0.03390879151308389	-0.035507806292570394
+Stärke	D_0__Bacteria.D_1__Actinobacteria	0.27050419859240504	0.15244073805634353
+Stärke	D_0__Bacteria.D_1__Bacteroidetes	0.5721702263603635	-0.23635822054732203
+Stärke	D_0__Bacteria.D_1__Cyanobacteria	0.15389118124624515	-0.10626045237980772
+Stärke	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Stärke	D_0__Bacteria.D_1__Epsilonbacteraeota	0.3635347586177965	0.18327922624168902
+Stärke	D_0__Bacteria.D_1__Firmicutes	0.5044699276419339	-0.22151492461256064
+Stärke	D_0__Bacteria.D_1__Fusobacteria	0.3572499372940385	0.18127544049368616
+Stärke	D_0__Bacteria.D_1__Lentisphaerae	0.017935298253809052	-0.01955077459933267
+Stärke	D_0__Bacteria.D_1__Patescibacteria	1.5454647002070434	0.3704460664341663
+Stärke	D_0__Bacteria.D_1__Proteobacteria	1.944705714545243	-0.4059001783618789
+Stärke	D_0__Bacteria.D_1__Spirochaetes	0.4072091358809833	0.1956326489663559
+Stärke	D_0__Bacteria.D_1__Synergistetes	0.14930865527082426	0.10358125917130052
+Stärke	D_0__Bacteria.D_1__Tenericutes	0.15378436052987696	0.1059539834873698
+Stärke	D_0__Bacteria.D_1__Verrucomicrobia	1.4269320206839111	-0.3594457615431489
+Stärke	D_0__Eukaryota.D_1__SAR	0.39042377070117773	0.19075601323209063
+Summe Zuckeralkohole	D_0__Archaea.D_1__Euryarchaeota	0.08822524366103567	-0.07660242710590383
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Actinobacteria	0.06889462662390947	-0.06549651546177294
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Bacteroidetes	0.2232710898222989	-0.13524023728637294
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Cyanobacteria	0.06409305531487171	0.06285912705443648
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Epsilonbacteraeota	0.03858837941105947	-0.04024684543531517
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Firmicutes	0.04096514711587761	-0.0423194021261617
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Fusobacteria	0.39042377070117773	0.19166974762543368
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Lentisphaerae	0.05661525057789379	-0.05437864081519058
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Patescibacteria	0.15389118124624515	0.10608095333804646
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Proteobacteria	0.7392157631587561	-0.26843386919272033
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Spirochaetes	0.5248566890630261	0.22657841160727674
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Synergistetes	0.3025813329515455	0.16511368290473558
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Tenericutes	0.20613411653257868	-0.12904817816688283
+Summe Zuckeralkohole	D_0__Bacteria.D_1__Verrucomicrobia	0.052715976573613404	0.0504551001482979
+Summe Zuckeralkohole	D_0__Eukaryota.D_1__SAR	0.007986264398254143	-0.0077840915222609905
+Tetracosansäure/Lignocerinsäure	D_0__Archaea.D_1__Euryarchaeota	0.008235681624550092	0.008014889110844733
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Actinobacteria	0.29081698575786896	-0.16063166703370096
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.0029335156749840064	0.002011990742739878
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.3025813329515455	0.16549044725348622
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16731048370860344	-0.11400295217480633
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Firmicutes	0.043684484395156375	0.04386244638094509
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Fusobacteria	0.07959404585777584	-0.0713488998815511
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.007042218830413096	-0.006113764547056911
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Patescibacteria	0.7010759344395251	-0.2618126781700449
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Proteobacteria	0.47638076687471165	0.21536483291629144
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Spirochaetes	0.01320963210248646	0.012161000316851885
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Synergistetes	0.053016474536057255	0.05084737674322847
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Tenericutes	0.14453883582627458	-0.10139063759155577
+Tetracosansäure/Lignocerinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.8630157793732555	0.2924105936744524
+Tetracosansäure/Lignocerinsäure	D_0__Eukaryota.D_1__SAR	0.2239289403346426	-0.1360726377211501
+Tetracosensäure/Nervonsäure	D_0__Archaea.D_1__Euryarchaeota	0.3885213158878785	-0.18997746673563282
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Actinobacteria	0.06238660467598262	-0.061601444301189745
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Bacteroidetes	0.6095842472247837	0.24480050717941076
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Cyanobacteria	0.20266583006488884	0.1277947531604942
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.014071583328817552	0.013661206637120567
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Firmicutes	0.10153335505013222	0.08404772058511562
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Fusobacteria	0.21752172897414507	-0.13264233541727638
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Lentisphaerae	0.1683282562613563	0.11447700201658326
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Patescibacteria	0.4367031576541823	-0.20405029127213384
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Proteobacteria	0.2910227899492003	0.1607474273475455
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Spirochaetes	0.040081921293819406	-0.04085907021494114
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Synergistetes	0.009696900983029638	0.009687876988736053
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Tenericutes	0.08518092933829077	-0.07560179924934222
+Tetracosensäure/Nervonsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.37853706983778534	0.1871433159827312
+Tetracosensäure/Nervonsäure	D_0__Eukaryota.D_1__SAR	0.7625018684711262	-0.2730951289563766
+Tetradecansäure/Myristinsäure	D_0__Archaea.D_1__Euryarchaeota	0.040081921293819406	0.04105188413724938
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Actinobacteria	0.8555104636021856	0.2905566685854984
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.18326584177412558	0.12189862216818705
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.8643105667352888	-0.29297299243177083
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.28521684285285914	0.1578636065302635
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Firmicutes	0.05228790269047017	0.049292765614019345
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Fusobacteria	0.07959404585777584	-0.07152457052805361
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.03400311812949427	0.03600811148415673
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Patescibacteria	0.29913707447809507	0.16322870175192294
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Proteobacteria	0.22226660609427176	0.13412244288813432
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Spirochaetes	0.6726385989524333	-0.25583823936584116
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Synergistetes	0.01396004158625736	0.013027201240433352
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Tenericutes	0.023866464531667676	-0.02702926763992612
+Tetradecansäure/Myristinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.7853372270289515	-0.27819428292532167
+Tetradecansäure/Myristinsäure	D_0__Eukaryota.D_1__SAR	0.06411716437820729	0.06318196595319492
+Tetradecensäure	D_0__Archaea.D_1__Euryarchaeota	0.056760479098375394	-0.05455763197436386
+Tetradecensäure	D_0__Bacteria.D_1__Actinobacteria	0.2996087698055929	-0.16411833869677894
+Tetradecensäure	D_0__Bacteria.D_1__Bacteroidetes	0.2996087698055929	0.16359202281742086
+Tetradecensäure	D_0__Bacteria.D_1__Cyanobacteria	0.08137861837751036	0.072837016576453
+Tetradecensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tetradecensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.08573955445528567	-0.0758078145146983
+Tetradecensäure	D_0__Bacteria.D_1__Firmicutes	0.0622724233596438	0.0614917678682074
+Tetradecensäure	D_0__Bacteria.D_1__Fusobacteria	0.27050419859240504	-0.15223646766779306
+Tetradecensäure	D_0__Bacteria.D_1__Lentisphaerae	0.3894373506723742	0.19024842452065296
+Tetradecensäure	D_0__Bacteria.D_1__Patescibacteria	0.7445795766221572	-0.2698490108800172
+Tetradecensäure	D_0__Bacteria.D_1__Proteobacteria	2.0340890171895962	0.41294861392186116
+Tetradecensäure	D_0__Bacteria.D_1__Spirochaetes	0.28545142668654194	-0.15819691100617503
+Tetradecensäure	D_0__Bacteria.D_1__Synergistetes	0.044865161905935515	0.045145328664587245
+Tetradecensäure	D_0__Bacteria.D_1__Tenericutes	0.005600181287302202	-0.004245102878050975
+Tetradecensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.11173266741234925	0.0882242707878568
+Tetradecensäure	D_0__Eukaryota.D_1__SAR	0.329387764497247	-0.17459257616105886
+Threonin	D_0__Archaea.D_1__Euryarchaeota	0.7299126037950524	0.2664852684190933
+Threonin	D_0__Bacteria.D_1__Actinobacteria	0.31653485126480474	0.16919809652351142
+Threonin	D_0__Bacteria.D_1__Bacteroidetes	0.043684484395156375	-0.04398992047678835
+Threonin	D_0__Bacteria.D_1__Cyanobacteria	0.6378536538875269	-0.24990167459460502
+Threonin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Threonin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.12656137456755628	0.09456359724095252
+Threonin	D_0__Bacteria.D_1__Firmicutes	0.011969953797497018	-0.011452213716368636
+Threonin	D_0__Bacteria.D_1__Fusobacteria	0.021264696129652615	-0.025292379750120164
+Threonin	D_0__Bacteria.D_1__Lentisphaerae	0.0332468222257699	-0.03397997218309594
+Threonin	D_0__Bacteria.D_1__Patescibacteria	0.3025813329515455	0.16513460802846508
+Threonin	D_0__Bacteria.D_1__Proteobacteria	0.08874115560741161	-0.07688550593263285
+Threonin	D_0__Bacteria.D_1__Spirochaetes	0.09571045715961024	-0.0801558478543714
+Threonin	D_0__Bacteria.D_1__Synergistetes	0.45977647853454306	-0.2103312290520806
+Threonin	D_0__Bacteria.D_1__Tenericutes	0.10924810382510691	0.08723104066801833
+Threonin	D_0__Bacteria.D_1__Verrucomicrobia	0.39461611375155525	-0.19282006500604454
+Threonin	D_0__Eukaryota.D_1__SAR	0.24373388106703517	0.1428880640782849
+Tryptophan	D_0__Archaea.D_1__Euryarchaeota	0.8963380483085653	0.29962431734103656
+Tryptophan	D_0__Bacteria.D_1__Actinobacteria	0.16086410452724895	-0.11028069297794614
+Tryptophan	D_0__Bacteria.D_1__Bacteroidetes	0.05598070435585557	-0.0536862994110158
+Tryptophan	D_0__Bacteria.D_1__Cyanobacteria	0.050699817475831174	-0.0478785376684471
+Tryptophan	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tryptophan	D_0__Bacteria.D_1__Epsilonbacteraeota	0.05937724110676637	-0.05732007052003383
+Tryptophan	D_0__Bacteria.D_1__Firmicutes	0.012716070104314128	0.011779030368670644
+Tryptophan	D_0__Bacteria.D_1__Fusobacteria	0.14930865527082426	-0.10361191460201752
+Tryptophan	D_0__Bacteria.D_1__Lentisphaerae	0.005600181287302202	0.004105063369308208
+Tryptophan	D_0__Bacteria.D_1__Patescibacteria	0.17540160945938105	-0.11833146710534845
+Tryptophan	D_0__Bacteria.D_1__Proteobacteria	0.05937724110676637	0.05762517260954926
+Tryptophan	D_0__Bacteria.D_1__Spirochaetes	0.017935298253809052	0.02119958314317784
+Tryptophan	D_0__Bacteria.D_1__Synergistetes	0.8288631344912669	-0.2866539889706001
+Tryptophan	D_0__Bacteria.D_1__Tenericutes	0.17237557186237235	0.1162944089778455
+Tryptophan	D_0__Bacteria.D_1__Verrucomicrobia	0.21726764190172362	0.13221940890677872
+Tryptophan	D_0__Eukaryota.D_1__SAR	0.008255250374276782	-0.008541865434907826
+Tyrosin	D_0__Archaea.D_1__Euryarchaeota	0.7631414223777422	0.2738128100441903
+Tyrosin	D_0__Bacteria.D_1__Actinobacteria	0.32094355176518696	0.17074252092318556
+Tyrosin	D_0__Bacteria.D_1__Bacteroidetes	0.045175722511511536	-0.045474338357009106
+Tyrosin	D_0__Bacteria.D_1__Cyanobacteria	0.6543515708282934	-0.2527171468754481
+Tyrosin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Tyrosin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.10588950973148128	0.08567774142129049
+Tyrosin	D_0__Bacteria.D_1__Firmicutes	0.005600181287302202	-0.003919477538434598
+Tyrosin	D_0__Bacteria.D_1__Fusobacteria	0.024048457757636553	-0.0272272685068414
+Tyrosin	D_0__Bacteria.D_1__Lentisphaerae	0.03375304278876368	-0.03539129043091497
+Tyrosin	D_0__Bacteria.D_1__Patescibacteria	0.27889281536525246	0.15561655161267998
+Tyrosin	D_0__Bacteria.D_1__Proteobacteria	0.0948086287019199	-0.07958147876538271
+Tyrosin	D_0__Bacteria.D_1__Spirochaetes	0.09797506585239453	-0.08146826586712946
+Tyrosin	D_0__Bacteria.D_1__Synergistetes	0.5453541152100566	-0.22993583204803192
+Tyrosin	D_0__Bacteria.D_1__Tenericutes	0.11985603204938043	0.0916928075189161
+Tyrosin	D_0__Bacteria.D_1__Verrucomicrobia	0.31653485126480474	-0.16924714884939612
+Tyrosin	D_0__Eukaryota.D_1__SAR	0.21538850510276839	0.13164452746010807
+Valin	D_0__Archaea.D_1__Euryarchaeota	0.6070798530160556	0.24427032863780798
+Valin	D_0__Bacteria.D_1__Actinobacteria	0.40758103006236107	0.19635295711209014
+Valin	D_0__Bacteria.D_1__Bacteroidetes	0.061213647945057924	-0.05875845245779977
+Valin	D_0__Bacteria.D_1__Cyanobacteria	0.680031354708311	-0.25776972493043937
+Valin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Valin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16086410452724895	0.10990578916207967
+Valin	D_0__Bacteria.D_1__Firmicutes	0.01396004158625736	-0.012945003878638466
+Valin	D_0__Bacteria.D_1__Fusobacteria	0.007042218830413096	-0.006477387514732037
+Valin	D_0__Bacteria.D_1__Lentisphaerae	0.06822715513913807	-0.065135377938504
+Valin	D_0__Bacteria.D_1__Patescibacteria	0.4404417420402446	0.2057238723844654
+Valin	D_0__Bacteria.D_1__Proteobacteria	0.17540160945938105	-0.11973051681144281
+Valin	D_0__Bacteria.D_1__Spirochaetes	0.07959404585777584	-0.07134873315188196
+Valin	D_0__Bacteria.D_1__Synergistetes	0.4163789788457069	-0.19862344728798442
+Valin	D_0__Bacteria.D_1__Tenericutes	0.09797506585239453	0.08155876547503246
+Valin	D_0__Bacteria.D_1__Verrucomicrobia	0.40266626089288077	-0.19439940115436063
+Valin	D_0__Eukaryota.D_1__SAR	0.27889281536525246	0.15561603365469578
+Vitamin A Beta-Carotin	D_0__Archaea.D_1__Euryarchaeota	0.15221951516454252	0.10522656612526149
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Actinobacteria	0.17275812224564124	0.11679967804839232
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Bacteroidetes	0.2652616506104286	-0.15031413726570253
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Cyanobacteria	0.4310774114126613	-0.20316877979061088
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.027351155705326525	-0.02988044279682776
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	-0.020418788862601043
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Fusobacteria	0.22299554482510883	0.1349315851264839
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Lentisphaerae	0.13755820288737444	-0.09850284440641204
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Patescibacteria	0.5185418876561932	0.2253431041342452
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Proteobacteria	0.28545142668654194	-0.15821973767954517
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Spirochaetes	0.016216711920346266	-0.017765738610561476
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Synergistetes	0.09797506585239453	0.08142045231408601
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	-0.021389738560694545
+Vitamin A Beta-Carotin	D_0__Bacteria.D_1__Verrucomicrobia	0.14930865527082426	-0.10407845174981177
+Vitamin A Beta-Carotin	D_0__Eukaryota.D_1__SAR	0.34782943178506764	0.17948809761937495
+Vitamin A Retinol	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	0.02153651331374114
+Vitamin A Retinol	D_0__Bacteria.D_1__Actinobacteria	0.28528200800848913	-0.15808785857170074
+Vitamin A Retinol	D_0__Bacteria.D_1__Bacteroidetes	0.1415560185608356	0.09993377530701165
+Vitamin A Retinol	D_0__Bacteria.D_1__Cyanobacteria	0.001678697489571784	-0.0010523157552521215
+Vitamin A Retinol	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin A Retinol	D_0__Bacteria.D_1__Epsilonbacteraeota	0.0147115005686739	0.01579672275717066
+Vitamin A Retinol	D_0__Bacteria.D_1__Firmicutes	0.007042218830413096	-0.0058884925271679165
+Vitamin A Retinol	D_0__Bacteria.D_1__Fusobacteria	0.15389118124624515	-0.10620952699695027
+Vitamin A Retinol	D_0__Bacteria.D_1__Lentisphaerae	0.0773567865053041	0.06941569193150307
+Vitamin A Retinol	D_0__Bacteria.D_1__Patescibacteria	0.06727970969978196	-0.06470089082606396
+Vitamin A Retinol	D_0__Bacteria.D_1__Proteobacteria	0.7775396450034491	0.27682149411460594
+Vitamin A Retinol	D_0__Bacteria.D_1__Spirochaetes	0.09571045715961024	-0.08010633001024041
+Vitamin A Retinol	D_0__Bacteria.D_1__Synergistetes	0.05937724110676637	-0.05679769215802073
+Vitamin A Retinol	D_0__Bacteria.D_1__Tenericutes	0.034024537189902365	0.036320124668486636
+Vitamin A Retinol	D_0__Bacteria.D_1__Verrucomicrobia	0.0010288273363758035	-3.7814616298769484e-4
+Vitamin A Retinol	D_0__Eukaryota.D_1__SAR	0.07783343752895172	-0.0699404175055183
+Vitamin A Retinoläquivalent	D_0__Archaea.D_1__Euryarchaeota	0.16086410452724895	0.11018363356038598
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Actinobacteria	0.040081921293819406	-0.04113935461848336
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Bacteroidetes	0.16422524733302774	-0.11289116371056783
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Cyanobacteria	0.2593904083316842	-0.14795620820297792
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Epsilonbacteraeota	0.053016474536057255	-0.05081029899694448
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Firmicutes	0.08236548690209294	-0.07413650300382481
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Fusobacteria	0.14453883582627458	0.10167479027999783
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Lentisphaerae	0.05268573363683467	-0.0501144030722435
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Patescibacteria	0.2954995638195128	0.16213982867983842
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Proteobacteria	0.025360719505868965	-0.0282002447024855
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Spirochaetes	0.025360719505868965	-0.028263845122579095
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Synergistetes	0.07189207675257392	0.06678881291738305
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.020825712892173328
+Vitamin A Retinoläquivalent	D_0__Bacteria.D_1__Verrucomicrobia	0.07930935411078874	-0.07079655387006702
+Vitamin A Retinoläquivalent	D_0__Eukaryota.D_1__SAR	0.19676727292806676	0.12535995420451862
+Vitamin B1 Thiamin	D_0__Archaea.D_1__Euryarchaeota	0.19735403286236763	0.1258641596843781
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Actinobacteria	0.009696900983029638	-0.009841368745848319
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Bacteroidetes	0.02158453930032127	-0.025676437154408267
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Cyanobacteria	0.16086410452724895	0.11133873853296254
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.07930935411078874	-0.07076407345358149
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Firmicutes	0.08874115560741161	-0.07702674466562622
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Fusobacteria	0.04237769653268875	-0.043368582749809
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Lentisphaerae	0.40266626089288077	0.19435426293198088
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Patescibacteria	0.12784584030510457	-0.0953884805650646
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Proteobacteria	0.053016474536057255	-0.05109061805132432
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Spirochaetes	0.17540160945938105	-0.11973454731580634
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Synergistetes	0.00802081632517834	-0.007867914378235042
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Tenericutes	0.38186583200429486	0.18779021971581256
+Vitamin B1 Thiamin	D_0__Bacteria.D_1__Verrucomicrobia	0.46031050334592294	-0.2106007683423765
+Vitamin B1 Thiamin	D_0__Eukaryota.D_1__SAR	0.024048457757636553	-0.027411677180923823
+Vitamin B12 Cobalamin	D_0__Archaea.D_1__Euryarchaeota	0.03396114372244232	-0.03573355163786117
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Actinobacteria	0.7951720282222515	-0.2800546857833208
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Bacteroidetes	0.08822524366103567	0.07649263344391498
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Cyanobacteria	0.42908512187071157	0.2021750616564872
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.20613411653257868	-0.12898783911959477
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Firmicutes	0.032494612818583554	0.03332506016328836
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Fusobacteria	0.13830566089879512	-0.0989491287443744
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Lentisphaerae	0.15796820409642265	0.1086246163681296
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Patescibacteria	0.965056969963843	-0.3105416806320678
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Proteobacteria	0.575071010780163	0.23711279142370706
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Spirochaetes	0.0771899643080751	0.06903839023338192
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Synergistetes	0.0147115005686739	-0.014463350093792298
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	-0.007040955627416696
+Vitamin B12 Cobalamin	D_0__Bacteria.D_1__Verrucomicrobia	0.5938384032299732	0.24198435755248146
+Vitamin B12 Cobalamin	D_0__Eukaryota.D_1__SAR	0.2964234608917418	-0.16253786734347203
+Vitamin B2 Riboflavin	D_0__Archaea.D_1__Euryarchaeota	0.6726385989524333	0.25572787395289515
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Actinobacteria	0.0622724233596438	0.06113116615900892
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Bacteroidetes	0.08465188725668113	-0.07518931152730825
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Cyanobacteria	0.37244130411646376	-0.1853231132346385
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.05905567009565652	0.0561417262090236
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Firmicutes	0.021332080771616045	-0.025416038312558672
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Fusobacteria	0.028109890793115842	0.030456455759044966
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Lentisphaerae	0.13011667509910826	-0.09610028498661775
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Patescibacteria	0.290345234728128	0.1604720117023079
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Proteobacteria	0.2239289403346426	-0.13601759877610423
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Spirochaetes	0.014803133276958994	0.016818282647536924
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Synergistetes	1.3942420340367632	-0.35656287638177775
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Tenericutes	0.09949645211425205	0.08270115156406964
+Vitamin B2 Riboflavin	D_0__Bacteria.D_1__Verrucomicrobia	0.01466254009354245	-0.013988817387302
+Vitamin B2 Riboflavin	D_0__Eukaryota.D_1__SAR	0.16275125369857432	0.11237222803979312
+Vitamin B3 Niacin, Nicotinsäure	D_0__Archaea.D_1__Euryarchaeota	0.1707413605254992	0.11582067961699712
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Actinobacteria	0.5340815194817695	0.22807728350938974
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.0580685212316544	-0.05531133267711376
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.32298834679790034	-0.1718298893312644
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.16086410452724895	0.1116771421843739
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Firmicutes	0.07783343752895172	-0.06990383960417093
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Fusobacteria	0.13262105371421376	0.09700372339587991
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.0147115005686739	-0.01473495417378111
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Patescibacteria	0.819470145383573	0.2851232537039241
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Proteobacteria	0.4214872787162972	-0.20011078147709424
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Spirochaetes	0.0147115005686739	-0.015538705095303525
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Synergistetes	0.009679250989743919	-0.009591826760445357
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Tenericutes	0.0147115005686739	-0.014280502186571759
+Vitamin B3 Niacin, Nicotinsäure	D_0__Bacteria.D_1__Verrucomicrobia	1.6247737101066608	-0.37791993403319585
+Vitamin B3 Niacin, Nicotinsäure	D_0__Eukaryota.D_1__SAR	0.38623128645007415	0.18889032323110116
+Vitamin B3 Niacinäquivalent	D_0__Archaea.D_1__Euryarchaeota	0.25102160060228673	0.1453879990120367
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Actinobacteria	0.6497611512152051	0.25200362938370574
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Bacteroidetes	0.05409101612788867	-0.05223567776795509
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Cyanobacteria	0.5299426101283978	-0.2273363765461986
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Epsilonbacteraeota	0.19735403286236763	0.12600375472578013
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Firmicutes	0.03536839805822787	-0.037131933617044366
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Fusobacteria	0.06597188556921844	0.06394155499733403
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Lentisphaerae	0.06322573246925012	-0.0621726571157255
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Patescibacteria	0.8069126891223386	0.28211966724398113
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Proteobacteria	0.362956914106184	-0.18296945560301506
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Spirochaetes	0.06409305531487171	-0.06282138952836402
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Synergistetes	0.09840174184095388	-0.08223179977669047
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Tenericutes	0.017935298253809052	0.02176648100170304
+Vitamin B3 Niacinäquivalent	D_0__Bacteria.D_1__Verrucomicrobia	0.9068409883694841	-0.30132912575434706
+Vitamin B3 Niacinäquivalent	D_0__Eukaryota.D_1__SAR	0.362956914106184	0.1830320017221362
+Vitamin B5 Pantothensäure	D_0__Archaea.D_1__Euryarchaeota	0.23995506923018356	0.1412932944958739
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Actinobacteria	0.5724400554678859	0.2365672417163098
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Bacteroidetes	0.061213647945057924	-0.05870784841725349
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Cyanobacteria	0.5758079971682173	-0.2373140289461883
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.225409463701723	0.13667117172070678
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Firmicutes	0.041639810591420814	-0.043087630610084866
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Fusobacteria	0.06069895562315101	0.05813213751943194
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Lentisphaerae	0.14312462147881558	-0.10076833690508388
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Patescibacteria	1.1047228936706417	0.32718502783320347
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Proteobacteria	0.46890671663960926	-0.21345482133800014
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Spirochaetes	0.05937724110676637	-0.056842334478347835
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Synergistetes	0.12656137456755628	-0.09458263399482537
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Tenericutes	0.027044201916956265	0.02918293394532507
+Vitamin B5 Pantothensäure	D_0__Bacteria.D_1__Verrucomicrobia	0.7131434949249366	-0.26384569515659057
+Vitamin B5 Pantothensäure	D_0__Eukaryota.D_1__SAR	0.40758103006236107	0.19639558396303491
+Vitamin B6 Pyridoxin	D_0__Archaea.D_1__Euryarchaeota	0.053016474536057255	0.051020420558113476
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Actinobacteria	0.20171949612573423	0.12734997183340746
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Bacteroidetes	0.12682323205586232	-0.09489325522542585
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Cyanobacteria	0.017935298253809052	-0.022491936495798174
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Epsilonbacteraeota	0.02929577630897189	0.03131790241059497
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Firmicutes	0.0773567865053041	-0.06954358841400415
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Fusobacteria	0.028968344330368562	0.031140885605169668
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Lentisphaerae	0.22226660609427176	-0.13435943253227778
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Patescibacteria	0.819470145383573	0.2851844886435311
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Proteobacteria	0.8696148933717281	-0.2942342487297601
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Spirochaetes	0.024265587489754784	0.02757722236613515
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Synergistetes	0.021863273148299226	-0.025976541017512664
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Tenericutes	0.2429983584199119	0.14268010711895526
+Vitamin B6 Pyridoxin	D_0__Bacteria.D_1__Verrucomicrobia	0.5118551663357627	-0.22332474020771803
+Vitamin B6 Pyridoxin	D_0__Eukaryota.D_1__SAR	0.45125095564927753	0.20832438809684964
+Vitamin B7 Biotin (Vitamin H)	D_0__Archaea.D_1__Euryarchaeota	0.007042218830413096	0.00683635755110387
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Actinobacteria	0.8137258785336713	-0.28352774039447304
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Bacteroidetes	0.0147115005686739	-0.015259936240259016
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Cyanobacteria	0.4861995533534495	0.21738725707683967
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Epsilonbacteraeota	0.23995506923018356	-0.14152276038556033
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Firmicutes	0.01396004158625736	0.012782612253243819
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Fusobacteria	0.0634547707127326	-0.06244427131707758
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Lentisphaerae	0.037230177823466284	0.03889793805853756
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Patescibacteria	0.7434722598959757	-0.26922140786161075
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Proteobacteria	0.1683282562613563	0.11445781739878173
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Spirochaetes	0.17037751854470265	0.11567417543522127
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Synergistetes	0.026501113047917774	-0.02883566449606445
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Tenericutes	0.006118831153176539	0.004896880974398123
+Vitamin B7 Biotin (Vitamin H)	D_0__Bacteria.D_1__Verrucomicrobia	0.9271024340482384	0.3052113576192874
+Vitamin B7 Biotin (Vitamin H)	D_0__Eukaryota.D_1__SAR	0.20863228518478646	-0.13016213656898104
+Vitamin B9 gesamte Folsäure	D_0__Archaea.D_1__Euryarchaeota	0.029599980865065663	0.031544362860162475
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Actinobacteria	0.8333187809183844	-0.2875450583124921
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Bacteroidetes	0.07915244547246106	-0.07064623942776671
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Cyanobacteria	0.32155632850538635	0.17109365960609313
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2239289403346426	-0.13601056864851524
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Firmicutes	0.02347587402457832	0.02672755587661212
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Fusobacteria	0.0332468222257699	-0.0346093279080605
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Lentisphaerae	0.09571045715961024	-0.08032591647934874
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Patescibacteria	0.3372587972764597	-0.17707544980797768
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Proteobacteria	0.09571045715961024	0.08039602829523776
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Spirochaetes	0.07189207675257392	0.06685670327853649
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Synergistetes	0.017935298253809052	-0.020579361139629045
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Tenericutes	0.017719624624512816	-0.018561899379553916
+Vitamin B9 gesamte Folsäure	D_0__Bacteria.D_1__Verrucomicrobia	1.94097267608541	0.4052732513398121
+Vitamin B9 gesamte Folsäure	D_0__Eukaryota.D_1__SAR	0.23995506923018356	-0.14127348412357044
+Vitamin C Ascorbinsäure	D_0__Archaea.D_1__Euryarchaeota	0.1175109762570001	0.09074017225327545
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Actinobacteria	0.6708432254357563	0.2554019564584089
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Bacteroidetes	0.061213647945057924	-0.05902534405511032
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Cyanobacteria	0.4688099647062075	-0.21325458202247743
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Epsilonbacteraeota	0.1640663812773479	0.1127641707234334
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Firmicutes	0.01396004158625736	-0.013278050628114109
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Fusobacteria	0.15817321613001106	0.10888410000083058
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Lentisphaerae	0.24297341476503573	-0.14252132604402765
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Patescibacteria	0.91878264989491365	0.3029524401916518
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Proteobacteria	0.31152082713561446	-0.1679761779016827
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Spirochaetes	0.23058830830956076	-0.13876180302395794
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Synergistetes	0.05937724110676637	-0.057001203513943555
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Tenericutes	0.0147115005686739	0.015498007087796207
+Vitamin C Ascorbinsäure	D_0__Bacteria.D_1__Verrucomicrobia	0.6133785460301636	-0.24560033209043322
+Vitamin C Ascorbinsäure	D_0__Eukaryota.D_1__SAR	0.30998391702108424	0.1673010051746902
+Vitamin D Calciferole	D_0__Archaea.D_1__Euryarchaeota	0.025360719505868965	-0.02827413259193335
+Vitamin D Calciferole	D_0__Bacteria.D_1__Actinobacteria	0.6956127611290158	-0.2607558751658511
+Vitamin D Calciferole	D_0__Bacteria.D_1__Bacteroidetes	0.1928717556772045	0.12423919044663809
+Vitamin D Calciferole	D_0__Bacteria.D_1__Cyanobacteria	0.4072091358809833	0.19556052471120877
+Vitamin D Calciferole	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin D Calciferole	D_0__Bacteria.D_1__Epsilonbacteraeota	0.34272738171456224	-0.17818080984685428
+Vitamin D Calciferole	D_0__Bacteria.D_1__Firmicutes	0.14453883582627458	0.10131609771802222
+Vitamin D Calciferole	D_0__Bacteria.D_1__Fusobacteria	0.3356729238751524	-0.1763457483632681
+Vitamin D Calciferole	D_0__Bacteria.D_1__Lentisphaerae	0.17377611654698027	0.1171331396422383
+Vitamin D Calciferole	D_0__Bacteria.D_1__Patescibacteria	1.0828420979630293	-0.32432567059267364
+Vitamin D Calciferole	D_0__Bacteria.D_1__Proteobacteria	0.7289880122828162	0.2662398859963901
+Vitamin D Calciferole	D_0__Bacteria.D_1__Spirochaetes	0.09840174184095388	0.08227501200030946
+Vitamin D Calciferole	D_0__Bacteria.D_1__Synergistetes	0.005636601152462003	-0.00447183860790993
+Vitamin D Calciferole	D_0__Bacteria.D_1__Tenericutes	0.05123635172996293	-0.04824378095436687
+Vitamin D Calciferole	D_0__Bacteria.D_1__Verrucomicrobia	0.776529929596828	0.27644706892891896
+Vitamin D Calciferole	D_0__Eukaryota.D_1__SAR	0.22404268346559517	-0.13634529073752563
+Vitamin E Tocopherol	D_0__Archaea.D_1__Euryarchaeota	0.2329306858465951	0.13941404799390486
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Actinobacteria	0.7625018684711262	0.27335086851951773
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Bacteroidetes	0.05598070435585557	-0.053609228205684686
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Cyanobacteria	0.884972592806968	-0.29740457642046814
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Epsilonbacteraeota	0.39042377070117773	0.1912226656048452
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Firmicutes	0.017935298253809052	0.019424807631459744
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Fusobacteria	0.001222048207877982	6.67176223006084e-4
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Lentisphaerae	0.17540160945938105	-0.11868434093336311
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Patescibacteria	0.8069126891223386	0.2824012089208304
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Proteobacteria	0.17540160945938105	-0.11859507725652028
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Spirochaetes	0.12033162630432112	-0.09187025786657457
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Synergistetes	0.007042218830413096	0.005964265575441276
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Tenericutes	0.01751249193655698	-0.01842303995634083
+Vitamin E Tocopherol	D_0__Bacteria.D_1__Verrucomicrobia	0.570311390019466	-0.23553831567495595
+Vitamin E Tocopherol	D_0__Eukaryota.D_1__SAR	0.21970511923913133	0.133348027623586
+Vitamin E Tocopheroläquivalent	D_0__Archaea.D_1__Euryarchaeota	0.2593904083316842	0.1479093987039486
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Actinobacteria	0.7625018684711262	0.27318919279776105
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Bacteroidetes	0.0622724233596438	-0.06107673775514268
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Cyanobacteria	0.8829858952116758	-0.29669917396633433
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Epsilonbacteraeota	0.3898794755661003	0.19040328442562274
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Firmicutes	0.01396004158625736	0.012961338991157178
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Fusobacteria	0.01278052907432242	0.011872186521196407
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Lentisphaerae	0.2303387165863366	-0.13846294936197945
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Patescibacteria	0.8296286493412569	0.2868763158999717
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Proteobacteria	0.21726764190172362	-0.1323645245432423
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Spirochaetes	0.10048120587980713	-0.08320676828316563
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Synergistetes	0.017935298253809052	-0.019626692529425317
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Tenericutes	0.007042218830413096	-0.006982757957677629
+Vitamin E Tocopheroläquivalent	D_0__Bacteria.D_1__Verrucomicrobia	0.5208253163308694	-0.22595432512797683
+Vitamin E Tocopheroläquivalent	D_0__Eukaryota.D_1__SAR	0.2239289403346426	0.13619725212378933
+Vitamin K Phyllochinon	D_0__Archaea.D_1__Euryarchaeota	0.017935298253809052	0.0202068241154306
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Actinobacteria	0.5797932236057568	-0.23925196606986743
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Bacteroidetes	0.01396004158625736	0.012982442922663822
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Cyanobacteria	0.1577025220904138	0.1084974160042893
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Epsilonbacteraeota	0.4819585805167206	-0.2164132228291852
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Firmicutes	0.13830566089879512	0.09896738430216888
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Fusobacteria	0.0010288273363758035	-4.7200942496670913e-4
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Lentisphaerae	0.018912707982651177	-0.023126090734681252
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Patescibacteria	0.519663820415428	-0.22559329209165824
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Proteobacteria	0.3217771272103338	0.17129830803454224
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Spirochaetes	0.038521816256277014	0.040157466614863975
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Synergistetes	0.17540160945938105	0.11816934357373374
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Tenericutes	0.2062076115947157	-0.1292486854616262
+Vitamin K Phyllochinon	D_0__Bacteria.D_1__Verrucomicrobia	1.0289825522818687	0.3179628627832075
+Vitamin K Phyllochinon	D_0__Eukaryota.D_1__SAR	0.2503414973805788	-0.14498510141938056
+Wasser	D_0__Archaea.D_1__Euryarchaeota	0.053016474536057255	-0.05116625891296442
+Wasser	D_0__Bacteria.D_1__Actinobacteria	0.23058830830956076	-0.13873647492896257
+Wasser	D_0__Bacteria.D_1__Bacteroidetes	0.38623581520607914	-0.18911790937769982
+Wasser	D_0__Bacteria.D_1__Cyanobacteria	0.5721702263603635	0.23626713641841315
+Wasser	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Wasser	D_0__Bacteria.D_1__Epsilonbacteraeota	0.03400311812949427	0.035910885464414836
+Wasser	D_0__Bacteria.D_1__Firmicutes	0.5023811616933413	-0.22084706327177772
+Wasser	D_0__Bacteria.D_1__Fusobacteria	1.8436350412019706	0.39677249613639176
+Wasser	D_0__Bacteria.D_1__Lentisphaerae	0.05749552333587748	-0.05496500601803869
+Wasser	D_0__Bacteria.D_1__Patescibacteria	0.4713812118360389	0.2143916203482435
+Wasser	D_0__Bacteria.D_1__Proteobacteria	1.7623851272987632	-0.38949954858065544
+Wasser	D_0__Bacteria.D_1__Spirochaetes	0.7786121884480418	0.27709099399643233
+Wasser	D_0__Bacteria.D_1__Synergistetes	0.21348941321235296	0.13121519751515687
+Wasser	D_0__Bacteria.D_1__Tenericutes	0.1740766137517559	-0.11769910841994433
+Wasser	D_0__Bacteria.D_1__Verrucomicrobia	0.7696389028598989	-0.27530523212991637
+Wasser	D_0__Eukaryota.D_1__SAR	0.007042218830413096	0.006516247008271642
+Wasserlösliche Ballaststoffe	D_0__Archaea.D_1__Euryarchaeota	0.02007633171376764	-0.023884504066189773
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Actinobacteria	0.37569144926718545	0.186250849859319
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Bacteroidetes	0.25237031709832375	-0.14585286629791797
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Cyanobacteria	0.17540160945938105	-0.11829839224478897
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Epsilonbacteraeota	0.24373388106703517	0.1429400864274848
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Firmicutes	0.14453883582627458	-0.10130981167956087
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Fusobacteria	0.17540160945938105	0.11917616789902304
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Lentisphaerae	0.2873714447969616	-0.15932724061147077
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Patescibacteria	1.7332349604048471	0.38695377577052
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Proteobacteria	1.085881516864693	-0.3252362675916288
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Spirochaetes	0.01396004158625736	0.012801426459335411
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Synergistetes	0.02007633171376764	0.023853278352445623
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Tenericutes	0.040081921293819406	0.04144769901740051
+Wasserlösliche Ballaststoffe	D_0__Bacteria.D_1__Verrucomicrobia	0.32374034179216854	-0.17237516487081916
+Wasserlösliche Ballaststoffe	D_0__Eukaryota.D_1__SAR	0.2690492061087595	0.15143679665859244
+Wasserunlösliche Ballaststoffe	D_0__Archaea.D_1__Euryarchaeota	0.024048457757636553	0.0272622852127147
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Actinobacteria	0.5674821182754185	0.23496520391232656
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Bacteroidetes	0.17540160945938105	-0.11857717617607333
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Cyanobacteria	0.5171375852215739	-0.2246357200109188
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Epsilonbacteraeota	0.22571502868858084	0.1368797403361979
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Firmicutes	0.05598070435585557	-0.05389123492400382
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Fusobacteria	0.12602669657206206	0.09434573897437287
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Lentisphaerae	0.2996087698055929	-0.16395117643366797
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Patescibacteria	1.5700341956980404	0.37309654067494236
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Proteobacteria	0.7301992312747199	-0.2667467513998116
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Spirochaetes	0.027781456765716625	0.03021502289672884
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Synergistetes	0.017935298253809052	0.01936785778556019
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Tenericutes	0.008255250374276782	0.008565400655105236
+Wasserunlösliche Ballaststoffe	D_0__Bacteria.D_1__Verrucomicrobia	0.336154485940448	-0.17664319057574343
+Wasserunlösliche Ballaststoffe	D_0__Eukaryota.D_1__SAR	0.2939133628406559	0.16154804485937094
+Xylit	D_0__Archaea.D_1__Euryarchaeota	0.043684484395156375	0.04381133700107715
+Xylit	D_0__Bacteria.D_1__Actinobacteria	0.17401998958407963	-0.11736047444715257
+Xylit	D_0__Bacteria.D_1__Bacteroidetes	0.10297799142200902	0.08458114836686938
+Xylit	D_0__Bacteria.D_1__Cyanobacteria	0.4559723917685544	0.20971400986887362
+Xylit	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Xylit	D_0__Bacteria.D_1__Epsilonbacteraeota	0.2232710898222989	-0.13528165562811983
+Xylit	D_0__Bacteria.D_1__Firmicutes	0.17540160945938105	0.1191602859643205
+Xylit	D_0__Bacteria.D_1__Fusobacteria	0.19726954860646656	-0.1256052405850314
+Xylit	D_0__Bacteria.D_1__Lentisphaerae	0.053016474536057255	-0.051286516825451385
+Xylit	D_0__Bacteria.D_1__Patescibacteria	0.870994301993484	-0.29477952967061954
+Xylit	D_0__Bacteria.D_1__Proteobacteria	0.38623581520607914	0.18908034731281334
+Xylit	D_0__Bacteria.D_1__Spirochaetes	0.20680221025152254	-0.12951099376061462
+Xylit	D_0__Bacteria.D_1__Synergistetes	0.05937724110676637	-0.057246544911802796
+Xylit	D_0__Bacteria.D_1__Tenericutes	0.08006734855749549	0.0721539144945354
+Xylit	D_0__Bacteria.D_1__Verrucomicrobia	0.35851267209851057	0.18172944188084092
+Xylit	D_0__Eukaryota.D_1__SAR	0.1567570544434824	-0.10794048617421272
+Zink	D_0__Archaea.D_1__Euryarchaeota	0.122189291481331	0.092426724439
+Zink	D_0__Bacteria.D_1__Actinobacteria	0.5038662682023771	0.22124738382292286
+Zink	D_0__Bacteria.D_1__Bacteroidetes	0.08025693554776371	-0.07227140284195353
+Zink	D_0__Bacteria.D_1__Cyanobacteria	0.45125095564927753	-0.2081862888172679
+Zink	D_0__Bacteria.D_1__Deinococcus.Thermus	0	0
+Zink	D_0__Bacteria.D_1__Epsilonbacteraeota	0.33752385617363934	0.17720367420180055
+Zink	D_0__Bacteria.D_1__Firmicutes	0.09403580099233634	-0.079213823070087
+Zink	D_0__Bacteria.D_1__Fusobacteria	0.06698620864891147	0.06452287215979094
+Zink	D_0__Bacteria.D_1__Lentisphaerae	0.017935298253809052	-0.019301457862154904
+Zink	D_0__Bacteria.D_1__Patescibacteria	1.0043893079853552	0.3149706715356951
+Zink	D_0__Bacteria.D_1__Proteobacteria	0.4187223313971113	-0.19940529633916984
+Zink	D_0__Bacteria.D_1__Spirochaetes	0.06322573246925012	-0.06222617853059884
+Zink	D_0__Bacteria.D_1__Synergistetes	0.005636601152462003	-0.004430330329151221
+Zink	D_0__Bacteria.D_1__Tenericutes	0.027682645650385005	0.03011435302985767
+Zink	D_0__Bacteria.D_1__Verrucomicrobia	1.3187471338980583	-0.34916339818909387
+Zink	D_0__Eukaryota.D_1__SAR	0.35953889790115356	0.18206020972359419

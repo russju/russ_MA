@@ -1,0 +1,381 @@
+---
+title: "animal and plant derived items"
+output: html_notebook
+---
+#libraries
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(ggsignif)
+library(ggpubr)
+
+library(grid)
+```
+
+# Paths
+```{r}
+
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(wd)
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+#data import
+```{r}
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+```
+
+
+#abundance of animal derived items
+manually assigned
+```{r}
+
+animal <- k.bls_prodi[k.bls_prodi$item_subcat %in% c('Likör (durchschn. 32 %)','Brühwürfel, Fleischextrakt','Kuchen und Torten aus besonderen Teigen','Fertiggerichte auf Fleischwarenbasis','Innereien von Haustieren','Fischerzeugnisse','Krebstiere, Muscheltiere','Schweinefleischstücke','Kalbfleischstücke','Barschartige Fische','Obstkuchen','Rindfleischschnitte','Dorschartige Fische, Kabeljau, Schellfisch, Seelachs, Goldbarsch','Torten','Fleischgerichte v. Wild + Geflügel','Fleischgerichte vom Hammel+Lamm','Schweinefleischschnitte','Fleischwarenerzeugnisse','Fischgerichte','Speiseeis','Milcherzeugnisse und Käseerzeugnisse','Ölsoßen, Mayonnaisen, Fettzubereitungen','Heringsfische, Makrelen, Thunfische','Obsttorten','Schnittkäse halbfest','Tierische Fette','Fleischgerichte vom Kalb','Getreidegerichte, Mehlspeisen, Pfannkuchen','Milchmischerzeugnisse','Pökelwaren','Geflügel','Schokoladenwaren, Pralinen','Teigwaren (-arten)','Eier-, Quark- und Käsegerichte','Kochwurst','Lachsfische','Würstchen, Hackfleischgerichte Fleisch,','Kalbfleischschnitte','Fleischgerichte vom Schwein','Frischkäse, Sauermilchkäse, Kochkäse, Schmelzkäse','Brühwurst','Süßspeisen, Dessert','Fertiggerichte auf Fleischbasis','Fleischgerichte vom Rind','Soßen','Hartkäse','Rindfleischstücke','Nudelgerichte, Teigwarengerichte, Pizzen','Marzipan, Lakritze, Krokant, Nougat','Speck, Schinken','Schnittkäse','Weichkäse','Schokolade','Rohwurst','Kuchen','Schnellgerichte, Eis','Eier','Butter','Milch und Sauermilch'),]
+
+animal2 <- k.bls_prodi[k.bls_prodi$item %in% c('mozzarella','french dressing energiereduziert','choco crossies nestle','gemüsequiche (standardrezeptur)','feta','rind hackfleisch roh','blätterteig gebacken','schafskäse','rind/schwein hackfleisch gekocht','schafskäse mind. 50% fett i. tr.','schafskäse','dressing für kartoffelsalat fertigprodukt','schwein hackfleisch gegart','rind/schwein hackfleisch gebraten (zubereitet ohne fett)','wurst','kapern konserve abgetropft','zitronenkuchen (standardrezeptur)','french dressing','buttergemüse (tk), alnatura','	
+hacksteak','rinderhackfleisch','rind hackfleisch gekocht (zubereitet mit fett und salz)','waffelkeks'),]
+
+animal <- rbind(animal,animal2)
+
+#merging file_name and day together in a new column sample_day
+
+animal$sample_day <- paste(animal$file_name,animal$day)
+animal$source <- rep('animal',nrow(animal))
+```
+
+#abundance of plant derived items
+manually assigned 
+```{r}
+
+plant <- k.bls_prodi[k.bls_prodi$item_subcat %in% c('Hülsenfruchtgerichte','Sojaerzeugnisse','Branntwein aus Wein','Kerne','Vegetarische Erzeugnisse','Fruchtsaftgetränk','Nusserzeugnisse und Ölsamenerzeugnisse','Knäckebrot','Pflanzliche Öle, 30–60 % Linolsäuregehalt','Gewürze','Sojamilch und Sojamilchprodukte','Eiweißmodifizierte Lebensmittel','Getreide','Obsterzeugnisse','Hülsenfrüchte (reife)','Gemüseerzeugnisse','Weißbrot, Feinbrot','Sprossen, Keime','Kaffeeersatz','Reisgerichte','Ölsamen','Fruchtzubereitungen','Spezialbrote/Spezialbrötchen','Broterzeugnis','Pilzerzeugnisse','Teigwaren besonderer Art','Weinähnliche Getränke, Schaumwein (bis 18 %)','Getreideerzeugnisse','Stärkereiche Pflanzenteile','Vegetarische Fertiggerichte','Vollkornbrot','Zitrusfrüchte','Kaffee','Pflanzliche Fette','Vollkornbrötchen (Kleingebäck)','Salate, gegart','Früchtetee, Kräutertee','Spirituosen (min. 32–40 %)','Blattgemüse','Kohlgemüse','Zuchtpilze/Wildpilze','Anderes Schalenobst','Beerenobst','Steinobst','Brötchen, (Kleingebäck)','Tee','Weißwein, Rotwein, Roséwein (durchschn. 10 %)','Kartoffeln','Hülsenfruchtgemüse unreif','Kakao/Kakaogetränk','Kleinteile, Plätzchen, Keks','Kartoffelgerichte','Cocktails','Bier (durchschn. 3,5 %)','Nüsse','Salate, roh','Gemüsebeilagen','Wildfrüchte','Sprossengemüse und Lauchgemüse','Pflanzliche Öle, >60 % Linolsäuregehalt','Brausen/Limonaden','Kartoffelerzeugnisse','Pflanzliche Öle, <30 % Linolsäuregehalt','Spezielle Getreide','Suppen','Brot (Graubrot, Schwarzbrot, Mischbrot)','Ölfrüchte','Fruchtgemüse','Wurzelgemüse und Knollengemüse (außer Kartoffeln)','Salatgemüse','Hilfsmittel, Backtriebe, Geliermittel und Dickungsmittel','Mehl','Zuckerwaren, Bonbons','Würzmittel','	
+Margarine','Mineralwasser, Trinkwasser','Südfrüchte','Kernobst','Belegte Brote, Toasts, Frühstückscerealien','Reduktionskost'),]
+
+plant2 <- k.bls_prodi[k.bls_prodi$item %in% c('laugenbrezel (mit salz)','hefe','chia','salzstangen (salzbrezeln) als dauergebäck','gemüsemischung chinesische art gebraten (zubereitet ohne fett)','sojasoße','hefeteig leicht gebacken','gemüsemischung tiefgefroren gegart','gemüsemischung roh','gemüse','müsli-riegel','rhabarber fruchtsaft','hefeaufstrichpaste mit olive','gemüsemischung gegart','gemüsemischung gekocht','gemüsebeilagen (0)','cracker meersalz, alnatura','tuc classic cracker, griesson - de beukelaer','cracker','gemüsemischung chinesische art gegart','sellerieblätter frisch','gemüsemischung chinesische art gebacken','laugenbrezel (sichtbares salz entfernt)','rind/schwein hackfleisch roh','suppengrün tiefgefroren'),]
+
+plant <- rbind(plant,plant2)
+
+plant$sample_day <- paste(plant$file_name,plant$day)
+plant$source <- rep('plant',nrow(plant))
+```
+
+#density dot plot
+x and y axis plant and animal derived in energy percent
+```{r}
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+#calculating animal and plant percent, per day
+
+plant.animal <- merge(plant, animal, by = c("sample_day","source","Energie_bls"),all.x = TRUE, all.y = TRUE)
+plant.animal <- subset(plant.animal,select = c('sample_day','source','Energie_bls'))
+
+#sum of energy intake in one day
+
+plant.animal$energy_sum_source <- with(plant.animal, ave(Energie_bls, sample_day, source, FUN = sum))
+
+plant.animal$energy_sum_total <- with(plant.animal, ave(Energie_bls, sample_day, FUN = sum))
+
+plant.animal$percent <- (100/plant.animal$energy_sum_total)*plant.animal$energy_sum_source
+
+plant.animal$percent.plant <- with(plant.animal, ifelse(source=='plant', percent,0))
+plant.animal$percent.animal <- with(plant.animal, ifelse(source=='animal', percent,0))
+
+pa <- plant.animal %>% group_by(sample_day,percent.animal,percent.plant)
+
+pa <- plant.animal  %>%
+    group_by(sample_day) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+
+pa$correct_percent <- pa$percent.plant+pa$percent.animal == 100
+
+#coloring by U1 U2
+
+pa$U1 <- grepl('U1',pa$sample_day)
+pa$color <- ifelse(pa$U1 == 'TRUE','U1','U2')
+
+#density plot
+
+p <- ggplot(pa, aes(x=`percent.plant`, y=`percent.animal`, color=`color`)) +
+  geom_point() + ggtitle('density plot PRE and POST nutritional protocols\nper day')
+# + geom_smooth(method=lm) 
+
+# ggplotly(p, tooltip = c('x','y','text'))
+```
+
+
+#abundance of plant and animal derived foods,per week
+```{r}
+#subset of k.bls_prodi per week
+
+plant.animal.w <- merge(plant, animal, by = c("file_name","Phenotype","source","Energie_bls"),all.x = TRUE, all.y = TRUE)
+plant.animal.w <- subset(plant.animal.w,select = c('file_name','Phenotype','source','Energie_bls'))
+
+#sum of energy intake in one week
+
+plant.animal.w$energy_sum_source <- with(plant.animal.w, ave(Energie_bls,file_name, source, FUN = sum))
+
+plant.animal.w$energy_sum_total <- with(plant.animal.w, ave(Energie_bls, file_name, FUN = sum))
+
+
+plant.animal.w$percent <- (100/plant.animal.w$energy_sum_total)*plant.animal.w$energy_sum_source
+
+plant.animal.w$percent.plant <- with(plant.animal.w, ifelse(source=='plant', percent,0))
+plant.animal.w$percent.animal <- with(plant.animal.w, ifelse(source=='animal', percent,0))
+
+pa.w <- plant.animal.w %>% group_by(file_name,percent.animal,percent.plant)
+
+pa.w <- plant.animal.w  %>%
+    group_by(file_name) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+
+pa.w$correct_percent <- pa.w$percent.plant+pa.w$percent.animal == 100
+
+#coloring by U1 U2
+
+pa.w$U1 <- grepl('U1',pa.w$file_name)
+pa.w$color <- ifelse(pa.w$U1 == 'TRUE','U1','U2')
+
+#density plot
+
+p.w <- ggplot(pa.w, aes(x=`percent.plant`, y=`percent.animal`, color=`color`)) +
+  geom_point() + ggtitle('density plot PRE and POST nutritional protocols')
+# + geom_smooth(method=lm)
+
+mean(pa.w$percent.plant)
+sd(pa.w$percent.plant)
+
+mean(pa.w$percent.animal)
+sd(pa.w$percent.animal)
+
+# ggplotly(p, tooltip = c('x','y','text'))
+```
+
+#stacked bar plot 
+per week
+```{r}
+#percentage stacked bar plots
+
+pa.w$count <- pa.w$percent.animal+pa.w$percent.plant
+pa.w <- subset(pa.w,select = c(`file_name`,`percent.plant`,`percent.animal`,`count`))
+
+#Melt and plot
+perc.w <- pa.w %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position="fill", stat="identity")+
+  theme(axis.text = element_text(angle = 90))
+
+##only U1
+
+pa.w.u1 <- pa.w[grepl(pattern = 'U1',pa.w$file_name), ]
+
+summary(pa.w.u1$percent.animal)
+sd(pa.w.u1$percent.animal)
+
+perc.w.u1 <- pa.w.u1 %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position="fill", stat="identity")+
+  theme(axis.text = element_text(angle = 90)) +ggtitle('animal and plant derived food\nPRE nutritional protocols')
+
+##only U2
+
+pa.w.u2 <- pa.w[grepl(pattern = 'U2',pa.w$file_name), ]
+
+summary(pa.w.u2$percent.animal)
+sd(pa.w.u2$percent.animal)
+
+perc.w.u2 <- pa.w.u2 %>% dplyr::select(-count) %>%
+  pivot_longer(cols = -file_name) %>%
+  ggplot(aes(x=file_name,y=value,fill=name)) + 
+  geom_bar(position="fill", stat="identity")+
+  theme(axis.text = element_text(angle = 90)) +ggtitle('animal and plant derived food\nketo nutritional protocols')
+
+
+#absolute stacked bar plots,per week
+
+plant.animal.w.a <- merge(plant, animal, by = c("file_name","source"),all.x = TRUE, all.y = TRUE)
+plant.animal.w.a <- subset(plant.animal.w,select = c('file_name','source'))
+
+#count occurrences of plant and animal in plant.animal.w.a$source, conditioned by file_name
+
+plant.animal.w.a <- plant.animal.w.a %>% group_by(file_name,source) %>% summarise(N=n()) %>% as.data.frame(.)
+colnames(plant.animal.w.a) <- c('file_name','source','count')
+
+##only U1
+
+pa.w.a.u1 <- plant.animal.w.a[grepl(pattern = 'U1',plant.animal.w.a$file_name), ]
+
+abs.U1 <- ggplot(pa.w.a.u1, aes(x = `file_name`,y = `count`))  + geom_bar(
+    aes(fill = `source`),
+    stat = "identity", position = position_stack())+ ggtitle('PRE protocols absolut number plant and animal foods')+ theme(axis.text = element_text(angle = 90))
+
+##only U2
+
+pa.w.a.u2 <- plant.animal.w.a[grepl(pattern = 'U2',plant.animal.w.a$file_name), ]
+
+abs.U2 <- ggplot(pa.w.a.u2, aes(x = `file_name`,y = `count`))  + geom_bar(
+    aes(fill = `source`),
+    stat = "identity", position = position_stack())+ ggtitle('keto protocols absolut number plant and animal foods')+ theme(axis.text = element_text(angle = 90))
+
+
+```
+
+#boxplots,summarised
+```{r}
+#energy percent
+
+pa.w$group <- ifelse(grepl('U2', pa.w$file_name), 'keto', 'non keto')
+
+
+pp <- ggplot(pa.w,aes(x=group, y=percent.plant)) +
+  geom_boxplot()+ylim(0,100)+ stat_compare_means(comparison = list(c('keto','non keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21)
+
+ap <- ggplot(pa.w,aes(x=group, y=percent.animal)) +
+  geom_boxplot()+ylim(0,100)+ stat_compare_means(comparison = list(c('keto','non keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21)
+
+# pa.w.plant <- dplyr::select(pa.w,starts_with(c('percent.plant','group')))
+# t.pa.w <- t.test(pa.w.plant)
+
+# pdf(paste0(output_dir,'groups.animal.plant.pdf'))
+groups.animal.plant <- ggarrange(pp,ap, 
+          # labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+# dev.off() 
+```
+
+#phenotype
+are low and high converters eating different amounts of animal and plant derived foods?
+```{r}
+pa.pheno <- plant.animal.w %>% group_by(file_name,percent.animal,percent.plant)
+pa.pheno <- subset(pa.pheno,select = c(`Phenotype`,`file_name`,`percent.plant`,`percent.animal`))
+
+pa.pheno <- pa.pheno  %>%
+  group_by(file_name,Phenotype) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+
+pa.pheno$group <- ifelse(grepl('U2', pa.pheno$file_name), 'U2', 'U1')
+pa.pheno$group <- ifelse(grepl('U2',pa.pheno$group),'keto','non-keto')
+
+#remove not classified and NA
+
+pa.pheno <- pa.pheno[pa.pheno$Phenotype != 'not classified', ] 
+pa.pheno <- pa.pheno[complete.cases(pa.pheno), ]
+
+##summary statistics
+pa.pheno.low <- pa.pheno[grepl('low',pa.pheno$Phenotype),]
+summary(pa.pheno.low$percent.animal)
+sd(pa.pheno.low$percent.animal)
+
+pa.pheno.high <- pa.pheno[grepl('high',pa.pheno$Phenotype),]
+summary(pa.pheno.high$percent.animal)
+sd(pa.pheno.high$percent.animal)
+
+# pa.pheno.not <- pa.pheno[grepl('not',pa.pheno$Phenotype),]
+# summary(pa.pheno.not$percent.animal)
+# sd(pa.pheno.not$percent.animal)
+# write_tsv(pa.pheno,paste0(table_dir,'plant.animal.processed.tsv'))
+
+#boxplots
+
+pheno.p <- ggplot(pa.pheno,aes(x=Phenotype, y=percent.plant, fill=group)) +
+  geom_boxplot() +ylim(0,100)  + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)#
+# + geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE,test = 'wilcox.test')
+
+pheno.a <- ggplot(pa.pheno,aes(x=Phenotype, y=percent.animal, fill=group)) +
+  geom_boxplot()+ylim(0,100) + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)#
+# + geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE,test = 'wilcox.test')
+
+pheno.ag <- ggplot(pa.pheno,aes(x=group, y=percent.animal, fill=Phenotype)) +
+  geom_boxplot()+ylim(0,100) + geom_jitter(shape = 21)  + stat_compare_means(comparison = list(c('U1','U2')),hide.ns = FALSE)#
+# + geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test')
+
+pheno.pg <- ggplot(pa.pheno,aes(x=group, y=percent.plant, fill=Phenotype)) +
+  geom_boxplot()+ylim(0,100)+geom_jitter(shape = 21) + stat_compare_means(comparison = list(c('U1','U2')),hide.ns = FALSE)#p.format
+# + geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE,test = 'wilcox.test')
+
+#only U1
+ symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+ 
+pa.pheno.u1 <- subset(pa.pheno,grepl("U1",file_name))
+
+pheno.u1.p <- ggplot(pa.pheno.u1,aes(x=Phenotype, y=percent.plant)) +
+  geom_boxplot()+ylim(0,100) + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ggtitle('non-keto diet')
+#
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE,test = 'wilcox.test')
+  
+
+pheno.u1.a <- ggplot(pa.pheno.u1,aes(x=Phenotype, y=percent.animal)) +
+  geom_boxplot()+ylim(0,100) + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ggtitle('non-keto diet')
+#
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE,test = 'wilcox.test')
+
+#only U2
+
+pa.pheno.u2 <- subset(pa.pheno,grepl("U2",file_name))
+
+pheno.u2.p <- ggplot(pa.pheno.u2,aes(x=Phenotype, y=percent.plant)) +
+  geom_boxplot()+ylim(0,100)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ggtitle('keto diet')
+#
+  # +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE, test = 'wilcox.test')
+
+
+pheno.u2.a <- ggplot(pa.pheno.u2,aes(x=Phenotype, y=percent.animal)) +
+  geom_boxplot()+ylim(0,100) + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ggtitle('keto diet')
+#
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE, test = 'wilcox.test')
+
+phenotype.group.animal.plant <- ggarrange(pheno.u1.p,pheno.u1.a,pheno.u2.p,pheno.u2.a, 
+          labels = c("A", "B","C","D"),
+          ncol = 2, nrow = 2)
+
+#entire data high and low converters
+
+pheno.aa <- ggplot(pa.pheno,aes(x=Phenotype, y=percent.animal)) +
+  geom_boxplot()+ylim(0,100)+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)
+
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = TRUE)#
+
+pheno.ap <- ggplot(pa.pheno,aes(x=Phenotype, y=percent.plant)) +
+  geom_boxplot()+ylim(0,100)+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args) #
+
+phenotype.animal.plant <- ggarrange(pheno.aa,pheno.ap,ap,pp, 
+          labels = c("A","B","C","D"),
+          ncol = 2, nrow = 2)
+
+```
+
+###export
+```{r}
+# pdf(paste0(output_dir,'diet.protocols/animal.plant.pdf'))
+# pdf(paste0(diet.protocols,'animal.plant.pdf'))
+groups.animal.plant 
+
+phenotype.animal.plant
+
+phenotype.group.animal.plant
+
+# dev.off()
+
+# write_tsv(plant.animal.w,paste0(table_dir,'plant.animal.w.tsv'))
+# write_tsv(plant.animal.w,paste0(table_dir,'plant.animal.percent.tsv'))
+```
+

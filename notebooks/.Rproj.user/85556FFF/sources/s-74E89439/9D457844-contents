@@ -1,0 +1,1018 @@
+---
+title: "Publication Figure 1"
+subtitle: "Figure Title"
+output:
+  html_notebook:
+    code_folding: hide
+    theme: united
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    toc_collapsed: false
+theme: cosmo
+---
+
+
+# Libraries
+Standard Import
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(cowplot)
+library(scales)
+library(ggrepel)
+library(ggpubr)
+library(RColorBrewer)
+```
+
+Special
+```{r}
+# devtools::install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
+library(pairwiseAdonis)
+library(FactoMineR)
+library(grid)
+library(gridExtra)
+```
+
+# Paths
+```{r}
+bin_dir = '../bin/'
+data_dir = '../data/'
+results_dir = '../results/'
+theme_dir = '../theme/'
+tables_dir = paste0(data_dir, 'tables/')
+```
+
+## Output Directory
+```{r}
+output_dir = paste0(results_dir, 'output_1/') 
+dir.create(output_dir)
+```
+
+# Custom Scripts / Theme
+```{r}
+source(paste0(theme_dir, 'theme_settings.R'))
+source (paste0(bin_dir, 'utilities.R'))
+source(paste0(bin_dir, 'analysis_metadata.R'))
+date <- format(Sys.time(), "%d%m%y")
+```
+
+# Figure 1
+
+## Taxonomic Composition
+PCA analysis of taxonomic composition of rCDI recipients, stool donors and post-FMT patients with resolved symptoms. 
+
+Import Data (Taxonomic Relative Abundance Tables)
+```{r}
+samples.metadata <- read_tsv(paste0(tables_dir, 'samples.metadata.tsv'))
+mp_subsampled.rcdi.long <- read_tsv(paste0(tables_dir, 'samples.mp_profiles_subsampled.species.tsv')) %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name')) %>% 
+  filter(Study %in% c('FRICKE', 'ALM'))
+
+mp.long <- read_tsv(paste0(tables_dir, 'samples.mp_profiles.species.tsv')) %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name')) %>% 
+  filter(!is.na(Case_Name))
+
+mp.rcdi.long <-
+  mp.long %>% 
+  filter(Study %in% c('FRICKE', 'ALM'))
+```
+
+
+Diversity metrics based on species-level relative abundances
+```{r}
+## filter only successful post-FMT samples
+failed_samples <- 
+  samples.metadata %>% 
+  filter(!fmt_success & Sample_Type == 'post') %>% 
+  pull(Name)
+
+# data
+mp.rcdi_success.wide <- mp.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+  filter(!Sample %in% failed_samples) %>% 
+  reshape2::dcast(., kingdom + phylum + class + order + family + genus + species ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+
+
+mp.rcdi_success.samples <- t(select(mp.rcdi_success.wide, 
+                                    matches('.pair'), species) %>% 
+                               column_to_rownames(var = 'species'))
+
+# alpha diversity
+mp.rcdi_success.shannon <- data.frame(Shannon.raw = diversity(mp.rcdi_success.samples, index = 'shannon')) %>% rownames_to_column('Name')
+
+# clr-transform
+pseudo = 1e-6
+mp.rcdi_success.clr <- rgr::clr(mp.rcdi_success.samples + pseudo,  ifclose = FALSE, ifwarn = TRUE)
+mp.rcdi_success.clr.unit <- t(scale(t(mp.rcdi_success.clr), center = F, scale = T))
+```
+
+PCA of clr-transformed taxonomic composition
+```{r}
+mp.rcdi_success.clr.pca_data <- PCA(mp.rcdi_success.clr, graph = FALSE, scale.unit = T)
+mp.rcdi_success.clr.pca <- mp.rcdi_success.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+mp.rcdi_success.data.clr.pca <- mp.rcdi_success.clr.pca %>% 
+  left_join(., samples.metadata, by = c('Name')) %>% 
+  left_join(., mp.rcdi_success.shannon, by = c('Name')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() 
+```
+
+PERMANOVA (adonis function) testing between rCDI recipients, Donors, and the last available post-FMT sample shows that composition of rCDI recipient is distinct from donors (r = .37, bf = 0.0029) and post-FMT samples (r = .28, bf = 0.0029), but last post-FMT not different from donors (.18, bf = 1).
+Pairwise PERMANOVA with Bonferroni adjustment, D/P, n.s.; D/R, q=0.003, r=0.37; R/P, q=0.003, r=0.28
+
+```{r}
+mp.rcdi_success.data.clr.pca.last <-
+  mp.rcdi_success.data.clr.pca %>% 
+  filter(last)
+
+rcdi.adonis <-
+  pairwise.adonis(x = mp.rcdi_success.clr.unit[mp.rcdi_success.data.clr.pca.last$Name, ],
+  factors = mp.rcdi_success.data.clr.pca.last$Sample_Type,
+  sim.method = 'euclidean',
+  p.adjust.m = 'bonferroni',
+  perm = 1e3) %>% 
+  mutate(R = sqrt(R2)) %>% 
+  rename(p.bonferroni = p.adjusted)
+rcdi.adonis
+```
+
+Plot shows rCDI recipients clustering separately from post-FMT patients and donors. Separate clustering of D3-related cases is also visible.
+```{r}
+plot <-
+  mp.rcdi_success.data.clr.pca %>% 
+  ggplot(aes(Dim.2, Dim.1, labels = Unique_ID)) +
+  geom_point(shape = 21, size = 8, col = 'black', 
+  aes(fill = Sample_Type)) + 
+  scale_fill_manual(values = colors.main) +
+  theme_cowplot() + 
+  labs(y = paste0('PC 1 (', round(mp.rcdi_success.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(mp.rcdi_success.clr.pca_data$eig[2,'percentage of variance'], 1), '%)'),
+       subtitle = 'Taxonomic Composition') +
+  # scale_y_reverse() + 
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.title=element_blank(),
+        legend.margin = unit(c(0, 0, 0, 0.1), "cm"),
+        aspect.ratio = 1,
+        plot.subtitle = element_text(hjust = .5, size = 14)
+        )
+legend <- cowplot::get_legend(plot)
+
+plot + theme(legend.position = 'none')
+grid.newpage()
+grid.draw(legend)
+```
+
+Exporting plots, tables
+```{r}
+output_name = 'TaxonomicDiversity.SuccessfulCases.CLR_PCA'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 5, height = 5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 1.1, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+
+write_tsv(rcdi.adonis, paste0(output_dir, output_name, '.Adonis.tsv'))
+```
+
+
+## Alpha Diversity
+```{r}
+# data
+mp_subsampled.rcdi.wide <- mp_subsampled.rcdi.long %>%
+  reshape2::dcast(., kingdom + phylum + class + order + family + genus + species ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+
+# alpha diversity
+mp_subsampled.rcdi.samples <- t(select(mp_subsampled.rcdi.wide, matches('.pair'), species) %>% column_to_rownames(var = 'species'))
+mp_subsampled.rcdi.shannon <- data.frame(Shannon = diversity(mp_subsampled.rcdi.samples, index = 'shannon')) %>% rownames_to_column('Name')
+```
+
+
+Correlation analysis of Shannon Index with first principal component (PC 1) of previous PCA analysis shows that large fraction of variance could be explained by alpha diversity differences between samples.
+r = -0.79, p < 2.2e-16
+```{r fig.width=3, fig.height=3}
+plot <- 
+  mp.rcdi_success.data.clr.pca %>% 
+  left_join(., mp_subsampled.rcdi.shannon %>% select(Name, Shannon), by = 'Name') %>% 
+  ggplot(aes(Shannon, Dim.1)) +
+  geom_point(shape = 21, col = 'black', size = 8, 
+  aes(fill = Sample_Type)) + 
+  geom_smooth(method = 'lm', color = 'black') +  
+  stat_cor(method = 'spearman', 
+           aes(label = paste(..r.label.., cut(..p.., 
+                                              breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                              labels = c("'***'", "'**'", "'*'", "''")), 
+                            sep = "~")), 
+           label.y.npc = .1, 
+           size = 6,
+           show.legend = F) +
+  scale_fill_manual(values = colors.discrete[c(1,2,3)]) +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        aspect.ratio = 1
+        ) +
+  labs(x = 'Shannon Index', y = 'PC 1')
+plot + theme(legend.position = 'none')
+```
+
+Correlation of taxonomic alpha diversity calculated based on QC'ed reads. Comparison of full set of sequences or a 5M subsample generated with seqtk after QC (but before MetaPhlAn2).
+```{r}
+mp.rcdi_success.data.clr.pca %>% 
+  left_join(., mp_subsampled.rcdi.shannon %>% select(Name, Shannon), by = 'Name') %>% 
+  ggplot(aes(Shannon, Shannon.raw)) +
+  geom_point(shape = 21, col = 'black', size = 8, 
+  aes(fill = Sample_Type)) + 
+  geom_smooth(method = 'lm', color = 'black') +  
+  stat_cor(method = 'spearman', 
+           aes(label = paste(..r.label.., cut(..p.., 
+                                              breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                              labels = c("'***'", "'**'", "'*'", "''")), 
+                            sep = "~")), 
+           label.y.npc = .9, 
+           size = 6,
+           show.legend = F) +
+  scale_fill_manual(values = colors.discrete[c(1,2,3)]) +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        legend.position = 'none', 
+        aspect.ratio = 1
+        ) +
+  labs(x = 'Shannon Index [5M Subsampled Reads]', y = 'Shannon Index [All Reads]')
+```
+
+Exporting plot
+```{r}
+output_name = 'TaxonomicDiversity.SuccessfulCases.PC1_Shannon'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = 3,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 1.1, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+## Differential Abundance between Donors and rCDI recipients
+Heatmap of differentially abundant taxa between rCDI recipients and donors based on clr-transformed genus-level relative abundances. Plots shows typical opportunistic pathogens and oral bacteria to be differentially abundant between groups.
+
+Import Microbe Metadata
+```{r}
+microbe_metadata <- read_tsv(paste0(tables_dir, 'microbe_metadata.tsv')) %>% 
+  mutate(oral = ifelse(!is.na(habit.oral), habit.oral, F))
+
+oral_species <- 
+  microbe_metadata %>% 
+  filter(oral) %>% 
+  pull(species)
+
+oral_genera <-
+  mp.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+  filter(!Sample %in% failed_samples) %>%
+  filter(Sample_Type %in% c('recipient', 'donor')) %>% 
+  left_join(., microbe_metadata %>% select(oral, species)) %>% 
+  mutate(genus = gsub(genus, pattern = '_noname', replacement = '')) %>% 
+  group_by(genus) %>% 
+  summarize(oral_rate = replace_na(sum(oral == T, na.rm = T) / n(), NA)) %>% 
+  mutate(oral_genus = oral_rate > 0.1)
+```
+
+```{r}
+mp.rcdi.genus.wide <- mp.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+  filter(!Sample %in% failed_samples) %>% 
+  select(-species) %>% 
+  mutate(genus = gsub(genus, pattern = '_noname', replacement = '')) %>%
+  reshape2::dcast(., kingdom + phylum + class + order + family + genus ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+
+mp.rcdi.samples <- t(select(mp.rcdi.genus.wide, matches('.pair')))
+mp.rcdi.bc_dist <- vegdist(mp.rcdi.samples, method = 'bray')
+mp.rcdi.bc <- as.data.frame(as.matrix(mp.rcdi.bc_dist))
+mp.rcdi.shannon <- data.frame(Shannon = diversity(mp.rcdi.samples, index = 'shannon')) %>% rownames_to_column('Name')
+
+
+mp.rcdi.pca_data <- PCA(mp.rcdi.bc, graph = FALSE)
+mp.rcdi.pca <- mp.rcdi.pca_data %>%
+  .$ind %>% .$coord %>%
+  as.data.frame() %>%
+  rownames_to_column(var = 'Name')
+
+mp.rcdi.data.pca <- mp.rcdi.pca %>% 
+  left_join(., samples.metadata, by = c('Name')) %>% 
+  left_join(., mp.rcdi.shannon, by = c('Name')) %>% 
+  mutate(Study = str_split_fixed(Name, '_', 2)[,1], 
+         Case_Name = ifelse(Study == 'HMP' & is.na(Sample_Type), Name, Case_Name),
+         Sample_Type = ifelse(Study == 'HMP', 'control', Sample_Type),
+         FMT_Type = ifelse(Study == 'HMP', 'Untreated', FMT_Type)) %>% 
+  mutate(Feature = ifelse(Sample_Type != 'donor' & (Study %in% rcdi.studies), 
+                      ' [rCDI]', 
+                   ifelse(Sample_Type != 'donor' & Study == 'BORK', ' [Ob]','')), 
+         Shannon_Group = Hmisc::cut2(round(Shannon, 1), g = 5))
+
+data.raw.donors <- 
+  mp.rcdi.genus.wide %>% 
+  dplyr::select(genus, ends_with('.pair')) %>% 
+  column_to_rownames('genus') %>% 
+  t() %>% as.data.frame() %>% 
+  rownames_to_column('Name') %>% 
+  left_join(., samples.metadata) %>% 
+  filter(Sample_Type == 'donor') %>% 
+  mutate(ID = Unique_ID)
+  filter(Sample_Type %in% c('donor', 'control'))
+
+data.raw.recipients <- 
+  mp.rcdi.genus.wide %>% 
+  dplyr::select(genus, ends_with('.pair')) %>% 
+  column_to_rownames('genus') %>% 
+  t() %>% as.data.frame() %>% 
+  rownames_to_column('Name') %>% 
+  left_join(., samples.metadata) %>% 
+  filter(Sample_Type == 'recipient')
+
+
+data.merge <-
+  bind_rows(data.raw.donors, data.raw.recipients) %>% 
+  mutate(tag = paste0(Unique_ID, ' ', gsub(
+      gsub(Name, pattern = '.*_', replacement = ''), 
+                 pattern = '.pair', replacement = '')))
+
+X.metadata <-
+  data.merge %>% 
+  select(Name, Study:tag)
+
+X = data.merge %>% 
+  column_to_rownames(var = 'tag') %>% 
+  select(-Name, -Study:-ID) %>% 
+  as.data.frame()
+
+Y = as.factor(X.metadata$Sample_Type)
+```
+
+PLS-DA (rCDI recipient vs. donor)
+```{r}
+pseudo = 1e-6
+data.plsda = mixOmics::plsda(X = X + pseudo, Y, ncomp = nlevels(Y), logratio = 'CLR')
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10)
+
+plot(data.perf.plsda, overlay = 'measure', sd=TRUE)
+
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+CV the number of selected features
+```{r}
+data.tune.splsda = mixOmics::tune.splsda(X + pseudo, 
+                          Y = Y, 
+                          ncomp = 2, 
+                          multilevel = NULL, 
+                          logratio = 'CLR',
+                          validation = c('Mfold'), 
+                          folds = 5, 
+                          dist = 'max.dist', # prediction distance can be chosen according to tune.plsda results
+                          nrepeat = 10,
+                          progressBar = FALSE)
+
+plot(data.tune.splsda)
+select.keepX = data.tune.splsda$choice.keepX[1:2]
+select.keepX
+select.keepX = c(15, 5)
+```
+
+sPLS-DA (rCDI recipient vs. donor)
+```{r}
+data.splsda = mixOmics::splsda(X = X + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               keepX = select.keepX, 
+                               logratio= "CLR",
+                               near.zero.var = T,
+)
+
+
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+plot(data.perf.splsda)
+
+# plot loadings
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .5, size.legend = .75, 
+                       legend.color = colors.discrete[c(4, 1)])
+
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .5, size.legend = .75, 
+                       legend.color = colors.discrete[c(4, 1)])
+
+mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+Heatmap plot of differentially abundant taxa showing that many of the genera higher in rCDI recipients were associated with oral species in the dataset
+```{r}
+sample_colors <-
+  tibble(Unique_ID.splsda = str_split_fixed(data.splsda$names$sample, pattern = ' ', n = 2)[,1]) %>% 
+  cbind(., data.merge %>% dplyr::select(tag, Unique_ID, fmt_success, Case_Name, Sample_Type)) %>% 
+  mutate(color = 
+        case_when(Sample_Type == 'recipient' ~ colors.discrete[3],
+                  Sample_Type == 'donor' ~ colors.discrete[1], 
+                  T ~ 'white'))
+
+oral_colors <-
+  tibble(genus = gsub(data.splsda$names$colnames$X, pattern = '_noname', replacement = '')) %>%
+  left_join(., oral_genera) %>% 
+  mutate(color = 
+        case_when(oral_genus == T ~ 'gray25',
+                  oral_genus == F ~ 'gray95', 
+                  T ~ 'white'))
+
+output_name = 'splsDA.DonorRecipient'
+mixOmics::cim(data.splsda, row.sideColors = sample_colors$color, col.sideColors = oral_colors$color, 
+              symkey = T, keysize = c(0.8, 0.8), 
+              row.names = F, 
+              col.names = gsub(data.splsda$names$colnames$X, pattern = '_noname', replacement = ''),
+              save = 'pdf', 
+              name.save = paste0(output_dir, output_name),
+              margins = c(20, 6.5),
+              row.cex = .75, col.cex = .5,
+              transpose = T,
+              # row.cex = .5, col.cex = .75,
+              # margins = c(6.5, 20), 
+              scale = T, center = T)
+```
+
+## Oral Species in rCDI
+Boxplots of relative abundances and fraction of species of bacteria classified as oral in eHOMD or BacDive. Plot shows enrichment of oral-classified bacteria in rCDI recipients but not donors or controls with decreasing abundances post-FMT. Majority of oral species are below 0.01% relative abundance.
+```{r fig.height=6, fig.width=2.5, message=FALSE, warning=FALSE}
+rcdi.oral_species <- 
+  mp.rcdi.long %>% 
+  
+  group_by(Case_Name, Sample_Type) %>% 
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  filter(last) %>%
+  
+  filter(!Sample %in% failed_samples) %>% 
+  mutate(oral = species %in% oral_species,
+         rel_abund = rel_abund / 100) %>% 
+  group_by(Case_Name, Sample, Days_Since_FMT, Sample_Type) %>% 
+  summarize(n = sum(rel_abund > 0, na.rm = T), 
+            oral = sum(ifelse(species %in% oral_species & rel_abund > 0, 1, 0), na.rm = T),
+            species_rel_abund = mean(ifelse(species %in% oral_species & rel_abund > 0, rel_abund, 0), na.rm = T),
+            sample_rel_abund = sum(ifelse(species %in% oral_species, rel_abund, 0), na.rm = T), 
+            ) %>% 
+  mutate(f = oral / n) %>% 
+  mutate(source = fct_recode(as.factor(Sample_Type),
+              R = 'recipient',
+              P = 'post',
+              D = 'donor')) %>% 
+  pivot_longer(names_to = 'metric', 
+               values_to = 'value',
+               cols = c('sample_rel_abund', 'species_rel_abund', 'f'))
+```
+
+
+```{r fig.width = 2.5, fig.height = 5,}
+stat_comparisons = list(c('P', 'D'), c('R', 'D'), c('R', 'P'))
+
+plot.sample_rel_abund <-
+  rcdi.oral_species %>% 
+  filter(metric == 'sample_rel_abund') %>% 
+  ggplot(aes(fct_relevel(source, 'R', 'P', 'D'),
+                         value, fill = source)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.01) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format_signif,
+                    limits = c(0, 1.21),
+                    expand = c(0,0,0.05,0),
+                    breaks = c(0, 0.25, 0.5, 0.75, 1)
+                     ) + 
+  scale_fill_manual(values = colors.discrete[c(1,2,3)]) +
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     ) + 
+  labs(y = 'Cumulative Sample Rel. Abund.') +
+  theme(axis.title.x = element_blank())
+plot.sample_rel_abund + theme(legend.position = 'none')
+```
+
+
+```{r fig.width = 2.5, fig.height = 5,}
+plot.species_rel_abund <-
+rcdi.oral_species %>% 
+  filter(metric == 'species_rel_abund') %>% 
+  ggplot(aes(fct_relevel(source, 'R', 'P', 'D'),
+                         value, fill = source)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.00025) +
+  theme_cowplot() + 
+  scale_y_continuous(limits = c(0, NA),
+                    labels = percent_format_signif,
+                    expand = c(0,0,0.05,0),
+                    # breaks = c(0, 0.001, 0.0025, 0.005, 0.01, 0.015)
+                     ) + 
+  scale_fill_manual(values = colors.discrete[c(1,2,3)]) +
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     ) + 
+  labs(y = 'Mean Rel. Abund. per Sp.') +
+  theme(axis.title.x = element_blank())
+plot.species_rel_abund + theme(legend.position = 'none')
+```
+
+
+```{r fig.width = 2.5, fig.height = 5,}
+plot.fraction <-
+rcdi.oral_species %>% 
+  filter(metric == 'f') %>%
+  ggplot(aes(fct_relevel(source, 'R', 'P', 'D'),
+                         value, fill = source)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.01) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format_signif,
+                    limits = c(0, .75),
+                    expand = c(0,0,0.05,0),
+                    breaks = c(0, 0.25, 0.5, 0.75, 1)
+                     ) + 
+  scale_fill_manual(values = colors.discrete[c(1,2,3)]) +
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     ) + 
+  theme(axis.title.x = element_blank(),
+        legend.title=element_blank(),
+        legend.position = 'none', 
+        strip.background = element_blank()) +
+  labs(y = 'Cumulative Fraction of Spp.')
+  
+plot.fraction + theme(legend.position = 'none')
+```
+
+
+Exporting plot
+```{r}
+output_name = 'OralSpecies'
+
+ggsave(plot.sample_rel_abund + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 2.5, height = 3.5,
+       filename = paste0(output_dir, output_name, '.SampleRelAbund', '.Plot.pdf'))
+ggsave(plot.species_rel_abund + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 2.5, height = 3.5,
+       filename = paste0(output_dir, output_name, '.SpeciesRelAbund','.Plot.pdf'))
+ggsave(plot.fraction + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 2.5, height = 3.5,
+       filename = paste0(output_dir, output_name, '.SpeciesFraction','.Plot.pdf'))
+```
+
+## Oxygen Tolerant Species post-FMT
+Area plot of glm binomial model (2nd degree polynomial) of showing the relative abundance and fraction of species classified as oxygen tolerant, intolerant, and unknown. Plot shows decrease of oxygen tolerant species post-FMT over time to levels observed in healthy controls.
+
+```{r message=FALSE, warning=FALSE}
+annotate_microbe_metadata <- function(df) {
+  df %>% 
+    mutate(species.simplified = unlist(lapply(str_split(species, pattern = '_', 3), function(x) paste0(x[1], '_', x[2])))) %>% 
+    left_join(., microbe_metadata %>% select(-AA:-dISSIRS_8), by = c('species.simplified' = 'species')) %>% 
+    select(-species.simplified) %>% 
+    mutate(oxygen.class = ifelse(order == 'Clostridiales', 'anaerobe', oxygen.class)) %>% 
+    return(.)
+}
+
+mp.oxygen <- 
+  mp.long %>% 
+  
+  # filter(!Sample %in% failed_samples) %>% 
+  filter(!Case_Name %in% cases_failed) %>% 
+  filter(Sample_Type == 'control' | (Sample_Type %in% c('recipient', 'post') & Study %in% c('FRICKE', 'ALM'))) %>% 
+  filter(Days_Since_FMT <= 373) %>%
+  
+  annotate_microbe_metadata(.) %>% 
+  
+  mutate(rel_abund = rel_abund / 100) %>% 
+  mutate(Study_Type = ifelse(Sample_Type == 'control', 'Control', 'rCDI')) %>% 
+  mutate(tag = ifelse(is.na(oxygen.tolerant), 'Unknown', 
+               ifelse(oxygen.tolerant, 'Oxygen Tolerant', 
+               ifelse(!oxygen.tolerant, 'Oxygen Intolerant', 'Unknown'))),
+         tag.bool = !is.na(tag), 
+         tag = as.factor(tag)) %>% 
+  group_by(Study_Type, Case_Name, Sample, Days_Since_FMT, Sample_Type, tag) %>% 
+  summarize(n = sum(rel_abund > 0, na.rm = T), 
+            species_rel_abund = mean(rel_abund, na.rm = T),
+            sample_rel_abund = sum(rel_abund, na.rm = T), 
+            ) %>%
+  group_by(Study_Type, Case_Name, Sample, Days_Since_FMT, Sample_Type) %>% 
+  mutate(f = n / sum(n, na.rm = T)) %>% 
+  pivot_longer(names_to = 'metric', 
+               values_to = 'value',
+               cols = c('sample_rel_abund', 'f'))
+```
+
+
+```{r fig.width=6, fig.height=5}
+pseudo = 0.5
+plot.oxygen.flow <-
+  mp.oxygen %>% 
+  mutate(rtag = fct_relevel(tag, 'Unknown', 'Oxygen Intolerant')) %>% 
+  ggplot(aes(Days_Since_FMT + pseudo, value, fill = rtag)) + 
+  stat_smooth(geom = 'area',
+              method = 'glm',
+              position = 'fill', colour = 'black', size = 0.25,
+              formula = y ~ poly(x, 2),
+              method.args=list(family='quasibinomial')
+              ) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     expand = c(0,0)) +
+  scale_x_continuous(trans = 'log10', 
+                     labels = function(l) {return(ceiling(l-pseudo))},
+                     breaks = c(pseudo, 7, 14, 30, 90, 365),
+                     expand = c(0,0)) + 
+  scale_fill_manual(values = c(colors.discrete[10], 'grey50', 'grey25'),
+                    guide = guide_legend(reverse = TRUE, ncol = 3)
+                    ) + 
+  labs(x = 'Sampling Day') + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_text(hjust = 0.2),
+        plot.margin = unit(c(0, 0, 0, 0), "cm"), 
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+        panel.spacing.y = unit(.5, "cm"),
+        panel.spacing.x = unit(.35, "cm"),
+        legend.title=element_blank(),
+        legend.position = 'top', 
+        legend.margin=ggplot2::margin(l = 0.1, unit='cm')) + 
+  facet_grid(scales = 'free_x', space = 'free_x', 
+   cols = vars(ifelse(fct_relevel(Study_Type, 'rCDI', 'Control') == 'rCDI', '', ' ')),
+   rows = vars(ifelse(grepl(metric, pattern = '^f'), 
+                                'Spp. Fraction', 
+                                'Rel. Abund.')))
+
+
+plot.oxygen.histogram <-
+  mp.oxygen %>% 
+  filter(metric == 'f') %>% 
+  group_by(Study_Type, Case_Name, Days_Since_FMT) %>% 
+  summarize(value = sum(value, na.rm = T)) %>% 
+  ggplot(aes(Days_Since_FMT + pseudo)) + 
+  geom_histogram(fill = 'black', bins = 10) +
+  facet_grid(scales = 'free_x', space = 'free_x', 
+   cols = vars(fct_relevel(Study_Type, 'rCDI', 'Control')),
+   rows = vars('log n')) +
+  scale_x_continuous(trans = 'log10', 
+                     labels = function(l) {return(ceiling(l-pseudo))},
+                     breaks = c(pseudo, 7, 14, 30, 90, 365),
+                     expand = c(0,0)) + 
+  scale_y_continuous(trans = pseudo_log_trans(), 
+                     expand = c(0,0),
+                     breaks = c(0, 10, 60),
+
+                     ) +
+  theme_cowplot() + 
+  theme(strip.background = element_blank(), 
+        strip.text.x = element_blank(), 
+        panel.spacing.x = unit(1, "lines"), 
+        axis.title = element_blank(), 
+        axis.line.x = element_line(size = 1),
+        axis.line.y = element_blank(), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.title=element_blank())
+
+plot.oxygen.flow + theme(legend.position = 'none')
+plot.oxygen.histogram + theme(legend.position = 'none')
+
+legend <- cowplot::get_legend(plot.oxygen.flow)
+
+grid.newpage()
+grid.draw(legend)
+```
+
+Exporting plot
+```{r}
+output_name = 'OxygenTolerantSpecies'
+
+ggsave(plot.oxygen.flow + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 6, height = 5,
+       filename = paste0(output_dir, output_name, '.SampleRelAbund', '.Plot.pdf'))
+ggsave(plot.oxygen.histogram + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 6, height = .6,
+       filename = paste0(output_dir, output_name, '.SpeciesRelAbund','.Plot.pdf'))
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 5, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+
+## Gene-content based Indicators for Oxygen Usage and ABx treatment
+Boxplots of functional gene-family indicators for microbial oxygen usage (Aerobic Electron Transport Chain) and ABx response pathways.
+
+Import Data
+```{r}
+gene_family_annotated <- read_tsv(paste0(tables_dir, 'genefamilies.infogo1000.cpm.annotated.tsv'))
+val_name = 'CPM'
+
+gf <-
+  gene_family_annotated %>% 
+  rename(Gene_Family = `# Gene Family`) %>% 
+  separate(Gene_Family, into = c('Gene_Family_Name', 'Taxonomy'), sep = '[|]') %>% 
+  select(-Taxonomy) %>% 
+  group_by(Gene_Family_Name) %>% 
+  summarize_all(.funs = funs(sum(., na.rm = T))) %>% 
+  group_by(Gene_Family_Name) %>% 
+  pivot_longer(names_to = 'Name', 
+               values_to = 'value', 
+               cols = ends_with(paste0('.pair_Abundance-', val_name))) %>% 
+  mutate(Name = gsub(Name, pattern = paste0('_Abundance-', val_name), replacement = '')) %>% 
+  mutate(Name = ifelse(grepl(Name, pattern = '^FMT'), paste0('ALM_', Name), Name)) %>% 
+
+  left_join(., samples.metadata) %>% 
+  filter(Study %in% c('FRICKE', 'ALM')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  separate(Gene_Family_Name, into = c('Gene_Family_ID', 'Gene_Family_Name'), sep = '[:] ') %>% 
+  filter(grepl(Gene_Family_Name, pattern = '[[BP]]')) %>% 
+  filter(!Sample %in% failed_samples)  %>% 
+  group_by(Case_Name, Sample_Type) %>%
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>%
+  ungroup() %>% 
+  filter(last)
+```
+ 
+Plots show increased abundance of these pathways in rCDI recipients, decreasing following FMT treatment.
+```{r fig.width=5, fig.height=10}
+stat_comparisons = list(c('P', 'D'), c('R', 'D'), c('R', 'P'))
+pseudo = 1e-6
+
+plot.aerobic <-
+gf %>% 
+  filter(Gene_Family_Name == '[BP] aerobic electron transport chain') %>% 
+  mutate(GFN = 'Aerobic Electron\nTransport Chain') %>% 
+  mutate(Sample_Type = str_to_upper(str_extract(Sample_Type, '.'))) %>% 
+  ggplot(aes(fct_relevel(Sample_Type, 'R','P','D'), value + pseudo, fill = Sample_Type)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.05) +
+  
+  scale_y_continuous(
+                trans = pseudo_log_trans(),
+                expand = c(0,0,0.1,0), 
+                labels = label_number_si(accuracy = 1),
+                breaks = c(1, 10, 100, 500),
+                ) +
+  
+  facet_wrap(~ GFN, scales = 'free_y', nrow = 2) + 
+  theme_bw() +
+  scale_fill_manual(values = c(colors.discrete[1], colors.discrete[2], colors.discrete[3])) + 
+  labs(y = 'Copies per Million') +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        legend.position = 'none', 
+        strip.background = element_blank(),
+        axis.title.x = element_blank()
+        ) + 
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     )
+plot.aerobic
+```
+
+
+```{r fig.width=5, fig.height=10}
+plot.abx <-
+  gf %>% 
+  filter(Gene_Family_Name == '[BP] response to antibiotic') %>% 
+  mutate(GFN = 'Response to\nAntibiotics') %>% 
+  mutate(Sample_Type = str_to_upper(str_extract(Sample_Type, '.'))) %>% 
+  ggplot(aes(fct_relevel(Sample_Type, 'R','P','D'), value + pseudo, fill = Sample_Type)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.015) +
+  
+  scale_y_log10(expand = c(0,0,0.1,0), 
+                labels = label_number_si(accuracy = 1)) +
+  
+  facet_wrap(~ GFN, scales = 'free_y', nrow = 2) + 
+  theme_bw() +
+  scale_fill_manual(values = c(colors.discrete[1], colors.discrete[2], colors.discrete[3])) + 
+  labs(y = 'Copies per Million') +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        legend.position = 'none', 
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        ) + 
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     )
+plot.abx
+```
+
+Exporting plot
+```{r}
+output_name = 'FunctionAerobic'
+ggsave(plot.aerobic + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 2.5, height = 3.5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+
+output_name = 'FunctionABx'
+ggsave(plot.abx + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 2.5, height = 3.5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+```
+
+```{r fig.width=10, fig.height=5}
+stat_comparisons = list(c('P', 'D'), c('R', 'D'), c('R', 'P'), c('D', 'D3'))
+
+plot.sulf <-
+  gf %>% 
+  filter(Gene_Family_Name %in% c('[BP] hydrogen sulfide biosynthetic process',
+                                 '[BP] sulfur compound transport',
+                                 '[BP] sulfate assimilation, phosphoadenylyl sulfate reduction by phosphoadenylyl-sulfate reductase (thioredoxin)')) %>% 
+  
+  mutate(GFN = Gene_Family_Name) %>% 
+  mutate(Sample_Type = str_to_upper(str_extract(Sample_Type, '.'))) %>% 
+  mutate(Sample_Type = ifelse(Sample_Type != 'R' & Donor.Subject == "D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21", 'D3', Sample_Type)) %>% 
+  ggplot(aes(fct_relevel(Sample_Type, 'R','P','D'), value + pseudo, fill = Sample_Type)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y",
+               stackdir = "center", binpositions="all", binwidth = 0.015) +
+  
+  scale_y_log10(expand = c(0,0,0.1,0), 
+                labels = label_number_si(accuracy = 1)) +
+  
+  facet_wrap(~ GFN, nrow = 1, scales = 'free_y') + 
+  theme_bw() +
+  scale_fill_manual(values = c(colors.discrete[c(1,2,3,4)])) + 
+  labs(y = 'Copies per Million') +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        legend.position = 'none', 
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        ) + 
+  stat_compare_means(method = 'wilcox', 
+                     comparisons = stat_comparisons,
+                     exact = F, p.adjust = 'bonferroni', label = 'p.signif'
+                     )
+plot.sulf
+```
+
+## Functional Composition
+PCA analysis of functional composition of rCDI recipients, stool donors and post-FMT patients with resolved symptoms based on clr-transformed pathway relative abundances.
+Plot shows rCDI recipients clustering separately from donors with less distinct clusters compared to taxonomic data.
+
+Import Data
+```{r}
+h2_unstratified <- read_tsv(paste0(tables_dir, 'samples.h2_profiles.unstratified_wmetadata.tsv'))
+```
+
+
+Annotate Humann2 with PWY Classes
+```{r}
+h2.rcdi <-
+  h2_unstratified %>% 
+  filter(Study %in% c('FRICKE', 'ALM')) %>% 
+  filter(!Sample %in% failed_samples)  %>%
+  group_by(Case_Name, Sample_Type) %>%
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>%
+  ungroup()
+  # filter(last)
+
+h2.rcdi.wide <-
+  h2.rcdi %>% 
+  filter(!is.na(pathway_description)) %>%
+  reshape2::dcast(., pathway_id + pathway_description ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+```
+
+
+Formatting
+```{r}
+h2.rcdi.samples <- t(select(h2.rcdi.wide, matches('.pair'), pathway_description) %>% column_to_rownames(var = 'pathway_description'))
+h2.rcdi.shannon <- data.frame(Shannon = vegan::diversity(h2.rcdi.samples, index = 'shannon')) %>% rownames_to_column('Name')
+
+pseudo = 0.1
+h2.rcdi.clr <- rgr::clr(h2.rcdi.samples + pseudo,  ifclose = FALSE, ifwarn = TRUE)
+h2.rcdi.clr.unit <- t(scale(t(h2.rcdi.clr), center = F, scale = T))
+h2.rcdi.pca_data <- PCA(h2.rcdi.clr, graph = FALSE, scale.unit = T) 
+
+h2.rcdi.pca <- h2.rcdi.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+h2.rcdi.data <- h2.rcdi.pca %>% 
+  left_join(., samples.metadata, by = c('Name')) %>% 
+  left_join(., h2.rcdi.shannon, by = c('Name')) %>% 
+  mutate(Study = str_split_fixed(Name, '_', 2)[,1], 
+         Case_Name = ifelse(Study == 'HMP' & is.na(Sample_Type), Name, Case_Name),
+         Sample_Type = ifelse(Study == 'HMP', 'control', Sample_Type),
+         FMT_Type = ifelse(Study == 'HMP', 'Untreated', FMT_Type)) %>% 
+  mutate(Feature = ifelse(Sample_Type != 'donor' & (Study %in% rcdi.studies), 
+                      ' [rCDI]', 
+                   ifelse(Sample_Type != 'donor' & Study == 'BORK', ' [Ob]','')), 
+         Shannon_Group = Hmisc::cut2(round(Shannon, 1), g = 5)) %>% 
+  filter(!is.na(FMT_Type)) %>% 
+  mutate(d3.tag = case_when(
+    Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & Sample_Type == 'post' ~ 
+      paste0('post | D3 ', if_else(fmt_success, 'Success', 'Failed')),
+    Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & Sample_Type == 'donor' ~ 'donor | D3',
+    T ~ Sample_Type)) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup()
+```
+
+
+```{r}
+plot <-
+  h2.rcdi.data %>% 
+  ggplot(aes(Dim.2, Dim.1, label = Unique_ID)) +
+  geom_point(shape = 21, col = 'black', size = 8, 
+  aes(fill = Sample_Type)) + 
+  scale_fill_manual(values = c(colors.discrete[1], colors.discrete[2], 
+                                   colors.discrete[3]), 
+                    guide = guide_legend(reverse = TRUE)) +
+  theme_cowplot() + 
+  labs(subtitle = 'Functional Composition') + 
+  coord_fixed() +
+  theme(plot.subtitle = element_text(hjust = 0.5),
+        legend.title=element_blank(),
+        aspect.ratio = 1
+        ) + 
+  labs(y = paste0('PC 1 (', round(h2.rcdi.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(h2.rcdi.pca_data$eig[2,'percentage of variance'], 1), '%)'))
+
+legend <- cowplot::get_legend(plot)
+plot + theme(legend.position = 'none')
+grid.newpage()
+grid.draw(legend)
+```
+
+PERMANOVA (adonis function) testing between rCDI recipients, Donors, post-FMT samples shows that functional composition of rCDI recipient is distinct from donors (r = .55, fdr = 0.0029) and post-FMT samples (r = .39, fdr = 0.0029), but the last post-FMT time point not different from donors (.24, fdr = 0.12).
+```{r}
+h2.rcdi.data.last <-
+  h2.rcdi.data %>% 
+  filter(last)
+
+rcdi.adonis <-
+  pairwise.adonis(x = h2.rcdi.clr.unit[h2.rcdi.data.last$Name, ],
+  factors = h2.rcdi.data.last$Sample_Type,
+  sim.method = 'euclidean',
+  p.adjust.m = 'bonferroni',
+  perm = 1e3) %>% 
+  mutate(R = sqrt(R2))
+rcdi.adonis
+```
+
+
+
+Exporting plots, tables
+```{r}
+output_name = 'FunctionalDiversity.SuccessfulCases.CLR_PCA'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 5, height = 5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 1.1, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+
+write_tsv(rcdi.adonis, paste0(output_dir, output_name, '.Adonis.tsv'))
+```
+

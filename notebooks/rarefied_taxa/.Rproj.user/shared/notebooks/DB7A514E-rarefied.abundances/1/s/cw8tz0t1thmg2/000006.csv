@@ -1,0 +1,4 @@
+"0","```r
+
+ggarrange(bacteroides,butyrivibrio,clostridiales,cardiobacterium,actinomyces,streptomyces,ncol = 2, nrow = 3, labels = c('H','I','J','K','L','M'))
+```"

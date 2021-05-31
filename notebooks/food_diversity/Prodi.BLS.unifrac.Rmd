@@ -1,0 +1,571 @@
+---
+title: "UniFrac"
+output: html_notebook
+---
+
+
+#libraries
+```{r}
+library(tidyverse)
+library(ape)
+library(phyloseq)
+library(ggplot2)
+library(devtools)
+library(factoextra)
+# library(GMDecomp)
+library(apcluster)
+library(plotly)
+# library(RFLPtools)
+# devtools::install_github("taryue/GMDecomp")
+
+library(Rtsne)
+library(FactoMineR)
+library(rgr)
+
+library(ggdendro)
+
+# library(DECIPHER)
+
+library(ggpubr)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))
+bls.extended <- read_tsv(paste0(table_dir,'bls.extended_01.08.tsv'))
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+
+pca.bls <- read_tsv(paste0(table_dir,'pca.bls_14.10.tsv'))
+nutr.sum <- read_tsv(paste0(table_dir,'nutr.sum_14.10.tsv'))
+
+# #trees
+tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))
+tree.keto.bls <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))
+
+```
+
+
+
+generating phylogenetic object
+keto samples, conventional clusters
+
+manually assign distances according to 
+groups and subgroups that are already defined by the bls
+
+```{r fig.height=10}
+set.seed(73)
+keto.bls <- keto.bls[!(keto.bls$item_cat == 'Gewürze, Würzmittel, Hilfsstoffe' ),]##| keto.bls$item_cat =='Menükomponenten'
+
+tmp <- unique(subset(keto.bls,select = c(`item_cat`,`item_subcat`,`item_prodi`))) %>% distinct(.)
+r <- tmp
+colnames(r) <- c('item_cat.select','item_subcat.select','item_prodi.select') 
+
+
+r <- tidyr::uncount(r, dplyr::n())
+# tmp <- tmp[rep(seq_len(nrow(tmp)), nrow(r)), ]
+tmp <- purrr::map_dfr(seq_len(1250), ~tmp)##nrow(tmp)/nrow(r)=1044  ##w/o gewürze 1280
+tmp <- cbind(tmp,r)
+
+cat.dist <-
+  tmp %>% 
+  mutate(same_subcat = item_subcat.select == item_subcat,
+         same_cat = item_cat.select == item_cat) %>% 
+  mutate(total = (as.numeric(!same_cat) + as.numeric(!same_subcat)) / 2) %>% 
+  dplyr::select(item_prodi.select, item_prodi, total) %>%
+  
+  pivot_wider(names_from = 'item_prodi.select', values_from = 'total') %>% 
+  column_to_rownames('item_prodi') %>%
+  as.dist(.)
+
+cat.dist[is.na(cat.dist)] <- 0
+
+#cats should all have own node
+#respective sub_cats too
+```
+
+#phylo object conv. cluster
+```{r fig.height=10}
+d.cat_data <- hclust(cat.dist, method = 'complete')
+dend.cat <- as.dendrogram(d.cat_data)
+tree.conv <- ape::as.phylo(d.cat_data,use.labels = keto.bls$item_cat)
+
+
+plot(tree.conv, type= 'fan')
+
+# write.tree(tree.conv, file=paste0(table_dir,'tree.conv.19.08.tre',append = FALSE))
+
+
+```
+for UniFrac you need a phylogenetic object (--> nutrient clustering derived from notebook BLS.betadiv via PCA, convetional clustering see above)
+
+matrix for UniFrac weighted and unweighted food-samples df
+
+18.08
+#conventional clusters UniFrac
+one sample one week
+```{r}
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+k.bls_prodi <- k.bls_prodi[k.bls_prodi$database == 'bls',]
+k.bls_prodi$Sex[k.bls_prodi$Sex == FALSE] <- 'female'
+k.bls_prodi$Sex[is.na(k.bls_prodi$Sex)] <- 0
+k.bls_prodi$Sex[k.bls_prodi$Sex == 0] <- 'male'
+
+
+##weighted UniFrac
+
+df.unifrac <- subset(k.bls_prodi,select=c(`file_name`,`item`,`Energie_bls`,`Energie (kcal)`))
+
+
+df.unifrac$calculation <- (100/df.unifrac$`Energie_bls`)*df.unifrac$`Energie (kcal)`
+
+##calculation for weighted UniFrac
+
+df.unifrac <- as.data.frame(df.unifrac)
+df.unifrac$calculation[is.nan(df.unifrac$calculation)] <-  0
+
+#otu_table generation for weighted UniFrac
+otu.unifrac <- subset(df.unifrac,select = c(`item`,`calculation`,`file_name`))
+
+otu.unifrac <- otu.unifrac  %>% group_by(file_name,item) %>% summarize(sum = sum(calculation)) %>% pivot_wider(names_from = 'item',values_from = 'sum') %>% as.data.frame(.)
+
+otu.unifrac[is.na(otu.unifrac)] <- 0
+
+# write_tsv(otu.unifrac,path=paste0(table_dir,'otu.conv.w.19.08.tsv',append=FALSE))
+
+row.names(otu.unifrac) <- otu.unifrac$file_name 
+otu.unifrac <- otu.unifrac[ ,-1]
+
+
+otu.weighted <- otu_table(otu.unifrac,taxa_are_rows = FALSE)
+
+#weighted UniFrac
+phylo.conv.w <- phyloseq(otu.weighted,tree.conv)
+unifrac.keto.conv.w <- UniFrac(phylo.conv.w,weighted = TRUE,fast = TRUE)
+pcoa_keto.w <- ape::pcoa(unifrac.keto.conv.w)
+
+##unweighted UniFrac
+
+sub.bell <- k.bls_prodi[!(k.bls_prodi$item_descr=="gemüsepaprika rot"),]
+sub.nudels <- k.bls_prodi[!(k.bls_prodi$item_descr=="nudeln (4)"),]
+
+unifrac <- subset(k.bls_prodi,select=c(`file_name`,`item`))
+
+unifrac <- as.data.frame(unifrac)
+unifrac <- xtabs(~ item + file_name , data = unifrac)##how often consumed/d
+
+unifrac <- as.data.frame(unifrac)  
+unifrac <- pivot_wider(data = unifrac, names_from = 'item', values_from = 'Freq') %>% as.data.frame(.)
+
+# write_tsv(unifrac,path=paste0(table_dir,'otu.conv.uw.19.08.tsv',append=FALSE,col_names = TRUE))
+
+row.names(unifrac) <- unifrac$file_name
+unifrac <- unifrac[ ,-1]
+
+unifrac <- otu_table(unifrac,taxa_are_rows = FALSE)
+
+
+#unweighted UniFrac
+phylo.conv.uw <- phyloseq(unifrac,tree.conv)
+unifrac.keto.conv.uw <- UniFrac(phylo.conv.uw,weighted = FALSE,fast = TRUE)
+pcoa_keto.uw <- ape::pcoa(unifrac.keto.conv.uw)
+
+get_explained_variance <- function(pcoa){
+  return(paste0(round(pcoa$values$Rel_corr_eig *100, 2), '%'))
+}
+
+get_explained_variance(pcoa_keto.uw)[1:2]##"11.21%" "8.45%"
+get_explained_variance(pcoa_keto.w)[1:2]##"12.69%" "9.66%" 
+
+#varinace
+pcoa_keto.uw$vectors <- as.data.frame(pcoa_keto.uw$vectors)
+pcoa_keto.w$vectors <- as.data.frame(pcoa_keto.w$vectors)
+
+varconvAxis.1 <- var(pcoa_keto.uw$vectors$Axis.1)##0.02851293
+varconvAxis.2 <- var(pcoa_keto.uw$vectors$Axis.2)##0.01470678
+
+varconvwAxis.1 <- var(pcoa_keto.w$vectors$Axis.1)##0.04093632
+varconvwAxis.2 <- var(pcoa_keto.w$vectors$Axis.2)##0.03483469
+
+##visualization
+
+#Phenotype
+p.metadata.conv.uw <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+conv.uw.pheno <- pcoa_keto.uw$vectors %>%  #or pcoa_keto.w/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.uw, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac conventional clusters')+ theme(plot.title = element_text(size=10))
+
+#Sex
+s.metadata.conv.uw <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Sex) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+conv.uw.sex <- pcoa_keto.uw$vectors %>%  #or pcoa_keto.w/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., s.metadata.conv.uw, by = 'Name') %>%
+  mutate(sex = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  # mutate(sex = ifelse(Sex == 'female', FALSE, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac conventional clusters')+ theme(plot.title = element_text(size=10))##FALSE female
+
+
+#Phenotype
+p.metadata.conv.w <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+conv.w.pheno <- pcoa_keto.w$vectors %>%  #/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.w, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac conventional clusters')+ theme(plot.title = element_text(size=10))
+
+#Sex
+s.metadata.conv.w <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Sex) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+conv.w.sex <- pcoa_keto.w$vectors %>%  #/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., s.metadata.conv.w, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac conventional clusters')+ theme(plot.title = element_text(size=10))
+
+
+
+```
+#conventional cluster
+one sample one day
+```{r}
+#unweighted UniFrac per day
+otu.unweighted.samp <- subset(k.bls_prodi,select=c(`file_name`,`item`,`day`))
+
+otu.unweighted.samp$sample_day <- paste(otu.unweighted.samp$file_name,otu.unweighted.samp$day)
+otu.unweighted.samp <- otu.unweighted.samp[ ,-c(1)]
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)
+otu.unweighted.samp <- xtabs(~ item + sample_day , data = otu.unweighted.samp)##how often consumed/d
+
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)  
+otu.unweighted.samp <- pivot_wider(data = otu.unweighted.samp, names_from = 'item', values_from = 'Freq') %>% as.data.frame(.)
+
+# write_tsv(otu.unweighted.samp,path=paste0(table_dir,'otu.conv.uw.samp.19.08.tsv',append=FALSE))
+
+row.names(otu.unweighted.samp) <- otu.unweighted.samp$sample_day
+otu.unweighted.samp <- otu.unweighted.samp[ ,-1]
+otu.unweighted.samp <- otu_table(otu.unweighted.samp,taxa_are_rows = FALSE)
+
+phylo.conv.uw.samp <- phyloseq(otu.unweighted.samp,tree.conv)
+unifrac.keto.conv.uw.samp <- UniFrac(phylo.conv.uw.samp,weighted = FALSE,fast = TRUE)
+pcoa_keto.uw.samp <- ape::pcoa(unifrac.keto.conv.uw.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.conv.uw.samp <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_keto.uw.samp$vectors %>%  #or pcoa_keto.w/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.uw.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac conventional clusters')
+
+
+#weighted UniFrac per day
+
+df.unifrac.samp <- subset(k.bls_prodi,select=c(`file_name`,`item`,`Energie_bls`,`Energie (kcal)`,`day`))
+
+##calculation for weighted UniFrac
+df.unifrac.samp$calculation <- apply(X=df.unifrac.samp,MARGIN=2,FUN=function(line){(100/df.unifrac$`Energie_bls`)*df.unifrac$`Energie (kcal)`})
+df.unifrac.samp <- as.data.frame(df.unifrac.samp)
+df.unifrac.samp$sample_day <- paste(df.unifrac.samp$file_name,df.unifrac.samp$day)
+df.unifrac.samp <- df.unifrac.samp[ ,-c(1)]
+
+#otu_table generation for weighted UniFrac
+otu.unifrac.samp <- subset(df.unifrac.samp,select = c(`item`,`calculation`,`sample_day`))
+
+otu.unifrac.samp <- otu.unifrac.samp %>% group_by(item,sample_day) %>% summarize(sum = sum(calculation)) %>% pivot_wider(names_from = 'item',values_from = 'sum') %>% as.data.frame(.)
+
+otu.unifrac.samp[is.na(otu.unifrac.samp)] <- 0
+row.names(otu.unifrac.samp) <- otu.unifrac.samp$sample_day
+otu.unifrac.samp <- otu.unifrac.samp[ ,-1]
+
+
+otu.weighted.samp <- otu_table(otu.unifrac.samp,taxa_are_rows = FALSE)
+
+phylo.conv.w.samp <- phyloseq(otu.weighted.samp,tree.conv)
+unifrac.keto.conv.w.samp <- UniFrac(phylo.conv.w.samp,weighted = FALSE,fast = TRUE)
+pcoa_keto.w.samp <- ape::pcoa(unifrac.keto.conv.w.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.conv.w.samp <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_keto.w.samp$vectors %>%  ##error
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.conv.w.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac conventional clusters')
+
+```
+
+19.08
+#nutrient based cluster UniFrac
+one sample one week
+```{r}
+##tree.keto.bls 
+
+##weighted UniFrac
+phylo.nutr.w <- phyloseq(otu.weighted,tree.keto.bls)
+unifrac.nutr.w <- UniFrac(phylo.nutr.w,weighted = TRUE,fast = TRUE)
+pcoa_nutr.w <- ape::pcoa(unifrac.nutr.w)
+
+##unweighted UniFrac
+phylo.nutr.uw <- phyloseq(unifrac,tree.keto.bls)
+unifrac.nutr.uw <- UniFrac(phylo.nutr.uw,weighted = FALSE,fast = TRUE)
+pcoa_nutr.uw <- ape::pcoa(unifrac.nutr.uw)
+
+#visualizations
+
+#Phenotype
+metadata.nutr.w <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+nutr.w.pheno <- pcoa_nutr.w$vectors %>%  #/pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.nutr.w, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac nutrient clusters')+ theme(plot.title = element_text(size=10))
+
+
+#Sex
+metadata.nutr.w <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Sex) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+nutr.w.sex <- pcoa_nutr.w$vectors %>%  #/pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.nutr.w, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac nutrient clusters')+ theme(plot.title = element_text(size=10))
+
+#Phenotype
+metadata.nutr.uw <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+nutr.uw.pheno <- pcoa_nutr.uw$vectors %>%  #
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.nutr.uw, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac nutrient clusters')+ theme(plot.title = element_text(size=10))
+
+# ggplotly(ug,tooltip = c('x','y','text'))
+
+#Sex
+metadata.nutr.uw <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Sex) %>% 
+  distinct() %>% 
+  dplyr::rename(Name = file_name)
+nutr.uw.sex <- pcoa_nutr.uw$vectors %>%  #/pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., metadata.nutr.uw, by = 'Name') %>%
+  mutate(Pheno = ifelse(Sex == 'not classified', NA, Sex)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Sex),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac nutrient clusters')+ theme(plot.title = element_text(size=10))
+
+#variance
+
+get_explained_variance(pcoa_nutr.uw)[1:2]
+get_explained_variance(pcoa_nutr.w)[1:2]
+
+pcoa_nutr.uw$values$Relative_eig
+
+pcoa_nutr.uw$vectors <- as.data.frame(pcoa_nutr.uw$vectors)
+pcoa_nutr.w$vectors <- as.data.frame(pcoa_nutr.w$vectors)
+
+varAxis.1 <- var(pcoa_nutr.uw$vectors$Axis.1)##0.005039151
+# -->100*0.02635798=2.635798% WRONG?
+varAxis.2 <- var(pcoa_nutr.uw$vectors$Axis.2)##0.003714742
+#--> 100*0.02117861=2.117861% WRONG?
+#very little variance on both axis
+
+varwAxis.1 <- var(pcoa_nutr.w$vectors$Axis.1)##0.04277659
+varwAxis.2 <- var(pcoa_nutr.w$vectors$Axis.2)##0.0120085
+
+var_pop <- function(x) {       # Create function for population variance
+  mean((x - mean(x))^2)
+}
+
+var_popAxis.1 <- var_pop(pcoa_nutr.uw$vectors$Axis.1)##0.02603901
+#--> 100*0.02603901=2.603901% WRONG?
+var_popAxis.2 <- var_pop(pcoa_nutr.uw$vectors$Axis.2)##0.02078877
+#--> 100*0.02078877=2.078877% WRONG? 
+
+# ggplotly(k,tooltip = c('x','y','text'))
+
+```
+
+#nutrient cluster
+one sample one day
+```{r}
+#unweighted UniFrac per day
+
+phylo.nutr.uw.samp <- phyloseq(otu.unweighted.samp,tree.keto.bls)
+unifrac.nutr.uw.samp <- UniFrac(phylo.nutr.uw.samp,weighted = FALSE,fast = TRUE)
+pcoa_nutr.uw.samp <- ape::pcoa(unifrac.nutr.uw.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.nutr.uw.samp <- 
+  k.bls_prodi %>% 
+  dplyr::select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_nutr.uw.samp$vectors %>%  #or pcoa_keto.w/pcoa_nutr.w or pcoa_nutr.uw
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.nutr.uw.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA unweighted UniFrac nutrient clusters')
+
+#weighted UniFrac
+phylo.nutr.w.samp <- phyloseq(otu.weighted.samp,tree.keto.bls)
+unifrac.nutr.w.samp <- UniFrac(phylo.nutr.w.samp,weighted = FALSE,fast = TRUE)
+pcoa_nutr.w.samp <- ape::pcoa(unifrac.nutr.w.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.nutr.w.samp <- 
+  k.bls_prodi %>% 
+  select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_nutr.w.samp$vectors %>%  ##error
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.nutr.w.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac nutrient clusters')
+```
+
+###export
+```{r}
+pdf(paste0(diet_dir,'unifrac.pc.pdf'))
+
+ggarrange(conv.uw.pheno,conv.uw.sex, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+
+ggarrange(nutr.uw.pheno,nutr.uw.sex, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+
+ggarrange(conv.w.pheno,conv.w.sex, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+
+ggarrange(nutr.w.pheno,nutr.w.sex, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+
+dev.off()
+```
+
+
+

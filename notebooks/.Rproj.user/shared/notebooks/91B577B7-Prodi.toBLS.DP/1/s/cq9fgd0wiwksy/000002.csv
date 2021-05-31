@@ -1,0 +1,19 @@
+"0","pseudo = 1e-15"
+"0",""
+"0","# both"
+"0","k.bls_prodi.clr <- rgr::clr(k.bls_prodi.data + pseudo, ifclose = FALSE, ifwarn = TRUE)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","k.bls_prodi.clr.unit <- t(scale(t(k.bls_prodi.clr), center = F, scale = T))"
+"0",""
+"0","# bls"
+"0","k.bls.clr <- rgr::clr(k.bls.data + pseudo, ifclose = FALSE, ifwarn = TRUE)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","k.bls.clr.unit <- t(scale(t(k.bls.clr), center = F, scale = T))"
+"0",""
+"0","# prodi"
+"0","k.prodi.clr <- rgr::clr(k.prodi.data + pseudo, ifclose = FALSE, ifwarn = TRUE)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","k.prodi.clr.unit <- t(scale(t(k.prodi.clr), center = F, scale = T))"

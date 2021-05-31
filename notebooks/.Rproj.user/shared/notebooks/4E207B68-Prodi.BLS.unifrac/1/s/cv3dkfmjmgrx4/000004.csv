@@ -1,0 +1,6 @@
+"0","d.cat_data <- hclust(cat.dist, method = 'complete')"
+"0","dend.cat <- as.dendrogram(d.cat_data)"
+"0","tree.conv <- ape::as.phylo(d.cat_data,use.labels = keto.bls$item_cat)"
+"0",""
+"0",""
+"0","plot(tree.conv, type= 'fan')"

@@ -1,0 +1,16 @@
+"0","physeq.week <- phyloseq(otu.week,tree.conv)
+jac.conv.week <- phyloseq::distance(physeq.week, method = ""jaccard"", binary = TRUE)
+pcoa_jac.conv.week <- ape::pcoa(jac.conv.week)
+
+#variance
+
+get_explained_variance <- function(pcoa) {
+  return(paste0(round(pcoa$values$Rel_corr_eig * 100, 2), '%'))
+}
+get_explained_variance(pcoa_jac.conv.week)[1:2]
+"
+"1","[1]"
+"1"," ""7.14%"""
+"1"," ""6.32%"""
+"1","
+"

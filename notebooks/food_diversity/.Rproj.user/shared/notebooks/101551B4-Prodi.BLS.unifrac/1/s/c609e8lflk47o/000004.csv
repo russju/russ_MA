@@ -1,0 +1,26 @@
+"0","```r
+
+#weighted UniFrac
+phylo.nutr.w.samp <- phyloseq(otu.weighted.samp,tree.keto.bls)
+unifrac.nutr.w.samp <- UniFrac(phylo.nutr.w.samp,weighted = FALSE,fast = TRUE)
+pcoa_nutr.w.samp <- ape::pcoa(unifrac.nutr.w.samp)
+
+##visualization
+
+#Phenotype
+p.metadata.nutr.w.samp <- 
+  k.bls_prodi %>% 
+  select(file_name:Phenotype) %>% 
+  distinct() %>% 
+  rename(Name = file_name)
+pcoa_nutr.w.samp$vectors %>%  ##error
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  select(Name, Axis.1:Axis.5) %>%
+  separate(Name, remove = F, into = c('Sample','U'), sep = '[.]') %>% 
+  left_join(., p.metadata.nutr.w.samp, by = 'Name') %>%
+  mutate(Pheno = ifelse(Phenotype == 'not classified', NA, Phenotype)) %>% 
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = U, alpha = Pheno),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA weighted UniFrac nutrient clusters')
+```"

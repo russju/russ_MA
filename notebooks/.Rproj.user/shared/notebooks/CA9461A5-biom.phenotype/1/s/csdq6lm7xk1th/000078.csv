@@ -1,0 +1,2 @@
+"0",""
+"0","stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,scale = c('row')) "

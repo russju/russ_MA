@@ -1,0 +1,5 @@
+"0","#faiths alpha diversity"
+"0",""
+"0","pd.nutr.samp <- pd(samp = otu.weighted.samp,tree = tree.nutr,include.root = TRUE)##phylogenetic diversity,specy richness"
+"2","Fehler in is.data.frame(x) : Objekt 'otu.weighted.samp' nicht gefunden
+"

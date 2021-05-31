@@ -1,0 +1,23 @@
+"0","# mapping <- read.table(paste0(biom_dir, 'Mappingfile_converter.txt'),row.names = NULL,header = TRUE)"
+"0",""
+"0","L2 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L2.csv'),row.names = 1,header = TRUE,sep = ';')"
+"0",""
+"0","L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')"
+"0",""
+"0","biom <- read_biom(paste0(biom_dir, 'silva_stool_rarefied1650_table.biom'))"
+"0",""
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

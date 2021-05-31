@@ -1,0 +1,6 @@
+"0",""
+"0","pheno <- dplyr::select(k.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.) %>% column_to_rownames(.,'file_name')"
+"0",""
+"0","pheno[any(is.na(pheno))] <- 'not clasified' ##34 sample in U2 is NA and in U1 not classified"
+"0",""
+"0",""

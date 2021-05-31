@@ -1,0 +1,4 @@
+"0","dir.create(output_dir)"
+"2","'..\..\results' existiert bereits"
+"0","dir.create(table_dir)"
+"2","'..\..\data\tables' existiert bereits"

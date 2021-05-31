@@ -1,0 +1,8 @@
+"0","wd <- '../../' "
+"0",""
+"0","output_dir = paste0(wd,'results/')"
+"0","diet.protocols = paste0(output_dir,'diet.protocols/')"
+"0",""
+"0","data_dir = paste0(wd,'data/')"
+"0","table_dir = paste0(data_dir, 'tables/')"
+"0","biom_dir = paste0(data_dir,'silva.feces/')"

@@ -1,0 +1,17 @@
+"0","```r
+                                                                        
+#per sample
+                                                                        
+df <- left_join(rowSum,pheno,by = 'file_name')
+
+df$sample_pheno <- paste(df$file_name,df$Phenotype)
+df <- df %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','file_name','row')))
+
+matrix.pheno <- df %>% group_by(sample_pheno) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_pheno) %>%
+  pivot_wider(names_from = sample_pheno,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes')                                                                        
+```"

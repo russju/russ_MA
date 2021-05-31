@@ -1,0 +1,95 @@
+---
+title: "bile acids and converter phenotypes"
+output: html_notebook
+---
+
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+#library
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+```
+
+#Data Import
+```{r}
+# ba <- read_tsv(paste0(biom_dir,'Ba_feces_short.tsv'))
+BA <- read_excel(paste0(biom_dir,'BAFecesFricke.xlsx'))
+samples <- read_tsv(paste0(biom_dir,'BA_Feces_Fricke_Sample_Assignment.txt'))
+
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') 
+k.bls_prodi <- dplyr::select(k.bls_prodi,starts_with(c('file_name','Phenotype'))) %>% distinct(.)
+```
+
+##data preparation and processing
+```{r}
+##merging and sample association
+
+samples <- dplyr::select(samples,starts_with(c('Sample Name_1','Sample Identifier')))
+colnames(samples) <- c('file_name','Sample Name')
+BA <- dplyr::select(BA,starts_with(c('Sample Name','Total')))
+
+bile <- merge(samples,BA,by = 'Sample Name')
+bile <- bile[!grepl('U3',bile$file_name),]
+bile$file_name <- str_replace(bile$file_name,pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+bile$diet <- ifelse(grepl('U1',bile$file_name),'non keto','keto')
+
+##z.score normalization
+z.score <- scale(bile$Total)
+bile <- cbind(bile,z.score)
+
+names(bile)[names(bile) == 'z.score'] <- 'stand.bile.acid'
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+ggplot(bile,aes(x=diet,y=`stand.bile.acid`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args)
+
+#converter phenotypes and bile acids in feces
+
+bile.pheno <- merge(bile,k.bls_prodi,by = 'file_name')
+
+# pdf(paste0(output_dir2,'bile.acids.converter.pdf'))
+
+ggplot(bile.pheno,aes(x=Phenotype,y=`stand.bile.acid`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','low converter'),c('not classified','high converter')),hide.ns = FALSE)
+
+ggplot(bile,aes(x=diet,y=`stand.bile.acid`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args)
+
+# dev.off()
+```
+summary statistics
+```{r}
+high <- bile.pheno[grepl('high',bile.pheno$Phenotype),]
+low <- bile.pheno[grepl('low',bile.pheno$Phenotype),]
+not <- bile.pheno[grepl('not',bile.pheno$Phenotype),]
+
+summary(high$stand.bile.acid)
+summary(low$stand.bile.acid)
+summary(not$stand.bile.acid)
+
+sd(high$stand.bile.acid)
+sd(low$stand.bile.acid)
+sd(not$stand.bile.acid)
+```
+

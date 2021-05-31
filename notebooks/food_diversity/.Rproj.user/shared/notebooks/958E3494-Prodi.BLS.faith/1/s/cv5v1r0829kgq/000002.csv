@@ -1,0 +1,55 @@
+"0","## Stacked bar plot, with nutrient based clusters"
+"0","#nutr.cluster  otu.unweighted"
+"0",""
+"0","otu.unweighted <- read_tsv(paste0(table_dir,'otu.conv.19.08.tsv')) %>% "
+"0","  group_by(file_name) %>% "
+"0","  mutate_at(.vars = vars(everything(), -file_name),"
+"0","            .funs = funs(as.numeric(.))) %>% "
+"0","  column_to_rownames('file_name') %>% "
+"0","  t() %>% "
+"0","  as.data.frame() %>% "
+"0","  rownames_to_column('foods')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"2","`funs()` was deprecated in dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
+
+  # Simple named list: 
+  list(mean = mean, median = median)
+
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
+
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))"
+"0","colnames(nutr.cluster) <- c('foods','nutrient.clusters')"
+"0","df <-"
+"0","  otu.unweighted %>% "
+"0","  right_join(nutr.cluster, by = ""foods"") %>% "
+"0","  dplyr::select(foods, nutrient.clusters, everything()) %>% "
+"0","  pivot_longer(cols = c(everything(), -foods, -nutrient.clusters), "
+"0","               names_to = ""sample"", values_to = 'value') %>% "
+"0","  filter(value > 0) %>%  ##only 5 clusters that values>0"
+"0","  group_by(nutrient.clusters, sample) %>% "
+"0","  summarise(value = sum(value)) %>% "
+"0","  pivot_wider(names_from = nutrient.clusters, values_from = value,"
+"0","              values_fill = list(value = 0)) %>% "
+"0","  pivot_longer(names_to = 'nutrient.clusters', "
+"0","               values_to = 'value', "
+"0","               cols = c('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'))"
+"2","`summarise()` has grouped output by 'nutrient.clusters'. You can override using the `.groups` argument.
+"
+"0","# write_tsv(df,'C:/Users/Juliane/Desktop/project.directory/data/tables/nutrient.clusters.df_07.10.tsv')"
+"0",""
+"0","df %>% "
+"0","  separate(sample, remove = F, into = c('individual','timepoint'), sep = '[.]') %>% "
+"0","  ggplot(aes(individual, value, fill = nutrient.clusters)) +"
+"0","  geom_bar(stat = 'identity') + "
+"0","  facet_wrap(~ timepoint)"

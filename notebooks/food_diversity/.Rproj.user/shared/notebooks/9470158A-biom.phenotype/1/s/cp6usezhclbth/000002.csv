@@ -1,0 +1,15 @@
+"0","```r
+set.seed(100)
+data.tune.splsda = mixOmics::tune.splsda(X + pseudo, 
+                          Y = Y, 
+                          ncomp = 3, 
+                          multilevel = NULL, 
+                          logratio = 'CLR',
+                          validation = c('Mfold'), 
+                          folds = 5, 
+                          dist = 'max.dist', 
+                          nrepeat = 10,
+                          progressBar = FALSE)
+
+plot(data.tune.splsda)
+```"

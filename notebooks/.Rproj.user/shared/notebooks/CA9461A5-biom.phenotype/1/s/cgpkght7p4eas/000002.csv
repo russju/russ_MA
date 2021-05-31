@@ -1,0 +1,27 @@
+"0","nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) 
+"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-----------------------------------------------------[39m
+cols(
+  sample = [31mcol_character()[39m,
+  `1.veg.fruit` = [32mcol_double()[39m,
+  `2.carbs.bread` = [32mcol_double()[39m,
+  `3.fatty.sweet` = [32mcol_double()[39m,
+  `4.carbs.cereal` = [32mcol_double()[39m,
+  `5.seed` = [32mcol_double()[39m,
+  `6.nut` = [32mcol_double()[39m,
+  `7.kohl` = [32mcol_double()[39m,
+  `8.fish.sauce` = [32mcol_double()[39m,
+  `9.egg` = [32mcol_double()[39m,
+  `10.alcohol` = [32mcol_double()[39m,
+  `11.wurst` = [32mcol_double()[39m,
+  `12.soft.drinks` = [32mcol_double()[39m,
+  `13.white.meat` = [32mcol_double()[39m,
+  `14.fatty.dairy` = [32mcol_double()[39m,
+  `15.cheese` = [32mcol_double()[39m
+)
+
+"
+"0","colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'"
+"0",""
+"0","pheno.X <- dplyr::select(X.metadata,starts_with(c('Phenotype','file_name')))"

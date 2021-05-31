@@ -1,0 +1,34 @@
+"0","```r
+library(tidyverse)
+```"
+"1","Paket ‘tidyverse’ wurde unter R Version 4.0.2 erstelltRegistered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+-- Attaching packages ---------------------------------------------------------------------------------- tidyverse 1.3.0 --
+v ggplot2 3.3.3     v purrr   0.3.4
+v tibble  3.0.6     v dplyr   1.0.4
+v tidyr   1.1.2     v stringr 1.4.0
+v readr   1.4.0     v forcats 0.5.1
+Paket ‘ggplot2’ wurde unter R Version 4.0.3 erstelltPaket ‘tibble’ wurde unter R Version 4.0.3 erstelltPaket ‘tidyr’ wurde unter R Version 4.0.3 erstelltPaket ‘readr’ wurde unter R Version 4.0.3 erstelltPaket ‘dplyr’ wurde unter R Version 4.0.3 erstelltPaket ‘forcats’ wurde unter R Version 4.0.3 erstellt-- Conflicts ------------------------------------------------------------------------------------- tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+"
+"0","```r
+library(ggplot2)  
+library(gplots)
+```"
+"1","Paket ã¤¼ã¸±gplotsã¤¼ã¸² wurde unter R Version 4.0.3 erstellt
+Attache Paket: ã¤¼ã¸±gplotsã¤¼ã¸²
+
+The following object is masked from ã¤¼ã¸±package:statsã¤¼ã¸²:
+
+    lowess
+"
+"0","```r
+library(vegan)
+```"
+"1","Paket ‘vegan’ wurde unter R Version 4.0.3 erstelltLade nötiges Paket: permute
+Lade nötiges Paket: lattice
+This is vegan 2.5-7
+"

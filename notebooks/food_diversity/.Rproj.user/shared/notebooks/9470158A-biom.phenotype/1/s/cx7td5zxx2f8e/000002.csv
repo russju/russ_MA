@@ -1,0 +1,12 @@
+"0","```r
+X.metadata <- X.metadata %>% dplyr::select(.,everything(),-starts_with('file_name')) 
+
+matrix <- X.metadata %>% group_by(Phenotype) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-Phenotype) %>%
+  pivot_wider(names_from = Phenotype,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+matrix.z <- scale(matrix)
+                                                                    stats::heatmap(matrix.z,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes')
+```"

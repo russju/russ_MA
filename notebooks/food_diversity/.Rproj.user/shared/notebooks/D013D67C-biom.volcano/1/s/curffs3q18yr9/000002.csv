@@ -1,0 +1,48 @@
+"0","```r
+##plotting rel. clr abundances firmicutes bacteroidetes
+
+fb.clr.L6 <- L6.rel.clr %>% as.data.frame(.) %>% subset(.,select = c('D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Bifidobacterium','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Bacteroidaceae.D_5__Bacteroides','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.2','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.6','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.7','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.9','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Lactococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Streptococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Blautia','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Roseburia','D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia','D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Pseudomonadaceae.D_5__Pseudomonas'))
+fb.clr.L6$diet <- ifelse(grepl('U1',row.names(fb.clr.L6)),'non keto','keto')
+colnames(fb.clr.L6) <- c('rel.clr.Bifidobacterium','rel.clr.Bacteroides','rel.clr.Prevotella','rel.clr.Prevotella.2','rel.clr.Prevotella.6','rel.clr.Prevotella.7','rel.clr.Prevotella.9','rel.clr.Lactococcus','rel.clr.Streptococcus','rel.clr.Blautia','rel.clr.Roseburia','rel.clr.Akkermansia','rel.clr.Pseudomonas','diet')
+
+akkermansia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Akkermansia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+pseudomonas.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Pseudomonas)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+roseburia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Roseburia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+blautia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Blautia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+streptococcus.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Streptococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+lactococcus.2.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Lactococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.2.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.2)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.6)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.7.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.7)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.9.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.9)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+
+bifido.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Bifidobacterium)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bacteroides.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Bacteroides)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevo.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+```"

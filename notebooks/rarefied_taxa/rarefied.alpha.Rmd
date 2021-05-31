@@ -1,0 +1,107 @@
+---
+title: "taxa alpha diversity correlated with clusters alpha diversity"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(ggplot2)  
+library(gplots)
+
+library(vegan)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+##Data Import
+```{r}
+# write_tsv(pd.conv,paste0(table_dir,'faith.conv.tsv'))
+# write_tsv(pd.nutr,paste0(table_dir,'faith.nutr.tsv'))
+
+div.conv <- read_tsv(paste0(table_dir,'shannon.conv.tsv')) %>% column_to_rownames(.,'file_name')
+colnames(div.conv) <- 'Shannon Index conv.clust'
+div.nut <- read_tsv(paste0(table_dir,'shannon.nutr.tsv'))%>% column_to_rownames(.,'file_name')
+colnames(div.nut) <- 'Shannon Index nut.clust'
+# biom.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+# biom.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))%>% column_to_rownames(.,'rowname')
+
+biom.L6.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L6.tsv')) %>% column_to_rownames(.,'rowname')
+biom.L7.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L7.tsv')) %>% column_to_rownames(.,'rowname')
+
+
+```
+##shannon index microbiome
+rarefied taxa
+```{r}
+div.L6 <- diversity(biom.L6.rel,index = "shannon",base = 2) %>% as.data.frame(.)
+colnames(div.L6) <- 'Shannon Index genus'
+
+div.L7 <- diversity(biom.L7.rel,index = "shannon",base = 2)%>% as.data.frame(.)
+colnames(div.L7) <- 'Shannon Index specy'
+```
+
+##conv clusters L6
+```{r}
+#L6 conv
+div.L6.conv <- merge(div.L6,div.conv,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L6.conv,x='Shannon Index conv.clust',y='Shannon Index genus',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+##keto and non keto separated
+
+div.L6.u1 <- div.L6 %>% filter(grepl('U1',row.names(div.L6)))
+div.L6.u2 <- div.L6 %>% filter(grepl('U2',row.names(div.L6)))
+
+div.conv.u1 <- div.cpnv %>% filter(grepl('U1',row.names(div.L6)))
+div.conv.u2 <- div.conv %>% filter(grepl('U1',row.names(div.L6)))
+```
+
+##conv clusters L7
+```{r}
+#L7 conv
+div.L7.conv <- merge(div.L7,div.conv,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L7.conv,x='Shannon Index conv.clust',y='Shannon Index specy',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```
+##nut clusters L7
+```{r}
+#L7 nut
+div.L7.nut <- merge(div.L7,div.nut,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L7.nut,x='Shannon Index nut.clust',y='Shannon Index specy',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```
+
+
+##nut clusters L6
+```{r}
+#L6 nut
+div.L6.nut <- merge(div.L6,div.nut,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L6.nut,x='Shannon Index nut.clust',y='Shannon Index genus',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```

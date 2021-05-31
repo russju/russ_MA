@@ -1,0 +1,6 @@
+"0","```r
+get_explained_variance(pcoa_nutr.w)[1:2]
+
+```"
+"1","[1] \"28.11%\" \"8.6%\"  
+"

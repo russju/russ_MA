@@ -1,0 +1,10 @@
+"0","conv.cluster <- subset(k.bls_prodi,select=c(`item_descr`,`item_cat`)) %>% as.data.frame(.) %>% distinct(.)
+"
+"2","Warnmeldung:
+"
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","names(conv.cluster)[names(conv.cluster) == 'item_descr'] <- 'foods'"
+"0","colnames(nutr.cluster) <- c('foods','nutrient.clusters')"
+"0","cl.merge <- merge(conv.cluster,nutr.cluster,by = 'foods') %>% distinct(.)"

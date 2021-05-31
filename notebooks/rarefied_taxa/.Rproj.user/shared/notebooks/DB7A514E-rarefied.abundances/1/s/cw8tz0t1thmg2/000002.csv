@@ -1,0 +1,99 @@
+"0","```r
+##L6 genus
+bacteroides.L6 <- norm.L6[grepl('Bacteroides',colnames(norm.L6))]
+names(bacteroides.L6)[names(bacteroides.L6) == 'k__Bacteria.p__Bacteroidetes.c__Bacteroidia.o__Bacteroidales.f__Bacteroidaceae.g__Bacteroides'] <- 'Bacteroides'
+
+actinomyces.L6 <- norm.L6[grepl('Actinomyces',colnames(norm.L6))]
+names(actinomyces.L6)[names(actinomyces.L6) == 'k__Bacteria.p__Actinobacteria.c__Actinobacteria.o__Actinomycetales.f__Actinomycetaceae.g__Actinomyces'] <- 'Actinomyces'
+
+streptomyces.L6 <- norm.L6[grepl('Streptomyces',colnames(norm.L6))]
+names(streptomyces.L6 )[names(streptomyces.L6 ) == 'k__Bacteria.p__Actinobacteria.c__Actinobacteria.o__Actinomycetales.f__Streptomycetaceae.g__Streptomyces'] <- 'Streptomyces'
+
+cardiobacterium.L6 <- norm.L6[grepl('Cardiobacterium',colnames(norm.L6))]
+names(cardiobacterium.L6)[names(cardiobacterium.L6) == 'k__Bacteria.p__Proteobacteria.c__Gammaproteobacteria.o__Cardiobacteriales.f__Cardiobacteriaceae.g__Cardiobacterium'] <- 'Cardiobacterium'
+
+# names(bacteroides.L6)[names(bacteroides.L6) == 'k__Bacteria.p__Tenericutes.c__RF3.o__ML615J.28.f__.g__'] <- 'Tenericutes spp.'
+buty.L6 <- norm.L6[grepl('Butyrivibrio',colnames(norm.L6))]
+names(buty.L6)[names(buty.L6) == 'k__Bacteria.p__Firmicutes.c__Clostridia.o__Clostridiales.f__Lachnospiraceae.g__Butyrivibrio'] <- 'Butyrivibrio'
+
+clost.L6 <- norm.L6[grepl('Clostridiales._',colnames(norm.L6))]
+names(clost.L6)[names(clost.L6) == 'k__Bacteria.p__Firmicutes.c__Clostridia.o__Clostridiales.__.__'] <- 'Clostridiales'
+
+genus <- merge(bacteroides.L6,buty.L6,by = 'row.names') %>% column_to_rownames(.,'Row.names') %>% merge(.,clost.L6,by = 'row.names') %>% column_to_rownames(.,'Row.names') %>% merge(.,actinomyces.L6,by = 'row.names') %>% column_to_rownames(.,'Row.names') %>%
+  merge(.,streptomyces.L6,by = 'row.names') %>% column_to_rownames(.,'Row.names') %>%
+  merge(.,cardiobacterium.L6,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+genus$diet <- ifelse(grepl('U1',row.names(genus)),'non keto','keto')
+
+##L7 specy
+specy <- select(norm.L7,ends_with(c('pallens','bacilliformis','faecis','_aeria','catus','_obeum','bifidum')))
+colnames(specy) <- c('Prevotella pallens','Neisseria bacilliformis','Roseburia faecis','Rothia aeria','Coprococcus catus','Blautia obeum','Bifidobacterium bifidum')
+
+specy$diet <- ifelse(grepl('U1',row.names(specy)),'non keto','keto')
+
+##plots
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c(\"****\", \"***\", \"**\", \"*\", \"ns\"))
+
+#phyla.rel.clr
+firm <- ggplot(phyla.rel.clr,aes(x = diet,y = Firmicutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+bact <- ggplot(phyla.rel.clr,aes(x = diet,y = Bacteroidetes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+bact.firm <- ggscatter(phyla.rel.clr,x='Bacteroidetes',y='Firmicutes',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+act <- ggplot(phyla.rel.clr,aes(x = diet,y = Actinobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+#specy
+roseburia <- ggplot(specy,aes(x = diet,y = `Roseburia faecis`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+prevotella <- ggplot(specy,aes(x = diet,y = `Prevotella pallens`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+coprococcus <- ggplot(specy,aes(x = diet,y = `Coprococcus catus`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+
+neisseria <- ggplot(specy,aes(x = diet,y = `Neisseria bacilliformis`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+blautia <- ggplot(specy,aes(x = diet,y = `Blautia obeum`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+rothia <- ggplot(specy,aes(x = diet,y = `Rothia aeria`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+bifidobacterium <- ggplot(specy,aes(x = diet,y = `Bifidobacterium bifidum`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)+theme(axis.title.y = element_text(size = 8))
+
+#genus
+actinomyces <- ggplot(genus,aes(x = diet,y = `Actinomyces`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+butyrivibrio <- ggplot(genus,aes(x = diet,y = `Butyrivibrio`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+clostridiales <- ggplot(genus,aes(x = diet,y = `Clostridiales`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+streptomyces <- ggplot(genus,aes(x = diet,y = `Streptomyces`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+bacteroides <- ggplot(genus,aes(x = diet,y = `Bacteroides`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+cardiobacterium <- ggplot(genus,aes(x = diet,y = `Cardiobacterium`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+# pdf(paste0(output_dir2,'rarefied.abundances.pdf'))
+
+ggarrange(firm,bact,act,bact.firm,ncol = 2,nrow = 2)
+```"
+"1","`geom_smooth()` using formula 'y ~ x'
+"

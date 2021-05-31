@@ -1,0 +1,15 @@
+"0","```r
+##Total.Sterols in feces and Cholesterol in diet
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+ggscatter(merge.chol.nutr,x='Total.Sterols',y='Cholesterin',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman',xlab = 'total sterols feces', ylab = 'dietary cholesterol')
+```"
+"1","Fehler in ggscatter(merge.chol.nutr, x = \"Total.Sterols\", y = \"Cholesterin\",  : 
+  Objekt 'merge.chol.nutr' nicht gefunden
+"

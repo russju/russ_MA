@@ -1,0 +1,14 @@
+"0","cat.dist <-
+  tmp %>% 
+  mutate(same_subcat = item_subcat.select == item_subcat,
+         same_cat = item_cat.select == item_cat) %>% 
+  mutate(total = (as.numeric(!same_cat) + as.numeric(!same_subcat)) / 2) %>% 
+  dplyr::select(item_descr.select, item_descr, total) %>%
+  
+  pivot_wider(names_from = 'item_descr.select', values_from = 'total') %>%
+  column_to_rownames('item_descr') 
+"
+"2","Values are not uniquely identified; output will contain list-cols.
+* Use `values_fn = list` to suppress this warning.
+* Use `values_fn = length` to identify where the duplicates arise
+* Use `values_fn = {summary_fun}` to summarise duplicates"

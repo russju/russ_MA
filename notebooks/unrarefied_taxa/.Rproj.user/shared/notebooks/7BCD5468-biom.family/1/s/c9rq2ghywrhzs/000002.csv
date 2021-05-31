@@ -1,0 +1,99 @@
+"0","```r
+
+L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')
+
+
+nutr.sum <- read_tsv(paste0(table_dir, 'norm.keto.bls.06.10.tsv'))
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+nutr.sum$file_name <- gsub(nutr.sum$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') 
+nutr.sum <- as.data.frame(nutr.sum) %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('rowsum'))
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+cl.sum.z <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_17.02.tsv')) %>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  file_name = col_character(),
+  `1.veg.fruit` = col_double(),
+  `2.carbs.bread` = col_double(),
+  `3.fatty.sweet` = col_double(),
+  `4.carbs.cereal` = col_double(),
+  `5.seed` = col_double(),
+  `6.nut` = col_double(),
+  `7.kohl` = col_double(),
+  `8.fish.sauce` = col_double(),
+  `9.egg` = col_double(),
+  `10.alcohol` = col_double(),
+  `11.wurst` = col_double(),
+  `12.soft.drinks` = col_double(),
+  `13.white.meat` = col_double(),
+  `14.fatty.dairy` = col_double(),
+  `15.cheese` = col_double()
+)
+"
+"0","```r
+conv.clust.z <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_17.02.tsv'))%>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+cl.sum <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_22.10.tsv')) %>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  `1.veg.fruit` = col_double(),
+  `2.carbs.bread` = col_double(),
+  `3.fatty.sweet` = col_double(),
+  `4.carbs.cereal` = col_double(),
+  `5.seed` = col_double(),
+  `6.nut` = col_double(),
+  `7.kohl` = col_double(),
+  `8.fish.sauce` = col_double(),
+  `9.egg` = col_double(),
+  `10.alcohol` = col_double(),
+  `11.wurst` = col_double(),
+  `12.soft.drinks` = col_double(),
+  `13.white.meat` = col_double(),
+  `14.fatty.dairy` = col_double(),
+  `15.cheese` = col_double(),
+  file_name = col_character()
+)
+"
+"0","```r
+conv.sum <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_26.10.tsv'))%>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification -------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"

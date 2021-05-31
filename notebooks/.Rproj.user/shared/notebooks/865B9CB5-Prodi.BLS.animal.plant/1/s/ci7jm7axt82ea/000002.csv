@@ -1,0 +1,14 @@
+"0","```r
+
+animal <- k.bls_prodi[k.bls_prodi$item_subcat %in% c('LikÃ¶r (durchschn. 32 %)','BrÃ¼hwÃ¼rfel, Fleischextrakt','Kuchen und Torten aus besonderen Teigen','Fertiggerichte auf Fleischwarenbasis','Innereien von Haustieren','Fischerzeugnisse','Krebstiere, Muscheltiere','SchweinefleischstÃ¼cke','KalbfleischstÃ¼cke','Barschartige Fische','Obstkuchen','Rindfleischschnitte','Dorschartige Fische, Kabeljau, Schellfisch, Seelachs, Goldbarsch','Torten','Fleischgerichte v. Wild + GeflÃ¼gel','Fleischgerichte vom Hammel+Lamm','Schweinefleischschnitte','Fleischwarenerzeugnisse','Fischgerichte','Speiseeis','Milcherzeugnisse und KÃ¤seerzeugnisse','Ã–lsoÃŸen, Mayonnaisen, Fettzubereitungen','Heringsfische, Makrelen, Thunfische','Obsttorten','SchnittkÃ¤se halbfest','Tierische Fette','Fleischgerichte vom Kalb','Getreidegerichte, Mehlspeisen, Pfannkuchen','Milchmischerzeugnisse','PÃ¶kelwaren','GeflÃ¼gel','Schokoladenwaren, Pralinen','Teigwaren (-arten)','Eier-, Quark- und KÃ¤segerichte','Kochwurst','Lachsfische','WÃ¼rstchen, Hackfleischgerichte Fleisch,','Kalbfleischschnitte','Fleischgerichte vom Schwein','FrischkÃ¤se, SauermilchkÃ¤se, KochkÃ¤se, SchmelzkÃ¤se','BrÃ¼hwurst','SÃ¼ÃŸspeisen, Dessert','Fertiggerichte auf Fleischbasis','Fleischgerichte vom Rind','SoÃŸen','HartkÃ¤se','RindfleischstÃ¼cke','Nudelgerichte, Teigwarengerichte, Pizzen','Marzipan, Lakritze, Krokant, Nougat','Speck, Schinken','SchnittkÃ¤se','WeichkÃ¤se','Schokolade','Rohwurst','Kuchen','Schnellgerichte, Eis','Eier','Butter','Milch und Sauermilch'),]
+
+animal2 <- k.bls_prodi[k.bls_prodi$item %in% c('mozzarella','french dressing energiereduziert','choco crossies nestle','gemÃ¼sequiche (standardrezeptur)','feta','rind hackfleisch roh','blÃ¤tterteig gebacken','schafskÃ¤se','rind/schwein hackfleisch gekocht','schafskÃ¤se mind. 50% fett i. tr.','schafskÃ¤se','dressing fÃ¼r kartoffelsalat fertigprodukt','schwein hackfleisch gegart','rind/schwein hackfleisch gebraten (zubereitet ohne fett)','wurst','kapern konserve abgetropft','zitronenkuchen (standardrezeptur)','french dressing','buttergemÃ¼se (tk), alnatura','	
+hacksteak','rinderhackfleisch','rind hackfleisch gekocht (zubereitet mit fett und salz)','waffelkeks'),]
+
+animal <- rbind(animal,animal2)
+
+#merging file_name and day together in a new column sample_day
+
+animal$sample_day <- paste(animal$file_name,animal$day)
+animal$source <- rep('animal',nrow(animal))
+```"

@@ -1,0 +1,4 @@
+"0","tmp <- do.call(""rbind"", replicate(nrow(r), r, simplify = FALSE))
+"
+"2","Fehler: kann Vektor der Größe 4.1 MB nicht allozieren
+"

@@ -1,0 +1,9 @@
+"0","cor.test.adj.biom.L7 <- cbind(cor.test.biom.L7[ ,c(1,3)],p.adj.log.biom.L7) %>% cbind(.,r.cor.biom.L7) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L7) <- c('specy','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L7 <- cor.test.adj.biom.L7[cor.test.adj.biom.L7$p.adj.log != 0 & cor.test.adj.biom.L7$estimate != 0,]
+
+write_tsv(cor.test.adj.L7,paste0(table_dir,'corr.nutr.biom.L7.tsv'))
+"
+"2","Fehler in is.data.frame(x) : Objekt 'cor.test.adj.L7' nicht gefunden
+"

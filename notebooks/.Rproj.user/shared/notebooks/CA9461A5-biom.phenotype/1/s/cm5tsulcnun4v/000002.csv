@@ -1,0 +1,7 @@
+"0","pseudo = 1e-6"
+"0",""
+"0","data.plsda = mixOmics::plsda(X = X + pseudo,Y = Y, ncomp = 3 , logratio = 'CLR', scale = T)"
+"0","data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,"
+"0","                    progressBar = FALSE, nrepeat = 10)"
+"0",""
+"0","plot(data.perf.plsda, overlay = 'measure', sd=TRUE)"

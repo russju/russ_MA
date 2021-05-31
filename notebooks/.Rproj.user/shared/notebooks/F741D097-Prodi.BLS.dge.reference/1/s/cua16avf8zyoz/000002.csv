@@ -1,0 +1,11 @@
+"0","```r
+# pdf('C:/Users/Juliane/Desktop/project.directory/results/diet.protocols/dge.reference.pdf')
+
+# pdf(paste0(diet_dir,'dge.reference.pdf'))
+
+ggarrange(e.pheno,fiber.pheno,b12.pheno,prot.pheno,fe.pheno,
+          labels = c(\"A\", \"B\", \"C\",\"D\",\"E\"),
+          ncol = 2, nrow = 3)
+```"
+"1","cannot compute exact p-value with tiescannot compute exact p-value with tiescannot compute exact p-value with tiescannot compute exact p-value with tiescannot compute exact p-value with ties
+"

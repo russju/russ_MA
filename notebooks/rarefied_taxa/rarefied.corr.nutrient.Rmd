@@ -1,0 +1,541 @@
+---
+title: "correlation rarefied taxa with nutrients (all,U1,U2)"
+output: html_notebook
+---
+
+#libraries
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("biomformat")
+
+# if (!requireNamespace('BiocManager', quietly = TRUE))
+#     install.packages('BiocManager')
+# 
+#  BiocManager::install('EnhancedVolcano')
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("a4Base")
+  
+
+library(tidyverse)
+library(biomformat)
+# library(data.table)
+library(compositions)
+# library(corrplot)
+# library(EnhancedVolcano)
+library(a4Base)
+library(plotly)
+library(ggpubr)
+
+library(Maaslin2)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')
+
+```
+
+##biom
+pseudo count
+relative abundance
+centered log ratio
+```{r}
+##preparation
+
+#two samples for U1,U2 and U3
+#merging them ore deleting?
+
+#L6 genus
+biom.L6 <- biom.L6[!grepl('.2U',row.names(biom.L6)),]
+biom.L6 <- biom.L6[!grepl(pattern = 'U3',row.names(biom.L6)),]
+biom.L6 <- dplyr::select(biom.L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+row.names(biom.L6) <- str_replace(row.names(biom.L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+
+#species L7
+biom.L7 <- biom.L7[!grepl('.2U',row.names(biom.L7)),]
+biom.L7 <- biom.L7[!grepl(pattern = 'U3',row.names(biom.L7)),]
+biom.L7 <- dplyr::select(biom.L7,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+row.names(biom.L7) <- str_replace(row.names(biom.L7),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+
+#L6  relative abundance, clr
+
+biom.L6.sub <- data.matrix(biom.L6)
+biom.L6.sub <- biom.L6.sub+0.5
+rowsum <- rowSums(biom.L6.sub)
+
+biom.L6 <- cbind(biom.L6.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+biom.L6 <- as.data.frame(biom.L6)
+biom.L6.rel <- biom.L6/biom.L6$rowsum
+biom.L6.rel <- dplyr::select(biom.L6.rel,everything(),-starts_with('row'))
+
+#L7  relative abundance, clr
+
+biom.L7.sub <- data.matrix(biom.L7)
+biom.L7.sub <- biom.L7.sub+0.5
+rowsum <- rowSums(biom.L7.sub)
+
+biom.L7 <- cbind(biom.L7.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+biom.L7 <- as.data.frame(biom.L7)
+biom.L7.rel <- biom.L7/biom.L7$rowsum
+biom.L7.rel <- dplyr::select(biom.L7.rel,everything(),-starts_with('row'))
+
+# biom.L6.rel <- rownames_to_column(biom.L6.rel)
+# write_tsv(biom.L6.rel,paste0(table_dir,'rarefied.rel.L6.tsv'))
+
+# biom.L7.rel <- rownames_to_column(biom.L7.rel)
+# write_tsv(biom.L7.rel,paste0(table_dir,'rarefied.rel.L7.tsv'))
+```
+
+clr transformation
+```{r}
+biom.L6.rel.clr <- clr(biom.L6.rel) %>% as.data.frame(.)
+
+biom.L7.rel.clr <- clr(biom.L7.rel) %>% as.data.frame(.)
+
+rownames_to_column(biom.L6.rel.clr) %>%
+write_tsv(.,paste0(table_dir,'biom.L6.rel.clr_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))
+```
+
+subsetting biom.rel.clr and nutr.sum according to day U1,U2
+```{r}
+##U1 
+biom.L6.rel.clr.U1 <- biom.L6.rel.clr[grepl('U1',row.names(biom.L6.rel.clr)),]
+
+biom.L7.rel.clr.U1 <- biom.L7.rel.clr[grepl('U1',row.names(biom.L7.rel.clr)),]
+
+nutr.sum.z.U1 <- nutr.sum.z[grepl('U1',row.names(nutr.sum.z)),]
+
+rownames_to_column(biom.L6.rel.clr.U1) %>% write_tsv(.,paste0(table_dir,'biom.L6.rel.clr.U1_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr.U1) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr.U1_19.02.tsv'))
+
+##U2 
+biom.L6.rel.clr.U2 <- biom.L6.rel.clr[grepl('U2',row.names(biom.L6.rel.clr)),]
+
+biom.L7.rel.clr.U2 <- biom.L7.rel.clr[grepl('U2',row.names(biom.L7.rel.clr)),]
+
+nutr.sum.z.U2 <- nutr.sum.z[grepl('U2',row.names(nutr.sum.z)),]
+
+rownames_to_column(biom.L6.rel.clr.U2) %>%
+write_tsv(.,paste0(table_dir,'biom.L6.rel.clr.U2_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr.U2) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))
+```
+
+###L6
+##correlation between nutrients and biom.L6
+merge taxa table and nutrient table (standardized) together
+correlate every nutrient with every taxa
+spearman correlation
+-log10(BH adjusted p.values)
+
+nutr.sum.z kommt von biom.volcano
+```{r}
+
+merge.biom.L6.nutr <- biom.L6.rel.clr %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L6.nutr[is.na(merge.biom.L6.nutr)] <- 0
+
+merge.biom.L6.nutr$file_name <- row.names(merge.biom.L6.nutr)
+write_tsv(merge.biom.L6.nutr,paste0(table_dir,'corr.biom.L6.19.02.tsv',append=FALSE))
+merge.biom.L6.nutr <- select(merge.biom.L6.nutr,everything(),-starts_with('file_name'))
+
+cor.test.biom.L6 <- merge.biom.L6.nutr %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L6[is.na(cor.test.biom.L6)] <- 0
+
+
+p.adj.biom.L6 <- subset(cor.test.biom.L6,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L6 <- subset(cor.test.biom.L6,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L6 <- log2(r.cor.biom.L6) %>% as.numeric(.)
+cor.test.log.biom.L6[is.nan(cor.test.log.biom.L6)] <- 0
+cor.test.log.biom.L6[is.infinite(cor.test.log.biom.L6)] <- 0
+cor.test.log.biom.L6 <- as.data.frame(cor.test.log.biom.L6)
+
+r.cor.biom.L6[is.nan(r.cor.biom.L6)] <- 0
+r.cor.biom.L6[is.infinite(r.cor.biom.L6)] <- 0
+r.cor.biom.L6 <- as.data.frame(r.cor.biom.L6)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L6 <- -log10(p.adj.biom.L6)
+p.adj.log.biom.L6[is.infinite(p.adj.log.biom.L6)] <- 0
+p.adj.log.biom.L6 <- as.data.frame(p.adj.log.biom.L6)
+
+cor.test.adj.biom.L6 <- cbind(cor.test.biom.L6[ ,c(1,3)],p.adj.log.biom.L6) %>% cbind(.,r.cor.biom.L6) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L6) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L6 <- cor.test.adj.biom.L6[cor.test.adj.biom.L6$p.adj.log != 0 & cor.test.adj.biom.L6$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L6,paste0(table_dir,'corr.nutr.biom.L6.tsv'))
+
+```
+
+###U1 correlation between nutrients and biom.L6.U1
+```{r}
+
+merge.biom.L6.nutr.U1 <- biom.L6.rel.clr.U1 %>% merge(.,nutr.sum.z.U1,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L6.nutr.U1[is.na(merge.biom.L6.nutr.U1)] <- 0
+
+merge.biom.L6.nutr.U1$file_name <- row.names(merge.biom.L6.nutr.U1)
+write_tsv(merge.biom.L6.nutr.U1,paste0(table_dir,'corr.biom.L6.U1.19.02.tsv',append=FALSE))
+merge.biom.L6.nutr.U1 <- select(merge.biom.L6.nutr.U1,everything(),-starts_with('file_name'))
+
+cor.test.biom.L6.U1 <- merge.biom.L6.nutr.U1 %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L6.U1[is.na(cor.test.biom.L6.U1)] <- 0
+
+
+p.adj.biom.L6.U1 <- subset(cor.test.biom.L6.U1,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L6.U1 <- subset(cor.test.biom.L6.U1,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L6.U1 <- log2(r.cor.biom.L6.U1) %>% as.numeric(.)
+cor.test.log.biom.L6.U1[is.nan(cor.test.log.biom.L6.U1)] <- 0
+cor.test.log.biom.L6.U1[is.infinite(cor.test.log.biom.L6.U1)] <- 0
+cor.test.log.biom.L6.U1 <- as.data.frame(cor.test.log.biom.L6.U1)
+
+r.cor.biom.L6.U1[is.nan(r.cor.biom.L6.U1)] <- 0
+r.cor.biom.L6.U1[is.infinite(r.cor.biom.L6.U1)] <- 0
+r.cor.biom.L6.U1 <- as.data.frame(r.cor.biom.L6.U1)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L6.U1 <- -log10(p.adj.biom.L6.U1)
+p.adj.log.biom.L6.U1[is.infinite(p.adj.log.biom.L6.U1)] <- 0
+p.adj.log.biom.L6.U1 <- as.data.frame(p.adj.log.biom.L6.U1)
+
+cor.test.adj.biom.L6.U1 <- cbind(cor.test.biom.L6.U1[ ,c(1,3)],p.adj.log.biom.L6.U1) %>% cbind(.,r.cor.biom.L6.U1) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L6.U1) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L6.U1 <- cor.test.adj.biom.L6.U1[cor.test.adj.biom.L6.U1$p.adj.log != 0 & cor.test.adj.biom.L6.U1$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L6.U1,paste0(table_dir,'corr.nutr.biom.L6.U1.tsv'))
+
+```
+
+###U2 correlation between nutrients and biom.L6.U1
+```{r}
+
+merge.biom.L6.nutr.U2 <- biom.L6.rel.clr.U2 %>% merge(.,nutr.sum.z.U2,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L6.nutr.U2[is.na(merge.biom.L6.nutr.U2)] <- 0
+
+merge.biom.L6.nutr.U2$file_name <- row.names(merge.biom.L6.nutr.U2)
+write_tsv(merge.biom.L6.nutr.U2,paste0(table_dir,'corr.biom.L6.U2.19.02.tsv',append=FALSE))
+merge.biom.L6.nutr.U2 <- select(merge.biom.L6.nutr.U2,everything(),-starts_with('file_name'))
+
+cor.test.biom.L6.U2 <- merge.biom.L6.nutr.U2 %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L6.U2[is.na(cor.test.biom.L6.U2)] <- 0
+
+
+p.adj.biom.L6.U2 <- subset(cor.test.biom.L6.U2,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L6.U2 <- subset(cor.test.biom.L6.U2,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L6.U2 <- log2(r.cor.biom.L6.U2) %>% as.numeric(.)
+cor.test.log.biom.L6.U2[is.nan(cor.test.log.biom.L6.U2)] <- 0
+cor.test.log.biom.L6.U2[is.infinite(cor.test.log.biom.L6.U2)] <- 0
+cor.test.log.biom.L6.U2 <- as.data.frame(cor.test.log.biom.L6.U2)
+
+r.cor.biom.L6.U2[is.nan(r.cor.biom.L6.U2)] <- 0
+r.cor.biom.L6.U2[is.infinite(r.cor.biom.L6.U2)] <- 0
+r.cor.biom.L6.U2 <- as.data.frame(r.cor.biom.L6.U2)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L6.U2 <- -log10(p.adj.biom.L6.U2)
+p.adj.log.biom.L6.U2[is.infinite(p.adj.log.biom.L6.U2)] <- 0
+p.adj.log.biom.L6.U2 <- as.data.frame(p.adj.log.biom.L6.U2)
+
+cor.test.adj.biom.L6.U2 <- cbind(cor.test.biom.L6.U2[ ,c(1,3)],p.adj.log.biom.L6.U2) %>% cbind(.,r.cor.biom.L6.U2) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L6.U2) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L6.U2 <- cor.test.adj.biom.L6.U2[cor.test.adj.biom.L6.U2$p.adj.log != 0 & cor.test.adj.biom.L6.U2$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L6.U2,paste0(table_dir,'corr.nutr.biom.L6.U2.tsv'))
+
+
+```
+
+###L7
+##correlation between nutrients and biom.L7
+```{r}
+
+merge.biom.L7.nutr <- biom.L7.rel.clr %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L7.nutr[is.na(merge.biom.L7.nutr)] <- 0
+
+merge.biom.L7.nutr$file_name <- row.names(merge.biom.L7.nutr)
+write_tsv(merge.biom.L7.nutr,paste0(table_dir,'corr.biom.L7.19.02.tsv',append=FALSE))
+merge.biom.L7.nutr <- select(merge.biom.L7.nutr,everything(),-starts_with('file_name'))
+
+cor.test.biom.L7 <- merge.biom.L7.nutr %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter.s__:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus.s__) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L7[is.na(cor.test.biom.L7)] <- 0
+
+
+p.adj.biom.L7 <- subset(cor.test.biom.L7,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L7 <- subset(cor.test.biom.L7,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L7 <- log2(r.cor.biom.L7) %>% as.numeric(.)
+cor.test.log.biom.L7[is.nan(cor.test.log.biom.L7)] <- 0
+cor.test.log.biom.L7[is.infinite(cor.test.log.biom.L7)] <- 0
+cor.test.log.biom.L7 <- as.data.frame(cor.test.log.biom.L7)
+
+r.cor.biom.L7[is.nan(r.cor.biom.L7)] <- 0
+r.cor.biom.L7[is.infinite(r.cor.biom.L7)] <- 0
+r.cor.biom.L7 <- as.data.frame(r.cor.biom.L7)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L7 <- -log10(p.adj.biom.L7)
+p.adj.log.biom.L7[is.infinite(p.adj.log.biom.L7)] <- 0
+p.adj.log.biom.L7 <- as.data.frame(p.adj.log.biom.L7)
+
+cor.test.adj.biom.L7 <- cbind(cor.test.biom.L7[ ,c(1,3)],p.adj.log.biom.L7) %>% cbind(.,r.cor.biom.L7) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L7) <- c('specy','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L7 <- cor.test.adj.biom.L7[cor.test.adj.biom.L7$p.adj.log != 0 & cor.test.adj.biom.L7$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L7,paste0(table_dir,'corr.nutr.biom.L7.tsv'))
+
+```
+
+###U1 correlation between nutrients and biom.L7.U1
+```{r}
+
+merge.biom.L7.nutr.U1 <- biom.L7.rel.clr.U1 %>% merge(.,nutr.sum.z.U1,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L7.nutr.U1[is.na(merge.biom.L7.nutr.U1)] <- 0
+
+merge.biom.L7.nutr.U1$file_name <- row.names(merge.biom.L7.nutr.U1)
+write_tsv(merge.biom.L7.nutr.U1,paste0(table_dir,'corr.biom.L7.U1.19.02.tsv',append=FALSE))
+merge.biom.L7.nutr.U1 <- select(merge.biom.L7.nutr.U1,everything(),-starts_with('file_name'))
+
+cor.test.biom.L7.U1 <- merge.biom.L7.nutr.U1 %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter.s__:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus.s__) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L7.U1[is.na(cor.test.biom.L7.U1)] <- 0
+
+
+p.adj.biom.L7.U1 <- subset(cor.test.biom.L7.U1,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L7.U1 <- subset(cor.test.biom.L7.U1,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L7.U1 <- log2(r.cor.biom.L7.U1) %>% as.numeric(.)
+cor.test.log.biom.L7.U1[is.nan(cor.test.log.biom.L7.U1)] <- 0
+cor.test.log.biom.L7.U1[is.infinite(cor.test.log.biom.L7.U1)] <- 0
+cor.test.log.biom.L7.U1 <- as.data.frame(cor.test.log.biom.L7.U1)
+
+r.cor.biom.L7.U1[is.nan(r.cor.biom.L7.U1)] <- 0
+r.cor.biom.L7.U1[is.infinite(r.cor.biom.L7.U1)] <- 0
+r.cor.biom.L7.U1 <- as.data.frame(r.cor.biom.L7.U1)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L7.U1 <- -log10(p.adj.biom.L7.U1)
+p.adj.log.biom.L7.U1[is.infinite(p.adj.log.biom.L7.U1)] <- 0
+p.adj.log.biom.L7.U1 <- as.data.frame(p.adj.log.biom.L7.U1)
+
+cor.test.adj.biom.L7.U1 <- cbind(cor.test.biom.L7.U1[ ,c(1,3)],p.adj.log.biom.L7.U1) %>% cbind(.,r.cor.biom.L7.U1) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L7.U1) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L7.U1 <- cor.test.adj.biom.L7.U1[cor.test.adj.biom.L7.U1$p.adj.log != 0 & cor.test.adj.biom.L7.U1$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L7.U1,paste0(table_dir,'corr.nutr.biom.L7.U1.tsv'))
+
+```
+
+###U2 correlation between nutrients and biom.L7.U2
+```{r}
+
+merge.biom.L7.nutr.U2 <- biom.L7.rel.clr.U2 %>% merge(.,nutr.sum.z.U2,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L7.nutr.U2[is.na(merge.biom.L7.nutr.U2)] <- 0
+
+merge.biom.L7.nutr.U2$file_name <- row.names(merge.biom.L7.nutr.U2)
+write_tsv(merge.biom.L7.nutr.U2,paste0(table_dir,'corr.biom.L7.U1.19.02.tsv',append=FALSE))
+merge.biom.L7.nutr.U2 <- select(merge.biom.L7.nutr.U2,everything(),-starts_with('file_name'))
+
+cor.test.biom.L7.U2 <- merge.biom.L7.nutr.U2 %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter.s__:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus.s__) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L7.U2[is.na(cor.test.biom.L7.U2)] <- 0
+
+
+p.adj.biom.L7.U2 <- subset(cor.test.biom.L7.U2,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L7.U2 <- subset(cor.test.biom.L7.U2,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+
+#x axis log2 correlation
+
+cor.test.log.biom.L7.U2 <- log2(r.cor.biom.L7.U2) %>% as.numeric(.)
+cor.test.log.biom.L7.U2[is.nan(cor.test.log.biom.L7.U2)] <- 0
+cor.test.log.biom.L7.U2[is.infinite(cor.test.log.biom.L7.U2)] <- 0
+cor.test.log.biom.L7.U2 <- as.data.frame(cor.test.log.biom.L7.U2)
+
+r.cor.biom.L7.U2[is.nan(r.cor.biom.L7.U2)] <- 0
+r.cor.biom.L7.U2[is.infinite(r.cor.biom.L7.U2)] <- 0
+r.cor.biom.L7.U2 <- as.data.frame(r.cor.biom.L7.U2)
+
+#y axis -log10 p.value
+
+p.adj.log.biom.L7.U2 <- -log10(p.adj.biom.L7.U2)
+p.adj.log.biom.L7.U2[is.infinite(p.adj.log.biom.L7.U2)] <- 0
+p.adj.log.biom.L7.U2 <- as.data.frame(p.adj.log.biom.L7.U2)
+
+cor.test.adj.biom.L7.U2 <- cbind(cor.test.biom.L7.U2[ ,c(1,3)],p.adj.log.biom.L7.U2) %>% cbind(.,r.cor.biom.L7.U2) %>% as.data.frame(.)
+colnames(cor.test.adj.biom.L7.U2) <- c('specy','nutrient','p.adj.log','estimate')
+
+cor.test.adj.biom.L7.U2 <- cor.test.adj.biom.L7.U2[cor.test.adj.biom.L7.U2$p.adj.log != 0 & cor.test.adj.biom.L7.U2$estimate != 0,]
+
+write_tsv(cor.test.adj.biom.L7.U2,paste0(table_dir,'corr.nutr.biom.L7.U2.tsv'))
+```
+
+#volcano plots
+```{r}
+##sig. correlations
+sig.biom.L6 <- cor.test.adj.biom.L6[cor.test.adj.biom.L6$p.adj.log >= -log10(0.050) & cor.test.adj.biom.L6$p.adj.log > 0.00000,]
+top.sig.biom.L6 <- sig.biom.L6[order(-sig.biom.L6$p.adj.log ),] #[1:11,]
+
+sig.biom.L7 <- cor.test.adj.biom.L7[cor.test.adj.biom.L7$p.adj.log >= -log10(0.050) & cor.test.adj.biom.L7$p.adj.log > 0.00000,]
+top.sig.biom.L7 <- sig.biom.L7[order(-sig.biom.L7$p.adj.log ),] #[1:11,]
+
+##L6
+vp.biom.L6 <- ggplot(cor.test.adj.biom.L6,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle("Volcano plot") +
+  xlab("correlation") + 
+  ylab("-log10 adjusted p-value")
+
+vp.biom.L6 <- vp.biom.L6+xlim(c(-1,1)) + geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+    geom_hline(yintercept=-log10(0.05), col="red") 
+
+##L7
+vp.biom.L7 <- ggplot(cor.test.adj.biom.L7,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle("Volcano plot") +
+  xlab("correlation") + 
+  ylab("-log10 adjusted p-value")
+
+vp.biom.L7 <- vp.biom.L7+xlim(c(-1,1)) + geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+    geom_hline(yintercept=-log10(0.05), col="red")
+```

@@ -1,0 +1,25 @@
+"0","```r
+
+merge.biom.L6.nutr.U1 <- norm.L6.U1 %>% merge(.,cl.sum.z.U1,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.biom.L6.nutr.U1[is.na(merge.biom.L6.nutr.U1)] <- 0
+
+merge.biom.L6.nutr.U1$file_name <- row.names(merge.biom.L6.nutr.U1)
+write_tsv(merge.biom.L6.nutr.U1,'C:/Users/Juliane/Desktop/project.directory/data/tables/corr.biom.L6.nutclust.U1.19.02.tsv',append=FALSE)
+merge.biom.L6.nutr.U1 <- select(merge.biom.L6.nutr.U1,everything(),-starts_with('file_name'))
+
+cor.test.biom.L6.U1 <- merge.biom.L6.nutr.U1 %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", k__Archaea.p__Euryarchaeota.c__Methanobacteria.o__Methanobacteriales.f__Methanobacteriaceae.g__Methanobrevibacter:k__Bacteria.p__.Thermi..c__Deinococci.o__Thermales.f__Thermaceae.g__Meiothermus) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `1.veg.fruit`:`15.cheese`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.biom.L6.U1[is.na(cor.test.biom.L6.U1)] <- 0
+
+
+p.adj.biom.L6.U1 <- subset(cor.test.biom.L6.U1,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.biom.L6.U1 <- subset(cor.test.biom.L6.U1,select = `estimate`) %>% data.matrix(.)
+
+```"

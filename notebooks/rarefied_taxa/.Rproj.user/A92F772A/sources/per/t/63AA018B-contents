@@ -1,0 +1,313 @@
+---
+title: "dysbiosis score for regular and keto diet"
+output: html_notebook
+---
+
+#libraries
+```{r}
+
+library(tidyverse)
+library(plotly)
+library(ggpubr)
+library(compositions)
+
+library(factoextra)
+library(FactoMineR)
+
+library(ecodist)
+library(vegan)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+PCA and Bray-Curtis dissimilarity in microbiome samples L6(genus) and L7(specy)
+
+colored per diet and per sample
+
+##Data Import
+```{r}
+norm.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+norm.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)
+
+```
+
+#PCA
+
+relative centered log ratio transformed taxa-tables
+
+colored PCA by diet and sample
+```{r}
+##Data prep
+norm.L6$diet <- ifelse(grepl('U1',row.names(norm.L6)),'keto','non keto')
+norm.L7$diet <- ifelse(grepl('U1',row.names(norm.L7)),'keto','non keto')
+
+pca.L6 <- dplyr::select(norm.L6,everything(),-starts_with('diet'))
+pca.L7 <- dplyr::select(norm.L7,everything(),-starts_with('diet'))
+
+##PCA
+pca.L6 <- PCA(pca.L6,scale.unit = FALSE,graph = FALSE)
+pca.L7 <- PCA(pca.L7,scale.unit = FALSE,graph = FALSE)
+```
+
+##L6
+```{r}
+##PCA with diet coloring
+factoextra::fviz_pca_biplot(X = pca.L6, 
+                            # samples
+                            fill.ind = norm.L6$diet,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA genus',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+##PCA with sample coloring
+norm.L6$samples <- row.names(norm.L6) %>%
+  str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U2',replacement = '')
+
+norm.L7$samples <- row.names(norm.L7) %>%
+  str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U2',replacement = '')
+
+
+factoextra::fviz_pca_biplot(X = pca.L6, 
+                            # samples
+                            fill.ind = norm.L6$samples,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA genus',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+# ggplot(pca.L6,aes(Axis.1, Axis.2)) + 
+#   geom_point(aes(fill = norm.L6$samples, alpha = norm.L6$diet),
+#     shape = 21, col = 'black', size = 4) + ggtitle('PCA microbiome')
+```
+##L7
+```{r}
+##PCA with diet coloring
+factoextra::fviz_pca_biplot(X = pca.L7, 
+                            # samples
+                            fill.ind = norm.L7$diet,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA specy',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+##PCA with sample coloring
+factoextra::fviz_pca_biplot(X = pca.L7, 
+                            # samples
+                            fill.ind = norm.L7$samples,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA specy',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+```
+
+
+
+difference between non keto and keto feces
+use fecal samples from follow-up and non keto samples to look at differences between two no keto feces
+
+problems:
+maybe some participants ate keto in follow-up?
+how long do keto changes stay in microbiome?
+
+##Data prep U1  U3
+```{r}
+#L6 genus
+
+##delete keto samples
+# biom.L6 <- biom.L6[!grepl('.2U',row.names(biom.L6)),]
+biom.L6 <- biom.L6[!grepl(pattern = 'U2',row.names(biom.L6)),]
+biom.L6 <- dplyr::select(biom.L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+# row.names(biom.L6) <- str_replace(row.names(biom.L6),pattern = 'ST.',replacement = '') %>% 
+#   str_replace(.,pattern = '0U', replacement = 'U')
+
+
+biom.L7 <- biom.L7[!grepl(pattern = 'U2',row.names(biom.L7)),]
+biom.L7 <- dplyr::select(biom.L7,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+# row.names(biom.L7) <- str_replace(row.names(biom.L7),pattern = 'ST.',replacement = '') %>% 
+#   str_replace(.,pattern = '0U', replacement = 'U')
+
+
+##Data transformation
+
+#L6  relative abundance, clr
+
+biom.L6.sub <- data.matrix(biom.L6)
+biom.L6.sub <- biom.L6.sub+0.5
+rowsum <- rowSums(biom.L6.sub)
+
+biom.L6 <- cbind(biom.L6.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+biom.L6 <- as.data.frame(biom.L6)
+biom.L6.rel <- biom.L6/biom.L6$rowsum
+biom.L6.rel <- dplyr::select(biom.L6.rel,everything(),-starts_with('row'))
+
+#L7  relative abundance, clr
+
+biom.L7.sub <- data.matrix(biom.L7)
+biom.L7.sub <- biom.L7.sub+0.5
+rowsum <- rowSums(biom.L7.sub)
+
+biom.L7 <- cbind(biom.L7.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+biom.L7 <- as.data.frame(biom.L7)
+biom.L7.rel <- biom.L7/biom.L7$rowsum
+biom.L7.rel <- dplyr::select(biom.L7.rel,everything(),-starts_with('row'))
+
+##clr
+
+biom.L6.rel.clr <- clr(biom.L6.rel) %>% as.data.frame(.)
+
+biom.L7.rel.clr <- clr(biom.L7.rel) %>% as.data.frame(.)
+```
+##PCA
+```{r}
+pca.6 <- PCA(biom.L6.rel.clr,scale.unit = FALSE,graph = FALSE)
+pca.7 <- PCA(biom.L7.rel.clr,scale.unit = FALSE,graph = FALSE)
+
+
+biom.L6.rel.clr$diet <- ifelse(grepl('U1',row.names(biom.L6.rel.clr)),'non keto','FOLLOW-UP')
+
+biom.L7.rel.clr$diet <- ifelse(grepl('U1',row.names(biom.L7.rel.clr)),'non keto','FOLLOW-UP')
+```
+PCA L6
+```{r}
+##PCA with diet coloring
+factoextra::fviz_pca_biplot(X = pca.6, 
+                            # samples
+                            fill.ind = biom.L6.rel.clr$diet,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA genus',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+##PCA with sample coloring
+biom.L6.rel.clr$samples <- row.names(biom.L6.rel.clr) %>%
+  str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U3',replacement = '')%>%
+  str_replace(.,pattern = '.2U1',replacement = '')%>%
+  str_replace(.,pattern = '.2U3',replacement = '')
+
+# biom.L6.rel.clr$samples <- str_replace(biom.L6.rel.clr$samples,pattern = '.',replacement = '') 
+biom.L7.rel.clr$samples <- row.names(biom.L7.rel.clr) %>%
+  str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U3',replacement = '')%>%
+  str_replace(.,pattern = '.2U1',replacement = '')%>%
+  str_replace(.,pattern = '.2U3',replacement = '')
+
+# biom.L7.rel.clr$samples <- str_replace(biom.L7.rel.clr$samples,pattern = '.',replacement = '')
+
+factoextra::fviz_pca_biplot(X = pca.6, 
+                            # samples
+                            fill.ind = biom.L6.rel.clr$samples,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA genus',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+```
+PCA L7
+```{r}
+##PCA with diet coloring
+factoextra::fviz_pca_biplot(X = pca.7, 
+                            # samples
+                            fill.ind = biom.L7.rel.clr$diet,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA specy',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+
+##PCA with sample coloring
+# biom.L7.rel.clr$samples <- str_replace(biom.L7.rel.clr$samples,pattern = '.',replacement = '')
+factoextra::fviz_pca_biplot(X = pca.7, 
+                            # samples
+                            fill.ind = biom.L7.rel.clr$samples,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA specy',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+```
+#Bray-Curtis
+
+relative taxa tables
+##L6
+```{r}
+##Bray Curtis with relative abundance
+biom.L6.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L6.tsv')) %>% column_to_rownames(.,'rowname')
+meta <- row.names(biom.L6.rel) %>% as.data.frame(.)
+meta$diet <- ifelse(grepl('U1',meta$.),'non keto','keto')
+colnames(meta) <- c('file_name','diet')
+meta$sample <- meta$file_name %>% str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U2',replacement = '')
+# norm.L6.bc <- dplyr::select(norm.L6,everything(),-starts_with(c('samples','diet')))
+bc.L6 <- vegdist(biom.L6.rel, method="bray")
+pcoa_bc.L6 <- ape::pcoa(bc.L6)
+
+pcoa_bc.L6$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  ggplot(aes(Axis.1, Axis.2, label = Name)) + 
+  geom_point(aes(fill = meta$diet),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\ngenus')
+
+pcoa_bc.L6$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  ggplot(aes(Axis.1, Axis.2, label = Name)) + 
+  geom_point(aes(fill = meta$`sample`),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\ngenus')
+```
+#Bray-Curtis
+##L7
+```{r}
+##Bray Curtis with relative abundance
+biom.L7.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L7.tsv')) %>% column_to_rownames(.,'rowname')
+meta7 <- row.names(biom.L7.rel) %>% as.data.frame(.)
+meta7$diet <- ifelse(grepl('U1',meta7$.),'non keto','keto')
+colnames(meta7) <- c('file_name','diet')
+meta7$sample <- meta7$file_name %>% str_replace(.,pattern = '.U1',replacement = '') %>%
+  str_replace(.,pattern = '.U2',replacement = '')
+# norm.L6.bc <- dplyr::select(norm.L6,everything(),-starts_with(c('samples','diet')))
+bc.L7 <- vegdist(biom.L7.rel, method="bray")
+pcoa_bc.L7 <- ape::pcoa(bc.L7)
+
+pcoa_bc.L7$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = meta7$diet),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\nspecy')
+
+pcoa_bc.L7$vectors %>%  
+  as.data.frame(.) %>% 
+  rownames_to_column('Name') %>% 
+  dplyr::select(Name, Axis.1:Axis.5) %>%
+  ggplot(aes(Axis.1, Axis.2)) + 
+  geom_point(aes(fill = meta7$`sample`),
+    shape = 21, col = 'black', size = 4) + ggtitle('PcoA Bray-Curtis similarity\nspecy')
+```

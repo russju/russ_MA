@@ -1,0 +1,2 @@
+"0",""
+"0","l <- stats::heatmap(matrix.nutr.z,cexRow = .9,cexCol = .9,Colv = NA,Rowv = NA)"

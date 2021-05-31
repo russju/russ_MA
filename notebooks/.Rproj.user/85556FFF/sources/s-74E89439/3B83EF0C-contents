@@ -1,0 +1,150 @@
+---
+title: "Prodi beta-diversity"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(ggtern)
+library(FactoMineR)
+library(tidyverse)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+keto.summary <- read_tsv(paste0(table_dir, 'Keto.summary.tsv'))
+```
+
+# Makronutrients - Diet Composition
+```{r}
+keto.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Time), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+keto.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = sample), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+keto.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Sex), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+keto.summary %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Phenotype),  shape = 21, size = 1, alpha = 0.75) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+```
+
+# Cholesterol Conversion
+Alena found high- and low converters of Sterols to Stanols in her microbiome dataset based on 16S rRNA gene data.
+Do we see patterns based on food or other criteria?
+
+## Sex
+66% of females are high converters, 27% low, 7% nc.
+33% of males are high converters, 11% low, 55% nc.
+```{r}
+select(keto.summary, Sex, Phenotype) %>% group_by(Sex, Phenotype) %>% tally() %>% group_by(Sex) %>% mutate(fraction.sex = n / sum(n, na.rm = T)) %>% group_by(Phenotype) %>% mutate(fraction.phenotype = n / sum(n, na.rm = T))
+```
+
+
+## Food composition
+Two samples have weird values. There are errors in the food protocols:
+Some individuals have consumed 7k kcal worth of aubergine or bread: 
+'25FE.D2'
+'49RJ.D1'
+
+Sample
+```{r}
+d <- 
+  keto.summary %>% 
+  filter(Time != 'PRE', !is.na(`Energie, Gesamt (kcal)`)) %>% 
+  mutate(ID = str_to_upper(paste0(sample, '.', Time, '.D', day))) %>% 
+  filter(! ID %in% c('29MK.POST.D1', '07RW.POST.D8')) %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified')
+
+metadata.cols <- c('file_name','sample', 'time_point', 'time_point.label', 'date', 'day', 
+                   'St_complet', 'Time', 'Sex', 'Phenotype')
+metadata <- d[, c(metadata.cols, 'ID')]
+
+df <- 
+  d %>% 
+  select(ends_with('(kcal)'), -contains('Alkohol'), ID) %>%
+  column_to_rownames('ID') %>% 
+  as.matrix()
+```
+
+clr-transform
+```{r}
+pseudo = 0.01 # 1e-9
+df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)
+df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))
+```
+
+PCA
+```{r}
+df.clr.pca_data <- PCA(X = df.clr, graph = FALSE, scale.unit = T)
+
+df.clr.pca <- df.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.clr.pca <- df.clr.pca %>% 
+  left_join(., metadata, by = c('Name' = 'ID'))
+```
+
+
+PCA biplot
+Higher protein and total energy intake in low converter group?
+```{r}
+factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = 'black',
+                            # select.var = list('name' = svars), 
+                            # title = 
+                              ) + 
+  theme(aspect.ratio = 1)
+```
+

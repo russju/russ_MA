@@ -1,0 +1,22 @@
+"0","```r
+pdf(paste0(output_converter,'pca.convclust.pdf'))
+
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+3: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+factoextra::fviz_pca_biplot(X =convclust.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA convetional clusters',label = 'none',invisible = c(\"ind.sup\", \"quali\", \"var\", \"quanti.sup\"),legend = 'none') 
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

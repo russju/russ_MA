@@ -1,0 +1,11 @@
+"0","```r
+biom.L6.rel.clr <- clr(biom.L6.rel) %>% as.data.frame(.)
+
+biom.L7.rel.clr <- clr(biom.L7.rel) %>% as.data.frame(.)
+
+rownames_to_column(biom.L6.rel.clr) %>%
+write_tsv(.,paste0(table_dir,'biom.L6.rel.clr_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))
+```"

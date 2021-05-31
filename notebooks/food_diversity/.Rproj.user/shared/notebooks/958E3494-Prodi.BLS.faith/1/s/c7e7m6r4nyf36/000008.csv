@@ -1,0 +1,13 @@
+"0","#community matrix"
+"0",""
+"0","# #df nutrient cluster"
+"0","# "
+"0","# nutr.clust <- pivot_wider(df,names_from = nutrient.clusters,values_from = value) %>% column_to_rownames(.,var = 'sample')"
+"0","# "
+"0","# # nutr.clust$file_name <- row.names(nutr.clust)"
+"0","# # write_tsv(nutr.clust,path = 'C:/Users/Juliane/Desktop/project.directory/data/tables/nutr.clust.df.01.10.tsv')"
+"0",""
+"0","nutr.clust <- read_tsv(paste0(table_dir, 'nutr.clust.df.01.10.tsv') %>% as.data.frame %>% column_to_rownames(.,'file_name'))"
+"2","Fehler: Can't find column `file_name` in `.data`.
+[90mRun `rlang::last_error()` to see where the error occurred.[39m
+"

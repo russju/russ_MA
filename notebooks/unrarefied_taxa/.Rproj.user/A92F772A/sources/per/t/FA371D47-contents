@@ -1,0 +1,597 @@
+---
+title: "correlation between taxa and nutrients"
+output: html_notebook
+---
+
+#libraries
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("biomformat")
+
+# if (!requireNamespace('BiocManager', quietly = TRUE))
+#     install.packages('BiocManager')
+# 
+#  BiocManager::install('EnhancedVolcano')
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("a4Base")
+  
+
+library(tidyverse)
+library(biomformat)
+# library(data.table)
+library(compositions)
+# library(corrplot)
+# library(EnhancedVolcano)
+library(a4Base)
+library(plotly)
+library(ggpubr)
+
+library(Maaslin2)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+# mapping <- read.table(paste0(biom_dir, 'Mappingfile_converter.txt'),row.names = NULL,header = TRUE)
+
+L2 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L2.csv'),row.names = 1,header = TRUE,sep = ';')
+
+L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')
+
+# biom <- read_biom(paste0(biom_dir, 'silva_stool_rarefied1650_table.biom'))
+# biom.biom <- biom_data(biom)
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')
+
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv')) %>% distinct(.)
+keto.bls$file_name <- gsub(keto.bls$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+# k.bls <- read_tsv(paste0(table_dir, 'k.bls_08.10.tsv'))##sometimes is not working
+k.bls <- read_tsv('C:/Users/Juliane/Desktop/project.directory/data/tables/ k.bls_08.10.tsv')
+k.bls$file_name <- gsub(k.bls$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+
+# input.metadata <- read_tsv(paste0(table_dir, 'input.metadata.maaslin.tsv')) %>% as.data.frame(.) %>% column_to_rownames(.,'file_name')
+```
+nutr.sum.z  z.score standardized weighted nutrient intake per samples
+nutr.sum relative centered log transformed weighted nutrient intake
+
+L2(phylum) L6(genus) unrarefied taxa tables, relative centered log transformed
+
+sum up nutrients from one sample
+
+boxplots with taxa and nutrients during keto and non keto diet
+
+```{r}
+df <- subset(k.bls,select=c(`file_name`,`Energie (kcal)`:`Energie, Gesamt (kcal)`))
+
+nutr.sum <- aggregate(.~file_name, df, sum)
+nutr.sum[is.na(nutr.sum)] <- 0
+
+# write_tsv(nutr.sum,paste0(table_dir,'nutr.sum_14.10.tsv'))
+
+row.names(nutr.sum) <- nutr.sum$file_name
+
+nutr.sum <- dplyr::select(nutr.sum,everything(),-starts_with('file_name'))
+
+```
+
+##L2
+normalize relative abundances 
+```{r}
+###zscore nutrients
+
+nutr.sum.z <- apply(nutr.sum,2,scale) %>% as.data.frame(.)
+nutr.sum.z$file_name <- row.names(nutr.sum)
+
+# write_tsv(nutr.sum.z,paste0(table_dir,'norm.keto.bls.17.02.tsv',append = F))
+
+
+#two samples for U1,U2 and U3
+#merging them ore deleting?
+
+L2 <- L2[!grepl('.2U',row.names(L2)),]
+L2 <- L2[!grepl(pattern = 'U3',row.names(L2)),]
+L2 <- select(L2,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+
+#sum of the rows
+
+#taxa
+
+L2.sub <- L2 %>% data.matrix(.)
+L2 <- L2+0.5##pseudocount
+# L2.sub <- data.matrix(L2.sub)
+rowsum <- rowSums(L2.sub)
+# L2 <- cbind(L2,rowsum)
+
+#nutrients
+
+nutr.sum <- data.matrix(nutr.sum)
+nutr.sum <- nutr.sum/1000
+nutr.sum[!is.finite(nutr.sum)] <- 0
+nutr.sum.rowsum <- nutr.sum  %>% rowSums(.)
+
+nutr.sum <- cbind(nutr.sum,nutr.sum.rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+# L2 <- data.matrix(L2)
+
+L2.sub <- cbind(L2,rowsum)
+L2.sub <- as.data.frame(L2.sub)
+
+
+L2.rel <- L2.sub/L2.sub$rowsum
+
+
+#nutrients value for one week/sum of all week
+
+nutr.sum <- as.data.frame(nutr.sum)
+nutr.sum <- nutr.sum[1:137]/nutr.sum$nutr.sum.rowsum
+nutr.sum <- data.matrix(nutr.sum)
+nutr.sum[!is.finite(nutr.sum)] <- 0
+# nutr.sum <- cbind(nutr.sum[1:137]/nutr.sum[,138],nutr.sum[138])
+
+```
+
+clr transformation
+
+boxplots taxa during diet 
+```{r}
+L2.rel <- select(L2.rel,everything(),-starts_with('row'))
+L2.rel.clr <- clr(L2.rel) %>% as.data.frame(.) ##acomp()
+
+nutr.sum <- clr(acomp(nutr.sum)) %>% as.data.frame(.)
+
+
+##plotting relative abundances firmicutes bacteroidetes
+
+# L2.rel <- L2.rel[!grepl(pattern = 'U3',row.names(L2.rel)),]
+
+fb <- L2.rel %>% as.data.frame(.) %>% dplyr::select(.,starts_with(c('D_0__Bacteria.D_1__Bacteroidetes','D_0__Bacteria.D_1__Firmicutes','D_0__Bacteria.D_1__Proteobacteria','D_0__Bacteria.D_1__Actinobacteria','D_0__Bacteria.D_1__Tenericutes')))
+fb$diet <- ifelse(grepl('U1',row.names(fb)),'non keto','keto')
+colnames(fb) <- c('rel.Bacteroidetes','rel.Firmicutes','rel.Proteobacteria','rel.Actinobacteria','rel.Tenericutes','diet')
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+firm <- ggplot(fb,aes(x = diet,y = rel.Firmicutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)#,symnum.args = symnum.args)
+
+bact <- ggplot(fb,aes(x = diet,y = rel.Bacteroidetes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+proteo <- ggplot(fb,aes(x = diet,y = rel.Proteobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+actinobacteria <- ggplot(fb,aes(x = diet,y = rel.Actinobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+tenericutes <- ggplot(fb,aes(x = diet,y = rel.Tenericutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bact.firm.rel <- ggscatter(fb,x='rel.Bacteroidetes',y='rel.Firmicutes',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+##plotting rel. clr abundances nutr sum
+
+nutr.sum.z <- column_to_rownames(nutr.sum.z,'file_name')
+nutr.clr <- nutr.sum.z %>% as.data.frame(.) %>% dplyr::select(.,starts_with(c('Energie, Fett (kcal)','Energie, Kohlenhydrate (kcal)')))
+nutr.clr$diet <- ifelse(grepl('U1',row.names(nutr.clr)),'non keto','keto')
+
+fett.clr <- ggplot(nutr.clr,aes(x = diet,y = `Energie, Fett (kcal)`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+carbs.clr <- ggplot(nutr.clr,aes(x = diet,y = `Energie, Kohlenhydrate (kcal)`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+```
+
+
+correlation between nutrients and taxa
+```{r}
+#selecting the samples that are both in L2.rel.clr and in nutr.sum
+#not everybody gave stool samples,U3 no protocols available 
+L2.rel <- as.data.frame(L2.rel)
+row.names(L2.rel) <- str_replace(row.names(L2.rel),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+row.names(L2.rel.clr) <- str_replace(row.names(L2.rel.clr),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+merge.L2.nutr <- L2.rel.clr %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L2.nutr[is.na(merge.L2.nutr)] <- 0
+# merge.L2.nutr <- dplyr::select(merge.L2.nutr,everything(),-ends_with('rowsum'))
+
+# L2.rel.clr$file_name <- row.names(L2.rel.clr)
+# write_tsv(L2.rel.clr,paste0(table_dir,'L2.normalized.correlation_06.10.tsv'))
+
+cor.test <- merge.L2.nutr %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", D_0__Archaea.D_1__Euryarchaeota:D_0__Eukaryota.D_1__SAR) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test [is.na(cor.test)] <- 0
+
+
+p.adj <- subset(cor.test,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test,select = `estimate`) %>% data.matrix(.)
+
+```
+
+```{r}
+##plotting rel. clr abundances firmicutes bacteroidetes
+
+fb.clr <- L2.rel.clr %>% as.data.frame(.) %>% dplyr::select(.,starts_with(c('D_0__Bacteria.D_1__Bacteroidetes','D_0__Bacteria.D_1__Firmicutes','D_0__Bacteria.D_1__Proteobacteria','D_0__Bacteria.D_1__Actinobacteria','D_0__Bacteria.D_1__Tenericutes')))
+fb.clr$diet <- ifelse(grepl('U1',row.names(fb.clr)),'non keto','keto')
+colnames(fb.clr) <- c('rel.clr.Bacteroidetes','rel.clr.Firmicutes','rel.clr.Proteobacteria','rel.clr.Actinobacteria','rel.clr.Tenericutes','diet')
+
+
+firm.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Firmicutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)#,symnum.args = symnum.args
+
+bact.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Bacteroidetes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+proteo.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Proteobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+actino.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Actinobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+tenericutes.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Tenericutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bact.firm <- ggscatter(fb.clr,x='rel.clr.Bacteroidetes',y='rel.clr.Firmicutes',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+```
+
+plotting
+```{r}
+#x axis log2 correlation
+
+cor.test.log <- log2(r.cor) %>% as.numeric(.)
+cor.test.log [is.nan(cor.test.log)] <- 0
+cor.test.log [is.infinite(cor.test.log)] <- 0
+cor.test.log <- as.data.frame(cor.test.log)
+
+r.cor[is.nan(r.cor)] <- 0
+r.cor[is.infinite(r.cor)] <- 0
+r.cor<- as.data.frame(r.cor)
+
+#y axis -log10 p.value
+
+p.adj.log <- -log10(p.adj)
+p.adj.log[is.infinite(p.adj.log)] <- 0
+p.adj.log <- as.data.frame(p.adj.log)
+
+cor.test.adj <- cbind(cor.test[ ,c(1,3)],p.adj.log) %>% cbind(.,r.cor) %>% as.data.frame(.)
+colnames(cor.test.adj) <- c('phylum','nutrient','p.adj.log','estimate')
+
+cor.test.adj <- cor.test.adj[cor.test.adj$p.adj.log != 0 & cor.test.adj$estimate != 0,]
+
+# write_tsv(cor.test.adj,paste0(table_dir,'corr.nutr.L2.tsv'))
+
+sig <- cor.test.adj[cor.test.adj$p.adj.log >= -log10(0.050) & cor.test.adj$p.adj.log > 0.00000,]
+top.sig <- sig[order(-sig$p.adj.log ),]
+
+#volcano plot ggplot()
+
+vp <- ggplot(cor.test.adj,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle("Volcano plot") +
+  xlab("correlation") + 
+  ylab("-log10 adjusted p-value")
+
+
+###maaslin
+
+df <- row.names(merge.L2.nutr) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.L2.nutrients <- Maaslin2(input_data = merge.L2.nutr,input_metadata = df,
+                                 fixed_effects = 'group',
+                                 output = 'L2.nutrients_maaslin',
+                                 min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```
+
+
+##L6
+normalize relative abundances 
+```{r}
+
+L6 <- L6[!grepl('.2U',row.names(L6)),]
+L6 <- L6[!grepl(pattern = 'U3',row.names(L6)),]
+L6 <- select(L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+row.names(L6) <- str_replace(row.names(L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+#sum of the rows
+
+#taxa
+
+# L6.sub <- L6[ ,c(1:222)]
+L6.sub <- data.matrix(L6)
+L6.sub <- L6.sub+0.5
+rowsum <- rowSums(L6.sub)
+
+
+L6 <- cbind(L6.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+# L6.sub <- L6.sub+0.00001
+L6 <- as.data.frame(L6)
+L6.rel <- L6/L6$rowsum
+
+```
+
+clr transformation
+
+boxplots taxa during diet
+```{r}
+L6.rel <- select(L6.rel,everything(),-starts_with('row'))
+
+L6.rel.clr <- clr(L6.rel) %>% as.data.frame(.) ##acomp
+
+##plotting relative abundances firmicutes bacteroidetes
+# L6.rel <- L6.rel[!grepl(pattern = 'U3',row.names(L6.rel)),]
+
+fb.rel <- L6.rel %>% as.data.frame(.) %>% subset(.,select = c('D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Bifidobacterium','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Bacteroidaceae.D_5__Bacteroides','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.2','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.6','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.7','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.9','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Lactococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Streptococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Blautia','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Roseburia','D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia','D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Pseudomonadaceae.D_5__Pseudomonas'))
+fb.rel$diet <- ifelse(grepl('U1',row.names(fb.rel)),'non keto','keto')
+colnames(fb.rel) <- c('rel.Bifidobacterium','rel.Bacteroides','rel.Prevotella','rel.Prevotella.2','rel.Prevotella.6','rel.Prevotella.7','rel.Prevotella.9','rel.Lactococcus','rel.Streptococcus','rel.Blautia','rel.Roseburia','rel.Akkermansia','rel.Pseudomonas','diet')
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+bifido.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Bifidobacterium)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bact.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Bacteroides)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Prevotella)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+
+pseudomonas.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Pseudomonas)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+roseburia.2.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Roseburia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+blautia.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Blautia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+streptococcus.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Streptococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+lactococcus.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Lactococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.2.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Prevotella.2)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.6.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Prevotella.6)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.7.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Prevotella.7)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.9.rel <- ggplot(fb.rel,aes(x = diet,y = rel.Prevotella.9)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+```
+
+
+
+correlation between nutrients and taxa
+```{r}
+
+L6.rel <- L6.rel %>% as.data.frame(.) 
+# L6.rel.clr$file_name <- row.names(L6.rel.clr)
+# write_tsv(L6.rel.clr,paste0(table_dir,'L6.normalized.correlation_06.10.tsv'))
+
+
+merge.L6.nutr <- L6.rel.clr %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+
+# merge.L6.nutr$samples <- row.names(merge.L6.nutr)
+
+# merge.L6.nutr <- merge.L6.nutr %>% column_to_rownames(.,'samples')
+# write_tsv(merge.L6.nutr,paste0(table_dir,'corr.L6.06.10.tsv',append=FALSE))
+
+cor.test.L6 <- merge.L6.nutr %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.L6[is.na(cor.test.L6)] <- 0
+
+
+#p.value >= 0.05
+
+sig.L6 <- cor.test.L6[cor.test.L6$p.value >= -log10(0.050) & cor.test.L6$p.value > 0.00000]
+
+sig.L2 <- cor.test[cor.test$p.value <= 0.050 & cor.test$p.value > 0.00000 & cor.test$estimate <= -0.5 | cor.test$estimate >= 0.5,]
+
+p.adj.L6 <- subset(cor.test.L6,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.L6 <- subset(cor.test.L6,select = `estimate`) %>% data.matrix(.)
+
+```
+
+plotting
+```{r}
+#x axis log2 correlation
+
+cor.test.log.L6 <- log2(r.cor.L6) %>% as.numeric(.)
+cor.test.log.L6[is.nan(cor.test.log.L6)] <- 0
+cor.test.log.L6[is.infinite(cor.test.log.L6)] <- 0
+cor.test.log.L6 <- as.data.frame(cor.test.log.L6)
+
+r.cor.L6[is.nan(r.cor.L6)] <- 0
+r.cor.L6[is.infinite(r.cor.L6)] <- 0
+r.cor.L6 <- as.data.frame(r.cor.L6)
+
+#y axis -log10 p.value
+
+p.adj.log.L6 <- -log10(p.adj.L6)
+p.adj.log.L6[is.infinite(p.adj.log.L6)] <- 0
+p.adj.log.L6 <- as.data.frame(p.adj.log.L6)
+
+cor.test.adj.L6 <- cbind(cor.test.L6[ ,c(1,3)],p.adj.log.L6) %>% cbind(.,r.cor.L6) %>% as.data.frame(.)
+colnames(cor.test.adj.L6) <- c('genus','nutrient','p.adj.log','estimate')
+
+cor.test.adj.L6 <- cor.test.adj.L6[cor.test.adj.L6$p.adj.log != 0 & cor.test.adj.L6$estimate != 0,]
+
+# write_tsv(cor.test.adj.L6,paste0(table_dir,'corr.nutr.L6.tsv'))
+
+sig.L6 <- cor.test.adj.L6[cor.test.adj.L6$p.adj.log <= 0.050 & cor.test.adj.L6$p.adj.log > 0.00000,]
+top.sig.L6 <- sig.L6[order(-sig.L6$p.adj.log ),][1:11,]
+
+#volcano plot ggplot()
+
+vp.L6 <- ggplot(cor.test.adj.L6,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle("Volcano plot") +
+  xlab("correlation") + 
+  ylab("-log10 adjusted p-value")
+
+vp.L6 <- vp.L6+xlim(c(-1,1))
+
+
+###maaslin
+row.names(merge.L6.nutr) <- str_replace(row.names(merge.L6.nutr),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-starts_with('sample'))
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+
+df <- row.names(merge.L6.nutr) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.L6.nutrients <- Maaslin2(input_data = merge.L6.nutr,input_metadata = df,fixed_effects = 'group',output = 'L6.nutrients_maaslin',
+                                 min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+# ggplotly(vp.L6,tooltip = c('x','y','text'))
+
+
+```
+
+```{r}
+##plotting rel. clr abundances firmicutes bacteroidetes
+
+fb.clr.L6 <- L6.rel.clr %>% as.data.frame(.) %>% subset(.,select = c('D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Bifidobacterium','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Bacteroidaceae.D_5__Bacteroides','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.2','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.6','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.7','D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.9','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Lactococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Streptococcus','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Blautia','D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Roseburia','D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia','D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Pseudomonadaceae.D_5__Pseudomonas'))
+fb.clr.L6$diet <- ifelse(grepl('U1',row.names(fb.clr.L6)),'non keto','keto')
+colnames(fb.clr.L6) <- c('rel.clr.Bifidobacterium','rel.clr.Bacteroides','rel.clr.Prevotella','rel.clr.Prevotella.2','rel.clr.Prevotella.6','rel.clr.Prevotella.7','rel.clr.Prevotella.9','rel.clr.Lactococcus','rel.clr.Streptococcus','rel.clr.Blautia','rel.clr.Roseburia','rel.clr.Akkermansia','rel.clr.Pseudomonas','diet')
+
+akkermansia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Akkermansia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+pseudomonas.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Pseudomonas)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+roseburia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Roseburia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+blautia.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Blautia)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+streptococcus.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Streptococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+lactococcus.2.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Lactococcus)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.2.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.2)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.6)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.7.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.7)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevotella.9.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella.9)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+
+bifido.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Bifidobacterium)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bacteroides.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Bacteroides)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+prevo.clr.L6 <- ggplot(fb.clr.L6,aes(x = diet,y = rel.clr.Prevotella)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+```
+
+###export boxplots
+```{r}
+# pdf(paste0(output_dir,'17.02_nutr.taxa.pdf'))
+ggarrange(bifido.clr.L6,bacteroides.clr.L6,prevo.clr.L6,ncol = 2,nrow = 2)
+
+# ggarrange(firm.clr,bact.clr,proteo.clr,actino.clr,ncol = 2,nrow = 2)
+
+ggarrange(fett.clr,carbs.clr,ncol = 2,nrow = 1)
+
+ggarrange(bifido.rel,bact.rel,prevotella.rel,pseudomonas.rel,blautia.rel,streptococcus.rel,lactococcus.rel,ncol = 3, nrow = 3)
+
+ggarrange(firm,bact,proteo,actinobacteria,tenericutes,bact.firm.rel,ncol = 3, nrow = 2)
+
+ggarrange(firm.clr.L2,bact.clr.L2 ,proteo.clr.L2,actino.clr.L2,ncol = 2, nrow = 2)
+
+ggarrange(akkermansia.clr.L6,pseudomonas.clr.L6,roseburia.clr.L6,blautia.clr.L6 ,streptococcus.clr.L6,lactococcus.2.clr.L6,prevotella.2.clr.L6,prevotella.clr.L6,prevotella.7.clr.L6,prevotella.9.clr.L6,ncol = 3,nrow = 4)
+
+# dev.off()
+```
+
+
+

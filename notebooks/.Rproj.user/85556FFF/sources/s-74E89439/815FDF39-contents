@@ -1,0 +1,179 @@
+---
+title: "Prodi merge"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(readxl)
+library(scales)
+library(tidyverse)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+data_dir = '../data/'
+keto_dir = paste0(data_dir, 'EP_Microbiome/')
+table_dir = paste0(data_dir, 'tables/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+keto.mapping <- read_tsv(paste0(keto_dir, 'Mappingfile_converter.txt'))
+```
+
+## Import Function
+```{r}
+# testfile = '../data/EP_Microbiome/05AP.U1.xls'
+
+read_keto_file <- function(file) {
+  df <- readxl::read_xls(file)
+  file_name <- gsub(basename(file), pattern = '.xls', replacement = '')
+  sample_name_col <- names(df)[1]
+  sample_name <- str_split_fixed(sample_name_col, pattern = ' ', n = 2)[,1]
+  df[,'sample'] <- sample_name
+  df[,'file_name'] <- file_name
+  
+  date_vec = c()
+  date_idx = c()
+
+  for (e in pull(df[,1])) {
+    if (grepl(e, pattern = '^[[:digit:]]')) {
+      current_date = e
+      date_idx = c(date_idx, T)
+    } else {
+      date_idx = c(date_idx, F)
+    }
+    date_vec = c(date_vec, current_date)
+  }
+  
+  df[, 'is_date'] <- date_idx
+  df[, 'date'] <- janitor::excel_numeric_to_date(as.numeric(date_vec), include_time = F)
+  df <- df %>% 
+    rename(item = all_of(sample_name_col)) %>% 
+    rename_all(.funs = funs(gsub(., pattern = '¹', replacement = ''))) %>% 
+    filter(!grepl(item, pattern = 'Gesamt')) %>% 
+    separate(sample, into = c('sample','time_point.label'), sep = '_') %>% 
+    mutate(time_point = paste0('0', str_to_upper(str_split_fixed(file_name, pattern = '[._]', 2)[,2])), 
+           day = dense_rank(date)) %>% 
+    rename(
+      'Energie (kcal)' = 'kcal',
+      'Eiweiß, Proteingehalt' = 'EW (g)',
+      'Fett' = 'F (g)',
+      'Kohlenhydrate' = 'KH (g)',
+      'Ballaststoffe' = 'Bst (g)',
+      'Cholesterin' = 'Chol (mg)',
+      'Einfach ungesättigte Fettsäuren' = 'EUFS (g)',
+      'Gesättigte Fettsäuren' = 'GFS (g)',
+      'Alkohol (Ethanol)' = 'Alk (g)',
+      'Vitamin B7 Biotin (Vitamin H)' = 'Biot (µg)',
+      'EPA - Eicosapentaensäure' = 'C205 (g)',
+      'DHA - Docosahexaensäure' = 'C226 (g)',
+      'Calcium' = 'Ca (mg)',
+      'Eisen' = 'Fe (mg)',
+      'Vitamin B9 gesamte Folsäure' = 'Fols (µg)',
+      'Iodid' = 'J (µg)',
+      'Kalium' = 'K (mg)',
+      'Octadecadiensäure/Linolsäure' = 'LieS (g)',
+      'Octadecatriensäure/Linolensäure' = 'LinS (g)',
+      'Magnesium' = 'Mg (mg)',
+      'Mehrfach ungesättigte Fettsäuren' = 'MUFS (g)',
+      'Vitamin B3 Niacinäquivalent' = 'NiaÄ (µg)',
+      'Vitamin B5 Pantothensäure' = 'Pta (mg)',
+      'Phosphor' = 'P (mg)',
+      'Vitamin A Retinoläquivalent' = 'ReEq (µg)',
+      'Vitamin B1 Thiamin' = 'B1 (mg)',
+      'Vitamin B2 Riboflavin' = 'B2 (mg)',
+      'Vitamin B12 Cobalamin' = 'B12 (µg)',
+      'Vitamin B6 Pyridoxin' = 'B6 (mg)',
+      'Vitamin C Ascorbinsäure' = 'C (mg)',
+      'Vitamin D Calciferole' = 'D (µg)',
+      'Vitamin E Tocopherol' = 'E (mg)',
+      'Vitamin K Phyllochinon' = 'K (µg)')
+  
+  df.summary <- df %>% filter(is_date) %>% select(file_name, sample, time_point.label, time_point, day,
+                                                  date, everything(), -is_date, -item)
+  df.sample <- df %>% filter(!is_date) %>% select(file_name, sample, time_point.label, time_point, day,
+                                                  date, everything(), -is_date)
+  
+  out <- list('df.summary' = df.summary,
+          'df.sample' = df.sample)
+  return(out)
+}
+```
+
+
+## Read Individual Food Protocols
+```{r}
+files = list.files(path = keto_dir, pattern = '*xls', full.names = T)
+
+data.summary <- NULL
+data.sample <- NULL
+for (file in files) {
+  results = read_keto_file(file)
+  data.summary <- bind_rows(data.summary, results[['df.summary']])
+  data.sample <- bind_rows(data.sample, results[['df.sample']])
+}
+```
+
+# Format & Output
+Per Sample and Item data
+```{r}
+keto.samples <-
+  left_join(
+    data.sample %>% 
+              # only available in some
+              select(-`Hsr (mg)`, 
+                     -`Zn (mg)`, 
+                     -`Cu (µg)`, 
+                     -`Na (mg)`, 
+                     -`Lact (g)`, 
+                     -`Se (µg)`,
+                     -`A (mg)`), 
+    keto.mapping %>% 
+      select(Proband, Timepoint, St_complet, Time, Sex, Phenotype), 
+    by = c('sample' = 'Proband', 'time_point' = 'Timepoint')) %>% 
+  select(file_name, sample, time_point.label, time_point, day, date, St_complet, Time, Sex, Phenotype, everything())
+
+fname = paste0(table_dir, 'Keto.samples.tsv')
+write_tsv(keto.samples, path = fname)
+```
+
+Per Sample Summary
+```{r}
+keto.summary <-
+  full_join(data.summary %>% 
+              select(-`Hsr (mg)`, 
+                     -`Zn (mg)`, 
+                     -`Cu (µg)`, 
+                     -`Na (mg)`, 
+                     -`Lact (g)`, 
+                     -`Se (µg)`,
+                     -`A (mg)`), 
+            keto.mapping %>% select(Proband, Timepoint, St_complet, Time, Sex, Phenotype),
+            by = c('sample' = 'Proband', 'time_point' = 'Timepoint')) %>% 
+  mutate(`Energie, Protein (kcal)` = `Eiweiß, Proteingehalt` * 4.1, 
+         `Energie, Kohlenhydrate (kcal)` = Kohlenhydrate * 4.1, 
+         `Energie, Fett (kcal)` = Fett * 9.3, 
+         `Energie, Alkohol (kcal)` = `Alkohol (Ethanol)` * 7.1, 
+         `Energie, Gesamt (kcal)` = `Energie, Protein (kcal)` + 
+                                    `Energie, Kohlenhydrate (kcal)` + 
+                                    `Energie, Fett (kcal)` + 
+                                    `Energie, Alkohol (kcal)`,
+         `Energie, Protein (%)` = `Energie, Protein (kcal)` / `Energie, Gesamt (kcal)`, 
+         `Energie, Kohlenhydrate (%)` = `Energie, Kohlenhydrate (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Fett (%)` = `Energie, Fett (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Alkohol (%)` = `Energie, Alkohol (kcal)` / `Energie, Gesamt (kcal)`
+         )   %>% 
+    select(file_name, sample, time_point.label, time_point, day, date, St_complet, Time, Sex, Phenotype, everything())
+
+fname = paste0(table_dir, 'Keto.summary.tsv')
+write_tsv(keto.summary, path = fname)
+```

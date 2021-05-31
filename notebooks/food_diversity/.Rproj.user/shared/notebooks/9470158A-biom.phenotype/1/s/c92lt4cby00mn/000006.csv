@@ -1,0 +1,25 @@
+"0","```r
+                                                                        
+#per sample
+                                                                        
+                                                                        
+df <- nutr.clust
+df$file_name <- row.names(df)
+
+df$sample_pheno <- paste(df$file_name,df$Phenotype)
+df <- df %>% dplyr::select(.,everything(),-starts_with(c('subgroup','Phenotype','file_name')))
+
+matrix.pheno <- df %>% group_by(sample_pheno) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-sample_pheno) %>%
+  pivot_wider(names_from = sample_pheno,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+
+k <- stats::heatmap(matrix.pheno,cexRow = .7,cexCol = .7,verbose = TRUE) 
+```"
+"1","layout: widths =  1 4 , heights =  1 4 ; lmat=
+     [,1] [,2]
+[1,]    0    3
+[2,]    2    1
+"

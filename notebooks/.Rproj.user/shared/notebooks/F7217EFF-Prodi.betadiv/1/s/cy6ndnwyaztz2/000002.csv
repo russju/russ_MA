@@ -1,0 +1,12 @@
+"0","library(ggpubr)
+"
+"2","Paket ‘ggpubr’ wurde unter R Version 4.0.2 erstellt"
+"2","
+Attache Paket: ‘ggpubr’
+
+"
+"2","The following object is masked from ‘package:ape’:
+
+    rotate
+
+"

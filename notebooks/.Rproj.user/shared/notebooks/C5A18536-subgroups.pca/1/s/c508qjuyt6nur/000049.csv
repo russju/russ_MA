@@ -1,0 +1,57 @@
+"0","for (cat in unique(bls.properties$Category)) {
+  svars = bls.properties %>% filter(Category == cat) %>% pull(Property)
+  p <- factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                             # samples
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 1.5,
+                            geom.ind = 'point', repel = T,
+                          
+                            
+                            # variables
+                            col.var = 'black',
+                            select.var = list('name' = svars), 
+                            title = paste0('Feature: ', cat)) +
+                             
+  theme(aspect.ratio = 1) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)+
+    geom_text(data = filter(d, ID %in% c('eierteigwaren','eierteigwaren aus weizen','eierteigwaren besonderer art','eierteigwaren spaghetti','pudding vanillegeschmack früchte','salzgebäck','salzstange','teigwaren hartgriess')), aes(x = Dim.1, y = Dim.2, label = ID), hjust = 0, vjust =0, size = 3,color = 'red')
+  
+  fname = paste0(output_dir, 'BLS_pos.proteo.intersect.food.', cat, '.pdf')
+  print(fname)
+  print(p)
+  ggsave(p, filename = fname, device = 'pdf', width = 15, height = 10, dpi = 300)
+}
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Aminosäuren.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Zusammensetzung.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Kohlenhydrate.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Fettsäuren.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Mineralstoffe.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Ballaststoffe.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Spurenelemente.pdf"""
+"1","
+"
+"1","[1]"
+"1"," ""../results/BLS_pos.proteo.intersect.food.Vitamine.pdf"""
+"1","
+"

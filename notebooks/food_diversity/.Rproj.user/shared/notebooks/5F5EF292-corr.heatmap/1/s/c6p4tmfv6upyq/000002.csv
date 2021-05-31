@@ -1,0 +1,38 @@
+"0","```r
+#data prep
+corr.convclust.L2.sub <- corr.convclust.L2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.convclust.L2.sub2 <- corr.convclust.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.convclust.L2.sub2 <- ifelse(corr.convclust.L2.sub2 >= -log10(0.05),'*','')
+
+corr.convclust.L6.sub <- corr.convclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.convclust.L6.sub6 <- corr.convclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.convclust.L6.sub6 <- ifelse(corr.convclust.L6.sub6 >= -log10(0.05),'*','')
+
+corr.convclust.family.sub <- corr.convclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+
+corr.convclust.family.sub6 <- corr.convclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+corr.convclust.family.sub6 <- ifelse(corr.convclust.family.sub6 >= -log10(0.05),'*','')
+
+pdf('C:/Users/Juliane/Desktop/project.directory/results/17.02_corr.convclust.taxa.pdf',onefile = T)
+
+convclust.L2 <- heatmap.2(corr.convclust.L2.sub,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L2.sub2 ,notecol = 'black',srtCol = 30)
+
+convclust.L6 <- heatmap.2(corr.convclust.L6.sub,cexRow = .5,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L6.sub6 ,notecol = 'black',srtCol = 30)
+```"
+"0","```r
+
+convclust.family <- heatmap.2(corr.convclust.family.sub,cexRow = .5,cexCol = .4, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L6.sub6 ,notecol = 'black',srtCol = 30)
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

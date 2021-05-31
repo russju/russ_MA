@@ -1,0 +1,439 @@
+---
+title: "correlation heatmap unrarefied taxa"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(ggplot2)  
+library(gplots)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+#nutrients
+corr.nutr.L2 <- read_tsv(paste0(table_dir, 'corr.nutr.L2.tsv')) %>% as.data.frame(.)
+corr.nutr.L6 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.tsv')) %>% as.data.frame(.)
+corr.nutr.family <- read_tsv(paste0(table_dir, 'corr.nutr.family.tsv')) %>% as.data.frame(.)
+
+#nutrient cluster
+corr.nutclust.L2 <- read_tsv(paste0(table_dir, 'corr.nutclust.L2.tsv')) %>% as.data.frame(.)
+corr.nutclust.L6 <- read_tsv(paste0(table_dir, 'corr.nutclust.L6.tsv')) %>% as.data.frame(.)
+corr.nutclust.family <- read_tsv(paste0(table_dir, 'corr.nutclust.family.tsv')) %>% as.data.frame(.)
+
+#conventional clusters
+corr.convclust.L2 <- read_tsv(paste0(table_dir, 'corr.convclust.L2.tsv')) %>% as.data.frame(.)
+corr.convclust.L6 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.tsv')) %>% as.data.frame(.)
+corr.convclust.family <- read_tsv(paste0(table_dir, 'corr.convclust.family.tsv')) %>% as.data.frame(.)
+
+#serum fats
+corr.nutr.fats <- read_tsv(paste0(table_dir, 'corr.fat.nut.tsv')) %>% as.data.frame(.)
+#feces fat
+corr.nutr.chol <- read_tsv(paste0(table_dir, 'corr.chol.nut.tsv')) %>% as.data.frame(.)
+#U1
+
+corr.nutr.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U1.tsv')) %>% as.data.frame(.)
+corr.convclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.convclust.L6.U1.tsv')) %>% as.data.frame(.)
+corr.nutrclust.L6.U1 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U1.tsv')) %>% as.data.frame(.)
+
+#U2
+
+corr.nutr.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutr.L6.U2.tsv')) %>% as.data.frame(.)
+corr.convclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.convrclust.L6.U2.tsv')) %>% as.data.frame(.)
+corr.nutrclust.L6.U2 <- read_tsv(paste0(table_dir, 'corr.nutrclust.L6.U2.tsv')) %>% as.data.frame(.)
+
+#fats in feces z.score
+
+corr.scfa.nut <- read_tsv(paste0(table_dir, 'corr.scfa.nutr.tsv')) %>% as.data.frame(.)
+corr.fa.nut <- read_tsv(paste0(table_dir, 'corr.fa.nutr.tsv')) %>% as.data.frame(.)
+corr.chol.nut <- read_tsv(paste0(table_dir, 'corr.chol.nutr.tsv')) %>% as.data.frame(.)
+
+corr.scfa.convclust <- read_tsv(paste0(table_dir, 'corr.scfa.convclust.tsv')) %>% as.data.frame(.)
+corr.fa.convclust <- read_tsv(paste0(table_dir, 'corr.fa.convclust.tsv')) %>% as.data.frame(.)
+corr.chol.convclust <- read_tsv(paste0(table_dir, 'corr.chol.convclust.tsv')) %>% as.data.frame(.)
+
+corr.scfa.nutclust <- read_tsv(paste0(table_dir, 'corr.scfa.nutclust.tsv')) %>% as.data.frame(.)
+corr.fa.nutclust <- read_tsv(paste0(table_dir, 'corr.fa.nutclust.tsv')) %>% as.data.frame(.)
+corr.chol.nutclust <- read_tsv(paste0(table_dir, 'corr.chol.nutclust.tsv')) %>% as.data.frame(.)
+
+
+```
+heatmaps correlation matrices
+taxa unrarefied, relative centered log ratio transformed 
+nutrients and food clusters relative, centered log transformed
+
+spearman correlation
+
+#all nutrients with L2,L6,family
+```{r}
+
+#only correlations not between 02. and -0.2,with p.vslue <= .05 sig. *
+corr.nutr.L2.sig <- corr.nutr.L2[corr.nutr.L2$estimate >= 0.2 | corr.nutr.L2$estimate <= -0.2,]
+# corr.nutr.L2.sig2 <- corr.nutr.L2[corr.nutr.L2$p.adj.log >= -log10(0.05),]
+
+corr.nutr.L6.sig <- corr.nutr.L6[corr.nutr.L6$estimate >= 0.2 | corr.nutr.L6$estimate <= -0.2,]
+# corr.nutr.L6.sig2 <- corr.nutr.L6.sig[corr.nutr.L6.sig$p.adj.log >= -log10(0.05),]
+
+corr.nutr.family.sig <- corr.nutr.family[corr.nutr.family$estimate >= 0.2 | corr.nutr.family$estimate <= -0.2,]
+# corr.nutr.family.sig2 <- corr.nutr.family.sig[corr.nutr.family.sig$p.adj.log >= -log10(0.05),]
+
+corr.nutr.L2.sig.sub <- corr.nutr.L2.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'phylum',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L2.sig.sub[is.na(corr.nutr.L2.sig.sub)] <- 0
+
+corr.nutr.L2.sig.sub2 <- corr.nutr.L2.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'phylum',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L2.sig.sub2 <- ifelse(corr.nutr.L2.sig.sub2 >= -log10(0.05),'*','')
+
+corr.nutr.L6.sig.sub <- corr.nutr.L6.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.sig.sub[is.na(corr.nutr.L6.sig.sub)] <- 0
+
+corr.nutr.L6.sig.sub2 <- corr.nutr.L6.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.sig.sub2 <- ifelse(corr.nutr.L6.sig.sub2 >= -log10(0.05),'*','')
+
+corr.nutr.family.sig.sub <- corr.nutr.family.sig %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log'))  %>% pivot_wider(.,names_from = 'taxa',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+corr.nutr.family.sig.sub[is.na(corr.nutr.family.sig.sub)] <- 0
+
+corr.nutr.family.sig.sub2 <- corr.nutr.family.sig  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'taxa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+corr.nutr.family.sig.sub2 <- ifelse(corr.nutr.family.sig.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+
+pdf(paste0(output_dir,'sig.corr.nutr.taxa'))
+nutr.L2.sig <- heatmap.2(corr.nutr.L2.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.L2.sig.sub2)
+
+nutr.L6.sig <- heatmap.2(corr.nutr.L6.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.L6.sig.sub2)
+
+nutr.family.sig <- heatmap.2(corr.nutr.family.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.family.sig.sub2)
+
+dev.off()
+#data prep
+corr.nutr.L2.sub <- corr.nutr.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% distinct(.) %>% pivot_wider(.,names_from = 'phylum',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L2.sub[is.na(corr.nutr.L2.sub)] <- 0
+
+corr.nutr.L2.sub2 <- corr.nutr.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate'))%>% distinct(.) %>% pivot_wider(.,names_from = 'phylum',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L2.sub2 <- ifelse(corr.nutr.L2.sub2 >= -log10(0.05),'*','')
+
+corr.nutr.L6.sub <- corr.nutr.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.L6.sub6 <- corr.nutr.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.sub6 <- ifelse(corr.nutr.L6.sub6 >= -log10(0.05),'*','')
+
+corr.nutr.family.sub <- corr.nutr.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+
+corr.nutr.family.sub6 <- corr.nutr.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+corr.nutr.family.sub6 <- ifelse(corr.nutr.family.sub6 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+mar <- c('15','20') %>% as.vector(.) %>% as.numeric(.)
+
+corr.nutr.L2.sub.t <- t(corr.nutr.L2.sub)
+nutr.L2.t <- heatmap.2(corr.nutr.L2.sub.t,cexRow = .5,cexCol = .2,trace = 'none',key.title = 'Spearman correlation',col = my_palette)
+
+pdf(paste0(output_dir,'17.02_corr.nutr.taxa.pdf',onefile = T))
+
+nutr.L2 <- heatmap.2(corr.nutr.L2.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutr.L2.sub2 ,notecol = 'black',srtCol = 30)
+
+nutr.L6 <- heatmap.2(corr.nutr.L6.sub,cexRow = .35,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutr.L6.sub6 ,notecol = 'black',srtCol = 30)
+
+nutr.family <- heatmap.2(corr.nutr.family.sub,cexRow = .35,cexCol = .4, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutr.family.sub6 ,notecol = 'black',srtCol = 30)
+
+
+dev.off()
+
+
+
+```
+
+#nutrient cluster with L2,L6,family
+```{r}
+#data prep
+corr.nutclust.L2.sub <- corr.nutclust.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.nutclust.L2.sub2 <- corr.nutclust.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.nutclust.L2.sub2 <- ifelse(corr.nutclust.L2.sub2 >= -log10(0.05),'*','')
+
+corr.nutclust.L6.sub <- corr.nutclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.nutclust.L6.sub6 <- corr.nutclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.nutclust.L6.sub6 <- ifelse(corr.nutclust.L6.sub6 >= -log10(0.05),'*','')
+
+corr.nutclust.family.sub <- corr.nutclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+
+corr.nutclust.family.sub6 <- corr.nutclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+corr.nutclust.family.sub6 <- ifelse(corr.nutclust.family.sub6 >= -log10(0.05),'*','')
+
+pdf(paste0(output_dir,'17.02_corr.nutclust.taxa.pdf',onefile = T,width  = 10,height = 10))
+
+nutclust.L2 <- heatmap.2(corr.nutclust.L2.sub,cexRow = .8,cexCol = .9, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutclust.L2.sub2 ,notecol = 'black',srtCol = 30)
+
+nutclust.L6 <- heatmap.2(corr.nutclust.L6.sub,cexRow = .8,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutclust.L6.sub6 ,notecol = 'black',srtCol = 30)
+
+nutclust.family <- heatmap.2(corr.nutclust.family.sub,cexRow = .8,cexCol = .4, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutclust.family.sub6 ,notecol = 'black',srtCol = 30)
+
+dev.off()
+```
+
+#conventional cluster with L2,L6,family
+```{r}
+#data prep
+corr.convclust.L2.sub <- corr.convclust.L2  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.convclust.L2.sub2 <- corr.convclust.L2 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'phylum',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.convclust.L2.sub2 <- ifelse(corr.convclust.L2.sub2 >= -log10(0.05),'*','')
+
+corr.convclust.L6.sub <- corr.convclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+
+corr.convclust.L6.sub6 <- corr.convclust.L6 %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'clusters') %>% data.matrix(.)
+corr.convclust.L6.sub6 <- ifelse(corr.convclust.L6.sub6 >= -log10(0.05),'*','')
+
+corr.convclust.family.sub <- corr.convclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+
+corr.convclust.family.sub6 <- corr.convclust.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+corr.convclust.family.sub6 <- ifelse(corr.convclust.family.sub6 >= -log10(0.05),'*','')
+
+pdf(paste0(output_dir,'17.02_corr.convclust.taxa.pdf',onefile = T))
+
+convclust.L2 <- heatmap.2(corr.convclust.L2.sub,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L2.sub2 ,notecol = 'black',srtCol = 30)
+
+convclust.L6 <- heatmap.2(corr.convclust.L6.sub,cexRow = .5,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L6.sub6 ,notecol = 'black',srtCol = 30)
+
+convclust.family <- heatmap.2(corr.convclust.family.sub,cexRow = .5,cexCol = .4, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.convclust.L6.sub6 ,notecol = 'black',srtCol = 30)
+
+dev.off()
+```
+
+#all nutrients with fats in serum
+```{r}
+#data prep
+corr.nutr.fats.sub <- corr.nutr.fats %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fat',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.fats.sub2 <- corr.nutr.fats %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fat',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.fats.sub2 <- ifelse(corr.nutr.fats.sub2 >= -log10(0.05),'*','')
+
+pdf(paste0(output_dir,'corr.nutr.fats.pdf',onefile = T))
+
+nutr.fat <- heatmap.2(corr.nutr.fats.sub ,cexRow = .2,cexCol = .4, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutr.fats.sub2, notecol = 'black')
+
+dev.off()
+
+```
+
+##only U1
+#all nutrients with L6
+```{r}
+#data prep
+corr.nutr.L6.U1.sub <- corr.nutr.L6.U1 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.L6.U1.sub2 <- corr.nutr.L6.U1 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.U1.sub2 <- ifelse(corr.nutr.L6.U1.sub2 >= -log10(0.05),'*','')
+
+corr.convclust.L6.U1.sub <- corr.convclust.L6.U1 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv cluster') %>% data.matrix(.)
+
+corr.convclust.L6.U1.sub2 <- corr.convclust.L6.U1 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv cluster') %>% data.matrix(.)
+corr.convclust.L6.U1.sub2 <- ifelse(corr.convclust.L6.U1.sub2 >= -log10(0.05),'*','')
+
+corr.nutrclust.L6.U1.sub <- corr.nutrclust.L6.U1 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutr cluster') %>% data.matrix(.)
+
+corr.nutrclust.L6.U1.sub2 <- corr.nutrclust.L6.U1 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutr cluster') %>% data.matrix(.)
+corr.nutrclust.L6.U1.sub2 <- ifelse(corr.nutrclust.L6.U1.sub2 >= -log10(0.05),'*','')
+
+pdf(paste0(output_dir,'corr.nutr.taxa.U1.pdf',onefile = T))
+
+nutr.L6.U1 <- heatmap.2(corr.nutr.L6.U1.sub,cexRow = .2,cexCol = .1,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutr.L6.U1.sub2,notecol = 'black')
+
+nutrclust.L6.U1 <- heatmap.2(corr.nutrclust.L6.U1.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutrclust.L6.U1.sub2,notecol = 'black')
+
+convclust.L6.U1 <- heatmap.2(corr.convclust.L6.U1.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.convclust.L6.U1.sub2,notecol = 'black')
+
+dev.off()
+```
+
+##only U2
+#all nutrients with L6
+```{r}
+#data prep
+corr.nutr.L6.U2.sub <- corr.nutr.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.L6.U2.sub2 <- corr.nutr.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.U2.sub2 <- ifelse(corr.nutr.L6.U2.sub2 >= -log10(0.05),'*','')
+
+corr.convclust.L6.U2.sub <- corr.convclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.convclust.L6.U2.sub2 <- corr.convclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.convclust.L6.U2.sub2 <- ifelse(corr.convclust.L6.U2.sub2 >= -log10(0.05),'*','')
+
+corr.nutrclust.L6.U2.sub <- corr.nutrclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutrclust.L6.U2.sub2 <- corr.nutrclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutrclust.L6.U2.sub2 <- ifelse(corr.nutrclust.L6.U2.sub2 >= -log10(0.05),'*','')
+
+
+pdf(paste0(output_dir,'corr.nutr.taxa.U2.pdf',onefile = T))
+
+nutr.L6.U2 <- heatmap.2(corr.nutr.L6.U2.sub,cexRow = .2,cexCol = .1,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutr.L6.U2.sub2,notecol = 'black',Rowv = nutr.L6.U1$rowDendrogram,Colv = nutr.L6.U1$colDendrogram)
+
+nutrclust.L6.U2 <- heatmap.2(corr.nutrclust.L6.U2.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutrclust.L6.U2.sub2,notecol = 'black',Rowv = nutrclust.L6.U1$rowDendrogram,Colv = nutrclust.L6.U1$colDendrogram)
+
+convclust.L6.U2 <- heatmap.2(corr.convclust.L6.U2.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3), cellnote = corr.convclust.L6.U2.sub2, notecol = 'black',Rowv = convclust.L6.U1$rowDendrogram,Colv = convclust.L6.U1$colDendrogram)
+
+dev.off()
+```
+#all nutrients with chol in feces
+```{r}
+#data prep
+corr.nutr.chol.sub <- corr.nutr.chol %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.chol.sub2 <- corr.nutr.chol %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.chol.sub2 <- ifelse(corr.nutr.chol.sub2 >= -log10(0.05),'*','')
+
+corr.chol.convclust.sub <- corr.chol.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv cluster') %>% data.matrix(.)
+
+corr.chol.convclust.sub2 <- corr.chol.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv cluster') %>% data.matrix(.)
+corr.chol.convclust.sub2 <- ifelse(corr.chol.convclust.sub2 >= -log10(0.05),'*','')
+
+corr.chol.nutclust.sub <- corr.chol.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+
+corr.chol.nutclust.sub2 <- corr.chol.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+corr.chol.nutclust.sub2 <- ifelse(corr.chol.nutclust.sub2 >= -log10(0.05),'*','')
+
+pdf(paste0(output_dir,'18.2_corr.nutr.chol.pdf',onefile = T))
+
+nutr.chol <- heatmap.2(corr.nutr.chol.sub ,cexRow = .3,cexCol = .5, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.nutr.chol.sub2, notecol = 'black',srtCol = 35 )
+
+convclust.chol <- heatmap.2(corr.chol.convclust.sub ,cexRow = .5,cexCol = .5, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.chol.convclust.sub2, notecol = 'black',srtCol = 35 )
+
+nutclust.chol <- heatmap.2(corr.chol.nutclust.sub ,cexRow = .8,cexCol = .5, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.chol.nutclust.sub2, notecol = 'black',srtCol = 35 )
+
+dev.off()
+
+```
+#nutrients,clusters with fa,scfa
+```{r}
+#data prep
+corr.scfa.nut.sub <- corr.scfa.nut %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.scfa.nut.sub2 <- corr.scfa.nut %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.scfa.nut.sub2 <- ifelse(corr.scfa.nut.sub2 >= -log10(0.05),'*','')
+
+corr.scfa.convclust.sub <- corr.scfa.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+corr.scfa.convclust.sub2 <- corr.scfa.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+corr.scfa.convclust.sub2 <- ifelse(corr.scfa.convclust.sub2 >= -log10(0.05),'*','')
+
+corr.scfa.nutclust.sub <- corr.scfa.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'estimate') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+
+corr.scfa.nutclust.sub2 <- corr.scfa.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal scfa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'cluster') %>% data.matrix(.)
+corr.scfa.nutclust.sub2 <- ifelse(corr.scfa.nutclust.sub2 >= -log10(0.05),'*','')
+
+
+corr.fa.nut.sub <- corr.fa.nut %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.fa.nut.sub2 <- corr.fa.nut %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.fa.nut.sub2 <- ifelse(corr.fa.nut.sub2 >= -log10(0.05),'*','')
+
+corr.fa.convclust.sub <- corr.fa.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+
+corr.fa.convclust.sub2 <- corr.fa.convclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+corr.fa.convclust.sub2 <- ifelse(corr.fa.convclust.sub2 >= -log10(0.05),'*','')
+
+corr.fa.nutclust.sub <- corr.fa.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+
+corr.fa.nutclust.sub2 <- corr.fa.nutclust %>% distinct(.)%>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'fecal fatty acids',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient cluster') %>% data.matrix(.)
+corr.fa.nutclust.sub2 <- ifelse(corr.fa.nutclust.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+
+pdf(paste0(output_dir,'18.02_corr.scfa.pdf',onefile = T))
+
+nutr.scfa <- heatmap.2(corr.scfa.nut.sub ,cexRow = .4,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.nut.sub2, notecol = 'black',srtCol = 30 )
+
+nutclust.scfa <- heatmap.2(corr.scfa.nutclust.sub ,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.nutclust.sub2, notecol = 'black',srtCol = 30 )
+
+convclust.scfa <- heatmap.2(corr.scfa.convclust.sub ,cexRow = .8,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.scfa.convclust.sub2, notecol = 'black',srtCol = 30 )
+
+dev.off()
+
+pdf(paste0(output_dir,'corr.fa.pdf',onefile = T))
+
+nutr.fa <- heatmap.2(corr.fa.nut.sub ,cexRow = .4,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.nut.sub2, notecol = 'black',srtCol = 30 )
+
+nutclust.fa <- heatmap.2(corr.fa.nutclust.sub ,cexRow = .5,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.nutclust.sub2, notecol = 'black',srtCol = 30 )
+
+convclust.fa <- heatmap.2(corr.fa.convclust.sub ,cexRow = .8,cexCol = .8, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4),cellnote = corr.fa.convclust.sub2, notecol = 'black',srtCol = 30 )
+
+dev.off()
+```

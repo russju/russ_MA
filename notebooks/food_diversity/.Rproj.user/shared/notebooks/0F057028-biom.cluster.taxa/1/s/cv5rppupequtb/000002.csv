@@ -1,0 +1,53 @@
+"0","```r
+#x axis log2 correlation
+
+r.cor.L6.nutr[is.nan(r.cor.L6.nutr)] <- 0
+r.cor.L6.nutr[is.infinite(r.cor.L6.nutr)] <- 0
+r.cor.L6.nutr <- as.data.frame(r.cor.L6.nutr)
+
+#y axis -log10 p.value
+
+p.adj.log.L6.nutr <- -log10(p.adj.L6.nutr)
+p.adj.log.L6.nutr[is.infinite(p.adj.log.L6.nutr)] <- 0
+p.adj.log.L6.nutr <- as.data.frame(p.adj.log.L6.nutr)
+
+cor.test.adj.L6.nutr <- cbind(cor.test.L6.nutr[ ,c(1,3)],p.adj.log.L6.nutr) %>% cbind(.,r.cor.L6.nutr) %>% as.data.frame(.)
+colnames(cor.test.adj.L6.nutr) <- c('genus','clusters','p.adj.log','estimate')
+
+cor.test.adj.L6.nutr <- cor.test.adj.L6.nutr[cor.test.adj.L6.nutr$p.adj.log != 0 & cor.test.adj.L6.nutr$estimate != 0,]
+
+# write_tsv(cor.test.adj.L6.nutr ,paste0(table_dir,'corr.convclust.L6.tsv'))
+
+sig.nutr.L6 <- cor.test.adj.L6.nutr[cor.test.adj.L6.nutr$p.adj.log <= 0.050 & cor.test.adj.L6.nutr$p.adj.log > 0.00000,]
+top.sig.nutr.L6 <- sig.nutr.L6[order(-sig.nutr.L6$p.adj.log ),][1:11,]
+#volcano plot ggplot()
+
+##volcano plot 
+vp.L6.cl.nutr <- ggplot(cor.test.adj.L6.nutr,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle(\"Volcano plot\") +
+  xlab(\"correlation\") + 
+  ylab(\"-log10 adjusted p-value\")
+
+# ggplotly(vp,tooltip = c('x','y','text'))
+
+vp.L6.cl.nutr+xlim(c(-1,1))
+
+###maaslin
+
+df <- row.names(merge.L6.nutr) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-starts_with('file_name'))
+merge.L6.nutr <- merge.L6.nutr[, colSums(merge.L6.nutr != 0) > 0]
+
+maaslin.L6.convclust <- Maaslin2(input_data = merge.L6.nutr,input_metadata = df,fixed_effects = 'group',output = 'L6.consclust_maaslin',
+                                 min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+
+```"

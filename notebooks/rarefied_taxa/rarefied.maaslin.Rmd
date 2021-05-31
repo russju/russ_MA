@@ -1,0 +1,114 @@
+---
+title: "rarefied taxa tables maaslin analysis"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(Maaslin2)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+##Data Import
+```{r}
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')
+cl.sum.z <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_17.02.tsv')) %>% column_to_rownames(.,'file_name')
+conv.clust.z <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_17.02.tsv'))%>% column_to_rownames(.,'file_name')
+
+norm.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+norm.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+```
+
+#nutrients
+```{r}
+df <- row.names(nutr.sum.z) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.fa <- Maaslin2(input_data = nutr.sum.z,input_metadata = df,fixed_effects = 'group',output = 'nutr.sum.z_maaslin',
+                       min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```
+
+#nutrient cluster
+```{r}
+df <- row.names(cl.sum.z) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.fa <- Maaslin2(input_data = cl.sum.z,input_metadata = df,fixed_effects = 'group',output = 'nutclust.sum.z_maaslin',
+                       min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```
+
+#conv clusters
+```{r}
+df <- row.names(conv.clust.z) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.fa <- Maaslin2(input_data = conv.clust.z,input_metadata = df,fixed_effects = 'group',output = 'convclust.sum.z_maaslin',
+                       min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```
+
+#L6 genus
+```{r}
+df <- row.names(norm.L6) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.fa <- Maaslin2(input_data = norm.L6,input_metadata = df,fixed_effects = 'group',output = 'genus_maaslin',
+                       min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```
+
+#L7 specy
+```{r}
+df <- row.names(norm.L7) %>% as.data.frame(.)
+colnames(df) <- 'file_name'
+df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  
+df <- column_to_rownames(df,'file_name')
+
+maaslin.fa <- Maaslin2(input_data = norm.L7,input_metadata = df,fixed_effects = 'group',output = 'specy_maaslin',
+                       min_abundance = -Inf,
+                                 normalization = 'NONE',
+                                 transform = 'NONE',
+                                 standardize = F, 
+                                 random_effects = 'row.names')
+```

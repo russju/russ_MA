@@ -1,0 +1,39 @@
+"0","```r
+#data prep
+corr.nutr.L6.U2.sub <- corr.nutr.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutr.L6.U2.sub2 <- corr.nutr.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutr.L6.U2.sub2 <- ifelse(corr.nutr.L6.U2.sub2 >= -log10(0.05),'*','')
+
+corr.convclust.L6.U2.sub <- corr.convclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.convclust.L6.U2.sub2 <- corr.convclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.convclust.L6.U2.sub2 <- ifelse(corr.convclust.L6.U2.sub2 >= -log10(0.05),'*','')
+
+corr.nutrclust.L6.U2.sub <- corr.nutrclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'genus',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+
+corr.nutrclust.L6.U2.sub2 <- corr.nutrclust.L6.U2 %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'genus',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient') %>% data.matrix(.)
+corr.nutrclust.L6.U2.sub2 <- ifelse(corr.nutrclust.L6.U2.sub2 >= -log10(0.05),'*','')
+
+
+pdf('C:/Users/Juliane/Desktop/project.directory/results/corr.nutr.taxa.U2.pdf',onefile = T)
+
+nutr.L6.U2 <- heatmap.2(corr.nutr.L6.U2.sub,cexRow = .2,cexCol = .1,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutr.L6.U2.sub2,notecol = 'black',Rowv = nutr.L6.U1$rowDendrogram,Colv = nutr.L6.U1$colDendrogram)
+
+nutrclust.L6.U2 <- heatmap.2(corr.nutrclust.L6.U2.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3),cellnote = corr.nutrclust.L6.U2.sub2,notecol = 'black',Rowv = nutrclust.L6.U1$rowDendrogram,Colv = nutrclust.L6.U1$colDendrogram)
+```"
+"0","```r
+
+convclust.L6.U2 <- heatmap.2(corr.convclust.L6.U2.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3), cellnote = corr.convclust.L6.U2.sub2, notecol = 'black',Rowv = convclust.L6.U1$rowDendrogram,Colv = convclust.L6.U1$colDendrogram)
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

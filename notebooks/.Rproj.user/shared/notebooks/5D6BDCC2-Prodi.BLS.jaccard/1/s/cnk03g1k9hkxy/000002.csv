@@ -1,0 +1,12 @@
+"0","physeq.week.nut <- phyloseq(otu.week,tree.nutr)
+jac.week.nut <- phyloseq::distance(physeq.week.nut, method = ""jaccard"", binary = TRUE)
+pcoa_jac.week.nut <- ape::pcoa(jac.week.nut)
+
+#variance
+get_explained_variance(pcoa_jac.week.nut)[1:2]
+"
+"1","[1]"
+"1"," ""%"""
+"1"," NA "
+"1","
+"

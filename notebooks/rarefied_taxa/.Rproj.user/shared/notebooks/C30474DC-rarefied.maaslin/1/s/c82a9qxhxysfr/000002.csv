@@ -1,0 +1,205 @@
+"0","df <- row.names(cl.sum.z) %>% as.data.frame(.)"
+"0","colnames(df) <- 'file_name'"
+"0","df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  "
+"0","df <- column_to_rownames(df,'file_name')"
+"0",""
+"0","maaslin.fa <- Maaslin2(input_data = cl.sum.z,input_metadata = df,fixed_effects = 'group',output = 'nutclust.sum.z_maaslin',"
+"0","                       min_abundance = -Inf,"
+"0","                                 normalization = 'NONE',"
+"0","                                 transform = 'NONE',"
+"0","                                 standardize = F, "
+"0","                                 random_effects = 'row.names')"
+"1","[1]"
+"1"," ""Creating output folder"""
+"1","
+"
+"1","[1]"
+"1"," ""Creating output figures folder"""
+"1","
+"
+"1","[0m2021-05-14 18:01:40 INFO::Writing function arguments to log file[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Verifying options selected are valid[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Determining format of input files[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Input format is data samples as rows and metadata samples as rows[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[38;5;214m2021-05-14 18:01:41 WARNING::Feature name not found in metadata so not applied to formula as random effect: row.names[39m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Formula for fixed effects: expr ~  group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Running selected normalization method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Filter data based on min abundance and min prevalence[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Total samples in data: 62[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Min samples required with min abundance for a feature not to be filtered: 6.200000[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Total filtered features: 0[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Filtered feature names:[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Bypass z-score application to metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Running selected transform method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:41 INFO::Running selected analysis method: LM[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |                                                  |"
+"1"," "
+"1","0 % ~calculating  "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 1, X1.veg.fruit[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++                                              |"
+"1"," "
+"1","7 % ~01s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 2, X2.carbs.bread[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++                                           |"
+"1"," "
+"1","13% ~01s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 3, X3.fatty.sweet[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","20% ~01s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 4, X4.carbs.cereal[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++                                    |"
+"1"," "
+"1","27% ~01s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 5, X5.seed[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","33% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 6, X6.nut[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++                              |"
+"1"," "
+"1","40% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 7, X7.kohl[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++                          |"
+"1"," "
+"1","47% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 8, X8.fish.sauce[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++                       |"
+"1"," "
+"1","53% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 9, X9.egg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++                    |"
+"1"," "
+"1","60% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 10, X10.alcohol[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","67% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 11, X11.wurst[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++             |"
+"1"," "
+"1","73% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 12, X12.soft.drinks[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++          |"
+"1"," "
+"1","80% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 13, X13.white.meat[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++      |"
+"1"," "
+"1","87% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 14, X14.fatty.dairy[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++   |"
+"1"," "
+"1","93% ~00s          "
+"1","[0m2021-05-14 18:01:41 INFO::Fitting model to feature number 15, X15.cheese[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","100% elapsed=01s  "
+"1","
+"
+"1","[0m2021-05-14 18:01:42 INFO::Counting total values for each feature[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Writing residuals to file nutclust.sum.z_maaslin/residuals.rds[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Writing all results to file (ordered by increasing q-values): nutclust.sum.z_maaslin/all_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): nutclust.sum.z_maaslin/significant_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Writing heatmap of significant results to file: nutclust.sum.z_maaslin/heatmap.pdf[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[1]"
+"1"," ""There is not enough metadata in the associations to create a heatmap plot. Please review the associations in text output file."""
+"1","
+"
+"1","[0m2021-05-14 18:01:42 INFO::Writing association plots (one for each significant association) to output folder: nutclust.sum.z_maaslin[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Plotting associations from most to least significant, grouped by metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Plotting data for metadata number 1, group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Creating boxplot for categorical data, group vs X1.veg.fruit[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:42 INFO::Creating boxplot for categorical data, group vs X3.fatty.sweet[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:43 INFO::Creating boxplot for categorical data, group vs X9.egg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:44 INFO::Creating boxplot for categorical data, group vs X15.cheese[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:45 INFO::Creating boxplot for categorical data, group vs X4.carbs.cereal[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:46 INFO::Creating boxplot for categorical data, group vs X6.nut[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:47 INFO::Creating boxplot for categorical data, group vs X8.fish.sauce[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:48 INFO::Creating boxplot for categorical data, group vs X13.white.meat[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:49 INFO::Creating boxplot for categorical data, group vs X2.carbs.bread[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:50 INFO::Creating boxplot for categorical data, group vs X5.seed[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:51 INFO::Creating boxplot for categorical data, group vs X10.alcohol[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:52 INFO::Creating boxplot for categorical data, group vs X11.wurst[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"

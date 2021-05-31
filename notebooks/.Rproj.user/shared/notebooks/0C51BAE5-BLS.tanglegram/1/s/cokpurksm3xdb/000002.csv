@@ -1,0 +1,5 @@
+"0","d.cat_data <- hclust(cat.dist, method = 'complete')"
+"0","# d.cat_data <- pc.hclust"
+"0","dend.cat <- as.dendrogram(d.cat_data)"
+"0","tree.conv <- ape::as.phylo(d.cat_data)"
+"0","plot(tree.conv, type= 'fan')"

@@ -1,0 +1,245 @@
+"0","df <- row.names(conv.clust.z) %>% as.data.frame(.)"
+"0","colnames(df) <- 'file_name'"
+"0","df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  "
+"0","df <- column_to_rownames(df,'file_name')"
+"0",""
+"0","maaslin.fa <- Maaslin2(input_data = conv.clust.z,input_metadata = df,fixed_effects = 'group',output = 'convclust.sum.z_maaslin',"
+"0","                       min_abundance = -Inf,"
+"0","                                 normalization = 'NONE',"
+"0","                                 transform = 'NONE',"
+"0","                                 standardize = F, "
+"0","                                 random_effects = 'row.names')"
+"1","[1]"
+"1"," ""Creating output folder"""
+"1","
+"
+"1","[1]"
+"1"," ""Creating output figures folder"""
+"1","
+"
+"1","[0m2021-05-14 18:01:54 INFO::Writing function arguments to log file[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Verifying options selected are valid[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Determining format of input files[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Input format is data samples as rows and metadata samples as rows[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[38;5;214m2021-05-14 18:01:54 WARNING::Feature name not found in metadata so not applied to formula as random effect: row.names[39m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Formula for fixed effects: expr ~  group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Running selected normalization method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Filter data based on min abundance and min prevalence[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Total samples in data: 62[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Min samples required with min abundance for a feature not to be filtered: 6.200000[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Total filtered features: 0[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Filtered feature names:[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Bypass z-score application to metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Running selected transform method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:54 INFO::Running selected analysis method: LM[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |                                                  |"
+"1"," "
+"1","0 % ~calculating  "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 1, Alkoholfreie.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++                                               |"
+"1"," "
+"1","5 % ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 2, Alkoholische.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++                                             |"
+"1"," "
+"1","10% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 3, Brot..und.Kleingebäck[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++                                          |"
+"1"," "
+"1","14% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 4, Cerealien..Getreide.und.Getreideprodukte..Reis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","19% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 5, Diätetische.Lebensmittel[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++                                      |"
+"1"," "
+"1","24% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 6, Eier.und.Eierprodukte..Teigwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++                                   |"
+"1"," "
+"1","29% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 7, Fische..Krusten...Schalen...Weichtiere[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","33% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 8, Fleisch..Rind..Kalb..Schwein..Hammel..Lamm.[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++                              |"
+"1"," "
+"1","38% ~01s          "
+"1","[0m2021-05-14 18:01:54 INFO::Fitting model to feature number 9, Fleisch..Wild..Geflügel..Federwild..Innereien.[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++                            |"
+"1"," "
+"1","43% ~01s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 10, Früchte..Obst.und.Obsterzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++                          |"
+"1"," "
+"1","48% ~01s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 11, Gemüse.und.Gemüseerzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++                       |"
+"1"," "
+"1","52% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 12, Gewürze..Würzmittel..Hilfsstoffe[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++                     |"
+"1"," "
+"1","57% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 13, Hülsenfrüchte..reif...Schalenobst..Öl..und.andere.Samen[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++                   |"
+"1"," "
+"1","62% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 14, Kartoffeln.und.Kartoffelerzeugnisse..stärkereiche.Pflanzenteile..Pilze[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","67% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 15, Kuchen..Feinbackwaren..Dauerbackwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++              |"
+"1"," "
+"1","71% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 16, Menükomponenten[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++           |"
+"1"," "
+"1","76% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 17, Milch..Milcherzeugnisse..Käse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++         |"
+"1"," "
+"1","81% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 18, Öle..Fette..Butter..Schmalz..Talg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++       |"
+"1"," "
+"1","86% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 19, Süßwaren..Zucker..Bonbons..Schokolade..Brotaufstrich.süß..Eis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++    |"
+"1"," "
+"1","90% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 20, Vegetarische.Produkte[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++  |"
+"1"," "
+"1","95% ~00s          "
+"1","[0m2021-05-14 18:01:55 INFO::Fitting model to feature number 21, Wurst..Fleischwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","100% elapsed=01s  "
+"1","
+"
+"1","[0m2021-05-14 18:01:55 INFO::Counting total values for each feature[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Writing residuals to file convclust.sum.z_maaslin/residuals.rds[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Writing all results to file (ordered by increasing q-values): convclust.sum.z_maaslin/all_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): convclust.sum.z_maaslin/significant_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Writing heatmap of significant results to file: convclust.sum.z_maaslin/heatmap.pdf[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[1]"
+"1"," ""There is not enough metadata in the associations to create a heatmap plot. Please review the associations in text output file."""
+"1","
+"
+"1","[0m2021-05-14 18:01:55 INFO::Writing association plots (one for each significant association) to output folder: convclust.sum.z_maaslin[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Plotting associations from most to least significant, grouped by metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Plotting data for metadata number 1, group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:55 INFO::Creating boxplot for categorical data, group vs Brot..und.Kleingebäck[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:56 INFO::Creating boxplot for categorical data, group vs Hülsenfrüchte..reif...Schalenobst..Öl..und.andere.Samen[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:56 INFO::Creating boxplot for categorical data, group vs Milch..Milcherzeugnisse..Käse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:57 INFO::Creating boxplot for categorical data, group vs Kuchen..Feinbackwaren..Dauerbackwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:57 INFO::Creating boxplot for categorical data, group vs Eier.und.Eierprodukte..Teigwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:57 INFO::Creating boxplot for categorical data, group vs Früchte..Obst.und.Obsterzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:58 INFO::Creating boxplot for categorical data, group vs Süßwaren..Zucker..Bonbons..Schokolade..Brotaufstrich.süß..Eis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:58 INFO::Creating boxplot for categorical data, group vs Öle..Fette..Butter..Schmalz..Talg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:58 INFO::Creating boxplot for categorical data, group vs Alkoholische.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:58 INFO::Creating boxplot for categorical data, group vs Cerealien..Getreide.und.Getreideprodukte..Reis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 18:01:59 INFO::Creating boxplot for categorical data, group vs Wurst..Fleischwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"

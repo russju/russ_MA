@@ -1,0 +1,88 @@
+"0",""
+"0","L6.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L6.normalized.correlation_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  sample = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","L6.rel.clr.U1.U2 <- column_to_rownames(L6.rel.clr.U1.U2,'sample')"
+"0",""
+"0","L2.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L2.normalized.correlation_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  D_0__Archaea.D_1__Euryarchaeota = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Actinobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Bacteroidetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Cyanobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Deinococcus.Thermus = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Epsilonbacteraeota = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Firmicutes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Fusobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Lentisphaerae = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Patescibacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Proteobacteria = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Spirochaetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Synergistetes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Tenericutes = [32mcol_double()[39m,
+  D_0__Bacteria.D_1__Verrucomicrobia = [32mcol_double()[39m,
+  D_0__Eukaryota.D_1__SAR = [32mcol_double()[39m,
+  sample = [31mcol_character()[39m
+)
+"
+"0","L2.rel.clr.U1.U2 <- column_to_rownames(L2.rel.clr.U1.U2,'sample')"
+"0",""
+"0","# keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"0","# clusters <- read_tsv(paste0(table_dir, 'nutrient.clusters.df_07.10.tsv'))"
+"0",""
+"0","otu.weighted <- read_tsv(paste0(table_dir,'otu.conv.w.19.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","otu.weighted <- as.data.frame(otu.weighted)"
+"0",""
+"0","nutr.cluster <- read_tsv(paste0(table_dir,'nutrient.clusters.09.09.tsv'))"
+"2","Parsed with column specification:
+cols(
+  food = [31mcol_character()[39m,
+  group = [32mcol_double()[39m
+)
+"
+"0","k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_character(),
+  day = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Sex = [33mcol_logical()[39m,
+  Energie_bls = [32mcol_double()[39m,
+  `Eiweiß, Proteingehalt` = [32mcol_double()[39m,
+  Kohlenhydrate = [32mcol_double()[39m,
+  Fett = [32mcol_double()[39m,
+  Ballaststoffe = [32mcol_double()[39m,
+  `Gesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Einfach ungesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Alkohol (Ethanol)` = [32mcol_double()[39m,
+  `Energie (kcal)` = [32mcol_double()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"2","5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"

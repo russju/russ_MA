@@ -1,0 +1,24 @@
+"0","library(phytools)
+"
+"2","Paket ‘phytools’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: maps
+"
+"2","Paket ‘maps’ wurde unter R Version 4.0.2 erstellt"
+"2","
+Attache Paket: ‘maps’
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    map
+
+"
+"2","
+Attache Paket: ‘phytools’
+
+"
+"2","The following object is masked from ‘package:dendextend’:
+
+    untangle
+
+"

@@ -1,0 +1,7 @@
+"0","##PCA with diet coloring"
+"0","factoextra::fviz_pca_biplot(X = pca.7, "
+"0","                            # samples"
+"0","                            fill.ind = biom.L7.rel.clr$diet,"
+"0","                            col.ind = 'black',"
+"0","                            pointshape = 21, pointsize = 3, alpha = 0.5,"
+"0","                            geom.ind = 'point',geom.var = FALSE,title = 'PCA specy',label = 'none',invisible = c(""ind.sup"", ""quali"", ""var"", ""quanti.sup"")) "

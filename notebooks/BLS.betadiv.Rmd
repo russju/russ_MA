@@ -1,0 +1,445 @@
+---
+title: "BLS beta-diversity"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(tidyverse)
+library(Rtsne)
+library(FactoMineR)
+
+library(rgr)
+library(colorspace)
+library(dendextend)
+
+library(factoextra)
+library(ape)
+library(phytools)
+library(ggpubr)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+output_cluster = paste0(output_dir,'cluster/')
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+
+```
+
+# Data Import
+```{r}
+bls.scale <- read_tsv(paste0(table_dir, 'BLS.scale.15Jun2020.tsv'))
+bls.properties <- read_tsv(paste0(table_dir, 'BLS.properties.15Jun2020.tsv'))
+
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))
+# subclusters <- read_tsv(paste0(table_dir, 'subclusters_06.10.tsv'))
+
+# nut.clust <- read_tsv(paste0(table_dir, 'food.conv.nutrient.tsv'))
+keto.bls.merged <- read_tsv(paste0(table_dir, 'keto.bls.merged.tsv'))%>%
+  dplyr::select(.,starts_with('item'))
+```
+
+PCA of BLS foods
+
+nutrient clustering based on PCA (hclust cut at height 95%)
+
+PCA colored by conventional clusters 
+PCA colored by nutrient clusters
+
+tSNE of BLS foods
+
+# Dimensionality Reduction
+
+Data
+```{r}
+keep <- !bls.scale$item_cat %in% c('Gewürze, Würzmittel, Hilfsstoffe')
+#%in% c() #'Menükomponenten','Gewürze, Würzmittel, Hilfsstoffe' 
+metadata <- bls.scale[keep, c('item_id','item_cat','item_subcat','item_descr')]
+df <- bls.scale[keep,] %>%
+  dplyr::select(everything(), -starts_with('item'), item_id) %>%
+  mutate_at(.vars = vars(everything(), -item_id), 
+            .funs = funs(replace_na(., 0))) %>% 
+  column_to_rownames('item_id') %>% 
+  as.matrix()
+
+```
+
+
+## PCA
+
+### gelman normalization
+
+Transform
+```{r}
+scale_gelman <- function(x) {
+  return((x - mean(x, na.rm = T)) / (2 * sd(x, na.rm = T)))
+}
+df.scale_gelman <- apply(df, 2, function(x) scale_gelman(x))
+```
+
+```{r}
+df.scale_gelman.pca_data <- PCA(X = df.scale_gelman, graph = FALSE, scale.unit = T)
+
+df.scale_gelman.pca <- df.scale_gelman.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.scale_gelman.pca <- df.scale_gelman.pca %>% 
+  left_join(., metadata, by = c('Name' = 'item_id'))
+```
+
+```{r fig.width=10, fig.height=10}
+df.data.scale_gelman.pca %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  labs(y = paste0('PC 1 (', round(df.scale_gelman.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.scale_gelman.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        # legend.position = 'none'
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+### clr transform
+
+```{r}
+pseudo = 1e-15 # 1e-9
+df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)
+df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))
+```
+
+```{r}
+X = cbind(metadata$item_cat, as.data.frame(df.clr))
+df.clr.pca_data <- PCA(X = df.clr, graph = FALSE, scale.unit = T)
+
+df.clr.pca <- df.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.clr.pca <- df.clr.pca %>% 
+  left_join(., metadata, by = c('Name' = 'item_id'))
+
+write_tsv(df.data.clr.pca ,paste0(table_dir,'df.data.clr.pca.tsv'))
+
+
+```
+
+Plot
+```{r fig.width=15, fig.height=10}
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2, labels = item_descr)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1, 
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+
+Loop through Property Categories
+```{r fig.width=15, fig.height=10}
+pexpand <- rep(0.1, 2)
+prop_cat <- 
+  tibble(Property = colnames(df.clr)) %>% 
+  left_join(., bls.properties) %>% 
+  mutate(Category = replace_na(Category, 'Zusammensetzung')) %>% 
+  pull(Category)
+
+# k <- dplyr::select(keto.bls,starts_with = c('item_id','item_prodi')) %>% distinct()
+
+p <-
+  factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$item_cat, col.ind = 'black',
+                            pointshape = 21, pointsize = 1.5,
+                            geom.ind = 'point', repel = T, geom.var = FALSE) +
+                            
+                            # variables
+                            # col.var = prop_cat,
+                            # title = 'Overview of all Features',
+                            # label = F) + 
+  theme(aspect.ratio = 1) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)
+
+
+
+
+                            
+                            
+for (cat in unique(bls.properties$Category)) {
+  svars = bls.properties %>% filter(Category == cat) %>% pull(Property)
+  p <- factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$item_cat, col.ind = 'black',
+                            pointshape = 21, pointsize = 1.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = 'black',
+                            select.var = list('name' = svars), 
+                            title = paste0('Feature: ', cat)) + 
+  theme(aspect.ratio = 1) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)
+  
+  fname = paste0(output_dir, 'BLS.', cat, '.pdf')
+  print(fname)
+  print(p)
+  # ggsave(p, filename = fname, device = 'pdf', width = 15, height = 10, dpi = 300)
+}
+
+#extract PCs
+
+pca <- get_pca(df.clr.pca_data,'ind')
+# plot(pca$coord)
+pca.coord.bls <- as.data.frame(pca$coord)
+
+
+
+```
+
+
+##PC clustering
+nutrient food clustering based on PCS of BLS foods
+PC (variables) are the nutrients
+
+hclust based on first three axis, cut at 97% similarity
+```{r}
+##extract PC and calculate distance
+
+keto <- dplyr::select(keto.bls,starts_with(c('item_id','item_prodi'))) %>% distinct(.) 
+df <- df.clr.pca_data$ind$coord %>% as.data.frame(.) %>% rownames_to_column(.)
+names(df)[names(df) == 'rowname'] <- 'item_id'
+coord <- merge(df,keto,all.x = TRUE,by = 'item_id')
+coord$item_prodi[is.na(coord$item_prodi)] <- 'nc'
+coord <- dplyr::filter(coord, item_prodi != "nc")
+
+#variance axis
+varAxis.1 <- var(coord$Dim.1)##30.73313
+varAxis.2 <- var(coord$Dim.2)##25.47235
+varAxis.3 <- var(coord$Dim.3)##31.53042
+
+coord <- dplyr::select(coord,everything(),-starts_with(c('item_id','Dim.4','Dim.5', 'Dim.3'))) %>% column_to_rownames(.,'item_prodi')
+```
+
+
+```{r}
+#distance,hclust,tree
+
+pc.hclust <- coord %>% dist(.,method = 'euclidean') %>%
+  hclust(.,method = 'ward')
+dend.nutr <- as.dendrogram(pc.hclust)
+
+pc.tree <- ape::as.phylo(pc.hclust)
+# cut = cutree(pc.hclust, k = 10) %>% as.data.frame() %>% rownames_to_column('food') %>% rename(group = '.')
+cut = cutree(pc.hclust, h = (max(pc.hclust$height)) * (1 - 0.97)) %>% as.data.frame() %>% rownames_to_column('food') %>% rename(group = '.')
+
+# write_tsv(cut,paste0(table_dir,nutrient.clusters.09.09.tsv',append = FALSE))
+
+# write.tree(pc.tree, file=paste0(table_dir,'tree.keto.bls.19.08.tre',append = FALSE))
+```
+PCA coloored by nutrient clusteers
+```{r}
+###color by conv cluster
+
+pc.nut <- coord %>% rownames_to_column('food') %>% 
+  full_join(., cut) 
+pc.nut$group <- as.character(pc.nut$group)
+
+colnames(metadata)[colnames(metadata) == 'item_descr'] <- 'food'
+metadata$food <- tolower(metadata$food)
+pc <- left_join(pc.nut,metadata,by = 'food')
+pc[is.na(pc)] <- 'nc'
+
+pc.n <- pc[!grepl("nc", pc$item_cat),]
+
+cc <- ggplot(pc.n,aes(Dim.1, Dim.2)) + 
+  geom_point(aes(fill = as.factor(item_cat)), shape = 21,size = 1) +
+   theme(aspect.ratio = 1,legend.key.width = unit(0.35,'cm'),
+         legend.text = element_text(size = 3)) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand) + coord_cartesian(xlim=c(-15,15), ylim=c(-15,15))
+
+
+# pdf(paste0(output_dir,'pc.conv.pdf',width = 15,height = 15))
+cc
+# dev.off()
+
+###color by nutrient cluster
+
+pc.n$group[pc.n$group == '1'] <- '1.veg.fruit'
+pc.n$group[pc.n$group == '2'] <- '2.carbs.bread'
+pc.n$group[pc.n$group == '3'] <- '3.fatty.sweet'
+pc.n$group[pc.n$group == '4'] <- '4.carbs.cereal'
+pc.n$group[pc.n$group == '5'] <- '5.seed'
+pc.n$group[pc.n$group == '6'] <- '6.nut'
+pc.n$group[pc.n$group == '7'] <- '7.kohl'
+pc.n$group[pc.n$group == '8'] <- '8.fish.sauce'
+pc.n$group[pc.n$group == '9'] <- '9.egg'
+pc.n$group[pc.n$group == '10'] <- '10.alcohol'
+pc.n$group[pc.n$group == '11'] <- '11.wurst'
+pc.n$group[pc.n$group == '12'] <- '12.soft.drinks'
+pc.n$group[pc.n$group == '13'] <- '13.white.meat'
+pc.n$group[pc.n$group == '14'] <- '14.fatty.dairy'
+pc.n$group[pc.n$group == '15'] <- '15.cheese'
+  
+c <- ggplot(pc.n,aes(Dim.1, Dim.2)) + 
+  geom_point(aes(fill = as.factor(group)), shape = 21,size = 1) +
+   theme(aspect.ratio = 1,legend.key.width = unit(0.35,'cm'),legend.text = element_text(size = 3),plot.title = element_text('nutrient food clusters')) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)+ coord_cartesian(xlim=c(-15,15), ylim=c(-15,15))
+
+
+
+# pdf(paste0(output_dir,'pc.nutrient.pdf',width = 10, height = 10))
+c
+# dev.off()
+pdf(paste0(output_cluster,'pca_clusters.pdf'))
+ggarrange(cc,c,ncol = 2,nrow = 1,legend = "none")
+cc
+c
+dev.off()
+
+a <- table(pc.n$group) %>% as.data.frame(.)
+b <- table(pc.n$item_cat) %>% as.data.frame(.)
+
+colnames(a) <- c('nutrient cluster','number of foods')
+colnames(b) <- c('conventional cluster','number of foods')
+
+pdf(paste0(output_cluster,'nutrient.cluster.count.pdf'))
+grid.table(a)
+dev.off()
+
+pdf(paste0(output_cluster,'conv.cluster.count.pdf'))
+grid.table(b)
+dev.off()
+```
+
+#conv clustering
+
+PCA BLS food colored by conventional clusters
+```{r}
+keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))
+keto.bls <- keto.bls[!(keto.bls$item_cat == 'Gewürze, Würzmittel, Hilfsstoffe' ),]##| keto.bls$item_cat =='Menükomponenten'
+tmp <- unique(subset(keto.bls,select = c(`item_cat`,`item_subcat`,`item_prodi`))) %>% distinct(.)
+r <- tmp
+colnames(r) <- c('item_cat.select','item_subcat.select','item_prodi.select') 
+
+
+
+r <- tidyr::uncount(r, dplyr::n())
+# tmp <- tmp[rep(seq_len(nrow(tmp)), nrow(r)), ]
+tmp <- purrr::map_dfr(seq_len(1250), ~tmp)##nrow(tmp)/nrow(r)=1044  ##w/o gewürze 1280
+tmp <- cbind(tmp,r)
+
+cat.dist <-
+  tmp %>% 
+  mutate(same_subcat = item_subcat.select == item_subcat,
+         same_cat = item_cat.select == item_cat) %>% 
+  mutate(total = (as.numeric(!same_cat) + as.numeric(!same_subcat)) / 2) %>% 
+  dplyr::select(item_prodi.select, item_prodi, total) %>%
+  
+  pivot_wider(names_from = 'item_prodi.select', values_from = 'total') %>% 
+  column_to_rownames('item_prodi') %>%
+  as.dist(.)
+
+cat.dist[is.na(cat.dist)] <- 0
+
+d.cat_data <- hclust(cat.dist, method = 'complete')
+dend.cat <- as.dendrogram(d.cat_data)
+tree.conv <- ape::as.phylo(d.cat_data,use.labels = keto.bls$item_cat)
+```
+## t-SNE
+```{r}
+df.tsne_data <- Rtsne(X = as.matrix(df.clr),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = 35,
+                     verbose=TRUE, max_iter=1000)
+
+df.data.tsne <- cbind(metadata, df.tsne_data$Y) %>% 
+  rename(Dim.1 = `1`, 
+         Dim.2 = `2`) 
+```
+
+Plot
+```{r fig.width=10, fig.height=10}
+df.data.tsne %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1, 
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+### Loop Perplexity
+```{r}
+loop_tsne <- function(df, label) {
+  output <- NULL
+  for (perplexity in seq(10, 50, 20)) {
+  tmp.tsne_data <- Rtsne(X = as.matrix(df),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = perplexity,
+                     verbose=TRUE, max_iter=400)
+  tmp.data <- 
+    cbind(metadata, tmp.tsne_data$Y) %>% 
+    rename(Dim.1 = `1`, 
+         Dim.2 = `2`) %>% 
+    mutate(perplexity = perplexity)  
+  output <- rbind(output, tmp.data)
+  }
+  return(output %>% mutate(label = label))
+}
+
+tsne.clr <- loop_tsne(df.clr, 'clr')
+tsne.raw <- loop_tsne(df, 'raw')
+tsne.scale_gelman <- loop_tsne(df.scale_gelman, 'gelman')
+```
+
+
+
+```{r}
+df.tsne_loop.all <- 
+  bind_rows(.id = 'method',
+    df = tsne.raw, 
+    df.clr = tsne.clr, 
+    df.scale_gelman = tsne.scale_gelman)
+```
+
+
+```{r fig.width=20, fig.height=15}
+df.tsne_loop.all %>% 
+  filter(!item_cat %in% c('Gewürze, Würzmittel, Hilfsstoffe')) %>%  #'Menükomponenten' ,
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 1, alpha = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_grid(rows = vars(method), 
+             cols = vars(perplexity), scales = 'free', space = 'free')
+```
+
+# hclust
+
+```{r}
+df.clr.pca.hclust_data <- hclust(dist(df.data.clr.pca %>% dplyr::select(starts_with('Dim'))), method = 'ward.D')
+plot(df.clr.pca.hclust_data)
+
+#how many categories,subcategories are there?
+
+count_cat <- length(unique(bls.gram[["item_cat"]]))##21
+count_subcat <- length(unique(bls.gram[["item_subcat"]]))#178
+
+```

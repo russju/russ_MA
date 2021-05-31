@@ -1,0 +1,49 @@
+"0","```r
+##U2
+
+merge.L6.nutrU2 <- L6.U2 %>% merge(.,cl.sumU2,by = 'file_name',all.x=T,all.y = T) %>% column_to_rownames(.,'file_name')
+
+merge.L6.nutrU2[is.na(merge.L6.nutrU2)] <- 0
+merge.L6.nutrU2 <- dplyr::select(merge.L6.nutrU2,everything(),-ends_with('rowsum'))
+
+cor.test.nutrU2 <- merge.L6.nutrU2 %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `menue compounds (1)`:`sweets (15)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  summarize(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test.nutrU2 [is.na(cor.test.nutrU2)] <- 0
+
+p.adj.nutrU2 <- subset(cor.test.nutrU2,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.nutrU2 <- subset(cor.test.nutrU2,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log.nutrU2 <- log2(r.cor.nutrU2) %>% as.numeric(.)
+cor.test.log.nutrU2 [is.nan(cor.test.log.nutrU2)] <- 0
+cor.test.log.nutrU2 [is.infinite(cor.test.log.nutrU2)] <- 0
+cor.test.log.nutrU2 <- as.data.frame(cor.test.log.nutrU2)
+
+r.cor.nutrU2[is.nan(r.cor.nutrU2)] <- 0
+r.cor.nutrU2[is.infinite(r.cor.nutrU2)] <- 0
+r.cor.nutrU2 <- as.data.frame(r.cor.nutrU2)
+
+#y axis -log10 p.value
+
+p.adj.log.nutrU2 <- -log10(p.adj.nutrU2)
+p.adj.log.nutrU2[is.infinite(p.adj.log.nutrU2)] <- 0
+p.adj.log.nutrU2 <- as.data.frame(p.adj.log.nutrU2)
+
+cor.test.adj.nutrU2 <- cbind(cor.test.nutrU2[ ,c(1,2)],p.adj.log.nutrU2) %>% cbind(.,r.cor.nutrU2) %>% as.data.frame(.)
+colnames(cor.test.adj.nutrU2) <- c('nutrient','genus','p.adj.log','estimate')
+
+cor.test.adj.nutrU2 <- cor.test.adj.nutrU2[cor.test.adj.nutrU2$p.adj.log != 0 & cor.test.adj.nutrU2$estimate != 0,]
+
+write_tsv(cor.test.adj.nutrU2,paste0(table_dir,'corr.nutrclust.L6.U2.tsv'))
+
+sig.nutrU2 <- cor.test.adj.nutrU2[cor.test.adj.nutrU2$p.adj.log >= -log10(0.050) & cor.test.adj.nutrU2$p.adj.log > 0.00000,]
+top.sig.nutrU2 <- sig.nutrU2[order(-sig.nutrU2$p.adj.log),]
+
+```"

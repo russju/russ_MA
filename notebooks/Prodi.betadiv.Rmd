@@ -1,0 +1,207 @@
+---
+title: "Prodi beta-diversity"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(ggplot2)
+library(ggtern)
+library(FactoMineR)
+library(tidyverse)
+
+library(ggtern)
+
+library(gmodels)
+
+library(ape)
+library(phyloseq)
+
+library(dada2)
+
+library(ggpubr)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+keto.summary <- read_tsv(paste0(table_dir, 'Keto.summary.tsv'))
+
+keto.bls <- read_tsv(paste0(table_dir,'keto.bls.merged.tsv'))
+combined_food <- read_tsv(paste0(table_dir,'keto.bls.recipes.tsv'))
+# tree.nutr <- read.tree(paste0(output_dir,'tree.nutr.tre'))
+# tree.conv <- read.tree(paste0(output_dir,'tree.conv.tre'))
+
+bls.extended <- read_tsv(paste0(file = table_dir, 'bls.extended_23.07'))
+keto.bls <- read_tsv(paste0(file = table_dir, 'keto.bls_23.07'))
+```
+
+# Makronutrients - Diet Composition
+```{r}
+diet <- keto.summary %>% 
+  filter(!is.na(Time),Time != 'FOLLOW-UP') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Time), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.') 
+  # ggsave(plot = diet,path = 'C:/Users/Juliane/Desktop/project.directory/results',filename = 'diet.macro.compo.pdf',)
+
+keto.summary %>%
+  filter(!is.na(Time),Time != 'FOLLOW-UP') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = sample), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+keto.summary %>% 
+  filter(!is.na(Time),Time != 'FOLLOW-UP') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Sex), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+keto.summary %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified') %>% 
+  filter(!is.na(Time),Time != 'FOLLOW-UP') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Phenotype),  shape = 21, size = 1, alpha = 0.75) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+vv <- keto.summary %>% 
+  filter(!is.na(Time),Time != 'FOLLOW-UP')
+vv.keto <- vv[!grepl('U1',vv$file_name),]
+vv.non <- vv[!grepl('U2',vv$file_name),]
+
+##mean and sd non keto
+mean(vv.non$`Energie, Protein (%)`,na.rm = TRUE)##15.38
+sd(vv.non$`Energie, Protein (%)`,na.rm = TRUE)##4.67
+mean(vv.non$`Energie, Kohlenhydrate (%)`,na.rm = TRUE)##42.22
+sd(vv.non$`Energie, Kohlenhydrate (%)`,na.rm = TRUE)##9.94
+mean(vv.non$`Energie, Fett (%)`,na.rm = TRUE)##39.53
+sd(vv.non$`Energie, Fett (%)`,na.rm = TRUE)##9.11
+
+##mean and sd  keto
+mean(vv.keto$`Energie, Protein (%)`,na.rm = TRUE)##20.41
+sd(vv.keto$`Energie, Protein (%)`,na.rm = TRUE)##5.3
+mean(vv.keto$`Energie, Kohlenhydrate (%)`,na.rm = TRUE)##8.25
+sd(vv.keto$`Energie, Kohlenhydrate (%)`,na.rm = TRUE)##6.55
+mean(vv.keto$`Energie, Fett (%)`,na.rm = TRUE)##70.59
+sd(vv.keto$`Energie, Fett (%)`,na.rm = TRUE)##8.77
+```
+
+# Cholesterol Conversion
+high- and low converters of Sterols to Stanols in her microbiome dataset based on 16S rRNA gene data.
+Do we see patterns based on food or other criteria?
+
+## Sex
+66% of females are high converters, 27% low, 7% nc.
+33% of males are high converters, 11% low, 55% nc.
+```{r}
+dplyr::select(keto.summary, Sex, Phenotype) %>% group_by(Sex, Phenotype) %>% tally() %>% group_by(Sex) %>% mutate(fraction.sex = n / sum(n, na.rm = T)) %>% group_by(Phenotype) %>% mutate(fraction.phenotype = n / sum(n, na.rm = T))
+```
+
+
+## Food composition
+Two samples have weird values. There are errors in the food protocols:
+Some individuals have consumed 7k kcal worth of aubergine or bread: 
+'25FE.D2'
+'49RJ.D1'
+
+Sample
+```{r}
+d <- 
+  keto.summary %>% 
+  filter(Time != 'PRE', !is.na(`Energie, Gesamt (kcal)`)) %>% 
+  mutate(ID = str_to_upper(paste0(sample, '.', Time, '.D', day))) %>% 
+  filter(! ID %in% c('29MK.POST.D1', '07RW.POST.D8')) %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified')
+
+metadata.cols <- c('file_name','sample', 'time_point', 'time_point.label', 'date', 'day', 
+                   'St_complet', 'Time', 'Sex', 'Phenotype')
+metadata <- d[, c(metadata.cols, 'ID')]
+
+df <- 
+  d %>% 
+  dplyr::select(ends_with('(kcal)'), -contains('Alkohol'), ID) %>%
+  column_to_rownames('ID') %>% 
+  as.matrix()
+```
+
+clr-transform
+```{r}
+pseudo = 0.01 # 1e-9
+df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)
+df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))
+
+
+plot.df <- df.clr %>% as.data.frame(.) %>% rownames_to_column(.)
+plot.df <- plot.df %>% left_join(., metadata, by = c('rowname' = 'ID'))
+
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+ggplot(plot.df,aes(x = Phenotype,y = `Energie (kcal)`)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)
+
+```
+
+PCA
+```{r}
+df.clr.pca_data <- PCA(X = df.clr, graph = FALSE, scale.unit = T)
+
+df.clr.pca <- df.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.clr.pca <- df.clr.pca %>% 
+  left_join(., metadata, by = c('Name' = 'ID'))
+```
+
+
+PCA biplot
+Higher protein and total energy intake in low converter group?
+```{r}
+factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = 'black',geom = 'text',label = 'var',
+                            invisible = c( "ind.sup", "quali",  "quanti.sup"),
+                            # select.var = list('name' = svars), 
+                            title = 'converter phenotypes PCA')
+                               
+
+
+```

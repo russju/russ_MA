@@ -1,0 +1,7 @@
+"0","```r
+ggarrange(e,fiber,b12,prot,fe,
+          labels = c(\"A\", \"B\", \"C\",\"D\",\"E\"),
+          ncol = 2, nrow = 3)
+```"
+"1","cannot compute exact p-value with tiescannot compute exact p-value with tiescannot compute exact p-value with ties
+"

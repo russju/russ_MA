@@ -1,0 +1,84 @@
+"0","library(tidyverse)"
+"0","library(Rtsne)"
+"0","library(FactoMineR)"
+"0",""
+"0","library(rgr)"
+"2","Lade nötiges Paket: MASS
+"
+"2","Paket ‘MASS’ wurde unter R Version 4.0.4 erstellt"
+"2","
+Attache Paket: ‘MASS’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    select
+
+"
+"2","Lade nötiges Paket: fastICA
+"
+"2","
+Attache Paket: ‘rgr’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    syms
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    syms
+
+"
+"0","library(colorspace)"
+"2","Paket ‘colorspace’ wurde unter R Version 4.0.3 erstellt"
+"0","library(dendextend)"
+"0",""
+"0","library(factoextra)"
+"2","Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+"
+"0","library(ape)"
+"0","library(phytools)"
+"2","Paket ‘phytools’ wurde unter R Version 4.0.2 erstellt"
+"2","Lade nötiges Paket: maps
+"
+"2","Paket ‘maps’ wurde unter R Version 4.0.2 erstellt"
+"2","
+Attache Paket: ‘maps’
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    map
+
+"
+"2","
+Attache Paket: ‘phytools’
+
+"
+"2","The following object is masked from ‘package:dendextend’:
+
+    untangle
+
+"
+"0","library(ggpubr)"
+"2","Paket ‘ggpubr’ wurde unter R Version 4.0.2 erstellt"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"2","
+Attache Paket: ‘ggpubr’
+
+"
+"2","The following object is masked from ‘package:ape’:
+
+    rotate
+
+"
+"2","The following object is masked from ‘package:dendextend’:
+
+    rotate
+
+"

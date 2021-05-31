@@ -1,0 +1,916 @@
+---
+title: "BLS beta-diversity"
+output: html_notebook
+---
+
+# Libraries
+```{r}
+library(tidyverse)
+```
+
+```{r}
+bls.raw <- read_tsv('../data/Bundeslms/nwr/V2/BLS.tsv')
+bls.subcat  <- read_tsv('../data/Bundeslms/nwr/V2/BLS_subcat.tsv')
+bls.properties <- read_tsv('../data/Bundeslms/nwr/V2/BLS.Property.tsv')
+bls.properties.should <- read_tsv('../data/Bundeslms/nwr/V2/bls_properties.tsv')
+
+output_dir = '../results/'
+```
+
+```{r}
+bls.properties <- full_join(bls.properties, bls.properties.should) %>% 
+  select(Category, Property)
+```
+
+bls id to sub_ids based on id position:
+1. main group
+2. sub group
+3-4. item
+5. processing info
+6. cooking info
+7. weight info (0,2,3 = no trash, 1,4 with trash)
+```{r}
+bls <- 
+  bls.raw %>% 
+  mutate(item_group = str_sub(item_id, 1, 2),
+         item_no = str_sub(item_id, 3, 4), 
+         item_info = str_sub(item_id, 5, 5), 
+         item_cooking = str_sub(item_id, 6, 6), 
+         item_weight = str_sub(item_id, 7, 7), 
+         ) %>% 
+  left_join(., bls.subcat %>% rename(item_subcat = Untergruppe), by = c('item_group' = 'ID')) %>% 
+  mutate(item_subcat = ifelse(item_id == 'H-chia', 'Andere und ohne Angaben', item_subcat)) %>% 
+  select(item_id, item_cat, item_subcat, item_descr, starts_with('item'), everything()) %>% 
+  mutate(item_id_length = str_length(item_id))
+```
+
+```{r}
+bls.gram <-
+  bls %>% 
+  select(-Value_Scale, -Unit) %>% 
+  pivot_wider(names_from = 'Property', 
+              values_from = 'Value') %>% 
+  mutate(`Energie, Protein (kcal)` = `Eiweiß, Proteingehalt` * 4.1, 
+         `Energie, Kohlenhydrate (kcal)` = Kohlenhydrate * 4.1, 
+         `Energie, Fett (kcal)` = Fett * 9.3, 
+         `Energie, Alkohol (kcal)` = `Alkohol (Ethanol)` * 7.1, 
+         `Energie, Gesamt (kcal)` = `Energie, Protein (kcal)` + 
+                                    `Energie, Kohlenhydrate (kcal)` + 
+                                    `Energie, Fett (kcal)` + 
+                                    `Energie, Alkohol (kcal)`,
+         `Energie, Protein (%)` = `Energie, Protein (kcal)` / `Energie, Gesamt (kcal)`, 
+         `Energie, Kohlenhydrate (%)` = `Energie, Kohlenhydrate (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Fett (%)` = `Energie, Fett (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Alkohol (%)` = `Energie, Alkohol (kcal)` / `Energie, Gesamt (kcal)`
+         ) %>% 
+  select(item_id, item_cat, item_subcat, item_descr, `Eiweiß, Proteingehalt`, Kohlenhydrate, Fett, everything())
+```
+
+
+```{r}
+bls.wide <-
+  bls %>% 
+  select(-Value, -Unit) %>% 
+  pivot_wider(names_from = 'Property', 
+              values_from = 'Value_Scale') %>% 
+  mutate(`Energie, Protein (kcal)` = `Eiweiß, Proteingehalt` * 4.1, 
+         `Energie, Kohlenhydrate (kcal)` = Kohlenhydrate * 4.1, 
+         `Energie, Fett (kcal)` = Fett * 9.3, 
+         `Energie, Alkohol (kcal)` = `Alkohol (Ethanol)` * 7.1, 
+         `Energie, Gesamt (kcal)` = `Energie, Protein (kcal)` + 
+                                    `Energie, Kohlenhydrate (kcal)` + 
+                                    `Energie, Fett (kcal)` + 
+                                    `Energie, Alkohol (kcal)`,
+         `Energie, Protein (%)` = `Energie, Protein (kcal)` / `Energie, Gesamt (kcal)`, 
+         `Energie, Kohlenhydrate (%)` = `Energie, Kohlenhydrate (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Fett (%)` = `Energie, Fett (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Alkohol (%)` = `Energie, Alkohol (kcal)` / `Energie, Gesamt (kcal)`
+         ) %>% 
+  select(item_id, item_cat, item_subcat, item_descr, `Eiweiß, Proteingehalt`, Kohlenhydrate, Fett, everything())
+```
+
+# Dimensionality Reduction
+Libraries
+```{r}
+require(Rtsne)
+library(FactoMineR)
+```
+
+Sample
+```{r}
+keep <- !bls.wide$item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')
+metadata <- bls.wide[keep, c('item_id','item_cat','item_subcat','item_descr')]
+df <- bls.wide[keep,] %>% 
+  select(-item_descr, -item_cat, -item_subcat) %>% 
+  column_to_rownames('item_id') %>% 
+  as.matrix()
+```
+
+Transform
+```{r}
+scale_gelman <- function(x) {
+  return((x - mean(x, na.rm = T)) / (2 * sd(x, na.rm = T)))
+}
+```
+
+```{r}
+# clr-transform
+pseudo = 1e-15 # 1e-9
+df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)
+df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))
+df.scale_gelman <- apply(df, 2, function(x) scale_gelman(x))
+```
+
+# PCA
+```{r}
+X = cbind(metadata$item_cat, as.data.frame(df.clr))
+df.clr.pca_data <- PCA(X = X, graph = FALSE, scale.unit = T,
+                       quali.sup = 1)
+
+df.clr.pca <- df.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.clr.pca <- df.clr.pca %>% 
+  left_join(., metadata, by = c('Name' = 'item_id'))
+```
+
+```{r}
+df.scale_gelman.pca_data <- PCA(X = df.scale_gelman, graph = FALSE, scale.unit = T)
+
+df.scale_gelman.pca <- df.scale_gelman.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.scale_gelman.pca <- df.scale_gelman.pca %>% 
+  left_join(., metadata, by = c('Name' = 'item_id'))
+```
+
+
+Plot
+```{r fig.width=15, fig.height=10}
+p <- df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2, labels = item_descr)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+p
+```
+
+
+Loop through Property Categories
+```{r fig.width=15, fig.height=10}
+pexpand <- rep(0.1, 2)
+prop_cat <- 
+  tibble(Property = colnames(df.clr)) %>% 
+  left_join(., bls.properties) %>% 
+  pull(Category)
+
+p <- 
+  factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$item_cat, col.ind = 'black',
+                            pointshape = 21, pointsize = 1.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = prop_cat,
+                            title = cat, label = F) + 
+  theme(aspect.ratio = 1) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)
+ggsave(p, filename = paste0(output_dir, 'BLS.All.pdf'), device = 'pdf', width = 15, height = 10, dpi = 300)
+
+for (cat in unique(bls.properties$Category)) {
+  svars = bls.properties %>% filter(Category == cat) %>% pull(Property)
+  p <- factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$item_cat, col.ind = 'black',
+                            pointshape = 21, pointsize = 1.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = 'black',
+                            select.var = list('name' = svars), 
+                            title = cat) + 
+  theme(aspect.ratio = 1) + 
+  scale_x_continuous(expand = pexpand) + 
+  scale_y_continuous(expand = pexpand)
+  
+  fname = paste0(output_dir, 'BLS.', cat, '.pdf')
+  print(fname)
+  print(p)
+  ggsave(p, filename = fname, device = 'pdf', width = 15, height = 10, dpi = 300)
+}
+```
+
+
+```{r fig.width=10, fig.height=10}
+df.data.scale_gelman.pca %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  labs(y = paste0('PC 1 (', round(df.scale_gelman.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.scale_gelman.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+
+# t-SNE
+```{r}
+df.tsne_data <- Rtsne(X = as.matrix(df.clr),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = 35,
+                     verbose=TRUE, max_iter=1000)
+
+df.data.tsne <- cbind(metadata, df.tsne_data$Y) %>% 
+  rename(Dim.1 = `1`, 
+         Dim.2 = `2`) 
+```
+
+Plot
+```{r fig.width=10, fig.height=10}
+df.data.tsne %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+## Loop Perplexity
+```{r}
+df.tsne_loop.perplexity = NULL
+for (perplexity in seq(2, 50, 6)) {
+  tmp.tsne_data <- Rtsne(X = as.matrix(df.clr),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = perplexity,
+                     verbose=TRUE, max_iter=1000)
+  tmp.data <- 
+    cbind(metadata, tmp.tsne_data$Y) %>% 
+    rename(Dim.1 = `1`, 
+         Dim.2 = `2`) %>% 
+    mutate(perplexity = perplexity)
+  
+  df.tsne_loop.perplexity <- rbind(df.tsne_loop.perplexity, tmp.data)
+}
+```
+
+
+```{r fig.width=10, fig.height=10}
+df.tsne_loop.perplexity %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_wrap(~perplexity, scales = 'free')
+```
+
+```{r}
+df.tsne_loop.perplexity.raw = NULL
+for (perplexity in seq(2, 50, 6)) {
+  tmp.tsne_data <- Rtsne(X = as.matrix(df),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = perplexity,
+                     verbose=TRUE, max_iter=1000)
+  tmp.data <- 
+    cbind(metadata, tmp.tsne_data$Y) %>% 
+    rename(Dim.1 = `1`, 
+         Dim.2 = `2`) %>% 
+    mutate(perplexity = perplexity)
+  
+  df.tsne_loop.perplexity.raw <- rbind(df.tsne_loop.perplexity.raw, tmp.data)
+}
+```
+
+```{r fig.width=10, fig.height=10}
+df.tsne_loop.perplexity.raw %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) +  
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_wrap(~perplexity, scales = 'free')
+```
+
+```{r}
+df.tsne_loop.perplexity.gelman = NULL
+for (perplexity in seq(2, 50, 6)) {
+  tmp.tsne_data <- Rtsne(X = as.matrix(df.scale_gelman),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = perplexity,
+                     verbose=TRUE, max_iter=1000)
+  tmp.data <- 
+    cbind(metadata, tmp.tsne_data$Y) %>% 
+    rename(Dim.1 = `1`, 
+         Dim.2 = `2`) %>% 
+    mutate(perplexity = perplexity)
+  
+  df.tsne_loop.perplexity.gelman <- rbind(df.tsne_loop.perplexity.gelman, tmp.data)
+}
+```
+
+```{r fig.width=10, fig.height=10}
+df.tsne_loop.perplexity.gelman %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>%
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_wrap(~perplexity, scales = 'free')
+```
+
+```{r}
+df.tsne_loop.all <- 
+  bind_rows(.id = 'method',
+    df = df.tsne_loop.perplexity.raw, 
+    df.clr = df.tsne_loop.perplexity, 
+    df.scale_gelman = df.tsne_loop.perplexity.gelman)
+```
+
+
+```{r fig.width=20, fig.height=15}
+df.tsne_loop.all %>% 
+  filter(perplexity %in% c(2, 8, 20, 38, 50)) %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>%
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 1, alpha = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_grid(rows = vars(method), 
+             cols = vars(perplexity), scales = 'free', space = 'free')
+```
+
+
+## Loop Iterations
+```{r}
+df.tsne_loop.iter = NULL
+for (iterations in c(50, 100, 500, 1000, 2500, 5000, 10000)) {
+  tmp.tsne_data <- Rtsne(X = as.matrix(df.clr),
+                     check_duplicates = FALSE,
+                     pca = T, pca_center = T, pca_scale = T, normalize = T, 
+                     dims = 2, perplexity = 35,
+                     verbose=TRUE, max_iter=iterations)
+  tmp.data <- 
+    cbind(metadata, tmp.tsne_data$Y) %>% 
+    rename(Dim.1 = `1`, 
+         Dim.2 = `2`) %>% 
+    mutate(iterations = iterations)
+  
+  df.tsne_loop.iter <- rbind(df.tsne_loop.iter, tmp.data)
+}
+```
+
+Plot
+```{r fig.width=10, fig.height=10}
+df.tsne_loop.iter %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>% 
+  ggplot(aes(Dim.2, Dim.1)) +
+  geom_point(size = 0.5, aes(col = item_cat)) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme(legend.position = 'none') + 
+  facet_wrap(~iterations, scales = 'free')
+```
+
+# hclust
+
+```{r}
+df.clr.pca.hclust_data <- hclust(dist(df.data.clr.pca %>% select(starts_with('Dim'))), method = 'ward.D')
+plot(df.clr.pca.hclust_data)
+```
+
+
+
+# Ternary Composition Plot
+```{r}
+library(ggtern)
+```
+
+
+```{r fig.height=10, fig.width=10}
+bls.wide %>% 
+  filter(!item_cat %in% c('Menükomponenten' ,'Gewürze, Würzmittel, Hilfsstoffe')) %>% 
+  
+  ggtern(., aes(x = `Energie, Kohlenhydrate (%)`, 
+                y = `Energie, Fett (%)`, 
+                z = `Energie, Protein (%)`)) + 
+  geom_point(aes(fill = item_cat), shape = 21, size = 2, alpha = 0.75) + 
+  theme(legend.position = 'none') + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+# Food protocols Keto
+```{r}
+library(readxl)
+library(scales)
+```
+
+```{r}
+keto.mapping <- read_tsv('../data/EP_Microbiome/Mappingfile_converter.txt')
+```
+
+
+```{r}
+# file = '../data/EP_Microbiome/05AP.U1.xls'
+
+read_keto_file <- function(file) {
+  df <- readxl::read_xls(file)
+  file_name <- gsub(basename(file), pattern = '.xls', replacement = '')
+  sample_name_col <- names(df)[1]
+  sample_name <- str_split_fixed(sample_name_col, pattern = ' ', n = 2)[,1]
+  df[,'sample'] <- sample_name
+  df[,'file_name'] <- file_name
+  
+  date_vec = c()
+  date_idx = c()
+
+  for (e in pull(df[,1])) {
+    if (grepl(e, pattern = '^[[:digit:]]')) {
+      current_date = e
+      date_idx = c(date_idx, T)
+    } else {
+      date_idx = c(date_idx, F)
+    }
+    date_vec = c(date_vec, current_date)
+  }
+  
+  df[, 'is_date'] <- date_idx
+  df[, 'date'] <- janitor::excel_numeric_to_date(as.numeric(date_vec), include_time = F)
+  df <- df %>% 
+    rename(item = all_of(sample_name_col)) %>% 
+    rename_all(.funs = funs(gsub(., pattern = '¹', replacement = ''))) %>% 
+    filter(!grepl(item, pattern = 'Gesamt')) %>% 
+    separate(sample, into = c('sample','time_point.label'), sep = '_') %>% 
+    mutate(time_point = paste0('0', str_to_upper(str_split_fixed(file_name, pattern = '[._]', 2)[,2])), 
+           day = dense_rank(date))
+  
+  df.summary <- df %>% filter(is_date) %>% select(file_name, sample, time_point.label, time_point, day,
+                                                  date, everything(), -is_date, -item)
+  df.sample <- df %>% filter(!is_date) %>% select(file_name, sample, time_point.label, time_point, day,
+                                                  date, everything(), -is_date)
+  
+  out <- list('df.summary' = df.summary,
+          'df.sample' = df.sample)
+  return(out)
+}
+```
+
+
+```{r}
+files = list.files(path = '../data/EP_Microbiome/', pattern = '*xls', full.names = T)
+
+data.summary <- NULL
+data.sample <- NULL
+for (file in files) {
+  results = read_keto_file(file)
+  data.summary <- bind_rows(data.summary, results[['df.summary']])
+  data.sample <- bind_rows(data.sample, results[['df.sample']])
+}
+```
+
+
+```{r}
+d.sample <- 
+  left_join(data.sample, 
+            keto.mapping %>% select(Proband, Timepoint, St_complet, Time, Sex, Phenotype), 
+            by = c('sample' = 'Proband', 'time_point' = 'Timepoint'))
+```
+
+```{r}
+d.summary <-
+  full_join(data.summary, 
+            keto.mapping %>% select(Proband, Timepoint, St_complet, Time, Sex, Phenotype),
+            by = c('sample' = 'Proband', 'time_point' = 'Timepoint')) %>% 
+  mutate(`Energie, Protein (kcal)` = `EW (g)` * 4.1, 
+         `Energie, Kohlenhydrate (kcal)` = `KH (g)` * 4.1, 
+         `Energie, Fett (kcal)` = `F (g)` * 9.3, 
+         `Energie, Alkohol (kcal)` = `Alk (g)` * 7.1, 
+         `Energie, Gesamt (kcal)` = `Energie, Protein (kcal)` + 
+                                    `Energie, Kohlenhydrate (kcal)` + 
+                                    `Energie, Fett (kcal)` + 
+                                    `Energie, Alkohol (kcal)`,
+         `Energie, Protein (%)` = `Energie, Protein (kcal)` / `Energie, Gesamt (kcal)`, 
+         `Energie, Kohlenhydrate (%)` = `Energie, Kohlenhydrate (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Fett (%)` = `Energie, Fett (kcal)` / `Energie, Gesamt (kcal)`,
+         `Energie, Alkohol (%)` = `Energie, Alkohol (kcal)` / `Energie, Gesamt (kcal)`
+         )   
+```
+
+```{r}
+select(d.summary, Sex, Phenotype) %>% group_by(Sex, Phenotype) %>% tally() %>% group_by(Sex) %>% mutate(fraction.sex = n / sum(n, na.rm = T)) %>% group_by(Phenotype) %>% mutate(fraction.phenotype = n / sum(n, na.rm = T))
+```
+
+66% of females are high converters, 27% low, 7% nc.
+33% of males are high converters, 11% low, 55% nc.
+
+```{r}
+library(ggtern)
+d.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = time_point), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 1)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+d.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = sample), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+d.summary %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Sex), shape = 21, size = 1, alpha = 0.75) + 
+  guides(fill = guide_legend(ncol = 2)) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+
+d.summary %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified') %>% 
+  ggtern(., aes(x = `Energie, Kohlenhydrate (kcal)`, 
+                y = `Energie, Fett (kcal)`, 
+                z = `Energie, Protein (kcal)`)) + 
+  geom_point(aes(fill = Phenotype),  shape = 21, size = 1, alpha = 0.75) + 
+  theme_bw() + 
+  weight_percent() + 
+  labs(x = 'Carb.', y= 'Fat', z = 'Prot.')
+```
+
+
+
+'25FE.D2'
+'49RJ.D1'
+
+Sample
+```{r}
+d <- 
+  d.summary %>% 
+  filter(Time != 'PRE', !is.na(`Energie, Gesamt (kcal)`)) %>% 
+  mutate(ID = str_to_upper(paste0(sample, '.', Time, '.D', day))) %>% 
+  filter(! ID %in% c('29MK.POST.D1', '07RW.POST.D8')) %>% 
+  filter(!is.na(Phenotype), Phenotype != 'not classified')
+
+metadata.cols <- c('file_name','sample', 'time_point', 'time_point.label', 'date', 'day', 
+                   'St_complet', 'Time', 'Sex', 'Phenotype')
+metadata <- d[, c(metadata.cols, 'ID')]
+
+df <- 
+  d %>% 
+  select(-all_of(metadata.cols), -day, 
+         -`Hsr (mg)`, -`Cu (µg)`, -`Na (mg)`, -`Lact (g)`, -`A (mg)`) %>%
+  # select(ends_with('(kcal)'), -contains('Alkohol'), ID) %>% 
+  column_to_rownames('ID') %>% 
+  as.matrix()
+```
+
+
+```{r}
+# clr-transform
+pseudo = 0.01 # 1e-9
+df.clr <- rgr::clr(df + pseudo, ifclose = FALSE, ifwarn = TRUE)
+df.clr.unit <- t(scale(t(df.clr), center = F, scale = T))
+```
+
+```{r}
+library(FactoMineR)
+df.clr.pca_data <- PCA(X = df.clr, graph = FALSE, scale.unit = T)
+
+df.clr.pca <- df.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+df.data.clr.pca <- df.clr.pca %>% 
+  left_join(., metadata, by = c('Name' = 'ID'))
+```
+
+
+Plot
+```{r fig.width=15, fig.height=10}
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2)) +
+  geom_point(size = 2, aes(col = time_point)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2)) +
+  geom_point(size = 2, aes(col = sample)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2)) +
+  geom_point(size = 2, aes(col = as.factor(day))) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2)) +
+  geom_point(size = 2, aes(col = Phenotype)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+df.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2)) +
+  geom_point(size = 2, aes(col = Sex)) + 
+  labs(y = paste0('PC 1 (', round(df.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(df.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1,
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+```{r}
+factoextra::fviz_pca_biplot(X = df.clr.pca_data, 
+                            # samples
+                            fill.ind = metadata$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point', repel = T, 
+                            
+                            # variables
+                            col.var = 'black',
+                            # select.var = list('name' = svars), 
+                            # title = 
+                              ) + 
+  theme(aspect.ratio = 1)
+```
+
+
+
+
+how much is 'unclassified?'
+```{r}
+data.sample %>% 
+  filter(item != 'Leitungswasser Freiburg') %>% 
+  mutate(classified = ifelse(is.na(`Ca (mg)`), 'unclassified', 'classified')) %>% 
+  group_by(sample, time_point, date, classified) %>% 
+  summarize(kcal = sum(kcal, na.rm = T)) %>% 
+  pivot_wider(names_from = 'classified', values_from = 'kcal') %>% 
+  mutate_at(.vars = vars(classified, unclassified),
+            .funs = funs(replace_na(., 0))) %>% 
+  mutate(kcal = classified + unclassified, 
+         classified.p = classified / kcal) %>% View()
+```
+
+
+# Prodi to BLS map
+
+```{r}
+prodi.food <- data.sample %>% 
+  group_by(item) %>% 
+  tally() %>% 
+  rename(item_prodi = item) %>% 
+  mutate(name = str_to_lower(item_prodi)) %>% 
+  mutate(name = gsub(name, pattern = '\\([3,6]\\)', replacement = '(zubereitung gastronomie)')) %>% 
+  mutate(name = gsub(name, pattern = '\\([1,4]\\)', replacement = '(zubereitung haushalt)')) %>% 
+  mutate(name = gsub(name, pattern = '\\([2,5]\\)', replacement = '(zubereitung großküche)')) %>% 
+  
+  mutate(name = gsub(name, pattern = 'ziegenmilchfrischkäse mind. ', 
+                     replacement = 'frischkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenmilchschnittkäse mind. ', 
+                     replacement = 'schnittkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenschnittkäse ', 
+                     replacement = 'schnittkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenmilchweichkäse mind. ', 
+                     replacement = 'weichkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenweichkäse ', 
+                     replacement = 'weichkäse aus ziegenmilch (')
+         ) %>% 
+  mutate(name = gsub(name, pattern = 'fett i. tr.$', replacement = 'fett i. tr.)'),
+         name = gsub(name, pattern = 'fett i.tr.$', replacement = 'fett i. tr.)'),
+         name = gsub(name, pattern = ' %', replacement = '%'),
+         name = gsub(name, pattern = 'mind. ', replacement = '(')
+         ) 
+
+n_items = nrow(prodi.food)
+print(paste0('Total: ', n_items))
+      
+bls.food <- bls.wide %>% 
+  select(item_id, item_descr, item_info, item_cooking) %>% 
+  mutate(name = str_to_lower(item_descr))
+
+merged.1 <- 
+  left_join(prodi.food, bls.food, by = 'name')
+
+found.1 <- merged.1 %>% filter(!is.na(item_id))
+left.1 <- merged.1 %>% filter(is.na(item_id)) %>% select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = nrow(found.1)
+print(paste0('Found: ', n_found, ' (', nrow(left.1), ' left)' ))
+```
+
+```{r}
+merged.2 <- 
+  left.1 %>% 
+  mutate(name = gsub(name, pattern = '< 10% fett i. tr.\\)', replacement = 'magerstufe'),
+         name = gsub(name, pattern = '\\(10% fett i. tr.\\)', replacement = 'viertelfettstufe'),
+         name = gsub(name, pattern = '\\(20% fett i. tr.\\)', replacement = 'halbfettstufe'),
+         name = gsub(name, pattern = '\\(30% fett i. tr.\\)', replacement = 'dreiviertelfettstufe'),
+         name = gsub(name, pattern = '\\(40% fett i. tr.\\)', replacement = 'fettstufe'),
+         name = gsub(name, pattern = '\\(45% fett i. tr.\\)', replacement = 'vollfettstufe'),
+         name = gsub(name, pattern = '\\(50% fett i. tr.\\)', replacement = 'rahmstufe'),
+         name = gsub(name, pattern = '\\(60% fett i. tr.\\)', replacement = 'doppelrahmstufe'),
+         ) %>% 
+  mutate(name = gsub(name, pattern = 'joghurt 1,5% fett', replacement = 'joghurt fettarm'),
+         name = gsub(name, pattern = 'joghurt 3,5% fett', replacement = 'joghurt vollfett'),
+         ) %>% 
+  mutate(name = gsub(name, pattern = ' roh', replacement = ' frisch')) %>% 
+  mutate(name = gsub(name, pattern = 'karotte \\(mohrrübe, möhre\\)', replacement = 'mohrrübe')) %>% 
+  mutate(name = gsub(name, pattern = 'karotten gedünstet \\(zubereitung haushalt\\)', 
+                     replacement = 'möhren gedünstet (zubereitung haushalt)')) %>% 
+  mutate(name = case_when(
+    name == 'kaffeesahne 10% fett' ~ 'kaffeesahne 10 % fett',
+    name == 'kuhmilch trinkmilch 3,5% fett' ~ 'kuhmilch trinkmilch vollfett', 
+    name == 'kuhmilch trinkmilch 1,5% fett' ~ 'kuhmilch trinkmilch fettarm', 
+    name == 'trinkmilch mit kakao/schokolade' ~ 'trinkmilch mit kakao, schokolade', 
+    name == 'vollmilchschokolade' ~ 'milchschokolade', 
+    name == 'sahnevollmilchschokolade' ~ 'sahnemilchschokolade',
+    name == 'sahnevollmilchschokolade mit nüssen' ~ 'milchschokolade vollmilch-nuß',
+    name == 'soja-milch' ~ 'sojadrink, sojadrinkprodukte',
+    name == 'schokolade milchschokolade' ~ 'milchschokolade', 
+    name == 'vollmilchschokolade gefüllt mit nuss-nougat' ~ 'milchschokolade nougat',
+    name == 'espresso (getränk)' ~ 'kaffee (getränk)',
+    name == 'cappuccino' ~ 'kaffee mit milch (getränk)',
+    name == 'kaffee halb und halb (getränk)'  ~ 'kaffee halb und halb',
+    name == 'kaffee-ersatz (pulver)' ~ 'kaffee-ersatz trocken',
+    name == 'vollmilchschokolade gefüllt mit nougat-kaffee' ~ 'schokolade gefüllt mit kaffee',
+    name == 'joghurt fettarm' ~ 'joghurt teilentrahmt', 
+    name == 'joghurt vollfett probiotisch' ~ 'joghurt vollfett',
+    name == 'joghurt angereichert mit magermilchpulver 10% fett' ~ 'joghurt mit magermilch angereichert 10% fett',
+    name == 'fruchtjoghurt vollfett' ~ 'joghurt vollfett mit fruchtzubereitung',
+    name %in% c('zartbitterschokolade 92% kakao',
+                'zartbitterschokolade 85%',
+                'zartbitterschokolade 90%',
+                'zartbitterschokolade 99%') ~ 'zartbitterschokolade',
+    name == 'apfelsaft handelsware' ~ 'apfel fruchtsaft',
+    name == 'apfelmus' ~ 'apfelmus (zubereitung haushalt)',
+    name %in% c('apfelsinensaft (orangensaft) ungesüßt handelsware', 
+                'apfelsinensaft (orangensaft) frisch gepresst muttersaft',
+                'orangensaft') ~ 'orange fruchtsaft',
+    name %in% c('orange / apfelsine','apfelsine (orange)') ~ 'orange frisch',
+    name == 'chia' ~ 'chiasamen getrocknet',
+    name %in% c('coca-cola zero','coca-cola light','fanta zero, coca-cola') ~ 'colagetränke entcoffeiniert mit süßstoff', 
+    name == 'mousse au chocolat (schokoladenschaum) (zubereitung gastronomie)' ~ 'mousse au chocolat (zubereitung gastronomie)',
+    name == 'zwiebel' ~ 'zwiebeln',
+    name == 'brötchen' ~ 'brötchen-weizenbrötchen',
+    name == 'macadamianuss frisch' ~ 'macadamianuss',
+    name == 'schlagsahne 30% fett' ~ 'schlagsahne 30 % fett',
+    name == 'polenta frisch' ~ 'polenta (zubereitung gastronomie)',
+    name == 'reis geschält frisch' ~ 'reis geschält',
+    name == 'fenchel knolle frisch' ~ 'fenchel frisch',
+    name == 'frischkäse dreiviertelfettstufe' ~ 'frischkäsezubereitung dreiviertelfettstufe',
+    name == 'frischkäse halbfettstufe' ~ 'frischkäsezubereitung halbfettstufe',
+    name == 'frischkäse (70% fett i. tr.)' ~ 'frischkäsezubereitung 70%f.i.tr',
+    name == 'frischkäse rahm 50% fett i. tr.)' ~ 'frischkäsezubereitung rahmstufe',
+    name == 'körniger frischkäse' ~ 'frischkäse', 
+    name == 'körniger frischkäse magerstufe' ~ 'frischkäsezubereitung magerstufe',
+    name == 'frischkäse doppelrahm (60%, höchst. 85% fett i. tr.)' ~ 'frischkäsezubereitung doppelrahmstufe',
+    name == 'fitline 0,2% natur, exquisa frischkäse' ~ 'frischkäsezubereitung magerstufe',
+    name == 'radieschen' ~ 'radieschen frisch', 
+    name == 'wiener würstchen' ~ 'wiener',
+    name == 'lachsschinken' ~ 'schwein schinken roh geräuchert (lachsschinken)',
+    name == 'zitronensaft frisch gepresst muttersaft' ~ 'zitrone fruchtsaft',
+    name %in% c('kartoffeln geschält druckgedämpft', 'kartoffeln geschält gekocht') ~ 'kartoffeln geschält gegart', 
+    name %in% c('kartoffelbrei/kartoffelpüree (0)', 'kartoffelpüree (standardrezeptur)', 'kartoffelbrei / kartoffelpüree (zubereitung haushalt)') ~ 'kartoffelbrei, kartoffelpüree (zubereitung haushalt)',
+    name == 'kartoffel gekocht, mit schale' ~ 'kartoffeln ungeschält gegart mit küchenabfall',
+    name == 'kartoffelpuffer (standardrezeptur)' ~ 'kartoffelpuffer (zubereitung gastronomie)',
+    name %in% c('kartoffelgratin (standardrezeptur)','kartoffelauflauf/kartoffelgratin (0)') ~ 'kartoffelgratin (zubereitung haushalt)',
+    name %in% c('broccoli gedämpft', 'broccoli gedünstet (zubereitet ohne fett)', 'broccoli gekocht') ~ 'broccoli gegart',
+    name == 'broccoli' ~ 'broccoli frisch',
+    name %in% c('aubergine gebacken','aubergine gebraten (zubereitet ohne fett)','aubergine gegart') ~ 'aubergine frisch gegart', 
+    name == 'aubergine (eierfrucht)' ~ 'aubergine frisch',
+    name %in% c('blumenkohl gedämpft','blumenkohl gekocht') ~ 'blumenkohl gegart',
+    name %in% c('creme fraiche 30% fett','creme/schmand 30% fett', 'creme, schmand 30% fett') ~ 'creme, schmand 30 % fett',
+    name == 'creme/schmand' ~ 'creme schmand',
+    name == 'creme/schmand 20% fett' ~ 'creme, schmand 20% fett',
+    name %in% c('erdnusspaste (erdnussmus)', 'erdnusscreme') ~ 'erdnussbutter, -mus',
+    T ~ name
+  )) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.2 <- merged.2 %>% filter(!is.na(item_id))
+left.2 <- merged.2 %>% filter(is.na(item_id)) %>% select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.2)
+print(paste0('Found: ', n_found, ' (', nrow(left.2), ' left)' ))
+```
+
+```{r}
+merged.3 <- 
+  left.2 %>% 
+  mutate(name = gsub(name, pattern = 'gekocht', replacement = 'gegart')) %>% 
+  mutate(name = gsub(name, pattern = '^spinat', replacement = 'blattspinat')) %>% 
+  mutate(name = case_when(
+         name == 'eierteigwaren (nudeln, makkaroni, spaghetti etc.)' ~ 'eierteigwaren',
+         name == 'eierteigwaren (nudeln) gegart, abgetropft' ~ 'eierteigwaren gegart',
+         name == 'eierteigwaren aus weizen frisch' ~ 'eierteigwaren aus weizen',
+         name == 'eierteigwaren spaghetti gegart' ~ 'eierteigwaren gegart',
+         name == 'eierteigwaren besonderer art frisch' ~ 'eierteigwaren besonderer art',
+         name %in% c('eierteigwaren schnitt-/bandnudeln frisch', 'eierteigwaren spaghetti frisch') ~ 'eierteigwaren spaghetti',
+         name == 'eierteigwaren spätzle gegart' ~ 'spätzle (zubereitung haushalt)',
+         name %in% c('teigwaren eifrei spaghetti gegart','teigwaren eifrei suppennudeln gegart') ~ 'teigwaren eifrei gegart',
+         name == 'teigwaren eifrei aus hartweizengrieß frisch' ~ 'teigwaren aus hartgrieß', 
+         name %in% c('gemüsepaprika rot gegart','gemüsepaprika rot gedämpft', 'gemüsepaprika gelb gegart') ~ 'paprikaschoten frisch gegart',
+         name == 'tomate' ~ 'tomaten',
+         name == 'tomatensoße (standardrezeptur)' ~ 'tomatensoße aus frischen tomaten (zubereitung haushalt)',
+         name == 'tomatensoße konserve' ~ 'tomaten konserve gekocht',
+         name == 'tomatensalat mit essig und öl (standardrezeptur)' ~ 'tomatensalat mit olivenöl (zubereitung gastronomie)',
+         name %in% c('tomatensuppe aus frischen tomaten (zubereitung haushalt)', 'tomatensuppe (standardrezeptur)') ~ 'tomatensuppe (zubereitung haushalt)',
+         name == 'tomatensauce toskana, alnatura' ~ 'tomatensoße italienisch (zubereitung großküche)',
+         name == 'roggenvollkornbrot' ~ 'vollkornbrot-roggenvollkornbrot',
+         name %in% c('vollkornbrot-roggenvollkornschrottoastbrot', 'vollkornbrot-weizen/roggenvollkornschrottoastbrot') ~ 'vollkornbrot-weizen, roggenvollkornschrottoastbrot',
+         name %in% c('knäckebrot leicht & cross') ~ 'knäckebrote leicht & cross',
+         name == 'knäckebrot' ~ 'knäckebrote',
+        name == 'vollkornbrot-roggen/weizenvollkornbrot' ~ 'vollkornbrot-roggenvollkornmischbrot' ,
+        name == 'weizen(mehl)brot (weißbrot)' ~ 'weißbrot-weizenbrot', 
+        name == 'roggenbrot' ~ 'graubrot-roggenbrot',
+        name == 'holzofenbrot' ~ 'holzofenbrote',
+        name == 'dinkelbrot' ~ 'dinkelbrot (vollkornbrot)',
+        name == 'vollkornbrötchen' ~ 'vollkornbrötchen allgemein',
+        name == 'brötchen dinkelbrötchen' ~ 'dinkelbrötchen',
+        name == 'vollkornbrötchen-dinkelvollkornbrötchen' ~ 'dinkelvollkornbrötchen',
+        name == 'vollkornbrötchen-weizenvollkornbrötchen mit ölsamenzutaten' ~ 'vollkornbrötchen-weizenvollk.brötchen mit ölsamenzutaten',
+        name == 'brötchen mit butter und schinkenwurst (standardrezeptur)' ~ 'schinkenbrötchen',
+        name == 'grünkohl gegart' ~ 'grünkohl (braunkohl) gegart',
+        name == 'lauch / porree gedünstet (zubereitung haushalt)' ~ 'lauch, porree gedünstet (zubereitung haushalt)',
+        name == 'schnittsalat (blatt-/ pflücksalat)' ~ 'schnittsalat (blatt- pflücksalat)',
+        name %in% c('rind/schwein hackfleisch gebraten (zubereitet ohne fett)',  'rind/schwein hackfleisch gegart') ~ 'rind, schwein hackfleisch gegart',
+        name == 'pökelwaren rippchen/schälrippchen' ~ 'pökelwaren rippchen, schälrippchen',
+        name == 'pudding-/soßenpulver/cremespeisenpulver' ~ 'pudding-, soßenpulver, cremespeisenpulver',
+        name == 'rind/schwein hackfleisch frisch' ~ 'rind, schwein hackfleisch frisch',
+        name == 'bierschinken/schinkenpastete' ~ 'bierschinken, schinkenpastete',
+        name == 'schweineschmalz/-fett' ~ 'schweineschmalz, -fett',
+        name == 'wollwurst/geschwollene' ~ 'wollwurst, geschwollene',
+        name == 'eiersalat mit tomaten und essig/öl dressing (zubereitung großküche)' ~ 'eiersalat mit tomaten (zubereitung großküche)',
+        name == 'walnuss' ~ 'walnuss frisch',
+        name == 'rotbusch-/roibuschtee' ~ 'tee (getränk)', 
+        name %in% c('schwein schinken gegart', 'schweineschinken gegart (kochschinken)') ~ 'schwein schinken',
+        name == 'schafskäse rahmstufe' ~ 'schafskäse',
+        name == 'nuss-nougatcreme' ~ 'nuß-nougat-creme süß',
+        
+         
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.3 <- merged.3 %>% filter(!is.na(item_id))
+left.3 <- merged.3 %>% filter(is.na(item_id)) %>% select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.3)
+print(paste0('Found: ', n_found, ' (', nrow(left.3), ' left)' ))
+```
+

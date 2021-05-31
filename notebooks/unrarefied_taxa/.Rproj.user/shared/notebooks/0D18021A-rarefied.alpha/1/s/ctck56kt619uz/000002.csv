@@ -1,0 +1,50 @@
+"0","```r
+# write_tsv(pd.conv,paste0(table_dir,'faith.conv.tsv'))
+# write_tsv(pd.nutr,paste0(table_dir,'faith.nutr.tsv'))
+
+div.conv <- read_tsv(paste0(table_dir,'shannon.conv.tsv')) %>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification ---------------------------------------------------------------------------------------------------
+cols(
+  `Shannon Index` = col_double(),
+  file_name = col_character()
+)
+"
+"0","```r
+colnames(div.conv) <- 'Shannon Index conv.clust'
+div.nut <- read_tsv(paste0(table_dir,'shannon.nutr.tsv'))%>% column_to_rownames(.,'file_name')
+```"
+"1","
+-- Column specification ---------------------------------------------------------------------------------------------------
+cols(
+  `Shannon Index` = col_double(),
+  file_name = col_character()
+)
+"
+"0","```r
+colnames(div.nut) <- 'Shannon Index nut.clust'
+# biom.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+# biom.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))%>% column_to_rownames(.,'rowname')
+
+biom.L6.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L6.tsv')) %>% column_to_rownames(.,'rowname')
+```"
+"1","
+-- Column specification ---------------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  rowname = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+biom.L7.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L7.tsv')) %>% column_to_rownames(.,'rowname')
+```"
+"1","
+-- Column specification ---------------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  rowname = col_character()
+)
+i Use `spec()` for the full column specifications.
+"

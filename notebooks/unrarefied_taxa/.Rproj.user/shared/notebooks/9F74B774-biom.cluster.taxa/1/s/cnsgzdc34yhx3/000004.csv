@@ -1,0 +1,1334 @@
+"0",""
+"0","###maaslin"
+"0",""
+"0","df <- row.names(merge.L6.nutr) %>% as.data.frame(.)"
+"0","colnames(df) <- 'file_name'"
+"0","df$group <- ifelse(grepl('U2', df$file_name), 'keto', 'a.non-keto')  "
+"0","df <- column_to_rownames(df,'file_name')"
+"0","merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-starts_with('file_name'))"
+"0","merge.L6.nutr <- merge.L6.nutr[, colSums(merge.L6.nutr != 0) > 0]"
+"0",""
+"0","maaslin.L6.convclust <- Maaslin2(input_data = merge.L6.nutr,input_metadata = df,fixed_effects = 'group',output = 'L6.consclust_maaslin',"
+"0","                                 min_abundance = -Inf,"
+"0","                                 normalization = 'NONE',"
+"0","                                 transform = 'NONE',"
+"0","                                 standardize = F, "
+"0","                                 random_effects = 'row.names')"
+"1","[1]"
+"1"," ""Creating output folder"""
+"1","
+"
+"1","[1]"
+"1"," ""Creating output figures folder"""
+"1","
+"
+"1","[0m2021-05-14 14:11:36 INFO::Writing function arguments to log file[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Verifying options selected are valid[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Determining format of input files[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Input format is data samples as rows and metadata samples as rows[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[38;5;214m2021-05-14 14:11:36 WARNING::Feature name not found in metadata so not applied to formula as random effect: row.names[39m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Formula for fixed effects: expr ~  group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Running selected normalization method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Filter data based on min abundance and min prevalence[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Total samples in data: 64[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Min samples required with min abundance for a feature not to be filtered: 6.400000[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Total filtered features: 0[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Filtered feature names:[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Bypass z-score application to metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Running selected transform method: NONE[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Running selected analysis method: LM[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |                                                  |"
+"1"," "
+"1","0 % ~calculating  "
+"1","[0m2021-05-14 14:11:36 INFO::Fitting model to feature number 1, D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Fitting model to feature number 2, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__Actinomyces[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:36 INFO::Fitting model to feature number 3, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__F0332[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+                                                 |"
+"1"," "
+"1","1 % ~14s          "
+"1","[0m2021-05-14 14:11:36 INFO::Fitting model to feature number 4, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__Mobiluncus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 5, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 6, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Bifidobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++                                                |"
+"1"," "
+"1","2 % ~14s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 7, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Scardovia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 8, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Corynebacteriales.D_4__Corynebacteriaceae.D_5__Corynebacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 9, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Corynebacteriales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++                                                |"
+"1"," "
+"1","4 % ~13s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 10, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Cellulomonadaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 11, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Microbacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 12, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Micrococcaceae.D_5__Rothia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++                                               |"
+"1"," "
+"1","5 % ~11s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 13, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Propionibacteriales.D_4__Propionibacteriaceae.D_5__Pseudopropionibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 14, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Propionibacteriales.D_4__Propionibacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 15, D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Streptomycetales.D_4__Streptomycetaceae.D_5__Streptomyces[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++                                              |"
+"1"," "
+"1","6 % ~10s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 16, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Atopobiaceae.D_5__Atopobium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 17, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Atopobiaceae.D_5__Olsenella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 18, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Coriobacteriaceae.D_5__Collinsella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++                                              |"
+"1"," "
+"1","7 % ~09s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 19, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Coriobacteriales.Incertae.Sedis.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 20, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__Adlercreutzia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 21, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__Enterorhabdus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++                                             |"
+"1"," "
+"1","9 % ~08s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 22, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__Senegalimassilia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 23, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__Slackia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 24, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++                                             |"
+"1"," "
+"1","10% ~08s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 25, D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 26, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Bacteroidaceae.D_5__Bacteroides[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 27, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__Barnesiella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++                                            |"
+"1"," "
+"1","11% ~07s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 28, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__Coprobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 29, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 30, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Dysgonomonadaceae.D_5__Dysgonomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++                                           |"
+"1"," "
+"1","12% ~07s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 31, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinifilaceae.D_5__Butyricimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 32, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinifilaceae.D_5__Odoribacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 33, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinilabiliaceae.D_5__Alkaliflexus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++                                           |"
+"1"," "
+"1","14% ~06s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 34, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Muribaculaceae.D_5__uncultured.organism[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 35, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Muribaculaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 36, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Paludibacteraceae.D_5__F0058[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++                                          |"
+"1"," "
+"1","15% ~06s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 37, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Porphyromonadaceae.D_5__Porphyromonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 38, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Alloprevotella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 39, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Paraprevotella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++                                         |"
+"1"," "
+"1","16% ~06s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 40, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 41, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 42, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.6[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++                                         |"
+"1"," "
+"1","17% ~06s          "
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 43, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.7[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 44, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.9[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:37 INFO::Fitting model to feature number 45, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotellaceae.NK3B31.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","19% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 46, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Rikenellaceae.D_5__Alistipes[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 47, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Tannerellaceae.D_5__Parabacteroides[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 48, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Tannerellaceae.D_5__Tannerella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++                                        |"
+"1"," "
+"1","20% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 49, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__uncultured.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 50, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Flavobacteriales.D_4__Flavobacteriaceae.D_5__Capnocytophaga[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 51, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Flavobacteriales.D_4__Flavobacteriaceae.D_5__Flavobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++                                       |"
+"1"," "
+"1","21% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 52, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Flavobacteriales.D_4__Weeksellaceae.D_5__Bergeyella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 53, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Sphingobacteriales.D_4__Lentimicrobiaceae.D_5__unidentified[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 54, D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Sphingobacteriales.D_4__env.OPS.17.D_5__uncultured.eubacterium.env.OPS.17[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++                                      |"
+"1"," "
+"1","22% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 55, D_0__Bacteria.D_1__Cyanobacteria.D_2__Melainabacteria.D_3__Gastranaerophilales.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 56, D_0__Bacteria.D_1__Cyanobacteria.D_2__Melainabacteria.D_3__Gastranaerophilales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 57, D_0__Bacteria.D_1__Cyanobacteria.D_2__Oxyphotobacteria.D_3__Chloroplast.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++                                      |"
+"1"," "
+"1","23% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 58, D_0__Bacteria.D_1__Deinococcus.Thermus.D_2__Deinococci.D_3__Thermales.D_4__Thermaceae.D_5__Meiothermus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 59, D_0__Bacteria.D_1__Epsilonbacteraeota.D_2__Campylobacteria.D_3__Campylobacterales.D_4__Campylobacteraceae.D_5__Campylobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 60, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Bacillaceae.D_5__Anaerobacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++                                     |"
+"1"," "
+"1","25% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 61, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Bacillaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 62, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Family.XI.D_5__Gemella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 63, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Family.XII.D_5__Exiguobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++                                     |"
+"1"," "
+"1","26% ~05s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 64, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Sporolactobacillaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 65, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Aerococcaceae.D_5__Abiotrophia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 66, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Carnobacteriaceae.D_5__Granulicatella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++                                    |"
+"1"," "
+"1","27% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 67, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Carnobacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 68, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Enterococcaceae.D_5__Enterococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 69, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Lactococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++                                   |"
+"1"," "
+"1","28% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 70, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Streptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 71, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 72, D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.__.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++                                   |"
+"1"," "
+"1","30% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 73, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Christensenellaceae.D_5__Christensenellaceae.R.7.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 74, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Christensenellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 75, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Clostridiaceae.1.D_5__Clostridium.sensu.stricto.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++                                  |"
+"1"," "
+"1","31% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 76, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Clostridiales.vadinBB60.group.D_5__uncultured.organism[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 77, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Defluviitaleaceae.D_5__Defluviitalea[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 78, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Defluviitaleaceae.D_5__Defluviitaleaceae.UCG.011[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","32% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 79, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XI.D_5__Parvimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 80, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__Mogibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 81, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..brachy.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++                                 |"
+"1"," "
+"1","33% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 82, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..nodatum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 83, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..saphenum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 84, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++                                |"
+"1"," "
+"1","35% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 85, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 86, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Agathobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 87, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Anaerostipes[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++                                |"
+"1"," "
+"1","36% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 88, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Blautia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 89, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Butyrivibrio[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 90, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Butyrivibrio.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++                               |"
+"1"," "
+"1","37% ~04s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 91, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__CAG.56[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 92, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Catonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 93, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Coprococcus.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++                              |"
+"1"," "
+"1","38% ~03s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 94, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Coprococcus.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 95, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Coprococcus.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 96, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Dorea[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++                              |"
+"1"," "
+"1","40% ~03s          "
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 97, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Fusicatenibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 98, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Johnsonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:38 INFO::Fitting model to feature number 99, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnoanaerobaculum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++                             |"
+"1"," "
+"1","41% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 100, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnoclostridium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 101, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospira[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 102, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.FCS020.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++                             |"
+"1"," "
+"1","42% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 103, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.ND3007.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 104, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.NK4A136.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 105, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.001[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++                            |"
+"1"," "
+"1","43% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 106, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.003[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 107, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.004[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 108, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.010[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++                           |"
+"1"," "
+"1","44% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 109, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Marvinbryantia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 110, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Oribacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 111, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Roseburia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++                           |"
+"1"," "
+"1","46% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 112, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Stomatobaculum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 113, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Tyzzerella.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 114, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..eligens.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++                          |"
+"1"," "
+"1","47% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 115, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..hallii.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 116, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..ruminantium.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 117, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..ventriosum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++                         |"
+"1"," "
+"1","48% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 118, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..xylanophilum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 119, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Ruminococcus..gauvreauii.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 120, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Ruminococcus..torques.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++                         |"
+"1"," "
+"1","49% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 121, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 122, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 123, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptococcaceae.D_5__Peptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++                        |"
+"1"," "
+"1","51% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 124, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Intestinibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 125, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Peptostreptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 126, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Romboutsia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++                        |"
+"1"," "
+"1","52% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 127, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Terrisporobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 128, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__.Eubacterium..yurii.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 129, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++                       |"
+"1"," "
+"1","53% ~03s          "
+"1","[0m2021-05-14 14:11:39 INFO::Fitting model to feature number 130, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Butyricicoccus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 131, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Faecalibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 132, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Flavonifractor[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++                      |"
+"1"," "
+"1","54% ~03s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 133, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Negativibacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 134, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminiclostridium.6[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 135, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.NK4A214.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++                      |"
+"1"," "
+"1","56% ~03s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 136, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.002[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 137, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.003[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 138, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.005[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++                     |"
+"1"," "
+"1","57% ~03s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 139, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.008[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 140, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.010[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 141, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.013[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++                    |"
+"1"," "
+"1","58% ~03s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 142, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.014[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 143, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcus.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 144, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcus.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++                    |"
+"1"," "
+"1","59% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 145, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Subdoligranulum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 146, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__.Eubacterium..coprostanoligenes.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 147, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++                   |"
+"1"," "
+"1","60% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 148, D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 149, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Bulleidia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 150, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelatoclostridium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++                   |"
+"1"," "
+"1","62% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 151, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelothrix[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 152, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelotrichaceae.UCG.003[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 153, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Holdemanella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++                  |"
+"1"," "
+"1","63% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 154, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Solobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 155, D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Turicibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 156, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Acidaminococcaceae.D_5__Phascolarctobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++                 |"
+"1"," "
+"1","64% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 157, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Anaeroglobus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 158, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Dialister[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 159, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Megasphaera[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++                 |"
+"1"," "
+"1","65% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 160, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 161, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 162, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas.4[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","67% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 163, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Veillonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 164, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 165, D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++                |"
+"1"," "
+"1","68% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 166, D_0__Bacteria.D_1__Fusobacteria.D_2__Fusobacteriia.D_3__Fusobacteriales.D_4__Fusobacteriaceae.D_5__Fusobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 167, D_0__Bacteria.D_1__Fusobacteria.D_2__Fusobacteriia.D_3__Fusobacteriales.D_4__Leptotrichiaceae.D_5__Leptotrichia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 168, D_0__Bacteria.D_1__Lentisphaerae.D_2__Lentisphaeria.D_3__Victivallales.D_4__Victivallaceae.D_5__Victivallis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++               |"
+"1"," "
+"1","69% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 169, D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..D_4__SR1.bacterium.oral.taxon.875.D_5__SR1.bacterium.oral.taxon.875[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 170, D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..D_4__candidate.division.SR1.bacterium.MGEHA.D_5__candidate.division.SR1.bacterium.MGEHA[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 171, D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++              |"
+"1"," "
+"1","70% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 172, D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Gracilibacteria.bacterium.oral.taxon.873.D_4__Gracilibacteria.bacterium.oral.taxon.873.D_5__Gracilibacteria.bacterium.oral.taxon.873[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 173, D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__JGI.0000069.P22.D_4__Gracilibacteria.bacterium.oral.taxon.872.D_5__Gracilibacteria.bacterium.oral.taxon.872[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 174, D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Candidatus.Saccharibacteria.bacterium.UB2523.D_5__Candidatus.Saccharibacteria.bacterium.UB2523[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++              |"
+"1"," "
+"1","72% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 175, D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Saccharimonadaceae.D_5__Candidatus.Saccharimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 176, D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Saccharimonadaceae.D_5__uncultured.bacterium.oral.clone.BE109[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 177, D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Saccharimonadaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++             |"
+"1"," "
+"1","73% ~02s          "
+"1","[0m2021-05-14 14:11:40 INFO::Fitting model to feature number 178, D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__TM7.phylum.sp..oral.clone.FR058.D_5__TM7.phylum.sp..oral.clone.FR058[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 179, D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodobacterales.D_4__Rhodobacteraceae.D_5__Paracoccus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 180, D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodobacterales.D_4__Rhodobacteraceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++            |"
+"1"," "
+"1","74% ~02s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 181, D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodospirillales.D_4__uncultured.D_5__Azospirillum.sp..47_25[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 182, D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodospirillales.D_4__uncultured.D_5__gut.metagenome[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 183, D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodospirillales.D_4__uncultured.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++            |"
+"1"," "
+"1","75% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 184, D_0__Bacteria.D_1__Proteobacteria.D_2__Deltaproteobacteria.D_3__Desulfovibrionales.D_4__Desulfovibrionaceae.D_5__Bilophila[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 185, D_0__Bacteria.D_1__Proteobacteria.D_2__Deltaproteobacteria.D_3__Desulfovibrionales.D_4__Desulfovibrionaceae.D_5__Desulfovibrio[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 186, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Aeromonadales.D_4__Succinivibrionaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++           |"
+"1"," "
+"1","77% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 187, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadaceae.D_5__Rheinheimera[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 188, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 189, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadales.Incertae.Sedis.D_5__Alkalimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++           |"
+"1"," "
+"1","78% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 190, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Shewanellaceae.D_5__Shewanella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 191, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Achromobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 192, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Lautropia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++          |"
+"1"," "
+"1","79% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 193, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Parasutterella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 194, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Sutterella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 195, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++         |"
+"1"," "
+"1","80% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 196, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.D_5__Kingella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 197, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.D_5__Neisseria[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 198, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++         |"
+"1"," "
+"1","81% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 199, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Cardiobacteriales.D_4__Cardiobacteriaceae.D_5__Cardiobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 200, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Enterobacteriales.D_4__Enterobacteriaceae.D_5__Escherichia.Shigella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 201, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Oceanospirillales.D_4__Halomonadaceae.D_5__Halomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++        |"
+"1"," "
+"1","83% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 202, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Oceanospirillales.D_4__Halomonadaceae.D_5__Marinospirillum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 203, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Oceanospirillales.D_4__Nitrincolaceae.D_5__Nitrincola[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 204, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.D_5__Actinobacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++        |"
+"1"," "
+"1","84% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 205, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.D_5__Aggregatibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 206, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.D_5__Haemophilus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 207, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++       |"
+"1"," "
+"1","85% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 208, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Moraxellaceae.D_5__Moraxella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 209, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Pseudomonadaceae.D_5__Pseudomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 210, D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Xanthomonadales.D_4__Xanthomonadaceae.D_5__Stenotrophomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++      |"
+"1"," "
+"1","86% ~01s          "
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 211, D_0__Bacteria.D_1__Spirochaetes.D_2__Spirochaetia.D_3__Spirochaetales.D_4__Spirochaetaceae.D_5__Treponema.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 212, D_0__Bacteria.D_1__Synergistetes.D_2__Synergistia.D_3__Synergistales.D_4__Synergistaceae.D_5__Cloacibacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:41 INFO::Fitting model to feature number 213, D_0__Bacteria.D_1__Synergistetes.D_2__Synergistia.D_3__Synergistales.D_4__Synergistaceae.D_5__Fretibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++      |"
+"1"," "
+"1","88% ~01s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 214, D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Anaeroplasmatales.D_4__Anaeroplasmataceae.D_5__Anaeroplasma[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 215, D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Izimaplasmatales.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 216, D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Izimaplasmatales.D_4__uncultured.organism.D_5__uncultured.organism[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++     |"
+"1"," "
+"1","89% ~01s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 217, D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Mollicutes.RF39.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 218, D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Mollicutes.RF39.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 219, D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Opitutales.D_4__Opitutaceae.D_5__IMCC26134[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++    |"
+"1"," "
+"1","90% ~01s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 220, D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Opitutales.D_4__Puniceicoccaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 221, D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 222, D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++    |"
+"1"," "
+"1","91% ~01s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 223, Alkoholfreie.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 224, Alkoholische.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 225, Brot..und.Kleingebäck[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++   |"
+"1"," "
+"1","93% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 226, Cerealien..Getreide.und.Getreideprodukte..Reis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 227, Diätetische.Lebensmittel[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 228, Eier.und.Eierprodukte..Teigwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++   |"
+"1"," "
+"1","94% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 229, Fische..Krusten...Schalen...Weichtiere[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 230, Fleisch..Rind..Kalb..Schwein..Hammel..Lamm.[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 231, Fleisch..Wild..Geflügel..Federwild..Innereien.[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++  |"
+"1"," "
+"1","95% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 232, Früchte..Obst.und.Obsterzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 233, Gemüse.und.Gemüseerzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 234, Gewürze..Würzmittel..Hilfsstoffe[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++++ |"
+"1"," "
+"1","96% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 235, Hülsenfrüchte..reif...Schalenobst..Öl..und.andere.Samen[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 236, Kartoffeln.und.Kartoffelerzeugnisse..stärkereiche.Pflanzenteile..Pilze[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 237, Kuchen..Feinbackwaren..Dauerbackwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |+++++++++++++++++++++++++++++++++++++++++++++++++ |"
+"1"," "
+"1","98% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 238, Menükomponenten[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 239, Milch..Milcherzeugnisse..Käse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 240, Öle..Fette..Butter..Schmalz..Talg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","99% ~00s          "
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 241, Süßwaren..Zucker..Bonbons..Schokolade..Brotaufstrich.süß..Eis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 242, Vegetarische.Produkte[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Fitting model to feature number 243, Wurst..Fleischwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1",""
+"1"," "
+"1"," |++++++++++++++++++++++++++++++++++++++++++++++++++|"
+"1"," "
+"1","100% elapsed=06s  "
+"1","
+"
+"1","[0m2021-05-14 14:11:42 INFO::Counting total values for each feature[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Writing residuals to file L6.consclust_maaslin/residuals.rds[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Writing all results to file (ordered by increasing q-values): L6.consclust_maaslin/all_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): L6.consclust_maaslin/significant_results.tsv[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Writing heatmap of significant results to file: L6.consclust_maaslin/heatmap.pdf[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[1]"
+"1"," ""There is not enough metadata in the associations to create a heatmap plot. Please review the associations in text output file."""
+"1","
+"
+"1","[0m2021-05-14 14:11:42 INFO::Writing association plots (one for each significant association) to output folder: L6.consclust_maaslin[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Plotting associations from most to least significant, grouped by metadata[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Plotting data for metadata number 1, group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:42 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:45 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Cellulomonadaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:45 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Microbacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:46 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Propionibacteriales.D_4__Propionibacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:46 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Streptomycetales.D_4__Streptomycetaceae.D_5__Streptomyces[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:46 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Sphingobacteriales.D_4__env.OPS.17.D_5__uncultured.eubacterium.env.OPS.17[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:47 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Deinococcus.Thermus.D_2__Deinococci.D_3__Thermales.D_4__Thermaceae.D_5__Meiothermus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:47 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Bacillaceae.D_5__Anaerobacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:47 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Sporolactobacillaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:48 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.__.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:48 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Defluviitaleaceae.D_5__Defluviitaleaceae.UCG.011[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:48 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:49 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptococcaceae.D_5__Peptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:49 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__.Eubacterium..yurii.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:49 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Bulleidia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:49 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelothrix[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:50 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Anaeroglobus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:50 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Gracilibacteria.bacterium.oral.taxon.873.D_4__Gracilibacteria.bacterium.oral.taxon.873.D_5__Gracilibacteria.bacterium.oral.taxon.873[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:50 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__JGI.0000069.P22.D_4__Gracilibacteria.bacterium.oral.taxon.872.D_5__Gracilibacteria.bacterium.oral.taxon.872[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:51 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Candidatus.Saccharibacteria.bacterium.UB2523.D_5__Candidatus.Saccharibacteria.bacterium.UB2523[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:51 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Saccharimonadaceae.D_5__uncultured.bacterium.oral.clone.BE109[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:51 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:51 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadales.Incertae.Sedis.D_5__Alkalimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:52 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.D_5__Kingella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:52 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Oceanospirillales.D_4__Halomonadaceae.D_5__Marinospirillum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:52 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.D_5__Aggregatibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:53 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Moraxellaceae.D_5__Moraxella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:53 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Synergistetes.D_2__Synergistia.D_3__Synergistales.D_4__Synergistaceae.D_5__Fretibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:53 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:54 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Defluviitaleaceae.D_5__Defluviitalea[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:54 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Sphingobacteriales.D_4__Lentimicrobiaceae.D_5__unidentified[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:54 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__Mobiluncus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:55 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Flavobacteriales.D_4__Flavobacteriaceae.D_5__Flavobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:55 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Scardovia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:56 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Dysgonomonadaceae.D_5__Dysgonomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:56 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Tannerellaceae.D_5__Tannerella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:56 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Lactococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:56 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Catonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:57 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas.4[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:57 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:57 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__TM7.phylum.sp..oral.clone.FR058.D_5__TM7.phylum.sp..oral.clone.FR058[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:58 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:58 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Paludibacteraceae.D_5__F0058[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:58 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__Actinomyces[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:58 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Corynebacteriales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:59 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Butyrivibrio.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:59 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Bacillaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:59 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..saphenum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:11:59 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..D_4__candidate.division.SR1.bacterium.MGEHA.D_5__candidate.division.SR1.bacterium.MGEHA[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:00 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinilabiliaceae.D_5__Alkaliflexus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:00 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Oceanospirillales.D_4__Nitrincolaceae.D_5__Nitrincola[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:00 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Bacillales.D_4__Family.XII.D_5__Exiguobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:00 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Johnsonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:01 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Carnobacteriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:01 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:01 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Gracilibacteria.D_3__Absconditabacteriales..SR1..D_4__SR1.bacterium.oral.taxon.875.D_5__SR1.bacterium.oral.taxon.875[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:01 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodobacterales.D_4__Rhodobacteraceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:02 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:02 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Propionibacteriales.D_4__Propionibacteriaceae.D_5__Pseudopropionibacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:02 INFO::Creating boxplot for categorical data, group vs Brot..und.Kleingebäck[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:03 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Alteromonadaceae.D_5__Rheinheimera[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:03 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Patescibacteria.D_2__Saccharimonadia.D_3__Saccharimonadales.D_4__Saccharimonadaceae.D_5__Candidatus.Saccharimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:03 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Butyrivibrio[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:04 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Clostridiales.vadinBB60.group.D_5__uncultured.organism[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:04 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Romboutsia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:05 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..brachy.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:05 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Bifidobacteriales.D_4__Bifidobacteriaceae.D_5__Bifidobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:06 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Opitutales.D_4__Opitutaceae.D_5__IMCC26134[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:06 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Roseburia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:06 INFO::Creating boxplot for categorical data, group vs Milch..Milcherzeugnisse..Käse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:07 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Ruminococcus..torques.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:07 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Cyanobacteria.D_2__Melainabacteria.D_3__Gastranaerophilales.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:07 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Atopobiaceae.D_5__Olsenella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:08 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Aerococcaceae.D_5__Abiotrophia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:08 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.ND3007.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:08 INFO::Creating boxplot for categorical data, group vs Hülsenfrüchte..reif...Schalenobst..Öl..und.andere.Samen[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:09 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinifilaceae.D_5__Odoribacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:09 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pasteurellales.D_4__Pasteurellaceae.D_5__Actinobacillus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:09 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Spirochaetes.D_2__Spirochaetia.D_3__Spirochaetales.D_4__Spirochaetaceae.D_5__Treponema.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:10 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.002[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:10 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.6[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:10 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Coprococcus.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:11 INFO::Creating boxplot for categorical data, group vs Kuchen..Feinbackwaren..Dauerbackwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:11 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XI.D_5__Parvimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:11 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.005[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:11 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Cardiobacteriales.D_4__Cardiobacteriaceae.D_5__Cardiobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:12 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Veillonella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:12 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Aeromonadales.D_4__Succinivibrionaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:12 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Flavobacteriales.D_4__Weeksellaceae.D_5__Bergeyella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:12 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Streptococcaceae.D_5__Streptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:13 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Alteromonadales.D_4__Shewanellaceae.D_5__Shewanella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:13 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Lautropia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:13 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Marinifilaceae.D_5__Butyricimonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:13 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Cyanobacteria.D_2__Oxyphotobacteria.D_3__Chloroplast.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:14 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..hallii.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:14 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:14 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Rikenellaceae.D_5__Alistipes[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:15 INFO::Creating boxplot for categorical data, group vs D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:15 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.004[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:15 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Dorea[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:16 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:16 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:16 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Megasphaera[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:16 INFO::Creating boxplot for categorical data, group vs Eier.und.Eierprodukte..Teigwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:17 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.003[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:17 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Carnobacteriaceae.D_5__Granulicatella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:17 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Alphaproteobacteria.D_3__Rhodobacterales.D_4__Rhodobacteraceae.D_5__Paracoccus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:18 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcus.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:18 INFO::Creating boxplot for categorical data, group vs Früchte..Obst.und.Obsterzeugnisse[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:18 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__uncultured.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:19 INFO::Creating boxplot for categorical data, group vs Süßwaren..Zucker..Bonbons..Schokolade..Brotaufstrich.süß..Eis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:19 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Izimaplasmatales.D_4__uncultured.organism.D_5__uncultured.organism[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:19 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Coprococcus.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:19 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospira[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:20 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Tyzzerella.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:20 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__.Eubacterium..coprostanoligenes.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:20 INFO::Creating boxplot for categorical data, group vs Öle..Fette..Butter..Schmalz..Talg[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:21 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__.Eubacterium..eligens.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:21 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__Barnesiella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:21 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.013[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:21 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:22 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:22 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:22 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelotrichaceae.UCG.003[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:22 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Pseudomonadales.D_4__Pseudomonadaceae.D_5__Pseudomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:23 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Blautia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:23 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Actinomycetales.D_4__Actinomycetaceae.D_5__F0332[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:23 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.010[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:24 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Christensenellaceae.D_5__Christensenellaceae.R.7.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:24 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Butyricicoccus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:24 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.NK4A214.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:24 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Izimaplasmatales.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:25 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.014[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:26 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.D_4__Enterococcaceae.D_5__Enterococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:26 INFO::Creating boxplot for categorical data, group vs Alkoholische.Getränke[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:26 INFO::Creating boxplot for categorical data, group vs Cerealien..Getreide.und.Getreideprodukte..Reis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:27 INFO::Creating boxplot for categorical data, group vs Wurst..Fleischwaren[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:27 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Marvinbryantia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:27 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:28 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Sutterella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:28 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Bacteroidaceae.D_5__Bacteroides[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:28 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Epsilonbacteraeota.D_2__Campylobacteria.D_3__Campylobacterales.D_4__Campylobacteraceae.D_5__Campylobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:28 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.010[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:29 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Tannerellaceae.D_5__Parabacteroides[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:29 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Lentisphaerae.D_2__Lentisphaeria.D_3__Victivallales.D_4__Victivallaceae.D_5__Victivallis[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:29 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminococcaceae.UCG.008[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:30 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Bacilli.D_3__Lactobacillales.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:30 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Fusicatenibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:30 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:30 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Parasutterella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:31 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Neisseriaceae.D_5__Neisseria[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:31 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Subdoligranulum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:31 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Muribaculaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:31 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.FCS020.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:32 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotellaceae.NK3B31.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:32 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Eggerthellaceae.D_5__Slackia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:32 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Xanthomonadales.D_4__Xanthomonadaceae.D_5__Stenotrophomonas[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:33 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Negativicutes.D_3__Selenomonadales.D_4__Veillonellaceae.D_5__Selenomonas.3[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:33 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Terrisporobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:33 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Ruminiclostridium.6[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:34 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Deltaproteobacteria.D_3__Desulfovibrionales.D_4__Desulfovibrionaceae.D_5__Bilophila[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:34 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__Coprobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:35 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Ruminococcaceae.D_5__Flavonifractor[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:35 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Proteobacteria.D_2__Gammaproteobacteria.D_3__Betaproteobacteriales.D_4__Burkholderiaceae.D_5__Achromobacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:35 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Mollicutes.RF39.D_4__uncultured.bacterium.D_5__uncultured.bacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:35 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.UCG.001[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:36 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Tenericutes.D_2__Mollicutes.D_3__Mollicutes.RF39.__.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:36 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Stomatobaculum[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:36 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Erysipelatoclostridium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:37 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Turicibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:37 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Clostridiaceae.1.D_5__Clostridium.sensu.stricto.1[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:37 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Intestinibacter[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:37 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Peptostreptococcaceae.D_5__Peptostreptococcus[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:38 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Lachnospiraceae.D_5__Lachnospiraceae.NK4A136.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:38 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Clostridia.D_3__Clostridiales.D_4__Family.XIII.D_5__.Eubacterium..nodatum.group[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:38 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Coriobacteriia.D_3__Coriobacteriales.D_4__Coriobacteriaceae.D_5__Collinsella[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:38 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Opitutales.D_4__Puniceicoccaceae.__[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:39 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Prevotellaceae.D_5__Prevotella.2[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:39 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Actinobacteria.D_2__Actinobacteria.D_3__Micrococcales.D_4__Micrococcaceae.D_5__Rothia[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:39 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Bacteroidetes.D_2__Bacteroidia.D_3__Bacteroidales.D_4__Barnesiellaceae.D_5__uncultured[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"
+"1","[0m2021-05-14 14:12:40 INFO::Creating boxplot for categorical data, group vs D_0__Bacteria.D_1__Firmicutes.D_2__Erysipelotrichia.D_3__Erysipelotrichales.D_4__Erysipelotrichaceae.D_5__Solobacterium[0m[22m[23m[24m[27m[28m[29m[39m[49m[0m[0m[22m[23m[24m[27m[28m[29m[39m[49m
+"

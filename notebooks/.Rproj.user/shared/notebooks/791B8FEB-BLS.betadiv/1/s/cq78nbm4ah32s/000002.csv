@@ -1,0 +1,7 @@
+"0","df.data.tsne %>% "
+"0","  ggplot(aes(Dim.2, Dim.1)) +"
+"0","  geom_point(size = 0.5, aes(col = item_cat)) + "
+"0","  theme(plot.title = element_text(hjust = 0.5),"
+"0","        aspect.ratio = 1, "
+"0","        ) + "
+"0","  guides(fill = guide_legend(ncol = 1))"

@@ -1,0 +1,20 @@
+"0","files = list.files(path = keto_dir, pattern = '*xls', full.names = T)"
+"0",""
+"0","data.summary <- NULL"
+"0","data.sample <- NULL"
+"0","for (file in files) {"
+"0","  results = read_keto_file(file)"
+"0","  data.summary <- bind_rows(data.summary, results[['df.summary']])"
+"0","  data.sample <- bind_rows(data.sample, results[['df.sample']])"
+"0","}"
+"2","`funs()` was deprecated in dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
+
+  # Simple named list: 
+  list(mean = mean, median = median)
+
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
+
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))"

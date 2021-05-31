@@ -1,0 +1,22 @@
+"0","pdf(paste0(output_converter,'pca.convclust.pdf'))
+"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","3: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","factoextra::fviz_pca_biplot(X =convclust.pca, "
+"0","                            # samples"
+"0","                            fill.ind = pheno$Phenotype,"
+"0","                            col.ind = 'black',"
+"0","                            pointshape = 21, pointsize = 3, alpha = 0.5,"
+"0","                            geom.ind = 'point',geom.var = FALSE,title = 'PCA convetional clusters',label = 'none',invisible = c(""ind.sup"", ""quali"", ""var"", ""quanti.sup""),legend = 'none') "

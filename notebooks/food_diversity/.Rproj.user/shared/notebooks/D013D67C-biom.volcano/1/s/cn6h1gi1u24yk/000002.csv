@@ -1,0 +1,9 @@
+"0","```r
+L2 <- L2[!grepl('.2U',row.names(L2)),]
+L2 <- L2[!grepl(pattern = 'U3',row.names(L2)),]
+L2 <- select(L2,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+```"
+"1","Fehler in select(L2, everything(), -starts_with(c(\"Sex\", \"Time\", \"Proband\",  : 
+  unbenutzte Argumente (everything(), -starts_with(c(\"Sex\", \"Time\", \"Proband\", \"Body\", \"Day\")))
+"

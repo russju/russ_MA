@@ -1,0 +1,21 @@
+"0","```r
+```r
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+```"
+"1","
+-- Column specification ----------------------------------------------------------------
+cols(
+  .default = col_double(),
+  samples = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+merge.L6.nutr <- column_to_rownames(merge.L6.nutr,'samples') %>% as.data.frame(.)
+
+
+```"

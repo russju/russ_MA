@@ -1,0 +1,64 @@
+"0","```r
+conv.sum <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_26.10.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+conv.clust.z <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_17.02.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+L6.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L6.normalized.correlation_06.10.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+names(L6.rel.clr.U1.U2)[names(L6.rel.clr.U1.U2) == 'sample'] <- 'file_name'
+
+
+L2.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L2.normalized.correlation_06.10.tsv'))
+```"
+"1","
+-- Column specification ----------------------------------------------------------------------------------------------
+cols(
+  D_0__Archaea.D_1__Euryarchaeota = col_double(),
+  D_0__Bacteria.D_1__Actinobacteria = col_double(),
+  D_0__Bacteria.D_1__Bacteroidetes = col_double(),
+  D_0__Bacteria.D_1__Cyanobacteria = col_double(),
+  D_0__Bacteria.D_1__Deinococcus.Thermus = col_double(),
+  D_0__Bacteria.D_1__Epsilonbacteraeota = col_double(),
+  D_0__Bacteria.D_1__Firmicutes = col_double(),
+  D_0__Bacteria.D_1__Fusobacteria = col_double(),
+  D_0__Bacteria.D_1__Lentisphaerae = col_double(),
+  D_0__Bacteria.D_1__Patescibacteria = col_double(),
+  D_0__Bacteria.D_1__Proteobacteria = col_double(),
+  D_0__Bacteria.D_1__Spirochaetes = col_double(),
+  D_0__Bacteria.D_1__Synergistetes = col_double(),
+  D_0__Bacteria.D_1__Tenericutes = col_double(),
+  D_0__Bacteria.D_1__Verrucomicrobia = col_double(),
+  D_0__Eukaryota.D_1__SAR = col_double(),
+  file_name = col_character()
+)
+"
+"0","```r
+names(L2.rel.clr.U1.U2)[names(L2.rel.clr.U1.U2) == 'sample'] <- 'file_name'
+```"

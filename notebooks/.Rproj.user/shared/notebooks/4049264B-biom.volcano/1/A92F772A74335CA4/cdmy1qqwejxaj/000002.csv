@@ -1,0 +1,8 @@
+"0","df <- subset(keto.bls,select=c(`file_name`,`Eiweiß, Proteingehalt`:`Broteinheiten_CH_UNIT`))"
+"0",""
+"0","nutr.sum <- aggregate(.~file_name, df, sum)"
+"0","nutr.sum[is.na(nutr.sum)] <- 0"
+"0","row.names(nutr.sum) <- nutr.sum$file_name"
+"0",""
+"0","nutr.sum <- nutr.sum[ ,-1]"
+"0",""

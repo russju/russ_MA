@@ -1,0 +1,6 @@
+"0","```r
+# mp1 <- matrix.pheno[,grepl(pattern = 'U1',colnames(matrix.pheno))]
+# mp2 <- matrix.pheno[,grepl(pattern = 'U2',colnames(matrix.pheno))]
+# mp <- cbind(mp1,mp2)
+# stats::heatmap(mp,cexRow = .7,cexCol = .7,main = 'heatmap phenotypes') 
+```"

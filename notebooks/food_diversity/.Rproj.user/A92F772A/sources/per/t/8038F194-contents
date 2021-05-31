@@ -1,0 +1,478 @@
+---
+title: "alpha diversity- Faith and Shannon"
+output: html_notebook
+---
+
+#libraries
+```{r}
+library(tidyverse)
+library(picante)
+library(vegan)
+library(ggplot2)
+library(plotly)
+library(phyloseq)
+library(ggsignif)
+library(ggpubr)
+# library('DECIPHER')
+library(ape)
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("DECIPHER")
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))
+k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))
+
+tree.nutr <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))
+
+# otu.weighted <- read_tsv(paste0(table_dir,'otu.conv.w.19.08.tsv'))
+otu.unweighted <- read_tsv(paste0(table_dir,'otu.conv.19.08.tsv'))
+
+#preparing otu dfs
+
+otu.unweighted <- as.data.frame(otu.unweighted)
+row.names(otu.unweighted) <- otu.unweighted$file_name
+otu.unweighted <- otu.unweighted[ ,-1]
+otu.unweighted <- otu_table(otu.unweighted,taxa_are_rows = FALSE)
+
+
+nutr.cluster <- read_tsv(paste0(table_dir,'nutrient.clusters.09.09.tsv'))
+
+##weighted conv.clust
+conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.weighted.01.10.tsv')) %>% column_to_rownames(.,'file_name')
+```
+
+faith and shannon alpha diversity of convetional clusters and nutrient clusters between non keto and keto diet
+
+
+
+#conventional cluster,per day
+```{r}
+#otu.unweighted per day
+
+otu.unweighted.samp <- subset(k.bls_prodi,select=c(`file_name`,`item`,`day`))
+
+otu.unweighted.samp$sample_day <- paste(otu.unweighted.samp$file_name,otu.unweighted.samp$day)
+otu.unweighted.samp <- otu.unweighted.samp[ ,-c(1)]
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)
+otu.unweighted.samp <- xtabs(~ item + sample_day , data = otu.unweighted.samp)##how often consumed/d
+
+otu.unweighted.samp <- as.data.frame(otu.unweighted.samp)  
+otu.unweighted.samp <- pivot_wider(data = otu.unweighted.samp, names_from = 'item', values_from = 'Freq') %>% as.data.frame(.)
+
+row.names(otu.unweighted.samp) <- otu.unweighted.samp$sample_day
+otu.unweighted.samp <- otu.unweighted.samp[ ,-1]
+
+
+
+```
+
+#how many nutrient clusters were consumed per week
+```{r}
+## Stacked bar plot, with nutrient based clusters
+#nutr.cluster  otu.unweighted
+
+otu.unweighted <- read_tsv(paste0(table_dir,'otu.conv.19.08.tsv')) %>% 
+  group_by(file_name) %>% 
+  mutate_at(.vars = vars(everything(), -file_name),
+            .funs = funs(as.numeric(.))) %>% 
+  column_to_rownames('file_name') %>% 
+  t() %>% 
+  as.data.frame() %>% 
+  rownames_to_column('foods')
+colnames(nutr.cluster) <- c('foods','nutrient.clusters')
+df <-
+  otu.unweighted %>% 
+  right_join(nutr.cluster, by = "foods") %>% 
+  dplyr::select(foods, nutrient.clusters, everything()) %>% 
+  pivot_longer(cols = c(everything(), -foods, -nutrient.clusters), 
+               names_to = "sample", values_to = 'value') %>% 
+  filter(value > 0) %>%  ##only 5 clusters that values>0
+  group_by(nutrient.clusters, sample) %>% 
+  summarise(value = sum(value)) %>% 
+  pivot_wider(names_from = nutrient.clusters, values_from = value,
+              values_fill = list(value = 0)) %>% 
+  pivot_longer(names_to = 'nutrient.clusters', 
+               values_to = 'value', 
+               cols = c('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'))
+
+# write_tsv(df,'C:/Users/Juliane/Desktop/project.directory/data/tables/nutrient.clusters.df_07.10.tsv')
+
+df %>% 
+  separate(sample, remove = F, into = c('individual','timepoint'), sep = '[.]') %>% 
+  ggplot(aes(individual, value, fill = nutrient.clusters)) +
+  geom_bar(stat = 'identity') + 
+  facet_wrap(~ timepoint)
+
+
+
+```
+
+
+
+#Faith diversity between high and low converters
+nutrient based and conventional
+```{r}
+#pd.nutr
+#pd.conv
+pd.conv <- pd(samp = otu.unweighted,tree = tree.conv)
+pd.nutr <- pd(samp = otu.unweighted,tree = tree.nutr)
+#find out whether sample is a high or low converter
+
+pd.conv$file_name <- row.names(pd.conv)
+pheno.pd.conv <- merge(pd.conv,k.bls_prodi,by = c('file_name'),all.x = TRUE, all.y = TRUE) %>% subset(.,select = c('file_name','PD','SR','Phenotype')) %>% distinct()
+pheno.pd.conv$group <- ifelse(grepl('U2', pheno.pd.conv$file_name), 'U2', 'U1')
+
+pd.nutr$file_name <- row.names(pd.nutr)
+pheno.pd.nutr <- merge(pd.nutr,k.bls_prodi,by = c('file_name'),all.x = TRUE, all.y = TRUE) %>% subset(.,select = c('file_name','PD','SR','Phenotype')) %>% distinct()
+pheno.pd.nutr$group <- ifelse(grepl('U2', pheno.pd.nutr$file_name), 'keto', 'non keto')
+
+#rm NA and not classified
+
+# pheno.pd.conv <- pheno.pd.conv[pheno.pd.conv$Phenotype != 'not classified', ] 
+pheno.pd.conv <- pheno.pd.conv[complete.cases(pheno.pd.conv), ]
+
+# pheno.pd.nutr <- pheno.pd.nutr[pheno.pd.nutr$Phenotype != 'not classified', ] 
+pheno.pd.nutr <- pheno.pd.nutr[complete.cases(pheno.pd.nutr), ]
+
+pheno.pd.conv$group <- ifelse(pheno.pd.conv$group == 'U1','non keto','keto')
+#boxplots nutr
+
+##normalize PD
+pheno.pd.nutr$PD.sum <- with(pheno.pd.nutr, ave(PD, FUN = sum))
+pheno.pd.nutr$PD.norm <- pheno.pd.nutr$PD.sum/pheno.pd.nutr$PD
+
+pheno.pd.conv$PD.sum <- with(pheno.pd.conv, ave(PD, FUN = sum))
+pheno.pd.conv$PD.norm <- pheno.pd.conv$PD.sum/pheno.pd.conv$PD
+
+symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+pheno.pd.nutr.u1 <- pheno.pd.nutr[grepl('U1',pheno.pd.nutr$file_name),]
+
+summary(pheno.pd.nutr.u1$PD.norm)
+sd(pheno.pd.nutr.u1$PD.norm)
+
+pheno.pd.nutr.u2 <- pheno.pd.nutr[grepl('U2',pheno.pd.nutr$file_name),]
+
+summary(pheno.pd.nutr.u2$PD.norm)
+sd(pheno.pd.nutr.u2$PD.norm)
+
+pheno.pd.nutr.high <- pheno.pd.nutr[grepl('low',pheno.pd.nutr$Phenotype),]
+
+summary(pheno.pd.nutr.high$PD.norm)
+sd(pheno.pd.nutr.high$PD.norm)
+
+pheno.pd.nutr.u2 <- pheno.pd.nutr[grepl('U2',pheno.pd.nutr$file_name),]
+
+summary(pheno.pd.nutr.u2$PD.norm)
+sd(pheno.pd.nutr.u2$PD.norm)
+
+pd.nutr.pheno <- ggplot(pheno.pd.nutr,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity nutrient clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','low converter'),c('high converter','not classified')),hide.ns = FALSE)
+
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)##wilcox test
+
+pd.nutr.group <- ggplot(pheno.pd.nutr,aes(x=group, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity nutrient clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args) + coord_cartesian(ylim = c(30,175))#,symnum.args = symnum.args
+
+#U1 and U2 seperatly
+
+pheno.pd.nutr.u1 <- subset(pheno.pd.nutr,grepl("U1",file_name))
+
+pd.nutr.pheno.group.u1 <- ggplot(pheno.pd.nutr.u1,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity non keto diet nutrient clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+pheno.pd.nutr.u2 <- subset(pheno.pd.nutr,grepl("U2",file_name))
+
+pd.nutr.pheno.group.u2 <- ggplot(pheno.pd.nutr.u2,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity keto diet nutrient clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+
+##summary statistics
+pheno.pd.conv.u1 <- pheno.pd.conv[grepl('U1',pheno.pd.conv$file_name),]
+
+summary(pheno.pd.conv.u1$PD.norm)
+sd(pheno.pd.conv.u1$PD.norm)
+
+pheno.pd.conv.u2 <- pheno.pd.conv[grepl('U2',pheno.pd.conv$file_name),]
+
+summary(pheno.pd.conv.u2$PD.norm)
+sd(pheno.pd.conv.u2$PD.norm)
+
+pheno.pd.conv.high <- pheno.pd.conv[grepl('high',pheno.pd.conv$Phenotype),]
+
+summary(pheno.pd.conv.high$PD.norm)
+sd(pheno.pd.conv.high$PD.norm)
+#boxplots conv
+pd.conv.pheno <- ggplot(pheno.pd.conv,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity conventional clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','low converter'),c('high converter','not classified')),hide.ns = FALSE)
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)
+
+pd.conv.group <- ggplot(pheno.pd.conv,aes(x=group, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity conventional clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5) + coord_cartesian(ylim = c(30,175))#,symnum.args = symnum.args
+# +geom_signif(comparison = list(c('U1','U2')),map_signif_level = TRUE)
+
+#U1 and U2 seperatly
+
+pheno.pd.conv.u1 <- subset(pheno.pd.conv,grepl("U1",file_name))
+
+pd.conv.pheno.group.u1 <- ggplot(pheno.pd.conv.u1,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity non keto diet conventional clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+pheno.pd.conv.u2 <- subset(pheno.pd.conv,grepl("U2",file_name))
+
+pd.conv.pheno.group.u2 <- ggplot(pheno.pd.conv.u2,aes(x=Phenotype, y=PD.norm)) +
+  geom_boxplot()+ggtitle('faith diversity keto diet conventional clusters')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+
+# pdf(paste0(diet.protocols,'faith.pc.norm.pdf'))
+
+ggarrange(pd.conv.pheno,pd.nutr.pheno, 
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+ggarrange(pd.conv.pheno.group.u1,pd.conv.pheno.group.u2,
+          pd.nutr.pheno.group.u1,pd.nutr.pheno.group.u2,
+          labels = c("A", "B","C","D"),
+          ncol = 2, nrow = 2)
+
+ggarrange(pd.conv.group,pd.nutr.group,
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+# dev.off()
+
+```
+
+
+
+
+#shannon diversity conventional clusters
+```{r}
+#community matrix
+
+
+#richness calculation
+
+conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.weighted.01.10.tsv')) %>% column_to_rownames(.,'file_name')
+
+div.conv <- diversity(conv.clust, index = 'shannon', base = 2) %>% as.data.frame(.) 
+colnames(div.conv) <- 'Shannon Index'
+div.conv$file_name <- row.names(div.conv)
+
+write_tsv(div.conv,paste0(table_dir,'shannon.conv.tsv'))
+
+#adding Sex,group and Phenotype,subgroups
+
+dv <- merge(div.conv, k.bls_prodi, by=c('file_name'))
+div.conv <- subset(dv,select = c(`file_name`,`Sex`,`Phenotype`,`Shannon Index`))
+div.conv$Sex <- ifelse(div.conv$Sex == FALSE,'f','m')
+
+div.conv$group <- ifelse(grepl('U1', div.conv$file_name), 'non keto', 'keto')
+
+
+#deleting not classified,NA
+
+# div.conv <- div.conv[div.conv$Phenotype != 'not classified', ] 
+div.conv <- div.conv[!is.na(div.conv$Phenotype), ]
+div.conv[complete.cases(div.conv), ]
+div.conv <- div.conv %>% distinct(.)
+
+##normalize shannon
+div.conv$sh.sum <- with(div.conv, ave(`Shannon Index`, FUN = sum))
+div.conv$sh.norm <- div.conv$sh.sum/div.conv$`Shannon Index`
+
+##summary statistics
+sh.conv.u1 <- div.conv[grepl('U1',div.conv$file_name),]
+summary(sh.conv.u1$`Shannon Index`)
+sd(sh.conv.u1$`Shannon Index`)
+
+sh.conv.u2 <- div.conv[grepl('U2',div.conv$file_name),]
+summary(sh.conv.u2$`Shannon Index`)
+sd(sh.conv.u2$`Shannon Index`)
+
+sh.conv.high <- div.conv[grepl('low',div.conv$Phenotype),]
+summary(sh.conv.high$`Shannon Index`)
+sd(sh.conv.high$`Shannon Index`)
+
+#boxplots conv Phenotype
+
+sh.conv.pheno <- ggplot(div.conv,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index conventional clusters') + stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','low converter'),c('not classified','high converter')),hide.ns = FALSE)+geom_jitter(shape = 21)#,symnum.args = symnum.args
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)
+
+sh.conv.group <- ggplot(div.conv,aes(x=group, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index conventional clusters')+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21) + coord_cartesian(ylim = c(0.25,4))#,symnum.args = symnum.args
+# + stat_compare_means(comparison = list(c('U1','U2')),hide.ns = FALSE)
+
+#U1 and U2 seperatly
+
+div.conv.u1 <- subset(div.conv,grepl('non keto',div.conv$group))
+div.conv.u2 <- subset(div.conv,grepl('keto',div.conv$group))
+
+sh.conv.pheno.group.u1 <- ggplot(div.conv.u1,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index non keto diet conventional clusters')+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+sh.conv.pheno.group.u2  <- ggplot(div.conv.u2,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index keto diet conventional clusters')+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))+geom_jitter(shape = 21)
+
+
+#boxplots conv subgroup
+
+pd.conv.sg <- ggplot(div.conv,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index\nconventional clusters')+
+  geom_signif(comparison = list(c('subgroup 1','subgroup 2 ')),map_signif_level = TRUE)+ stat_compare_means(comparison = list(c('subgroup 1','subgroup 2 ')),hide.ns = FALSE)
+
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)##wilcox test
+
+pd.conv.group <- ggplot(div.conv,aes(x=group, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index conventional clusters')+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args)
+
+#U1 and U2 seperatly
+
+div.conv.u1.plot.sg <- ggplot(div.conv.u1,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index U1\nconventional clusters')+
+  geom_signif(comparison = list(c('subgroup 1','subgroup 2')),map_signif_level = TRUE)+ stat_compare_means(comparison = list(c('subgroup 1','subgroup 2 ')),hide.ns = FALSE)+ theme(plot.title = element_text(size=10))
+
+div.conv.u2.plot.sg <- ggplot(div.conv.u2,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index U2\nconventional clusters')+
+  geom_signif(comparison = list(c('subgroup 1','subgroup 2')),map_signif_level = TRUE)+ stat_compare_means(comparison = list(c('subgroup 1','subgroup 2 ')),hide.ns = FALSE)+ theme(plot.title = element_text(size=10))
+
+
+```
+
+#shannon diversity nutrient clusters
+```{r}
+#community matrix
+
+# #df nutrient cluster
+# 
+# nutr.clust <- pivot_wider(df,names_from = nutrient.clusters,values_from = value) %>% column_to_rownames(.,var = 'sample')
+# 
+# # nutr.clust$file_name <- row.names(nutr.clust)
+# # write_tsv(nutr.clust,path = 'C:/Users/Juliane/Desktop/project.directory/data/tables/nutr.clust.df.01.10.tsv')
+
+nutr.clust <- read_tsv(paste0(table_dir, 'nutr.clust.df.01.10.tsv') %>% as.data.frame %>% column_to_rownames(.,'file_name'))
+#richness calculation
+
+div.nutr <- diversity(nutr.clust, index = 'shannon', base = 2) %>% as.data.frame(.) 
+colnames(div.nutr) <- 'Shannon Index'
+div.nutr$file_name <- row.names(div.nutr)
+
+# write_tsv(div.nutr,paste0(table_dir,'shannon.nutr.tsv'))
+# div.nutr <- read_tsv(paste0(table_dir,'shannon.nutr.tsv'))
+
+
+#adding Sex,group and Phenotype, subgroups
+
+dn <- merge(div.nutr, k.bls_prodi, by=c('file_name'))
+div.nutr <- subset(dn,select = c(`file_name`,`Sex`,`Phenotype`,`Shannon Index`))
+div.nutr$Sex <- ifelse(div.nutr$Sex == FALSE,'f','m')
+div.nutr$group <- ifelse(grepl(div.nutr$file_name, pattern = 'U1'),'non keto','keto') 
+
+
+#deleting not classified,NA
+
+# div.nutr <- div.nutr[div.nutr$Phenotype != 'not classified', ] 
+div.nutr <- div.nutr[!is.na(div.nutr$Phenotype), ]
+div.nutr[complete.cases(div.nutr), ]
+div.nutr <- div.nutr %>% distinct(.)
+
+##summary statistics
+div.nutr.high <- div.nutr[grepl('low',div.nutr$Phenotype),]
+summary(div.nutr.high$`Shannon Index`)
+sd(div.nutr.high$`Shannon Index`)
+
+
+
+#boxplots nutr Phenotype
+
+sh.nutr.pheno <- ggplot(div.nutr,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index nutrient clusters')+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE)+geom_jitter(shape = 21)#,symnum.args = symnum.args
+# + stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE)##wilcox test
+
+sh.nutr.group <- ggplot(div.nutr,aes(x=group, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index nutrient clusters')+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21) + coord_cartesian(ylim = c(0.25,4)) #,symnum.args = symnum.args
+# + stat_compare_means(comparison = list(c('U1','U2')),hide.ns = FALSE)
+
+#U1 and U2 seperatly
+
+div.nutr.u1 <- subset(div.nutr,grepl('non keto',div.conv$group))
+div.nutr.u2 <- subset(div.nutr,grepl('keto',div.conv$group))
+
+##summary statistics
+summary(div.nutr.u1$`Shannon Index`)
+sd(div.nutr.u1$`Shannon Index`)
+
+summary(div.nutr.u2$`Shannon Index`)
+sd(div.nutr.u2$`Shannon Index`)
+
+sh.nutr.pheno.group.u1 <- ggplot(div.nutr.u1,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index non keto diet nutrient clusters')+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+sh.nutr.pheno.group.u2 <- ggplot(div.nutr.u2,aes(x=Phenotype, y=`Shannon Index`)) +
+  geom_boxplot()+ggtitle('Shannon Index keto diet nutrient clusters')+ stat_compare_means(comparison = list(c('high converter','low converter')),hide.ns = FALSE,symnum.args = symnum.args)+ theme(plot.title = element_text(size=10))
+# +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)
+
+#boxplots nutr subgroup
+
+pd.nutr.sg <- ggplot(div.nutr,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index\nnutrient clusters')+
+  geom_signif(comparison = list(c('subgroup 1','subgroup 2')),map_signif_level = TRUE) 
+# + stat_compare_means(comparison = list(c('subgroup 1','subgroup 2')),hide.ns = FALSE)##wilcox test
+
+
+#U1 and U2 seperatly
+
+div.nutr.u1.plot.sg <- ggplot(div.nutr.u1,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index U1\nnutrient clusters')+
+  geom_signif(comparison = list(c('subgroup 1','subgroup 2')),map_signif_level = TRUE)
+
+div.nutr.u2.plot.sg <- ggplot(div.nutr.u2,aes(x=subgroup, y=`Shannon Index`, fill=subgroup)) +
+  geom_boxplot()+ggtitle('subgroups Shannon Index U2\nnutrient clusters')+
+  geom_signif(comparison = list(c('subgroup1 ','subgroup 2')),map_signif_level = TRUE)
+
+# pdf(paste0(diet_dir,'shannon.pc.norm.pdf'))
+
+ggarrange(sh.conv.pheno,sh.nutr.pheno, 
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+ggarrange(sh.conv.pheno.group.u1,sh.conv.pheno.group.u2,
+          sh.nutr.pheno.group.u1,sh.nutr.pheno.group.u2,
+          labels = c("A", "B","C","D"),
+          ncol = 2, nrow = 2)
+
+ggarrange(sh.conv.group,sh.nutr.group,
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+# dev.off()
+```

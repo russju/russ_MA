@@ -1,0 +1,7 @@
+"0","#pd.nutr"
+"0","#pd.conv"
+"0","pd.conv <- pd(samp = otu.unweighted,tree = tree.conv)"
+"2","drop all tips of the tree: returning NULL"
+"2","Fehler in UseMethod(""is.rooted"") : 
+  nicht anwendbare Methode für 'is.rooted' auf Objekt der Klasse ""NULL"" angewendet
+"

@@ -1,0 +1,7 @@
+"0","pdf(paste0(converter_dir,'U2.convclust.sPLS-DA.pdf'))"
+"0",""
+"0","# COMP 1"
+"0","mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',"
+"0","                       comp = 1, method = 'median', contrib = 'max',"
+"0","                       size.title = rel(1), border = T,"
+"0","                       size.name = .75, legend = FALSE)"

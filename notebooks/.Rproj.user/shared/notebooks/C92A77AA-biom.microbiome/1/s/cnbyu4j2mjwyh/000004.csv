@@ -1,0 +1,132 @@
+"0","L2 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L2.csv'),row.names = 1,header = TRUE,sep = ';')"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')"
+"0","biom <- read_biom(paste0(biom_dir, 'silva_stool_rarefied1650_table.biom'))"
+"0",""
+"0","#nutrient clusters,weighted,relative,log"
+"0","cl.sum <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_22.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","Parsed with column specification:
+cols(
+  `1.veg.fruit` = [32mcol_double()[39m,
+  `2.carbs.bread` = [32mcol_double()[39m,
+  `3.fatty.sweet` = [32mcol_double()[39m,
+  `4.carbs.cereal` = [32mcol_double()[39m,
+  `5.seed` = [32mcol_double()[39m,
+  `6.nut` = [32mcol_double()[39m,
+  `7.kohl` = [32mcol_double()[39m,
+  `8.fish.sauce` = [32mcol_double()[39m,
+  `9.egg` = [32mcol_double()[39m,
+  `10.alcohol` = [32mcol_double()[39m,
+  `11.wurst` = [32mcol_double()[39m,
+  `12.soft.drinks` = [32mcol_double()[39m,
+  `13.white.meat` = [32mcol_double()[39m,
+  `14.fatty.dairy` = [32mcol_double()[39m,
+  `15.cheese` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+"
+"0","#conv.clusters need to be prepared for analysis"
+"0","#unweighted"
+"0","# conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.01.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"0",""
+"0","k.bls_prodi <- read_tsv(paste0(table_dir,'k.bls_prodi_13_08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_character(),
+  day = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  Sex = [33mcol_logical()[39m,
+  Energie_bls = [32mcol_double()[39m,
+  `Eiweiß, Proteingehalt` = [32mcol_double()[39m,
+  Kohlenhydrate = [32mcol_double()[39m,
+  Fett = [32mcol_double()[39m,
+  Ballaststoffe = [32mcol_double()[39m,
+  `Gesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Einfach ungesättigte Fettsäuren` = [32mcol_double()[39m,
+  `Alkohol (Ethanol)` = [32mcol_double()[39m,
+  `Energie (kcal)` = [32mcol_double()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"2","5624 parsing failures.
+ row col           expected actual                                   file
+1415 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1416 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1417 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1418 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+1419 Sex 1/0/T/F/TRUE/FALSE      m '../data/tables/k.bls_prodi_13_08.tsv'
+.... ... .................. ...... ......................................
+See problems(...) for more details.
+"
+"0","k.bls_prodi$file_name <- gsub(k.bls_prodi$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"
+"0",""
+"0","#for weighted"
+"0","# k.bls <- read_tsv(paste0(table_dir, 'k.bls_08.10.tsv'))##sometimes is not working"
+"0","k.bls <- read_tsv('C:/Users/Juliane/Desktop/project.directory/data/tables/ k.bls_08.10.tsv')"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  sample = [31mcol_character()[39m,
+  time_point.label = [31mcol_character()[39m,
+  time_point = [31mcol_character()[39m,
+  date = [34mcol_date(format = """")[39m,
+  St_complet = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  Sex = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m,
+  database = [31mcol_character()[39m,
+  diet_item_id = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","k.bls$file_name <- gsub(k.bls$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"
+"0",""
+"0","otu.conv.w <- read_tsv(paste0(table_dir, 'otu.conv.w.19.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","#weighted conv.clust"
+"0","conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.weighted.01.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","#family"
+"0","# L6.family <- read_tsv(paste0(table_dir, 'family.correlation.30.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"0",""
+"0","# #data preparation: richness calculation clusters"
+"0","# "
+"0","# div.conv <- diversity(conv.clust, index = 'shannon', base = 2) %>% as.data.frame(.)"
+"0","# colnames(div.conv) <- 'Shannon Index conv'"
+"0","# div.conv$file_name <- row.names(div.conv)"
+"0","# "
+"0","# div.nutr <- diversity(nutr.clust, index = 'shannon', base = 2) %>% as.data.frame(.)"
+"0","# colnames(div.nutr) <- 'Shannon Index nutr'"
+"0","# div.nutr$file_name <- row.names(div.nutr)"
+"0","# "

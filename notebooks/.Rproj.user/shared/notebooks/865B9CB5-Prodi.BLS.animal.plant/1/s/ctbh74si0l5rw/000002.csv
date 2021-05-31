@@ -1,0 +1,12 @@
+"0","```r
+```r
+pa.sg <- plant.animal.w %>% group_by(file_name,percent.animal,percent.plant)
+pa.sg <- left_join(pa.sg,subclust, by = 'file_name')
+pa.sg <- subset(pa.sg,select = c(`subgroup`,`file_name`,`percent.plant`,`percent.animal`))
+
+pa.sg <- pa.sg  %>%
+  group_by(file_name,subgroup) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+```
+```"

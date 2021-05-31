@@ -1,0 +1,59 @@
+"0","```r
+##U1
+
+merge.L6.nutr <- L6.U1 %>% merge(.,nutr.U1,by = 'file_name',all.x=T,all.y = T) %>% column_to_rownames(.,'file_name')
+
+merge.L6.nutr[is.na(merge.L6.nutr)] <- 0
+merge.L6.nutr <- dplyr::select(merge.L6.nutr,everything(),-ends_with('rowsum'))
+
+cor.test.U1 <- merge.L6.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  summarize(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+
+cor.test.U1 [is.na(cor.test.U1)] <- 0
+
+p.adj.U1 <- subset(cor.test.U1,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.U1 <- subset(cor.test.U1,select = `estimate`) %>% data.matrix(.)
+
+#x axis log2 correlation
+
+cor.test.log.U1 <- log2(r.cor.U1) %>% as.numeric(.)
+cor.test.log.U1 [is.nan(cor.test.log.U1)] <- 0
+cor.test.log.U1 [is.infinite(cor.test.log.U1)] <- 0
+cor.test.log.U1 <- as.data.frame(cor.test.log.U1)
+
+r.cor.U1[is.nan(r.cor.U1)] <- 0
+r.cor.U1[is.infinite(r.cor.U1)] <- 0
+r.cor.U1 <- as.data.frame(r.cor.U1)
+
+#y axis -log10 p.value
+
+p.adj.log.U1 <- -log10(p.adj.U1)
+p.adj.log.U1[is.infinite(p.adj.log.U1)] <- 0
+p.adj.log.U1 <- as.data.frame(p.adj.log.U1)
+
+cor.test.adj.U1 <- cbind(cor.test.U1[ ,c(1,2)],p.adj.log.U1) %>% cbind(.,r.cor.U1) %>% as.data.frame(.)
+colnames(cor.test.adj.U1) <- c('nutrient','genus','p.adj.log','estimate')
+
+cor.test.adj.U1 <- cor.test.adj.U1[cor.test.adj.U1$p.adj.log != 0 & cor.test.adj.U1$estimate != 0,]
+
+write_tsv(cor.test.adj.U1,paste0(table_dir,'corr.nutr.L6.U1.tsv'))
+
+sig.U1 <- cor.test.adj.U1[cor.test.adj.U1$p.adj.log >= -log10(0.050) & cor.test.adj.U1$p.adj.log > 0.00000,]
+top.sig.U1 <- sig.U1[order(-sig.U1$p.adj.log),]
+
+#volcano plot ggplot()
+
+vp.U1 <- ggplot(cor.test.adj.U1,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle(\"Volcano plot\") +
+  xlab(\"correlation\") + 
+  ylab(\"-log10 adjusted p-value\")
+
+```"

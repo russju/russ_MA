@@ -1,0 +1,8 @@
+"0","df <- subset(k.bls,select=c(`file_name`,`Energie (kcal)`:`Energie, Gesamt (kcal)`))"
+"0",""
+"0","nutr.sum <- aggregate(.~file_name, df, sum)"
+"0","nutr.sum[is.na(nutr.sum)] <- 0"
+"0","row.names(nutr.sum) <- nutr.sum$file_name"
+"0",""
+"0","nutr.sum <- nutr.sum[ ,-1]"
+"0",""

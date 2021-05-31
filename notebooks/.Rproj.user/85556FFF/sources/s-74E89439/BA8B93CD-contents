@@ -1,0 +1,1581 @@
+---
+title: "Publication Figure 6"
+subtitle: "Figure Title"
+output:
+  html_notebook:
+    code_folding: hide
+    theme: united
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    toc_collapsed: false
+theme: cosmo
+---
+
+
+# Libraries
+Standard Import
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(cowplot)
+library(scales)
+library(ggrepel)
+library(ggpubr)
+library(ggridges)
+library(RColorBrewer)
+```
+
+Other
+```{r}
+library(grid)
+library(tidymodels)
+library(FactoMineR)
+library(factoextra)
+library(vegan)
+```
+
+# Paths
+```{r}
+bin_dir = '../bin/'
+data_dir = '../data/'
+results_dir = '../results/'
+theme_dir = '../theme/'
+tables_dir = paste0(data_dir, 'tables/')
+```
+
+## Output Directory
+```{r}
+output_dir = paste0(results_dir, 'output_6/') 
+dir.create(output_dir)
+```
+
+# Custom Scripts / Theme
+```{r}
+source(paste0(theme_dir, 'theme_settings.R'))
+source (paste0(bin_dir, 'utilities.R'))
+source(paste0(bin_dir, 'analysis_metadata.R'))
+source(paste0(bin_dir, 'distmat_utils.R'))
+source(paste0(bin_dir, 'species_competition_functions.R'))
+date <- format(Sys.time(), "%d%m%y")
+```
+
+# Import Tables
+Metadata
+```{r message=FALSE, warning=FALSE}
+samples.metadata <- read_tsv(paste0(tables_dir, 'samples.metadata.tsv'))
+microbe_metadata <- read_tsv(paste0(tables_dir, 'microbe_metadata.tsv'))
+```
+
+SameStr Data
+```{r message=FALSE, warning=FALSE}
+samples.sstr_data <- read_tsv(paste0(tables_dir, 'samples.sstr_data_wmetadata.tsv')) %>% 
+  select(-row, -col)
+mp_species.long <- read_tsv(paste0(tables_dir, 'samples.mp_profiles.species.tsv'))
+sstr.samples.same_cases.case_summary <- read_tsv(paste0(tables_dir, 'samples.case_summary.MVS.tsv')) 
+```
+
+# Format Data
+```{r}
+sstr.fmt_cases <- 
+  sstr.samples.same_cases.case_summary %>%
+  filter(Case_Name.pair %in% cases.full) %>% 
+
+  # filter single sample per time point (not bio repl.)
+  # group_by(Case_Name.pair, Days_Since_FMT.post) %>%
+  # filter(dense_rank(Sample.post) == 1) %>%
+  # ungroup() %>%
+  
+  # format  
+  rename('Case_Name' = 'Case_Name.pair',
+         'Study' = 'Study.pair') %>% 
+  tag_species_competition(.)
+```
+
+```{r}
+sstr.rcdi <-
+  sstr.fmt_cases %>% 
+  filter(Study %in% c('ALM', 'FRICKE'), fmt_success) %>% 
+  group_by(Study, Case_Name) %>% 
+  mutate(Days_Since_FMT.post.rank = dense_rank(Days_Since_FMT.post)) %>% 
+  filter(Days_Since_FMT.post.rank == max(Days_Since_FMT.post.rank, na.rm = T)) %>% 
+  ungroup() %>% 
+  mutate(rel_abund.rd.log = 
+           log10(rel_abund.recipient + 1e-9 / rel_abund.donor + 1e-9)) %>% 
+  mutate(rel_abund.highest = 
+           ifelse(rel_abund.recipient < rel_abund.donor, 'donor', 
+           ifelse(rel_abund.recipient > rel_abund.donor, 'recipient', 'same')))
+
+sstr.rcdi.source <- 
+  sstr.rcdi %>% 
+  filter(existed.post)
+```
+
+
+# Strain-level Source
+failed:
+Data
+```{r fig.width=5, fig.height=5, message=FALSE, warning=FALSE, paged.print=FALSE}
+sstr.study <- 
+  sstr.fmt_cases %>%
+  filter(Days_Since_FMT.post <= 373) %>% 
+  filter(Case_Name %in% alm.shared_donor.d3) %>% 
+  mutate(fmt_success.label = ifelse(!fmt_success, 'Failed', 
+                                     ifelse(Study.type == 'Control', '', 'Resolved'))) %>%
+  filter(Study.type %in% c('rCDI', 'Control') ) %>% 
+  mutate(n = 1) %>% 
+  
+  mutate(source = ifelse(grepl(species, pattern = 'unclassified'),  'Unclassified', source)) %>% 
+  mutate(source = ifelse(Study.type == 'Control' &
+                           analysis_level == 'species' &
+                           source == 'self',
+                         'same_species', source)) %>%
+  
+    mutate(source = case_when(
+    # analysis_level == 'species' & source == 'self' ~ 'same_species',
+
+    analysis_level == 'species' & source == 'self' ~ 'Self Sp.',
+    analysis_level == 'species' & source == 'donor' ~ 'Donor Sp.',
+    analysis_level == 'species' & source == 'unique' ~ 'Unique Sp.',
+
+    T ~ source
+  )) %>% 
+  
+  group_by(Study.type, Case_Name, source, Days_Since_FMT.post, fmt_success.label) %>% 
+  summarize(n = sum(n, na.rm = T),
+            rel_abund = sum(rel_abund.post, na.rm = T) / 100) %>% 
+  group_by(Case_Name, Days_Since_FMT.post) %>% 
+  mutate(f = n / sum(n, na.rm = T)) %>%
+  ungroup()
+
+d <-
+  sstr.study %>% 
+  ungroup() %>% 
+  mutate(Study.type = ifelse(Study.type == 'Ob', 'Ob [Allog.]',
+                      ifelse(Study.type == 'Ob.auto', 'Ob [Autolog.]', 
+                      ifelse(Study.type == 'rCDI', 'Failed FMT', Study.type)))) %>% 
+  group_by(Case_Name) %>% 
+  
+  mutate(source = case_when(source == 'Unclassified' ~ 'Unclassified Sp.',
+                  source == 'same_species' ~ 'Same Sp.', 
+                  source == 'unique' ~ 'Unique to Time Point',
+                  source == 'self' ~ 'Recipient / Initial Sample',
+                  source == 'donor' ~ 'Donor',
+                  source == 'both' ~ 'Coexistence', 
+                  T ~ source)) %>% 
+  
+  pivot_wider(names_from = 'source', 
+               values_from = c('rel_abund','f','n'), names_sep = '___') %>% 
+  mutate_at(.vars = vars(contains('___')),
+            .funs = funs(replace_na(., 0))) %>%  
+  pivot_longer(cols = contains("___"), 
+               names_to = c("metric", "source"),
+               names_sep = '___', values_drop_na = F)
+```
+
+per Case
+```{r fig.width=10}
+pseudo = 0.5
+bb = c(pseudo, 2, 7, 14, 35, 84, 365)
+
+
+species_order <- c('Coexistence', 'Donor', 'Recipient / Initial Sample', 'Unique to Time Point', 'Same Sp.')
+species_colors <- c(colors.discrete[4],colors.discrete[1], colors.discrete[3], 
+                               colors.discrete[2], colors.discrete[5], colors.discrete[10])
+
+strain_order <- c('Donor', 'Donor Sp.', 'Coexistence', 'Recipient / Initial Sample', 'Self Sp.', 'Unique to Time Point', 'Unique Sp.', 'Same Sp.')
+strain_colors <- c(colors.discrete[c(6,1, 4, 8,3, 7,2, 5,10)])
+
+# use_vars = list(species_order, species_colors)
+use_vars = list(strain_order, strain_colors)
+
+d %>% 
+  filter(metric == 'rel_abund') %>% 
+  ggplot(aes(
+    fct_reorder(paste0('D', Days_Since_FMT.post, ' | ', Case_Name), Days_Since_FMT.post),
+    value, 
+    fill = fct_relevel(source, use_vars[[1]]))) + 
+
+   geom_bar(stat = 'identity', position = position_fill(), width = 1) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     breaks = c(1, .75, .5, .25, 0),
+                     expand = c(0,0)) +
+  scale_fill_manual(values = strain_colors, 
+                    
+                    guide = guide_legend(reverse = TRUE)) + 
+  labs(x = 'Time Since Initial Sampling [d]') + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_text(hjust = 1),
+        axis.line.y = element_blank(),
+        axis.text.x = element_text(angle = 90, hjust = 1, size = 10),
+        # axis.text.y = element_blank(),
+        # axis.ticks.y = element_blank(),
+        plot.margin = unit(c(0, 0, 0, 0), "cm"), 
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+        panel.spacing.y = unit(.5, "cm"),
+        panel.spacing.x = unit(.35, "cm"),
+        legend.title=element_blank(),
+        legend.position = 'top', 
+        legend.margin= ggplot2::margin(l = 1.5, unit='cm')) + 
+    guides(fill=guide_legend(ncol = 2))
+```
+
+```{r}
+sstr.fmt_cases %>% 
+  filter(source == 'donor', !grepl(species, pattern = 'unclassified')) %>% 
+  mutate(tag = ifelse(Case_Name %in% alm.shared_donor.d3, 'D3', 'Other')) %>% 
+  
+  group_by(species, tag, analysis_level) %>% 
+  tally() %>% 
+  ungroup() %>% 
+
+  mutate(analysis_level = paste0(analysis_level, '_level')) %>% 
+  pivot_wider(names_from = c('analysis_level', 'tag'), values_from = 'n', names_sep = '.') %>% 
+  mutate(total.D3 = 
+                    # replace_na(species_level.D3, 0) + 
+                    replace_na(strain_level.D3, 0) + 
+                    replace_na(combined_level.D3, 0), 
+         total.Other = 
+                    # replace_na(species_level.Other, 0) + 
+                    replace_na(strain_level.Other, 0) + 
+                    replace_na(combined_level.Other, 0)) %>% 
+  mutate(ratio = log10((total.D3 + 0.5) / (total.Other+ 0.5))) %>% 
+  left_join(., taxa) %>% View
+```
+
+
+Strain Figure
+```{r fig.width=5, fig.height=3.5, message=FALSE, warning=FALSE, paged.print=FALSE}
+pseudo = 0.5
+bb = c(pseudo, 2, 7, 14, 35, 84, 365)
+
+
+species_order <- c('Coexistence', 'Donor', 'Recipient / Initial Sample', 'Unique to Time Point', 'Same Sp.')
+species_colors <- c(colors.discrete[4],colors.discrete[1], colors.discrete[3], 
+                               colors.discrete[2], colors.discrete[5], colors.discrete[10])
+
+strain_order <- c('Donor', 'Donor Sp.', 'Coexistence', 'Recipient / Initial Sample', 'Self Sp.', 'Unique to Time Point', 'Unique Sp.', 'Same Sp.')
+strain_colors <- c(colors.discrete[c(6,1, 4, 8,3, 7,2, 5,10)])
+
+# use_vars = list(species_order, species_colors)
+use_vars = list(strain_order, strain_colors)
+
+plot <-
+
+  d %>% 
+  filter(metric != 'n') %>% 
+  ggplot(aes(x = Days_Since_FMT.post, 
+             y = value, 
+             fill = fct_relevel(source, use_vars[[1]]))
+         ) +  # 2.5e-3
+  
+  stat_smooth(geom = 'area',
+              method = 'glm',
+              position = 'fill', colour = 'black', size = 0.25,
+              formula = y ~ poly(x, 2),
+              method.args=list(family='binomial')
+              ) +
+  
+   facet_grid(scales = 'free_x', space = 'free_x',
+   cols = vars(fmt_success.label),
+   rows = vars(ifelse(grepl(metric, pattern = '^f'), 
+                                'Spp. Fraction', 
+                                'Rel. Abund.'))) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     breaks = c(1, .75, .5, .25, 0),
+                     expand = c(0,0), 
+                     ) +
+  scale_x_continuous(trans = pseudo_log_trans(0.5, 10), #'#trans = 'log10', 
+                     # labels = function(l) {return(ceiling(l-pseudo))},
+                     breaks = bb,
+                     expand = c(0,0)) + 
+  scale_fill_manual(values = use_vars[[2]], 
+                    guide = guide_legend(reverse = TRUE)) + 
+  labs(x = 'Days Since FMT\n') + 
+  theme(axis.title.y = element_blank(), 
+        plot.margin = unit(c(0, 0, 0, 0), "cm"), 
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+        panel.spacing.y = unit(.5, "cm"),
+        # panel.spacing.x = unit(.35, "cm"),
+        legend.title=element_blank(),
+        legend.position = 'top', 
+        legend.margin=ggplot2::margin(l = 1.5, unit='cm')) + 
+    guides(fill=guide_legend(ncol = 2))
+plot + theme(legend.position = 'none')
+```
+
+```{r}
+d %>% 
+  filter(metric == 'rel_abund') %>% 
+  mutate(source = gsub(source, pattern = ' Sp.', replacement = ''),
+         source = ifelse(source == 'Self', 'Recipient / Initial Sample', source),
+         source = ifelse(source == 'Unique to Time Point', 'Unique', source)) %>%
+  group_by(metric, Case_Name, Days_Since_FMT.post, fmt_success.label, source) %>% 
+  summarize(value = sum(value, na.rm = T)) %>% 
+  filter(! source %in% c('Unique','Unclassified', 'Same')) %>% 
+  ggplot(aes(x = Days_Since_FMT.post, 
+             y = value)) +
+  geom_point(shape = 21, size = 4, aes(fill = fct_relevel(source, species_colors))) +
+  geom_line(aes(group = paste0(Case_Name, source))) +
+  
+   facet_grid(scales = 'free_x', space = 'free_x',
+   cols = vars(fmt_success.label),
+   rows = vars(ifelse(grepl(metric, pattern = '^f'), 
+                                'Spp. Fraction', 
+                                'Rel. Abund.'))) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     breaks = c(1, .75, .5, .25, 0),
+                     expand = c(0,0), 
+                     ) +
+  scale_x_continuous(trans = pseudo_log_trans(0.5, 10), #'#trans = 'log10', 
+                     # labels = function(l) {return(ceiling(l-pseudo))},
+                     breaks = bb,
+                     expand = c(0,0)) + 
+  scale_fill_manual(values = use_vars[[2]], 
+                    guide = guide_legend(reverse = TRUE)) + 
+  labs(x = 'Days Since FMT\n') + 
+  theme(axis.title.y = element_blank(), 
+        plot.margin = unit(c(0, 0, 0, 0), "cm"), 
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+        panel.spacing.y = unit(.5, "cm"),
+        # panel.spacing.x = unit(.35, "cm"),
+        legend.title=element_blank(),
+        legend.position = 'top', 
+        legend.margin=ggplot2::margin(l = 1.5, unit='cm')) + 
+    guides(fill=guide_legend(ncol = 2))
+```
+
+
+Histogram
+```{r fig.width=5, fig.height=5, message=FALSE, warning=FALSE, paged.print=FALSE}
+plot.histogram <-
+  d %>% 
+  filter(metric == 'f') %>% 
+  group_by(Study.type, Case_Name, Days_Since_FMT.post) %>% 
+  summarize(value = sum(value, na.rm = T)) %>% 
+  ggplot(aes(Days_Since_FMT.post)) + 
+  geom_histogram(fill = 'black', bins = 10) +
+  facet_grid(scales = 'free_x', space = 'free_x', 
+   cols = vars(fct_relevel(Study.type, 'rCDI', 'Control')),
+   rows = vars('n')) +
+  scale_x_continuous(trans = pseudo_log_trans(0.5, 10), 
+                     breaks = c(pseudo, 2, 7, 14, 35, 84, 365),
+                     expand = c(0,0)) + 
+  scale_y_continuous(#trans = 'log10', 
+                     breaks = c(1, 10, 100), 
+                     expand = c(0,0),
+                     ) +
+  theme_cowplot() + 
+  theme(strip.background = element_blank(), 
+        strip.text.x = element_blank(), 
+        axis.title = element_blank(), 
+        axis.line.x = element_line(size = 1),
+        axis.line.y = element_blank(), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.title=element_blank())
+
+plot.histogram
+legend = cowplot::get_legend(plot)
+grid.newpage()
+grid.draw(legend)
+```
+
+Exporting plot
+```{r}
+output_name = 'rCDIFailedStrainSource'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = 5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+ggsave(plot.histogram + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = .6,
+       filename = paste0(output_dir, output_name, '.Histogram','.Plot.pdf'))
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 5, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+# Oxygen Tolerant Species post-FMT
+
+## Source-dependent abundance of Oxygen Tolerant Species post-FMT
+```{r fig.width=5, fig.height=5, message=FALSE, warning=FALSE, paged.print=FALSE}
+sstr.oxy <- 
+  sstr.fmt_cases %>%
+  filter(Days_Since_FMT.post <= 373) %>% 
+  mutate(fmt_success.label = ifelse(!fmt_success, 'Failed', 
+                                     ifelse(Study.type == 'Control', '', 'Resolved'))) %>%
+  filter(Study.type %in% c('rCDI', 'Control') ) %>% 
+  
+  mutate(n = 1) %>% 
+  
+  mutate(source = ifelse(grepl(species, pattern = 'unclassified'),  'Unclassified', source)) %>% 
+  mutate(source = ifelse(Study.type == 'Control' &
+                           analysis_level == 'species' &
+                           source == 'self',
+                         'same_species', source)) %>%
+  
+    mutate(source = case_when(
+    analysis_level == 'species' & source == 'self' ~ 'Self Sp.',
+    analysis_level == 'species' & source == 'donor' ~ 'Donor Sp.',
+    analysis_level == 'species' & source == 'unique' ~ 'Unique Sp.',
+    T ~ source
+  )) %>% 
+  
+  annotate_microbe_metadata(.) %>% 
+  mutate(oxygen.tolerant = ifelse(species %in% c('Akkermansia_muciniphila'), T, oxygen.tolerant)) %>% 
+  
+  # mutate(tag = case_when(oxygen.tolerant ~ 'Oxygen Tolerant', 
+  #   !oxygen.tolerant ~ 'Oxygen Intolerant',
+  #   T ~ 'Unknown')) %>% 
+  mutate(tag = case_when(
+      is.na(oxygen.tolerant) & is.na(habit.oral) ~ 'Unknown',
+      oxygen.tolerant & habit.oral ~ 'Tolerant + Oral', # 'Oral/Tolerant',
+      oxygen.tolerant & !replace_na(habit.oral, F) ~ 'Tolerant (only)', # 'Non-Oral/Tolerant',
+      !replace_na(oxygen.tolerant, F) & !replace_na(habit.oral, F) ~ 'Intolerant + Non-Oral', # 'Non-Oral/Intolerant',
+      !oxygen.tolerant & habit.oral ~ 'Oral (only)', #'Oral/Intolerant'
+      ),
+           tag = as.factor(tag)) %>%
+  
+  group_by(Study.type, Case_Name, source, tag, Days_Since_FMT.post, fmt_success.label) %>% 
+  summarize(n = sum(n, na.rm = T),
+            rel_abund = sum(rel_abund.post, na.rm = T) / 100) %>% 
+  group_by(Case_Name, Days_Since_FMT.post) %>% 
+  mutate(f = n / sum(n, na.rm = T)) %>%
+  ungroup() %>% 
+  
+  mutate(source = case_when(source == 'Unclassified' ~ 'Unclassified Sp.',
+                  source == 'same_species' ~ 'Same Sp.', 
+                  source == 'unique' ~ 'Unique to Time Point',
+                  source == 'self' ~ 'Recipient / Initial Sample',
+                  source == 'donor' ~ 'Donor',
+                  source == 'both' ~ 'Coexistence', 
+                  T ~ source)) %>% 
+  
+  pivot_wider(names_from = 'source', 
+               values_from = c('rel_abund','f','n'), names_sep = '___') %>% 
+  mutate_at(.vars = vars(contains('___')),
+            .funs = funs(replace_na(., 0))) %>%  
+  pivot_longer(cols = contains("___"), 
+               names_to = c("metric", "source"),
+               names_sep = '___', values_drop_na = F) %>% 
+  mutate(D3.case = ifelse(Case_Name %in% alm.shared_donor.d3, 'MGH03D', 'Other')) %>% 
+  filter(Study.type == 'rCDI', metric == 'rel_abund') %>% 
+  mutate(ID = fct_reorder(paste0(Case_Name, '.D', Days_Since_FMT.post), Days_Since_FMT.post), 
+         metric = 'Rel. Abund.')
+```
+
+```{r fig.width=15, fig.height=5}
+strain_order <- c('Donor', 'Donor Sp.', 'Coexistence', 'Recipient / Initial Sample', 'Self Sp.', 'Unique to Time Point', 'Unique Sp.', 'Same Sp.')
+strain_colors <- c(colors.discrete[c(6,1, 4, 8,3, 7,2, 5,10)])
+oxygen_order <- c('Unknown', 'Oxygen Intolerant', 'Oxygen Tolerant')
+oxygen_colors <- c(colors.discrete[10], 'grey50', 'grey25')
+
+combi_order <- c('Unknown', 'Intolerant + Non-Oral', 'Tolerant (only)', 'Tolerant + Oral', 'Oral (only)')
+combi_colors <- c(colors.discrete[10], 'white', 'grey50', 'grey25', 'black')
+
+sstr.oxy %>% 
+  ggplot(aes(x = ID, y = value, fill = fct_relevel(source, strain_order))) + 
+  geom_bar(stat = 'identity', position = position_fill()) + 
+  scale_fill_manual(values = strain_colors, 
+                    
+                    guide = guide_legend(reverse = TRUE)) +
+  facet_grid(rows = vars(metric), scales = 'free',  space = 'free',
+             cols = vars(Study.type, fmt_success.label, D3.case)) + 
+  scale_y_continuous(labels = percent_format_signif, limits = c(0, 1))  + 
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title = element_blank()) + 
+  guides(fill = guide_legend(title = ''))
+
+sstr.oxy %>% 
+  ggplot(aes(x = ID, y = value, fill = fct_relevel(tag, combi_order))) + 
+  geom_bar(stat = 'identity', position = position_fill()) + 
+  scale_fill_manual(values = combi_colors, 
+                    guide = guide_legend(reverse = T)) +
+  facet_grid(rows = vars(metric), scales = 'free',  space = 'free',
+             cols = vars(Study.type, fmt_success.label, D3.case)) + 
+  scale_y_continuous(labels = percent_format_signif, limits = c(0, 1))  + 
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title = element_blank()) + 
+  guides(fill = guide_legend(title = ''))
+
+sstr.oxy %>% 
+  filter(tag %in% c('Oral (only)', 'Tolerant + Oral', 'Tolerant (only)')) %>% 
+  ggplot(aes(x = ID, y = value, fill = fct_relevel(source, strain_order))) + 
+  geom_bar(stat = 'identity') + 
+  scale_fill_manual(values = strain_colors, 
+                    guide = guide_legend(reverse = TRUE)) +
+  facet_grid(rows = vars(metric), scales = 'free', space = 'free',
+             cols = vars(Study.type, fmt_success.label, D3.case)) + 
+  scale_y_continuous(labels = percent_format_signif, limits = c(0, 1))  + 
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title = element_blank()) + 
+  guides(fill = guide_legend(title = 'Tolerant, Oral, Both'))
+```
+
+
+
+## Species-level association
+```{r}
+mp.long <- read_tsv(paste0(tables_dir, 'samples.mp_profiles.species.tsv')) %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name')) %>% 
+  filter(!is.na(Case_Name))
+```
+
+Area plot of glm binomial model (2nd degree polynomial) of showing the relative abundance and fraction of species classified as oxygen tolerant, intolerant, and unknown. Plot shows decrease of oxygen tolerant species post-FMT over time to levels observed in healthy controls.
+
+```{r message=FALSE, warning=FALSE}
+annotate_microbe_metadata <- function(df) {
+  df %>% 
+    mutate(species.simplified = unlist(lapply(str_split(species, pattern = '_', 3), function(x) paste0(x[1], '_', x[2])))) %>% 
+    left_join(., microbe_metadata %>% select(-AA:-dISSIRS_8), by = c('species.simplified' = 'species')) %>% 
+    select(-species.simplified) %>% 
+    mutate(oxygen.class = ifelse(order == 'Clostridiales', 'anaerobe', oxygen.class)) %>% 
+    return(.)
+}
+
+mp.oxygen <- 
+  mp.long %>% 
+  
+  # filter(Case_Name %in% cases_failed) %>% 
+  mutate(Study.type = case_when(
+    Study %in% c('ALM', 'FRICKE') ~ 'rCDI', 
+    Sample_Type == 'control'  ~ 'Control',
+    T ~ Study
+  )) %>% 
+  filter(Sample_Type %in% c('recipient', 'post', 'control', 'donor'), 
+         Study.type %in% c('rCDI', 'Control')) %>% 
+  filter(Days_Since_FMT <= 373) %>%
+  filter(Study %in% c('ALM','FRICKE')) %>%
+  
+  annotate_microbe_metadata(.) %>% 
+  
+  # group_by(Case_Name, Sample_Type) %>%
+  # filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT), na.rm = T)) %>%
+  # ungroup() %>%
+  # filter(Case_Name %in% cases_persistence) %>% # oxygen.tolerant Sample_Type == 'post'
+  # arrange(desc(rel_abund)) %>%
+  # group_by(genus, species) %>%
+  # summarize(rel_abund = sum(rel_abund, na.rm = T)) %>% 
+
+  mutate(oxygen.tolerant = ifelse(species %in% c('Akkermansia_muciniphila'), T, oxygen.tolerant)) %>% 
+  mutate(rel_abund = rel_abund / 100) %>% 
+  # mutate(tag = ifelse(is.na(oxygen.tolerant), 'Unknown',
+  #              ifelse(oxygen.tolerant, 'Oxygen Tolerant',
+  #              ifelse(!oxygen.tolerant, 'Oxygen Intolerant', 'Unknown'))),
+  #        tag.bool = !is.na(tag),
+  #        tag = as.factor(tag)) %>%
+  
+    mutate(tag = case_when(
+      is.na(oxygen.tolerant) & is.na(habit.oral) ~ 'Unknown',
+      oxygen.tolerant & habit.oral ~ 'Oxygen Tolerant', # 'Oral/Tolerant',
+      oxygen.tolerant & !replace_na(habit.oral, F) ~ 'Oxygen Tolerant', # 'Non-Oral/Tolerant',
+      !replace_na(oxygen.tolerant, F) & !replace_na(habit.oral, F) ~ 'Oxygen Intolerant', # 'Non-Oral/Intolerant',
+      !oxygen.tolerant & habit.oral ~ 'Oxygen Tolerant', #'Oral/Intolerant'
+      ),
+           tag = as.factor(tag)) %>%
+  
+  group_by(Study.type, Case_Name, Sample, Days_Since_FMT, Sample_Type, tag, fmt_success) %>% 
+  summarize(n = sum(rel_abund > 0, na.rm = T), 
+            species_rel_abund = mean(rel_abund, na.rm = T),
+            sample_rel_abund = sum(rel_abund, na.rm = T), 
+            ) %>%
+  group_by(Study.type, Case_Name, Sample, Days_Since_FMT, Sample_Type, fmt_success) %>% 
+  mutate(f = n / sum(n, na.rm = T)) %>% 
+  pivot_longer(names_to = 'metric', 
+               values_to = 'value',
+               cols = c('sample_rel_abund', 'f'))
+```
+
+per Case
+```{r}
+do.long <-
+  mp.oxygen %>% 
+  filter(metric == 'sample_rel_abund') %>%
+  mutate(rtag = fct_relevel(tag, 'Unknown', 'Oxygen Intolerant')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  mutate(value = replace_na(value, NA)) %>% 
+  mutate(Sample_Type.label = str_to_upper(unlist(str_extract(Sample_Type, pattern = '.'))))
+
+do <-
+  read_tsv(paste0(data_dir, '/tables/FMT_Events.tsv'))
+
+do.wide <- 
+  do.long %>% 
+  filter(tag == 'Oxygen Tolerant', Study.type == 'rCDI') %>%
+  select(-Sample, -n, -species_rel_abund, -metric, -rtag, -fmt_success, -Study.type)
+```
+
+
+```{r}
+d <- do.wide
+
+special_cases <- unique(d$Case_Name[grepl(d$Case_Name, pattern = ';')])
+X <- d %>% filter(!Case_Name %in% special_cases)
+
+for (sc in special_cases) {
+  X_tmp <- d %>% filter(Case_Name == sc)
+  
+  for (scc in unlist(str_split(sc, pattern = ';'))) {
+    X <- rbind(X, X_tmp %>% mutate(Case_Name = scc))
+  }
+}
+
+X_wide <-
+  X %>% 
+  group_by(Case_Name) %>% 
+  pivot_wider(names_from = 'Sample_Type', values_from = 'value', values_fn = list(value = sum)) %>% 
+  ungroup() %>% group_by(Case_Name, tag) %>% 
+  summarize_at(.vars = vars(Days_Since_FMT, donor, recipient, post, donor), 
+               .funs = funs(max(., na.rm = T))) %>% 
+  ungroup() %>% 
+  mutate(fmt_success = !Case_Name %in% cases_failed) %>% 
+  mutate_at(.vars = vars(donor, recipient, post, donor),
+            .funs = funs(ifelse(!is.finite(.), NA, .))) %>% 
+  mutate(treatment_change = post - recipient, 
+         ALM = convert_to_alm_cases(Case_Name),
+         low_engrafted = ifelse(ALM %in% c('19R','8R','9R','7R','12R','11R', '4E', '6E', '10R') | 
+                                  Case_Name == 'FRICKE_Case_19', T, F))
+
+X_long <- 
+  X %>% 
+  # filter(Sample_Type %in% c('donor','post')) %>% 
+  # group_by(Case_Name) %>% 
+  # filter(n() == 3) %>% 
+  # ungroup() %>% 
+  mutate(ALM = convert_to_alm_cases(Case_Name),
+         low_engrafted = ifelse(ALM %in% c('19R','8R','9R','7R','12R','11R', '4E', '6E', '10R') | 
+                                  Case_Name == 'FRICKE_Case_19', T, F)) %>% 
+  left_join(., do %>% select(Case_Name, Days_Since_FMT.post, Self, Donor, fmt_success.label, DonorRecipientRatio), 
+            by = c('Case_Name', 'Days_Since_FMT' = 'Days_Since_FMT.post')) %>% 
+  mutate(low_engrafted = Self > 0.15 | DonorRecipientRatio < 0) %>% 
+  mutate(Sample_Type.tag = str_to_upper(unlist(str_extract(Sample_Type, '.')))) %>% 
+  mutate(fmt_success.label = ifelse(Case_Name %in% cases_failed, 'Failed','Success')) %>% 
+  
+  group_by(Case_Name) %>% 
+  mutate(StrainPersistence = ifelse(as.logical(max(low_engrafted, na.rm = T)), 'High','Low')) %>% 
+  ungroup() %>% 
+  mutate(Failed = ifelse(fmt_success.label == 'Failed' & Sample_Type == 'post', 'Failed', 'Resolved')) 
+```
+
+```{r}
+legend_title = 'Persistence' 
+
+X_long %>% 
+  ggplot(aes(fct_relevel(Sample_Type.tag, 'R','P','D'), value)) +
+    
+  geom_boxplot(aes(fill = StrainPersistence)) + 
+  geom_jitter(aes(col = Failed), width = 0.1) + 
+  labs(y = 'Cumulative\nSample Rel. Abund.') + 
+  scale_y_continuous(labels = percent_format_signif) + 
+  scale_x_discrete(expand = c(0.05, 0)) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        # legend.position = c(0.5, 0.85)
+        ) + 
+  scale_color_manual(values = c('red', colors.discrete[c(3,1)], 'black')) + 
+  scale_shape_manual(values = c(8, 21)) + 
+  guides(col = guide_legend(title = 'FMT'), 
+         linetype = guide_legend(title = legend_title)) #+ 
+  # facet_wrap(~StrainPersistence)
+
+
+# plot <- 
+X_long %>% 
+  ggplot(aes(fct_relevel(Sample_Type.tag, 'R','P','D'), value)) +
+    
+  geom_line(aes(group = Case_Name, col = StrainPersistence, linetype = StrainPersistence), size = 1) + 
+  geom_point(aes(col = Failed)) + 
+
+  labs(y = 'Cumulative\nSample Rel. Abund.') + 
+  scale_y_continuous(labels = percent_format_signif) + 
+  scale_x_discrete(expand = c(0.05, 0)) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        legend.position = c(0.5, 0.85)) + 
+  scale_color_manual(values = c('red', colors.discrete[c(3,1)], 'black')) + 
+  scale_shape_manual(values = c(8, 21)) + 
+  guides(col = guide_legend(title = 'Failed'), 
+         linetype = guide_legend(title = legend_title))
+# plot
+```
+
+```{r}
+X_long %>% 
+  filter(Sample_Type == 'post') %>% 
+  ggplot(aes(value, Self, col = Failed)) + 
+  geom_point() + 
+  scale_x_continuous(labels = percent_format_signif) + 
+  scale_y_continuous(labels = percent_format_signif) + 
+  theme_cowplot() + 
+  theme(aspect.ratio = 1) + 
+  labs(x = 'Oxygen Tolerant / Oral', y = 'Recipient-Specific')
+```
+
+
+Export plot
+```{r}
+output_name = 'OxygenTolerant.Persistence'
+
+ggsave(plot, 
+       device = 'pdf', dpi = 300, width = 4, height = 3,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+```
+
+
+```{r fig.width=5, fig.height=4}
+pairwise.wilcox.test(x = pseudo_log_trans(1e-6, 10)$transform(X_long$value), g = X_long$Sample_Type, 
+                     p.adjust.method = 'fdr',
+                     paired = F)
+```
+
+Samples:
+```{r}
+cases.persistence <- 
+  X_long %>% 
+  filter(StrainPersistence == 'High', Sample_Type == 'post') %>% 
+  pull(Case_Name)
+
+cases.persistence
+```
+
+mostly:
+Escherichia coli, Enterococcus faecium & faecalis, Streptococci, Klebsiella pneumoniae and a lot of Lactobacillus
+
+```{r}
+wilcox.test(pseudo_log_trans(1e-6, 10)$transform(X_wide$recipient), 
+            pseudo_log_trans(1e-6, 10)$transform(X_wide$post), 
+            paired = T)
+
+pairwise.wilcox.test(X_long$value, 
+            X_long$Sample_Type, 
+            paired = T)
+```
+
+
+```{r}
+View(do)
+library(broom)
+X %>% 
+  # filter(Sample_Type %in% c('recipient','post')) %>% 
+  group_by(Case_Name) %>% 
+  filter(n() == 3) %>% 
+  ungroup() %>% 
+  
+  nest() %>% 
+  mutate(test = map(data, ~pairwise.wilcox.test(.x$value, .x$Sample_Type, 
+                                                paired = T, 
+                                                p.adjust.method = 'fdr')),
+         tidied = map(test, tidy)) %>% 
+  unnest(tidied, .drop = T) %>% 
+  
+  mutate(p.format = round(p.value, digits = 3)) %>% 
+  View
+
+o <- 
+  do.wide %>% 
+  # filter(rtag == 'Oxygen Tolerant') %>% 
+  mutate(Sample_Type.label = str_to_upper(unlist(str_extract(Sample_Type, pattern = '.')))) %>%
+  ggplot(aes(fct_relevel(Sample_Type.label, 'R','P','D'), value)) +
+  geom_boxplot() + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", show.legend = F, stackdir = "center", 
+               binpositions="all", binwidth = 0.015) + 
+  stat_compare_means(comparisons = list(c('P', 'D'), c('P','R'), c('D','R')), label = 'p.signif') + 
+  theme_cowplot()
+o 
+ggsave(o, 
+       device = 'pdf', dpi = 300, width = 5, height = 5,
+       filename = paste0(output_dir, 'Signif.pdf'))
+```
+
+
+```{r fig.width=5, fig.height=2.5}
+p <-
+  do.long %>% 
+  filter(!Sample_Type.label == 'P' | fmt_success) %>%
+  ggplot(aes(fct_reorder(paste0('D', Days_Since_FMT, ' | ', Case_Name), Days_Since_FMT),
+    value, 
+    fill = rtag)) + 
+
+   geom_bar(stat = 'identity', position = position_fill(), width = 1)  +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     breaks = c(1, .75, .5, .25, 0),
+                     expand = c(0,0)) +
+  scale_fill_manual(values = c(colors.discrete[10], 'grey50', 'grey25'),
+                    guide = guide_legend(reverse = T)) + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+
+        strip.placement = "outside",
+        legend.title=element_blank(),
+        legend.position = 'bottom') +
+    guides(fill=guide_legend(ncol = 1)) +
+  facet_grid(cols = vars(fct_relevel(Sample_Type.label, 'R','P','D')), 
+             scales = 'free_x', space = 'free') # switch = 'x'
+p + theme(legend.position = 'none')
+
+legend <- cowplot::get_legend(p)
+
+grid.newpage()
+grid.draw(legend)
+```
+
+```{r}
+output_name = 'OxygenTolerantSpecies'
+
+ggsave(p + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 5, height = 2.5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 5, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+
+```{r fig.width=6, fig.height=5}
+plot.oxygen.flow <-
+  mp.oxygen %>% 
+  mutate(rtag = fct_relevel(tag, 'Unknown', 'Oxygen Intolerant')) %>% 
+  ggplot(aes(Days_Since_FMT, value, fill = rtag)) + 
+  stat_smooth(geom = 'area',
+              method = 'glm',
+              position = 'fill', colour = 'black', size = 0.25,
+              formula = y ~ poly(x, 2),
+              method.args=list(family='quasibinomial')
+              ) +
+  theme_cowplot() + 
+  scale_y_continuous(labels = percent_format(),
+                     expand = c(0,0)) +
+  scale_x_continuous(trans = pseudo_log_trans(0.5, 10), 
+                     breaks = c(0, 7, 14, 35, 84, 365),
+                     expand = c(0,0)) + 
+  scale_fill_manual(values = c(colors.discrete[10], 'grey50', 'grey25'),
+                    guide = guide_legend(reverse = TRUE, ncol = 3)
+                    ) + 
+  labs(x = 'Sampling Day') + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_text(hjust = 0.2),
+        plot.margin = unit(c(0, 0, 0, 0), "cm"), 
+        strip.background = element_blank(), 
+        strip.text = element_text(size = 14), 
+        panel.spacing.y = unit(.5, "cm"),
+        panel.spacing.x = unit(.35, "cm"),
+        legend.title=element_blank(),
+        legend.position = 'top', 
+        legend.margin=ggplot2::margin(l = 0.1, unit='cm')) + 
+  facet_grid(scales = 'free_x', space = 'free_x', 
+   cols = vars(''),
+   rows = vars(ifelse(grepl(metric, pattern = '^f'), 
+                                'Spp. Fraction', 
+                                'Rel. Abund.')))
+
+
+plot.oxygen.histogram <-
+  mp.oxygen %>% 
+  filter(metric == 'f') %>% 
+  group_by(Study_Type, Case_Name, Days_Since_FMT) %>% 
+  summarize(value = sum(value, na.rm = T)) %>% 
+  ggplot(aes(Days_Since_FMT)) + 
+  geom_histogram(fill = 'black', bins = 10) +
+  facet_grid(scales = 'free_x', space = 'free_x', 
+   cols = vars(fct_relevel(Study_Type, 'rCDI', 'Control')),
+   rows = vars('n')) +
+  scale_x_continuous(trans = pseudo_log_trans(0.5, 10), 
+                     breaks = c(0, 7, 14, 30, 90, 365),
+                     expand = c(0,0)) + 
+  scale_y_continuous(#trans = pseudo_log_trans(), 
+                     expand = c(0,0),
+                     breaks = c(1, 5, 10),
+
+                     ) +
+  theme_cowplot() + 
+  theme(strip.background = element_blank(), 
+        strip.text.x = element_blank(), 
+        panel.spacing.x = unit(1, "lines"), 
+        axis.title = element_blank(), 
+        axis.line.x = element_line(size = 1),
+        axis.line.y = element_blank(), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.title=element_blank())
+
+plot.oxygen.flow + theme(legend.position = 'none')
+plot.oxygen.histogram + theme(legend.position = 'none')
+
+legend <- cowplot::get_legend(plot.oxygen.flow)
+
+grid.newpage()
+grid.draw(legend)
+```
+
+Exporting plot
+```{r}
+output_name = 'FailedOxygenTolerantSpecies'
+
+ggsave(plot.oxygen.flow + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = 5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+ggsave(plot.oxygen.histogram + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = .6,
+       filename = paste0(output_dir, output_name, '.Histogram','.Plot.pdf'))
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 5, height = 1,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+
+# PCoA
+
+Data import
+```{r}
+mp_subsampled_species.long <- mp_species.long
+```
+
+Alpha diversity based on NOT subsampled data
+```{r}
+mp_subsampled.rcdi.long <- 
+  mp_subsampled_species.long %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name'))
+
+mp_subsampled.rcdi.wide <- mp_subsampled.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+
+  reshape2::dcast(., kingdom + phylum + class + order + family + genus + species ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+
+# alpha diversity
+mp_subsampled.rcdi.samples <- t(select(mp_subsampled.rcdi.wide, matches('.pair'), species) %>% column_to_rownames(var = 'species'))
+mp_subsampled.rcdi.shannon <- data.frame(Shannon = diversity(mp_subsampled.rcdi.samples, index = 'shannon')) %>% rownames_to_column('Name') %>% 
+left_join(., samples.metadata, by = 'Name')
+```
+
+```{r fig.width=2, fig.height=4}
+  mp_subsampled.rcdi.shannon %>% 
+    filter(Study %in% c(rcdi.studies, control.studies)) %>% 
+    filter(Sample_Type %in% c('donor','post','control','recipient')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+    mutate(tag = case_when(
+      Donor.Subject != 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ Sample_Type,
+      Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ paste0(Sample_Type, ' [MGH03D]'),
+      T ~ Sample_Type
+    )) %>% 
+  mutate(tag = fct_relevel(tag, 'control', 'recipient', 'donor', 'post')) %>% 
+  ggplot(aes(tag, Shannon, col = fmt_success)) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", show.legend = F, stackdir = "center", 
+               binpositions="all", binwidth = 0.04) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  labs(y = 'Shannon Index') + 
+  stat_compare_means(comparisons = list(c('post','MGH03D-related\n[donor+post]'), c('donor','MGH03D-related\n[donor+post]')))
+```
+
+```{r fig.width=4, fig.height=4}
+  plot <-
+  mp_subsampled.rcdi.shannon %>% 
+    filter(Study %in% c(rcdi.studies, control.studies)) %>% 
+    filter(Sample_Type %in% c('donor','post','control','recipient')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  
+  mutate(Sample_Type.label = str_to_upper(unlist(str_extract(Sample_Type, '.')))) %>% 
+  mutate(tag = case_when(
+    Donor.Subject != 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ Sample_Type.label,
+    # Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & Sample_Type == 'post'~ paste0(Sample_Type.label, '\n[MGH03D]'),
+    Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & 
+      (Sample_Type == 'donor' | (Sample_Type == 'post' & !fmt_success)) ~ paste0(Sample_Type.label, '*'),
+    T ~ Sample_Type.label
+  )) %>% 
+  mutate(tag = fct_relevel(tag, 'C', 'R', 'P', 'D', 'P*')) %>%
+  
+  
+  ggplot(aes(tag, Shannon)) + 
+  stat_boxplot(geom = 'errorbar', width = 0.5) +
+  geom_boxplot(show.legend = F, width = 0.5) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.05) +
+  
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank()) + 
+  labs(y = 'Shannon Index') + 
+  stat_compare_means(label = 'p.signif', p.adjust = 'fdr', 
+                     comparisons = list(c('R','P'),
+                                        c('P','D'),
+                                        c('C','P'),
+                                        c('P*','D*'),
+                                        c('P','P*'))
+                     ) + 
+  annotate('text', label = '*Unresolved Symptoms', y = 0.2, x = 'D*', hjust = 0.9)
+
+plot
+```
+
+```{r fig.width=2, fig.height=3}
+mp_subsampled.rcdi.shannon %>% 
+    filter(Study %in% c(rcdi.studies, control.studies)) %>% 
+    filter(Sample_Type %in% c('donor')) %>%  # 'post'
+  group_by(Case_Name, Sample_Type) %>% 
+  filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  
+  mutate(tag = case_when(
+    Donor.Subject != 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ 'Other',
+    T ~ 'MGH03D'
+  )) %>% 
+  
+  ggplot(aes(tag, Shannon)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.05) +
+  scale_y_continuous(expand = c(0.1, 0.1), limits = c(NA, 3.25)) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        ) + 
+  labs(y = 'Shannon Index') + 
+  stat_compare_means(label = 'p.format', p.adjust = 'fdr', method = 'wilcox')
+```
+
+
+Exporting plot
+```{r}
+output_name = 'D3.Shannon'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 4, height = 4,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+```
+
+Persistence not associated with alpha-diversity
+```{r}
+  mp_subsampled.rcdi.shannon %>% 
+    filter(Study %in% c(rcdi.studies, control.studies)) %>% 
+    filter(Sample_Type %in% c('donor','post','control','recipient')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  filter(dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  ungroup() %>% 
+  mutate(Persistence = Case_Name %in% cases_persistence) %>% 
+  
+  mutate(Sample_Type.label = str_to_upper(unlist(str_extract(Sample_Type, '.')))) %>% 
+  mutate(tag = paste0(Sample_Type.label, ifelse(Persistence, '+', '-'))) %>% 
+  mutate(tag = fct_relevel(tag, 'C', 'R', 'P', 'D', 'P*')) %>%
+  
+  
+  ggplot(aes(Persistence, Shannon, col = Persistence)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.05) +
+  
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank()) + 
+  labs(y = 'Shannon Index') + 
+  facet_grid(cols = vars(Sample_Type.label), scales = 'free_x', space = 'free') + 
+  
+  stat_compare_means()
+```
+
+
+```{r fig.width=2, fig.height=4}
+plot <- 
+  mp_subsampled.rcdi.shannon %>% 
+    filter(Study %in% c(rcdi.studies, control.studies)) %>% 
+    filter(Sample_Type == 'donor' | Sample_Type == 'control' & Days_Since_FMT == 0) %>% 
+    mutate(tag = case_when(
+      Sample_Type == 'control' ~ 'C',
+      Sample_Type == 'donor' & Donor.Subject != 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ 'D',
+      Sample_Type == 'donor' & Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' ~ 'MGH03D',
+      T ~ Sample_Type
+    )) %>% 
+  ggplot(aes(tag, Shannon)) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", show.legend = F, stackdir = "center", 
+               binpositions="all", binwidth = 0.04) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  labs(y = 'Shannon Index')
+plot
+```
+
+Exporting plot
+```{r}
+output_name = 'D3.Shannon'
+w = 2
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = w, height = w * 2,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+```
+
+PCA of clr-transformed taxonomic composition
+```{r}
+mp.rcdi.long <- 
+  mp_species.long %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name')) %>% 
+  filter(Study %in% c('FRICKE', 'ALM'))
+
+mp.rcdi.wide <- mp.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+  reshape2::dcast(., species ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T) %>% 
+  separate(species, into = c('genus', 'species', 'species_id'), sep = '_') %>% 
+  mutate(species = ifelse(species == 'unclassified', 'sp', species),
+         species = paste0(genus, '_', species)) %>% 
+  select(-genus, -species_id) %>% 
+  group_by(species) %>% 
+  summarize_all(.funs = funs(sum(., na.rm = T)))
+
+mp.rcdi.samples <- t(select(mp.rcdi.wide, 
+                               matches('.pair'), species) %>% 
+                               column_to_rownames(var = 'species'))
+
+
+# clr-transform
+pseudo = 1e-6
+mp.rcdi.clr <- rgr::clr(mp.rcdi.samples + pseudo,  ifclose = FALSE, ifwarn = TRUE)
+mp.rcdi.clr.unit <- t(scale(t(mp.rcdi.clr), center = F, scale = T))
+  
+mp.rcdi.clr.pca_data <- PCA(mp.rcdi.clr, graph = FALSE, scale.unit = T)
+mp.rcdi.clr.pca <- mp.rcdi.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+mp.rcdi.data.clr.pca <- mp.rcdi.clr.pca %>% 
+  left_join(., samples.metadata, by = c('Name')) %>% 
+  left_join(., mp_subsampled.rcdi.shannon %>% select(Name, Shannon), by = c('Name')) %>% 
+  group_by(Case_Name, Sample_Type) %>% 
+  mutate(last = dense_rank(Days_Since_FMT) == max(dense_rank(Days_Since_FMT))) %>% 
+  mutate(d3.tag = case_when(
+    Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & Sample_Type == 'post' ~ 
+      paste0('post | D3 ', if_else(fmt_success, 'Success', 'Failed')),
+    Donor.Subject == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' & Sample_Type == 'donor' ~ 'donor | D3',
+    T ~ Sample_Type)) %>% 
+  ungroup()
+```
+
+# Donor difference
+```{r}
+mp.rcdi.long <- 
+  mp_species.long %>% 
+  left_join(., samples.metadata, by = c('Sample' = 'Name')) %>% 
+  filter(Study %in% c('FRICKE', 'ALM'))
+
+mp.rcdi.wide <- mp.rcdi.long %>%
+  filter(kingdom == 'Bacteria') %>% 
+  reshape2::dcast(., species ~ Sample,
+                  value.var = 'rel_abund', fun.aggregate = sum, na.rm = T)
+
+mp.rcdi.samples <- t(select(mp.rcdi.wide, 
+                               matches('.pair'), species) %>% 
+                               column_to_rownames(var = 'species'))
+
+
+# clr-transform
+pseudo = 1e-6
+mp.rcdi.clr <- rgr::clr(mp.rcdi.samples + pseudo,  ifclose = FALSE, ifwarn = TRUE)
+mp.rcdi.clr.unit <- t(scale(t(mp.rcdi.clr), center = F, scale = T))
+  
+# euclidean dist
+mp.rcdi.clr.dist <- dist(mp.rcdi.clr.unit, method = 'euclidean') %>% as.matrix()
+
+donors <- mp.rcdi.long %>% 
+  filter(Sample_Type == 'donor') %>% 
+  distinct(Sample, Donor.Subject)
+donor_samples <- 
+  donors %>% 
+  pull(Sample)
+donor_samples.idx <- colnames(mp.rcdi.clr.dist) %in% donor_samples
+mp.rcdi.clr.donors <- mp.rcdi.clr.dist[donor_samples.idx, donor_samples.idx] %>% 
+  as.data.frame(.) %>% 
+  distmat_to_long(., value_name = 'dist', rm_diag = T) %>% 
+  left_join(., samples.metadata %>% select(Name, Donor.Unique_ID, Donor.Subject), 
+            by = c('row' = 'Name')) %>% 
+  left_join(., samples.metadata %>% select(Name, Donor.Unique_ID, Donor.Subject), 
+            by = c('col' = 'Name'), suffix = c('.row','.col')) %>% 
+  mutate(d3.tag = Donor.Subject.row == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' | 
+                  Donor.Subject.col == 'D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21' 
+                  ) %>% 
+  filter(Donor.Subject.row != Donor.Subject.col)
+```
+
+
+```{r}
+d3.adonis <-
+  pairwiseAdonis::pairwise.adonis(
+  x = mp.rcdi.clr.unit[donors$Sample, ],
+  factors = ifelse(donors$Donor.Subject == "D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21", 'MGH03D','Other'),
+  sim.method = 'euclidean',
+  p.adjust.m = 'bonferroni',
+  perm = 1e3) %>% 
+  mutate(R = sqrt(R2)) %>% 
+  rename(p.bonferroni = p.adjusted)
+d3.adonis
+```
+
+
+```{r fig.width=2, fig.height=3}
+mp.rcdi.clr.donors %>% 
+  mutate(d3.tag = ifelse(d3.tag, 'MGH03D\nOther','Other\nOther')) %>% 
+  ggplot(aes(d3.tag, dist)) + 
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot(show.legend = F) + 
+  geom_dotplot(aes(fill = NULL), binaxis = "y", 
+               stackdir = "center", binpositions="all", binwidth = 0.15) +
+  scale_y_continuous(expand = c(0.1, 0.1), limits = c(NA, 30)) + 
+  theme_cowplot() + 
+  theme(axis.title.x = element_blank(), 
+        ) + 
+  labs(y = 'Beta-Diversity') + 
+  annotate('text', label = paste0('R=', round(d3.adonis$R, 2), ' ', d3.adonis$sig), 
+           x = 'MGH03D\nOther', y = 29, 
+           hjust = 0, vjust = 0, )
+```
+
+# Diff Abund. D3-related
+```{r}
+taxa <- mp.rcdi.long %>% 
+  distinct(genus, species)
+
+data.raw.d3 <- 
+  mp.rcdi.wide %>% 
+  select(species, ends_with('.pair')) %>% 
+  
+  # move to genus-level
+  # left_join(., taxa) %>% 
+  # select(-species) %>% 
+  # group_by(genus) %>% 
+  # summarize_all(.funs = funs(sum(., na.rm = T))) %>% 
+  # column_to_rownames('genus') %>% 
+  
+  column_to_rownames('species') %>%
+  t() %>% as.data.frame() %>% 
+  rownames_to_column('Name') %>% 
+  left_join(., samples.metadata) %>% 
+  filter(Sample_Type %in% c('post', 'donor'),
+         Donor.Subject == "D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21"
+         ) %>% 
+  mutate(ID = Unique_ID)
+
+data.raw.others <- 
+  mp.rcdi.wide %>% 
+  select(species, ends_with('.pair')) %>% 
+  
+   # move to genus-level
+  # left_join(., taxa) %>% 
+  # select(-species) %>% 
+  # group_by(genus) %>% 
+  # summarize_all(.funs = funs(sum(., na.rm = T))) %>% 
+  # column_to_rownames('genus') %>% 
+  
+  column_to_rownames('species') %>%
+  t() %>% as.data.frame() %>% 
+  rownames_to_column('Name') %>% 
+  left_join(., samples.metadata) %>% 
+  filter(Sample_Type %in% c('post', 'donor'),
+         Donor.Subject != "D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21"
+)
+
+
+data.merge <-
+  bind_rows(data.raw.d3, data.raw.others) %>% 
+  mutate(tag = paste0(Unique_ID, ' ', gsub(
+      gsub(Name, pattern = '.*_', replacement = ''), 
+                 pattern = '.pair', replacement = '')))
+
+X.metadata <-
+  data.merge %>% 
+  select(Name, Study:tag) %>% 
+  mutate(D3_Sample = ifelse(Donor.Subject == "D0_ALM_Case_4;5;6;8;9;12;13;15;17;18;20;21", 
+                            'D3_Sample', 'Other'))
+
+X = data.merge %>% 
+  column_to_rownames(var = 'tag') %>% 
+  select(-Name, -Study:-ID) %>% 
+  as.data.frame()
+
+Y = as.factor(X.metadata$D3_Sample)
+```
+
+PLS-DA (rCDI recipient vs. donor)
+```{r}
+pseudo = 1e-6
+data.plsda = mixOmics::plsda(X = X + pseudo, Y, ncomp = nlevels(Y), logratio = 'CLR')
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10)
+
+plot(data.perf.plsda, overlay = 'measure', sd=TRUE)
+
+mixOmics::plotIndiv(data.plsda , comp = c(1,2),
+          group = Y, 
+          ind.names = T,
+          ellipse = T,
+          legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+CV the number of selected features
+```{r}
+data.tune.splsda = mixOmics::tune.splsda(X + pseudo, 
+                          Y = Y, 
+                          ncomp = 2, 
+                          multilevel = NULL, 
+                          logratio = 'CLR',
+                          validation = c('Mfold'), 
+                          folds = 5, 
+                          dist = 'max.dist', # prediction distance can be chosen according to tune.plsda results
+                          nrepeat = 10,
+                          progressBar = FALSE)
+
+plot(data.tune.splsda)
+select.keepX = data.tune.splsda$choice.keepX[1:2]
+select.keepX
+select.keepX = c(20, 10)
+```
+
+sPLS-DA (rCDI recipient vs. donor)
+```{r}
+data.splsda = mixOmics::splsda(X = X + pseudo,  Y = Y, 
+                               ncomp = 2, 
+                               keepX = select.keepX, 
+                               logratio= "CLR",
+                               near.zero.var = T,
+)
+
+
+data.perf.splsda = mixOmics::perf(data.splsda, validation = 'Mfold', folds = 5, 
+                   progressBar = FALSE, nrepeat = 10, dist = 'max.dist')
+
+data.perf.splsda$error.rate
+plot(data.perf.splsda)
+
+# plot loadings
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 1',
+                       comp = 1, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .5, size.legend = .75, 
+                       legend.color = colors.discrete[c(4, 1)])
+
+mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .5, size.legend = .75, 
+                       legend.color = colors.discrete[c(4, 1)])
+
+mixOmics::plotIndiv(data.splsda , comp = c(1,2),
+          group = Y, ind.names = T, 
+          ellipse = TRUE, legend = TRUE, title = 'PLSDA comp 1 - 2')
+```
+
+
+Heatmap plot of differentially abundant taxa 
+D3-related are rich in Prevotella and Bacteroides/Parabacteroides-related species but do not have R. torques, Lachnospiraceae, some Eubacterium species
+On genus-level, enriched in Odoribacter, Megasphaera, Alistipes, Desulfovibrio, Bacteroidales, Fusobacterium (mortiferum), Megamonas,
+but depleted of Lachnospiraceae, Eggerthella, Anaerostipes, Streptococci
+This is supported by strain-level transfer showing that in D3-related cases Prevotella, Parabacteroides, Megasphaera, Alistipes and Odoribacter are transfered
+-> Link to sulfate
+```{r}
+sample_colors <-
+  tibble(tag = data.splsda$names$sample) %>% 
+  left_join(., X.metadata) %>% 
+  mutate(color = 
+        case_when(D3_Sample == 'D3_Sample' & Sample_Type == 'donor' ~ colors.discrete[1],
+                  D3_Sample != 'D3_Sample' & Sample_Type == 'donor' ~ colors.discrete[6],
+                  
+                  D3_Sample == 'D3_Sample' & Sample_Type == 'post' & fmt_success ~ colors.discrete[2],
+                  D3_Sample == 'D3_Sample' & Sample_Type == 'post' & !fmt_success ~ colors.discrete[4],
+                  
+                  D3_Sample != 'D3_Sample' ~ colors.discrete[7], 
+                  T ~ 'white'))
+
+
+output_name = 'splsDA.D3Others'
+mixOmics::cim(data.splsda, row.sideColors = sample_colors$color, 
+              symkey = T, keysize = c(0.8, 0.8), 
+              row.names = F, 
+              col.names = gsub(data.splsda$names$colnames$X, pattern = '_noname', replacement = ''),
+              save = 'pdf', 
+              name.save = paste0(output_dir, output_name),
+              margins = c(25, 10),
+              row.cex = .1, #col.cex = 1,
+              transpose = T,
+              # row.cex = .5, col.cex = .75,
+              # margins = c(6.5, 20), 
+              scale = T, center = T)
+```
+
+
+Function
+```{r}
+print_taxonomy <- function(name, selection) {
+  unlist(
+    lapply(name, function(x) {
+      case_when(
+        !x %in% selection ~ x,
+        x %in% selection ~ str_replace(string = str_to_sentence(x), pattern = '[a-z].*[_ ]', replacement = '. ')
+      )
+    }
+    )) %>% 
+    return()
+}
+```
+
+Format species names in PCA object
+```{r}
+select.prevotella <- c('Prevotella_denticola', 'Prevotella_oris', 'Prevotella_oralis','Prevotella_veroralis')
+select.fusobacteria <- c('Fusobacterium_nucleatum', 'Fusobacterium_periodonticum', 'Fusobacterium_mortiferum')
+other <-  c('Rothia_dentocariosa', 'Veilonella_parvula')
+
+select.bacteroides <- c('Bacteroides_faecis', 'Bacteroides_eggerthii', 'Bacteroides_intestinalis', 'Bacteroides_thetaiotaomicron') 
+# 'Bacteroides_fragilis',
+select.ruminococcus <- c('Ruminococcus_torques', 'Ruminococcus_bromii', 'Ruminococcus_obeum')
+# 'Ruminococcus_albus', 'Ruminococcus_callidus',
+
+plot_spp <- c(other, select.bacteroides, select.ruminococcus, select.prevotella, select.fusobacteria,
+               'Lachnospiraceae_bacterium')
+```
+
+Function
+```{r}
+rownames(mp.rcdi.clr.pca_data$var$coord) <- print_taxonomy(rownames(mp.rcdi.clr.pca_data$var$coord), plot_spp)
+rownames(mp.rcdi.clr.pca_data$var$cor) <- print_taxonomy(rownames(mp.rcdi.clr.pca_data$var$cor), plot_spp)
+rownames(mp.rcdi.clr.pca_data$var$cos) <- print_taxonomy(rownames(mp.rcdi.clr.pca_data$var$cos), plot_spp)
+rownames(mp.rcdi.clr.pca_data$var$contrib) <- print_taxonomy(rownames(mp.rcdi.clr.pca_data$var$contrib), plot_spp)
+```
+
+```{r fig.height=5,fig.weigth=5}
+plot <-
+  fviz_pca_biplot(mp.rcdi.clr.pca_data, 
+             # select.var = list('cos2' = 0.5),
+             select.var = list('name' = print_taxonomy(plot_spp, plot_spp)),
+             fill.ind = mp.rcdi.data.clr.pca$d3.tag, 
+             pointshape = 21, pointsize = 8, 
+             alpha.ind = ifelse(grepl(mp.rcdi.data.clr.pca$d3.tag, pattern = 'D3'), 1, .25),
+             labelsize = 3, 
+             addEllipses = F, centroids = F, 
+             subtitle = 'Taxonomic Composition',
+             col.var = 'black',  title = '', # 'PCA biplot of Spp. distinguishing D3-related samples',
+             repel = T, invisible = c("quali"), 
+             label = 'var',
+             )  + 
+  ggpubr::fill_palette(palette = colors.discrete[c(1,1,2,4,2,3)]) + 
+  theme_cowplot() + 
+  theme(aspect.ratio = 1,
+        plot.subtitle = element_text(hjust = .5, size = 14),
+)  + 
+  coord_flip() +
+  labs(x = paste0('PC 1 (', round(mp.rcdi.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       y = paste0('PC 2 (', round(mp.rcdi.clr.pca_data$eig[2,'percentage of variance'], 1), '%)'))
+ 
+plot + theme(legend.position = 'none')
+
+legend = cowplot::get_legend(plot)
+grid.newpage()
+grid.draw(legend)
+```
+
+Post-FMT samples with high abundance of oxygen tolerant species and high abundance of recipient-derived strains
+```{r fig.height=5,fig.weigth=5}
+# plot <-
+  fviz_pca_biplot(mp.rcdi.clr.pca_data, 
+                  select.var = list('name' = ''),
+             fill.ind = mp.rcdi.data.clr.pca$d3.tag, 
+             pointshape = 21, pointsize = 8, 
+             alpha.ind = 
+               # ifelse(mp.rcdi.data.clr.pca$last, 1, 0.25),
+               case_when(
+               mp.rcdi.data.clr.pca$Case_Name %in% cases_persistence &
+               mp.rcdi.data.clr.pca$last &
+               mp.rcdi.data.clr.pca$Sample_Type == 'post' ~ 1,
+               mp.rcdi.data.clr.pca$Case_Name %in% cases_persistence &
+               mp.rcdi.data.clr.pca$Sample_Type != 'post' ~ 0.3,
+               T ~ 0.1),
+             labelsize = 3, 
+             addEllipses = F, centroids = F, 
+             subtitle = 'Taxonomic Composition',
+             col.var = 'black',  title = '', # 'PCA biplot of Spp. distinguishing D3-related samples',
+             repel = T, invisible = c("quali"), 
+             label = 'none',
+             )  + 
+  ggpubr::fill_palette(palette = colors.discrete[c(1,1,2,4,2,3)]) + 
+  theme_cowplot() + 
+  theme(aspect.ratio = 1,
+        plot.subtitle = element_text(hjust = .5, size = 14),
+)  + 
+  coord_flip() +
+  labs(x = paste0('PC 1 (', round(mp.rcdi.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       y = paste0('PC 2 (', round(mp.rcdi.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) + 
+  geom_line(aes(group = mp.rcdi.data.clr.pca$Case_Name, alpha =
+                  case_when(
+               mp.rcdi.data.clr.pca$Case_Name %in% cases_persistence &
+               mp.rcdi.data.clr.pca$Sample_Type == 'post' ~ 1,
+               T ~ 0.1))) + 
+  theme(legend.position = 'none')
+```
+```
+
+
+Exporting plot
+```{r}
+output_name = 'D3.PCAbiplotCLR.species'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 5, height = 5,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+ggsave(legend, 
+       device = 'pdf', dpi = 300, width = 5, height = 5,
+       filename = paste0(output_dir, output_name, '.Legend.pdf'))
+```
+
+
+## Alpha diversity
+
+Correlation analysis of Shannon Index with first principal component (PC 1) of previous PCA analysis shows that large fraction of variance could be explained by alpha diversity differences between samples.
+```{r fig.width=3, fig.height=3}
+plot <-
+  mp.rcdi.data.clr.pca %>% 
+  filter(grepl(d3.tag, pattern = 'D3')) %>% 
+  ggplot(aes(Shannon, Dim.1)) +
+  geom_point(shape = 21, col = 'black', size = 8, 
+  aes(fill = d3.tag)) + 
+  geom_smooth(method = 'lm', color = 'black') +  
+  stat_cor(method = 'spearman', 
+           aes(label = paste(..r.label.., cut(..p.., 
+                                              breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                              labels = c("'***'", "'**'", "'*'", "''")), 
+                            sep = "~")), 
+           label.y.npc = 1,
+           label.x.npc = .3,
+           size = 6,
+           show.legend = F) +
+  scale_fill_manual(values = colors.discrete[c(1,4,2)]) +
+  theme_cowplot() + 
+  theme(legend.title=element_blank(),
+        aspect.ratio = 1
+        ) +
+  labs(x = 'Shannon Index', y = 'PC 1')
+plot + theme(legend.position = 'none')
+```
+
+Exporting plot
+```{r}
+output_name = 'D3.PC1Shannon.species'
+
+ggsave(plot + theme(legend.position = 'none'), 
+       device = 'pdf', dpi = 300, width = 3, height = 3,
+       filename = paste0(output_dir, output_name, '.Plot.pdf'))
+```

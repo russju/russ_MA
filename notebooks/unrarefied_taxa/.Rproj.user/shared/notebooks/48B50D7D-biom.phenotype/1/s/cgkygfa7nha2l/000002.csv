@@ -1,0 +1,11 @@
+"0","```r
+pseudo = 1e-6
+
+#standard Partial Least Squares regression to classify samples
+
+data.plsda = mixOmics::plsda(X = conv.clust + pseudo,Y = Y, ncomp = 2 , logratio = 'CLR', scale = T)
+data.perf.plsda = mixOmics::perf(data.plsda, validation = 'Mfold', folds = 5,
+                    progressBar = FALSE, nrepeat = 10)
+
+plot(data.perf.plsda, sd=TRUE)
+```"

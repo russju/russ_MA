@@ -1,0 +1,11 @@
+"0","```r
+# dev.off()
+
+
+
+# pdf(paste0(diet_dir,'dge.energy.biomass.pdf'))
+
+ggarrange(energy.pheno,biomass.pheno.nut,
+          labels = c(\"A\", \"B\"),
+          ncol = 2, nrow = 1)
+```"

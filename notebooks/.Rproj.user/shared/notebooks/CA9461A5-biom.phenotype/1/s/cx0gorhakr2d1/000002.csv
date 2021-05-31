@@ -1,0 +1,75 @@
+"0","# nutr.clust <- read_tsv(paste0(table_dir,'nutrient.clusters.09.09.tsv'))"
+"0","# nutr.sum <- read_tsv(paste0(table_dir,'norm.keto.bls.06.10.tsv'))"
+"0",""
+"0","keto.bls <- read_tsv(paste0(table_dir, 'keto.bls_04.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m,
+  item_prodi = [31mcol_character()[39m,
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_subcat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","subgr <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","# nutr.clust <- read_tsv(paste0(table_dir,'nutr.clust.df.01.10.tsv'))"
+"0","# colnames(nutr.clust) <- c('menue compounds (1)','sweets (2)','cereals (3)','breads (4)','vegeteables (5)','vegetables (6)','dairy (7)','vegetables (8)','fats (9)','fruits (10)','fats (11)','legumes (12)','sweets (15)','file_name')"
+"0","rowSum <- read_tsv(paste0(output_dir,'biomass_30.11.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) "
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  sample = [31mcol_character()[39m,
+  `1.veg.fruit` = [32mcol_double()[39m,
+  `2.carbs.bread` = [32mcol_double()[39m,
+  `3.fatty.sweet` = [32mcol_double()[39m,
+  `4.carbs.cereal` = [32mcol_double()[39m,
+  `5.seed` = [32mcol_double()[39m,
+  `6.nut` = [32mcol_double()[39m,
+  `7.kohl` = [32mcol_double()[39m,
+  `8.fish.sauce` = [32mcol_double()[39m,
+  `9.egg` = [32mcol_double()[39m,
+  `10.alcohol` = [32mcol_double()[39m,
+  `11.wurst` = [32mcol_double()[39m,
+  `12.soft.drinks` = [32mcol_double()[39m,
+  `13.white.meat` = [32mcol_double()[39m,
+  `14.fatty.dairy` = [32mcol_double()[39m,
+  `15.cheese` = [32mcol_double()[39m
+)
+
+"
+"0","colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'"
+"0","conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"

@@ -1,0 +1,10 @@
+"0","```r
+#L6 genus
+biom.L6 <- biom.L6[!grepl('.2U',row.names(biom.L6)),]
+biom.L6 <- biom.L6[!grepl(pattern = 'U3',row.names(biom.L6)),]
+biom.L6 <- select(biom.L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+row.names(biom.L6) <- str_replace(row.names(biom.L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+
+```"

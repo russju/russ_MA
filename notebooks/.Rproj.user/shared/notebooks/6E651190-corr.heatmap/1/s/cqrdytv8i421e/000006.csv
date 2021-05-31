@@ -1,0 +1,2 @@
+"0",""
+"0","convclust.L6.U2 <- heatmap.2(corr.convclust.L6.U2.sub,cexRow = .2,cexCol = .1, trace = 'none', key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.3), cellnote = corr.convclust.L6.U2.sub2, notecol = 'black',Rowv = convclust.L6.U1$rowDendrogram,Colv = convclust.L6.U1$colDendrogram)"

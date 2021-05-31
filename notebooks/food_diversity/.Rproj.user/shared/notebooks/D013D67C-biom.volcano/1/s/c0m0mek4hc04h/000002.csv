@@ -1,0 +1,33 @@
+"0","```r
+#selecting the samples that are both in L2.rel.clr and in nutr.sum
+#not everybody gave stool samples,U3 no protocols available 
+L2.rel <- as.data.frame(L2.rel)
+row.names(L2.rel) <- str_replace(row.names(L2.rel),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+row.names(L2.rel.clr) <- str_replace(row.names(L2.rel.clr),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+merge.L2.nutr <- L2.rel.clr %>% merge(.,nutr.sum.z,by = 'row.names',all.x=T,all.y = T) %>% column_to_rownames(.,'Row.names')
+
+merge.L2.nutr[is.na(merge.L2.nutr)] <- 0
+# merge.L2.nutr <- dplyr::select(merge.L2.nutr,everything(),-ends_with('rowsum'))
+
+# L2.rel.clr$file_name <- row.names(L2.rel.clr)
+# write_tsv(L2.rel.clr,paste0(table_dir,'L2.normalized.correlation_06.10.tsv'))
+
+cor.test <- merge.L2.nutr %>% 
+  pivot_longer(names_to = \"variable_right\", values_to = \"value_right\", D_0__Archaea.D_1__Euryarchaeota:D_0__Eukaryota.D_1__SAR) %>% 
+  pivot_longer(names_to = \"variable_left\", values_to = \"value_left\", `Energie (kcal)`:`Energie, Gesamt (kcal)`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right,method = 'spearman'))$estimate)
+
+cor.test [is.na(cor.test)] <- 0
+
+
+p.adj <- subset(cor.test,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor <- subset(cor.test,select = `estimate`) %>% data.matrix(.)
+
+```"

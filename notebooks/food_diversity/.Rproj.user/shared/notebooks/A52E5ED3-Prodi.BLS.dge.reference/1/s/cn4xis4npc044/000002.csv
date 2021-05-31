@@ -1,0 +1,6 @@
+"0","energy <- ggplot(keto.nutrients.week,aes(x=group, y=`Energie (kcal)`)) +"
+"0","  geom_boxplot()+ggtitle('energy uptake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 2) + ylab('energy [kcal]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7))"
+"0",""
+"0","energy.pheno <- ggplot(keto.nutrients.week,aes(x=Phenotype, y=`Energie (kcal)`)) +"
+"0","  geom_boxplot()+ggtitle('energy uptake')+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('high converter','low converter'),c('not classified','high converter'),c('not classified','low converter')),hide.ns = FALSE,vjust = 2) + ylab('energy [kcal]')+ theme(plot.title = element_text(size=7),axis.title = element_text(size = 7))##,symnum.args = symnum.args"
+"0",""

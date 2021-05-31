@@ -1,0 +1,6 @@
+"0","tmp <- purrr::map_dfr(seq_len(1280), ~tmp)##nrow(tmp)/nrow(r)=1044  ##w/o gewürze 1280
+tmp <- cbind(tmp,r)
+"
+"2","Fehler in data.frame(..., check.names = FALSE) : 
+  Argumente implizieren unterschiedliche Anzahl Zeilen: 1600000, 1562500
+"

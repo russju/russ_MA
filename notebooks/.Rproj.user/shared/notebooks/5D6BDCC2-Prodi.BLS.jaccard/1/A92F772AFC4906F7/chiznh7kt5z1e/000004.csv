@@ -1,0 +1,34 @@
+"0","#otu_table per week"
+"0","otu.week <- read_tsv(paste0(table_dir,'otu.conv.uw.19.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","otu.week <- as.data.frame(otu.week)"
+"0","row.names(otu.week) <- otu.week$file_name"
+"0","otu.week <- otu.week[ ,-1]"
+"0","otu.week <- otu_table(otu.week,taxa_are_rows = FALSE)"
+"0",""
+"0","#otu_table per day"
+"0","otu.day <- read_tsv(paste0(table_dir,'otu.conv.uw.samp.19.08.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  sample_day = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","otu.day  <- as.data.frame(otu.day )"
+"0","row.names(otu.day) <- otu.day$sample_day"
+"0","otu.day  <- otu.day [ ,-1]"
+"0","otu.day  <- otu_table(otu.day ,taxa_are_rows = FALSE)"
+"0",""
+"0","#trees"
+"0","tree.conv <- read.tree(paste0(table_dir,'tree.conv.19.08.tre'))"
+"0","# tree.nutr <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))"
+"0","tree.nutr <- DECIPHER::ReadDendrogram(paste0(table_dir,'tree.keto.bls.19.08.tre')) %>% as.hclust(.) %>% ape::as.phylo(.)"

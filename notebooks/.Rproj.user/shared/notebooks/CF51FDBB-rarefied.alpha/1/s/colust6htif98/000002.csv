@@ -1,0 +1,20 @@
+"0","#L6 nut"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","3: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","div.L7.nut <- merge(div.L7,div.nut,by = 'row.names') %>% column_to_rownames(.,'Row.names')"
+"0",""
+"0","ggscatter(div.L7.nut,x='Shannon Index nut.clust',y='Shannon Index specy',"
+"0","          add = 'reg.line',conf.int = TRUE,"
+"0","          cor.coef = TRUE,cor.method = 'spearman')"

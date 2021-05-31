@@ -1,0 +1,16 @@
+"0","pdf(paste0(output_heatmap,'rarefied.24.02.family.heatmaps.pdf'))
+
+heatmap.2(cor.test.family.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.family.sub2)
+
+heatmap.2(cor.test.nutr.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.nutr.sub2)
+
+heatmap.2(cor.test.conv.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.conv.sub2)
+
+dev.off()
+"
+"1","null device "
+"1","
+"
+"1","          1 "
+"1","
+"

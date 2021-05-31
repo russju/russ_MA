@@ -1,0 +1,5 @@
+"0","ggarrange(conv.w.pheno,conv.w.sex, "
+"0","          labels = c(""A"", ""B""),"
+"0","          ncol = 1, nrow = 2,heights = c(1,1))"
+"2","Using alpha for a discrete variable is not advised."
+"2","Using alpha for a discrete variable is not advised."

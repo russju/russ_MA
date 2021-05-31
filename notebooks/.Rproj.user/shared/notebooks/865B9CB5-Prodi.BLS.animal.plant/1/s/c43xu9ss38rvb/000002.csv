@@ -1,0 +1,22 @@
+"0","```r
+#energy percent
+
+pa.w$group <- ifelse(grepl('U2', pa.w$file_name), 'keto', 'non keto')
+
+
+pp <- ggplot(pa.w,aes(x=group, y=percent.plant)) +
+  geom_boxplot()+ylim(0,100)+ stat_compare_means(comparison = list(c('keto','non keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21)
+
+ap <- ggplot(pa.w,aes(x=group, y=percent.animal)) +
+  geom_boxplot()+ylim(0,100)+ stat_compare_means(comparison = list(c('keto','non keto')),hide.ns = FALSE,symnum.args = symnum.args)+geom_jitter(shape = 21)
+
+# pa.w.plant <- dplyr::select(pa.w,starts_with(c('percent.plant','group')))
+# t.pa.w <- t.test(pa.w.plant)
+
+# pdf('C:/Users/Juliane/Desktop/project.directory/results/diet.protocols/.groups.animal.plantpdf')
+groups.animal.plant <- ggarrange(pp,ap, 
+          # labels = c(\"A\", \"B\"),
+          ncol = 2, nrow = 1)
+
+# dev.off() 
+```"

@@ -1,0 +1,10 @@
+"0","```r
+                       # legend.color = colors.discrete[c(4, 1)])
+
+
+# COMP 2
+pL.pc2 <- mixOmics::plotLoadings(data.splsda, title = 'sPLS-DA PC 2',
+                       comp = 2, method = 'median', contrib = 'max', 
+                       size.title = rel(1), border = T, 
+                       size.name = .75, size.legend = .75)
+```"

@@ -1,0 +1,4 @@
+"0",""
+"0","# ggplot(pca.L6,aes(Axis.1, Axis.2)) + "
+"0","#   geom_point(aes(fill = norm.L6$samples, alpha = norm.L6$diet),"
+"0","#     shape = 21, col = 'black', size = 4) + ggtitle('PCA microbiome')"

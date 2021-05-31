@@ -1,0 +1,37 @@
+"0",""
+"0","L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')"
+"0",""
+"0",""
+"0","nutr.sum <- read_tsv(paste0(table_dir, 'norm.keto.bls.06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","nutr.sum$file_name <- gsub(nutr.sum$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.') "
+"0","nutr.sum <- as.data.frame(nutr.sum) %>% column_to_rownames(.,'file_name') %>% dplyr::select(.,everything(),-ends_with('rowsum'))"
+"0",""
+"0",""
+"0","cl.sum <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_22.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","Parsed with column specification:
+cols(
+  `menue compounds (1)` = [32mcol_double()[39m,
+  `sweets (2)` = [32mcol_double()[39m,
+  `vegetables (3)` = [32mcol_double()[39m,
+  `fats (4)` = [32mcol_double()[39m,
+  `fruits(5)` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+"
+"0","conv.sum <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_26.10.tsv'))%>% column_to_rownames(.,'file_name')"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

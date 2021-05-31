@@ -1,0 +1,5 @@
+"0","#data prep"
+"0","corr.nutr.chol.sub <- corr.nutr.chol %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'sum fecal chol (derivates)',values_from = 'estimate') %>%"
+"0","  column_to_rownames(.,'nutrient') %>% data.matrix(.)"
+"2","Fehler in distinct(.) : Objekt 'corr.nutr.chol' nicht gefunden
+"

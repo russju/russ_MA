@@ -1,0 +1,32 @@
+"0","bls.raw <- read_tsv(paste0(bls_dir, 'BLS.tsv'))"
+"2","Parsed with column specification:
+cols(
+  item_id = [31mcol_character()[39m,
+  item_cat = [31mcol_character()[39m,
+  item_descr = [31mcol_character()[39m,
+  Property = [31mcol_character()[39m,
+  Value = [32mcol_double()[39m,
+  Unit = [31mcol_character()[39m,
+  Value_Scale = [32mcol_double()[39m
+)
+"
+"0","bls.subcat  <- read_tsv(paste0(bls_dir, 'BLS_subcat.tsv'))"
+"2","Parsed with column specification:
+cols(
+  ID = [31mcol_character()[39m,
+  Untergruppe = [31mcol_character()[39m
+)
+"
+"0","bls.properties <- read_tsv(paste0(bls_dir, 'BLS.Property.tsv'))"
+"2","Parsed with column specification:
+cols(
+  Property = [31mcol_character()[39m
+)
+"
+"0","bls.properties.should <- read_tsv(paste0(bls_dir, 'bls_properties.tsv'))"
+"2","Parsed with column specification:
+cols(
+  Category = [31mcol_character()[39m,
+  Property = [31mcol_character()[39m
+)
+"

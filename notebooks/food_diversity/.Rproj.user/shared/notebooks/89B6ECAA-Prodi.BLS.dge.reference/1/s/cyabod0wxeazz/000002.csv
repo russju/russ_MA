@@ -1,0 +1,35 @@
+"0","dge <- read.csv(paste0(data_dir, 'dge_reference.csv'),row.names = 1,header = TRUE,sep = ';')"
+"0",""
+"0","keto.summary <- read_tsv(paste0(table_dir, 'Keto.summary.tsv'))##original df"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m----------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m,
+  sample = [31mcol_character()[39m,
+  time_point.label = [31mcol_character()[39m,
+  time_point = [31mcol_character()[39m,
+  date = [34mcol_date(format = """")[39m,
+  St_complet = [31mcol_character()[39m,
+  Time = [31mcol_character()[39m,
+  Sex = [31mcol_character()[39m,
+  Phenotype = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","keto.summary$file_name <- gsub(keto.summary$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')"
+"0",""
+"0","food_table <- read_tsv(paste0(table_dir, 'otu.conv.w.19.08.tsv'))"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m----------------------------------------------[39m
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","#rm not classified"
+"0",""
+"0","# keto.summary <- keto.summary[keto.summary$Phenotype != 'not classified', ]"

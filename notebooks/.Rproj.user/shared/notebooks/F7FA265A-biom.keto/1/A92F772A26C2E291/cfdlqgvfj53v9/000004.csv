@@ -1,0 +1,32 @@
+"0","pdf('C:/Users/Juliane/Desktop/project.directory/results/corr.U1U2_16.11.pdf')"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In grDevices::png(f) :"
+"2","
+ "
+"2"," kann Datei 'C:\Users\Juliane\AppData\Local\Temp\RtmpqenHQF\file35b4b105376' nicht zum Schreiben öffnen
+"
+"2","2: "
+"2","In grDevices::png(f) :"
+"2"," opening device failed
+"
+"2","3: "
+"2","In grDevices::png(f) :"
+"2","
+ "
+"2"," kann Datei 'C:\Users\Juliane\AppData\Local\Temp\RtmpqenHQF\file35b4411d6174' nicht zum Schreiben öffnen
+"
+"2","4: "
+"2","In grDevices::png(f) :"
+"2"," opening device failed
+"
+"2","5: "
+"2","In (function (filename = if (onefile) ""Rplots.svg"" else ""Rplot%03d.svg"",  :"
+"2","
+ "
+"2"," cairo error 'error while writing to output stream'
+"
+"0","grid.table(top.sig.nutrU1)"
+"2","Cannot open temporary file 'C:\Users\Juliane\AppData\Local\Temp\RtmpqenHQF\pdf35b46cb56d25' for compression (reason: No such file or directory); compression has been turned off for this device"
+"0","grid.newpage()"

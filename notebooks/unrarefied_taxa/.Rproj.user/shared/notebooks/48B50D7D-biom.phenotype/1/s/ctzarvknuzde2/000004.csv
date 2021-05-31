@@ -1,0 +1,5 @@
+"0","mixOmics::plotIndiv(data.plsda , comp = c(1,2),"
+"0","          group = Y, "
+"0","          ind.names = T,"
+"0","          ellipse = T,"
+"0","          legend = TRUE, title = 'PLSDA comp 1 - 2')"

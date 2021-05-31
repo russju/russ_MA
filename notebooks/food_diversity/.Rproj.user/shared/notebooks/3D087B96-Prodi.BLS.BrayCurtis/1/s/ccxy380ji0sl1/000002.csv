@@ -1,0 +1,11 @@
+"0","```r
+bc.nutr <- vegdist(nutr.clust, method=\"bray\")##noNA
+pcoa_bc.nutr <- ape::pcoa(bc.nutr)##noNA
+
+#varinace
+
+get_explained_variance(pcoa_bc.nutr)[1:2]
+
+```"
+"1","[1] \"11.46%\" \"10.09%\"
+"

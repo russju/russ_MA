@@ -1,0 +1,8 @@
+"0","```r
+#L6 nut
+div.L6.nut <- merge(div.L6,div.nut,by = 'row.names') %>% column_to_rownames(.,'Row.names')
+
+ggscatter(div.L6.nut,x='Shannon Index nut.clust',y='Shannon Index genus',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+```"

@@ -1,0 +1,4 @@
+"0","top.sig.nutr.L7 <- sig.nutr[order(-sig.nutr.L7$p.adj.log ),]
+"
+"2","Fehler: Objekt 'sig.nutr' nicht gefunden
+"

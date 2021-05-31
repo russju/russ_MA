@@ -1,0 +1,158 @@
+---
+title: "tanglegram"
+output: html_notebook
+---
+
+tanglegram
+compare hierarchical clustering of
+nutrient based and conventional clusters
+
+#libraries
+```{r}
+library(tidyverse)
+library(FactoMineR)
+library(dendextend)
+library(ape)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+bin_dir = '../bin/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```
+
+#Data Import
+```{r}
+df.data.clr.pca <- read_tsv(paste0(table_dir,'df.data.clr.pca.tsv'))
+ 
+```
+
+# hclust bls
+```{r}
+df.clr.pca.hclust_data <- hclust(dist(df.data.clr.pca %>% dplyr::select(starts_with('Dim'))), method = 'ward.D')
+```
+
+
+sample
+```{r message=FALSE, warning=FALSE}
+d.sample <- df.data.clr.pca[sample(1:nrow(df.data.clr.pca), size = 100),]
+rownames(d.sample) <- NULL
+
+d <- d.sample %>% dplyr::select(Name, starts_with('item'))
+r <- d %>% rename_all(.funs = funs(paste0(., '.select')))
+
+tmp <- NULL
+for (r_row in 1:nrow(r)) {
+  tmp <- rbind(tmp, cbind(r[r_row, ], d))
+}
+```
+
+```{r fig.height=10}
+cat.dist <-
+  tmp %>% 
+  dplyr::mutate(same_subcat  =  item_subcat.select == item_subcat,
+         same_cat  =  item_cat.select == item_cat) %>% 
+  mutate(total = (as.numeric(!same_cat) + as.numeric(!same_subcat)) / 2) %>% 
+  # select(Name.select, Name, total) %>% 
+  # pivot_wider(names_from = 'Name.select', values_from = 'total') %>%
+  dplyr::select(item_descr.select, item_descr, total) %>% 
+  pivot_wider(names_from = 'item_descr.select', values_from = 'total') %>%  
+  column_to_rownames('item_descr') %>% 
+  as.dist(.)
+```
+
+#phylo object conv. cluster
+```{r fig.height=10}
+d.cat_data <- hclust(cat.dist, method = 'complete')
+# d.cat_data <- pc.hclust
+dend.cat <- as.dendrogram(d.cat_data)
+tree.conv <- ape::as.phylo(d.cat_data)
+plot(tree.conv, type= 'fan')
+
+# write.tree(tree.nutr, file='.../project.directory/results/tree.conv.tre')
+
+
+```
+
+#phylo object bls
+```{r fig.height=10}
+nutr.dist <- d.sample %>% 
+  dplyr::select(starts_with('Dim'), item_descr) %>% 
+  column_to_rownames('item_descr') %>% 
+  dist(.)
+d.nutr <- hclust(nutr.dist, method = 'complete')
+dend.nutr <- as.dendrogram(d.nutr)
+tree.nutr <- ape::as.phylo(d.nutr)
+
+tree.nutr <- read.tree(paste0(table_dir,'tree.keto.bls.19.08.tre'))
+
+
+tree.plot <- plot(tree.nutr, type= 'fan')
+
+# write.tree(tree.nutr, file='.../project.directory/results/tree.nutr.tre')
+
+```
+
+tanglegram, colored by cattegories
+```{r fig.height=5, fig.width=15}
+round(entanglement(dend.cat, dend.nutr), 2)
+d.labels <- tibble(item_descr = d.cat_data$labels[order.hclust(d.cat_data)]) %>%
+  left_join(., d.sample %>% dplyr::select(item_descr, item_cat)) %>% 
+  mutate(col = rainbow(length(levels(as.factor(item_cat))))[as.factor(item_cat)])
+
+# pdf('C:/Users/Juliane/Desktop/project.directory/results/tanglegram.pdf')
+top = 1
+bot = 5
+tangle <- tanglegram(dend.cat, dend.nutr, 
+           main_left = 'Food Categories',
+           main_right = 'Nutrient Clustering', 
+           margin_top = top,
+           margin_bottom = bot,
+           left_dendo_mar = c(bot,  0, top, 15),
+           right_dendo_mar = c(bot, 0, top, 15),
+           common_subtrees_color_branches = F,
+           common_subtrees_color_lines = F,
+           highlight_distinct_edges = F,
+           axes = F, 
+           margin_inner = 5,
+           color_lines = d.labels$col,
+           sort = F,
+           lab.cex = 0.5)
+# dev.off()
+```
+
+
+```{r fig.height=10, fig.width=15}
+
+dends <- dendextend::dendlist( dend.cat,dend.nutr) %>% 
+  untangle(., method = 'step2side')
+l.entanglement = round(entanglement(dends), 2)
+l.labels <- get_nodes_attr(dends[[1]], 'label')
+
+d.labels <-   
+  tibble(item_descr = l.labels[!is.na(l.labels)]) %>%
+  left_join(., d.sample %>% select(item_descr, item_cat)) %>% 
+  mutate(col = rainbow(length(levels(as.factor(item_cat))))[as.factor(item_cat)])
+
+top = 5
+bot = 5
+
+dends %>% 
+  tanglegram(.,
+           main_left = 'Food Categories',
+           main_right = 'Nutrient Clustering', 
+           main = paste0('\n\nEntanglement: ', l.entanglement), 
+           margin_top = top,
+           margin_bottom = bot,
+           left_dendo_mar = c(bot,  0, top, 15),
+           right_dendo_mar = c(bot, 0, top, 15),
+           common_subtrees_color_branches = F,
+           common_subtrees_color_lines = F,
+           highlight_distinct_edges = F,
+           axes = F, 
+           margin_inner = 5,
+           color_lines = d.labels$col,
+           sort = F)
+```

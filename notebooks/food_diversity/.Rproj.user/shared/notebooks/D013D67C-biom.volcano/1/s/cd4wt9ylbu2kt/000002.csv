@@ -1,0 +1,41 @@
+"0","```r
+
+#two samples for U1,U2 and U3
+#merging them ore deleting?
+
+# TF <- grepl(pattern = '.2U',x = row.names(L6))
+# L6.TF <- cbind(L6,TF) %>% split(.,sub('\\d+','',`TF`))
+# L6 <- as.data.frame(L6.TF[[\"FALSE\"]])
+
+L6 <- L6[!grepl('.2U',row.names(L6)),]
+L6 <- L6[!grepl(pattern = 'U3',row.names(L6)),]
+L6 <- select(L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+
+row.names(L6) <- str_replace(row.names(L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+#sum of the rows
+
+#taxa
+
+# L6.sub <- L6[ ,c(1:222)]
+L6.sub <- data.matrix(L6)
+L6.sub <- L6.sub+0.5
+rowsum <- rowSums(L6.sub)
+
+
+L6 <- cbind(L6.sub,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+# L2 <- data.matrix(L2)
+# L6.sub <- cbind(L6.sub,rowsum)
+# L6.sub <- as.data.frame(L6.sub)
+
+# L6.sub <- L6.sub+0.00001
+L6 <- as.data.frame(L6)
+L6.rel <- L6/L6$rowsum
+# L6.rel <- L6.sub[1:222]/L6.sub$rowsum
+# L6.rel <- cbind(L6.sub[1:222]/L6.sub[,223],L6.sub[223])
+# L6.rel <- L6.rel[ ,-223]
+
+```"

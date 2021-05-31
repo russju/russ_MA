@@ -1,0 +1,1 @@
+{"frames":[{"func":"dplyr::select(specy.U2, everything(), -starts_with(c(\"diet\")))","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Fehler in dplyr::select(specy.U2, everything(), -starts_with(c(\"diet\"))) : \n  Objekt 'specy.U2' nicht gefunden\n"}

@@ -1,0 +1,6 @@
+"0","```r
+
+biom.L6.family <- sapply(split.default(biom.L6, sub('.*_(.*ceae).*', '\\1', names(biom.L6))), rowSums) %>% as.data.frame(.)
+
+biom.L6.family <- dplyr::select(biom.L6.family,ends_with('ceae'))
+```"

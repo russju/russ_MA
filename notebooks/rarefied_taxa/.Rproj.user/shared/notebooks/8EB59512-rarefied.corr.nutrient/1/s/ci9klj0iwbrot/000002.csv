@@ -1,0 +1,8 @@
+"0","```r
+
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)
+
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')
+
+```"

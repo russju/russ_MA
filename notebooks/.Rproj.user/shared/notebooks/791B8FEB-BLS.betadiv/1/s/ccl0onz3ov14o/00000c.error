@@ -1,0 +1,1 @@
+{"frames":[{"func":"var(df.clr.pca_data$var$coord$Dim.1)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0},{"func":"is.data.frame(x)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Fehler in df.clr.pca_data$var$coord$Dim.1 : \n  $ operator is invalid for atomic vectors\n"}

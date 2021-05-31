@@ -1,0 +1,14 @@
+"0","```r
+output_dir = '../results/'
+```"
+"1","Warnmeldungen:
+1: In readChar(file, size, TRUE) : truncating string with embedded nuls
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls
+3: In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+output_dir2 = paste0(output_dir,'boxplots.taxa.asso/')
+```"

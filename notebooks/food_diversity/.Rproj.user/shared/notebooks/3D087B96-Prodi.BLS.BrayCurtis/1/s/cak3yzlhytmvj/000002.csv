@@ -1,0 +1,7 @@
+"0","```r
+bc.week <- vegdist(otu.week, method=\"bray\")
+
+```"
+"1","Fehler in vegdist(otu.week, method = \"bray\") : 
+  konnte Funktion \"vegdist\" nicht finden
+"

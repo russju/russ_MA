@@ -1,0 +1,17 @@
+"0","```r
+
+norm.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+norm.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+
+norm.L6.U1 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr.U1_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+norm.L7.U1 <-read_tsv(paste0(table_dir,'biom.L7.rel.clr.U1_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+
+norm.L6.U2 <-read_tsv(paste0(table_dir,'biom.L6.rel.clr.U2_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+norm.L7.U2 <-read_tsv(paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))%>% column_to_rownames(.,'rowname')
+
+cl.sum.z <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_17.02.tsv')) %>% column_to_rownames(.,'file_name')
+
+cl.sum.z.U1 <- cl.sum.z[grepl('U1',row.names(cl.sum.z)),]
+cl.sum.z.U2 <- cl.sum.z[grepl('U2',row.names(cl.sum.z)),]
+
+```"

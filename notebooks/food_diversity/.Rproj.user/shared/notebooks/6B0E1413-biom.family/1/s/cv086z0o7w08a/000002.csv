@@ -1,0 +1,27 @@
+"0","```r
+#sum of the rows
+
+#taxa
+
+L6.family <- data.matrix(L6.family)
+L6.family <- L6.family+0.5##pseudocount
+rowsum <- rowSums(L6.family)
+
+
+L6.family <- cbind(L6.family,rowsum)
+
+#OTU count / OTU sample sum = rel. abund  taxa
+
+L6.family <- as.data.frame(L6.family)
+
+L6.family <- L6.family/L6.family$rowsum
+# L6.family <- L6.family[ ,-106]
+
+#clr transformation
+L6.family <- clr(L6.family) %>% as.data.frame(.) ##acomp
+
+L6.family <- select(L6.family,everything(), -starts_with(c('row','file')))
+```"
+"1","Fehler in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function â€˜selectâ€™ for signature â€˜\"data.frame\"â€™
+"

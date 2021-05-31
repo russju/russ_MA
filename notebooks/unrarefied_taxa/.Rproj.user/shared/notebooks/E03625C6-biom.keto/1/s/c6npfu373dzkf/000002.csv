@@ -1,0 +1,16 @@
+"0","```r
+
+L6.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L6.normalized.correlation_06.10.tsv'))
+# L6.rel.clr.U1.U2 <- column_to_rownames(L6.rel.clr.U1.U2,'sample')
+
+L2.rel.clr.U1.U2 <- read_tsv(paste0(table_dir, 'L2.normalized.correlation_06.10.tsv'))
+# L2.rel.clr.U1.U2 <- column_to_rownames(L2.rel.clr.U1.U2,'sample')
+
+nutr.sum <- read_tsv(paste0(table_dir, 'norm.keto.bls.06.10.tsv'))
+nutr.sum$file_name <- gsub(nutr.sum$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+
+conv.sum <- read_tsv(paste0(table_dir, 'conv.cluster.correlation_26.10.tsv'))
+
+cl.sum <- read_tsv(paste0(table_dir, 'nutrient.cluster.correlation_22.10.tsv'))
+```"

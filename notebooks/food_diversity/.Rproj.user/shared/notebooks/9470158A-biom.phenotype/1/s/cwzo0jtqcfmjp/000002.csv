@@ -1,0 +1,21 @@
+"0","```r
+# if (!requireNamespace(\"BiocManager\", quietly = TRUE))
+```"
+"1","Warnmeldung:
+In readChar(file, size, TRUE) : truncating string with embedded nuls
+"
+"0","```r
+#     install.packages(\"BiocManager\")
+# 
+# BiocManager::install(\"mixOmics\")
+  
+
+library(tidyverse)
+library(mixOmics)
+library(plotly)
+
+library(grid)
+library(gplots)
+
+# library(pheatmap)
+```"

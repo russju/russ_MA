@@ -1,0 +1,14 @@
+"0","```r
+#two samples for U1,U2 and U3
+#merging them ore deleting?
+
+L6 <- L6[!grepl(pattern = 'U3',row.names(L6)),]
+row.names(L6) <- str_replace(row.names(L6),pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U') 
+
+L6 <- L6[!grepl('.2U',row.names(L6)),]
+L6 <- select(L6,everything(),-starts_with(c('Sex','Time','Proband','Body','Day')))
+```"
+"1","Fehler in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function â€˜selectâ€™ for signature â€˜\"data.frame\"â€™
+"

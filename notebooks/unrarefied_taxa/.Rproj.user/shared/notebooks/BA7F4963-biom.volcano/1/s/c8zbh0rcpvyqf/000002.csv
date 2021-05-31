@@ -1,0 +1,28 @@
+"0","```r
+##plotting rel. clr abundances firmicutes bacteroidetes
+
+fb.clr <- L2.rel.clr %>% as.data.frame(.) %>% dplyr::select(.,starts_with(c('D_0__Bacteria.D_1__Bacteroidetes','D_0__Bacteria.D_1__Firmicutes','D_0__Bacteria.D_1__Proteobacteria','D_0__Bacteria.D_1__Actinobacteria','D_0__Bacteria.D_1__Tenericutes')))
+fb.clr$diet <- ifelse(grepl('U1',row.names(fb.clr)),'non keto','keto')
+colnames(fb.clr) <- c('rel.clr.Bacteroidetes','rel.clr.Firmicutes','rel.clr.Proteobacteria','rel.clr.Actinobacteria','rel.clr.Tenericutes','diet')
+
+
+firm.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Firmicutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)#,symnum.args = symnum.args
+
+bact.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Bacteroidetes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,vjust = 1.5,symnum.args = symnum.args)
+
+proteo.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Proteobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+actino.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Actinobacteria)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+tenericutes.clr.L2 <- ggplot(fb.clr,aes(x = diet,y = rel.clr.Tenericutes)) +
+  geom_boxplot()+geom_jitter(shape = 21)+ stat_compare_means(comparison = list(c('non keto','keto')),hide.ns = FALSE,symnum.args = symnum.args,vjust = 1.5)
+
+bact.firm <- ggscatter(fb.clr,x='rel.clr.Bacteroidetes',y='rel.clr.Firmicutes',
+          add = 'reg.line',conf.int = TRUE,
+          cor.coef = TRUE,cor.method = 'spearman')
+
+```"

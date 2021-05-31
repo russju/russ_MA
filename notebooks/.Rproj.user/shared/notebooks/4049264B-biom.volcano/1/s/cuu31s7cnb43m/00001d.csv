@@ -1,0 +1,4 @@
+"0",""
+"0","# ggarrange(firm.clr,bact.clr,proteo.clr,actino.clr,ncol = 2,nrow = 2)"
+"0",""
+"0","ggarrange(fett.clr,carbs.clr,ncol = 2,nrow = 1)"

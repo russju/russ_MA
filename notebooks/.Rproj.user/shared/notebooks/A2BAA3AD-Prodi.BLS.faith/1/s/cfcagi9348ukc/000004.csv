@@ -1,0 +1,8 @@
+"0",""
+"0","p.samp <- ggplot(hist.df.samp, aes(x = samples, y = SR)) +"
+"0","  geom_bar("
+"0","    aes(fill = stringr::str_sub(samples, -2, -1)),"
+"0","    stat = ""identity"", position = position_dodge(0.8),"
+"0","    width = 0.7"
+"0","    ) + ggtitle('richness in conventional clusters\n')+ theme(axis.text = element_text(angle = 90))"
+"0","ggplotly(p,tooltip = c('x','y','text'))"

@@ -1,0 +1,124 @@
+---
+title: "pca of nutrients,foods,nutclust,convclust samples colored by phenotype"
+output: html_notebook
+---
+#libraries
+```{r}
+library(tidyverse)
+
+
+library(factoextra)
+library(FactoMineR)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+##data import
+```{r}
+food_table <- read_tsv(paste0(table_dir, 'otu.conv.w.19.08.tsv')) %>% column_to_rownames(.,'file_name')##food level
+nutr.sum.z <- read_tsv(paste0(table_dir, 'norm.keto.bls.17.02.tsv'))%>% column_to_rownames(.,'file_name')##nutrient level
+k.bls <- read_tsv('C:/Users/Juliane/Desktop/project.directory/data/tables/ k.bls_08.10.tsv')##converter phenotypes
+k.bls$file_name <- gsub(k.bls$file_name,pattern='u',replacement = 'U') %>% gsub(pattern = '_',replacement = '.')
+
+
+# nutr.sum <- read_tsv(paste0(table_dir,'norm.keto.bls.06.10.tsv') %>% column_to_rownames(.,'file_name'))
+
+
+conv.clust <- read_tsv(paste0(table_dir, 'conv.clust.df.weighted.01.10.tsv')) %>% column_to_rownames(.,'file_name') %>% scale(.)
+
+
+nutr.clust <- read_tsv(paste0(table_dir,'cluster.w.df_07.10.tsv')) 
+colnames(nutr.clust)[colnames(nutr.clust) == 'sample'] <- 'file_name'
+nutr.clust <- column_to_rownames(nutr.clust,'file_name')
+nutr.clust <- scale(nutr.clust)
+```
+nutrients and converter information merge
+```{r}
+
+pheno <- dplyr::select(k.bls,starts_with(c('file_name','Phenotype'))) %>% distinct(.) %>% column_to_rownames(.,'file_name')
+
+pheno$Phenotype[is.na(pheno$Phenotype)] <- 'not classified' ##34 sample in U2 is NA and in U1 not classified
+
+
+```
+
+PCA nutrients
+```{r}
+nutr.sum.z[is.na(nutr.sum.z)] <- 0
+nutr.pca <- PCA(nutr.sum.z,scale.unit = FALSE)
+
+pdf(paste0(output_converter,'pca.nutrient.pdf'))
+##PCA with diet coloring
+factoextra::fviz_pca_biplot(X = nutr.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA nutrients',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup"))
+
+dev.off()
+```
+PCA food
+```{r}
+food.pca <- PCA(food_table,scale.unit = FALSE)
+
+##PCA with diet coloring
+
+pdf(paste0(output_converter,'pca.food.pdf'))
+factoextra::fviz_pca_biplot(X = food.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA foods',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup")) 
+
+dev.off()
+```
+PCA nutrient clusters
+```{r}
+nutrclust.pca <- PCA(nutr.clust,scale.unit = FALSE)
+
+##PCA with diet coloring
+pdf(paste0(output_converter,'pca.nutclust.pdf'))
+factoextra::fviz_pca_biplot(X =nutrclust.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA nutrient clusters',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup"),legend = 'none')
+
+dev.off()
+```
+
+
+PCA convetional clusters clusters
+```{r}
+convclust.pca <- PCA(conv.clust,scale.unit = FALSE)
+
+##PCA with diet coloring
+pdf(paste0(output_converter,'pca.convclust.pdf'))
+factoextra::fviz_pca_biplot(X =convclust.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA convetional clusters',label = 'none',invisible = c("ind.sup", "quali", "var", "quanti.sup"),legend = 'none') 
+
+dev.off()
+```

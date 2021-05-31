@@ -1,0 +1,126 @@
+---
+title: "correlation between fiber intake and taxa"
+output: html_notebook
+---
+
+#libraries
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("biomformat")
+
+# if (!requireNamespace('BiocManager', quietly = TRUE))
+#     install.packages('BiocManager')
+# 
+#  BiocManager::install('EnhancedVolcano')
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("a4Base")
+  
+
+library(tidyverse)
+library(biomformat)
+# library(data.table)
+library(compositions)
+# library(corrplot)
+# library(EnhancedVolcano)
+library(a4Base)
+library(plotly)
+```
+
+# Paths
+```{r}
+wd <- '../../' 
+
+output_dir = paste0(wd,'results/')
+diet.protocols = paste0(output_dir,'diet.protocols/')
+
+data_dir = paste0(wd,'data/')
+table_dir = paste0(data_dir, 'tables/')
+biom_dir = paste0(data_dir,'silva.feces/')
+```
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+# mapping <- read.table(paste0(biom_dir, 'Mappingfile_converter.txt'),row.names = NULL,header = TRUE)
+
+L2 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L2.csv'),row.names = 1,header = TRUE,sep = ';')
+
+L6 <- read.csv(paste0(biom_dir, 'ST_silva_unrarefied_filtered300_L6.csv'),header = TRUE,row.names = 1,sep = ';')
+
+biom <- read_biom(paste0(biom_dir, 'silva_stool_rarefied1650_table.biom'))
+
+merge.L6.nutr <- read_tsv(paste0(table_dir,'corr.L6.06.10.tsv'))
+merge.L6.nutr <- column_to_rownames(merge.L6.nutr,'samples') %>% as.data.frame(.)
+
+
+```
+
+
+unrarefied taxa tables
+relative nutrient table
+
+#correlation between fiber and taxa
+```{r}
+
+merge.L6.fiber <- dplyr::select(merge.L6.nutr,starts_with(c('D_','Cellulose','Wasserunlösliche Ballaststoffe','Ballaststoffe','Lignin','Oligosaccharide, nicht resorbierbar')),-ends_with('D_0__Eukaryota.D_1__SAR.D_2__Stramenopiles.D_3__Incertae.Sedis.D_4__Blastocystis.D_5__unidentified.guinea.pig.faeces.isolate.U26177'))
+
+cor.test.fiber <- merge.L6.fiber %>% 
+  pivot_longer(names_to = "variable_right", values_to = "value_right", D_0__Archaea.D_1__Euryarchaeota.D_2__Methanobacteria.D_3__Methanobacteriales.D_4__Methanobacteriaceae.D_5__Methanobrevibacter:D_0__Bacteria.D_1__Verrucomicrobia.D_2__Verrucomicrobiae.D_3__Verrucomicrobiales.D_4__Akkermansiaceae.D_5__Akkermansia) %>% 
+  pivot_longer(names_to = "variable_left", values_to = "value_left",`Cellulose`:`Oligosaccharide, nicht resorbierbar`) %>% 
+  group_by(variable_left, variable_right) %>% 
+  mutate(p.value = broom::tidy(cor.test(value_left, value_right))$p.value,
+         estimate = broom::tidy(cor.test(value_left, value_right))$estimate)
+
+cor.test.fiber[is.na(cor.test.fiber)] <- 0
+
+p.adj.fiber <- subset(cor.test.fiber,select = `p.value`) %>% data.matrix(.) %>% p.adjust(.,method = 'fdr')
+r.cor.fiber <- subset(cor.test.fiber,select = `estimate`) %>% data.matrix(.)
+
+```
+
+
+plotting
+```{r}
+#x axis log2 correlation
+
+# cor.test.log.fiber <- log2(r.cor.fiber) %>% as.numeric(.)
+# cor.test.log.fiber [is.nan(cor.test.log.fiber)] <- 0
+# cor.test.log.fiber [is.infinite(cor.test.log.fiber)] <- 0
+# cor.test.log.fiber <- as.data.frame(cor.test.log.fiber)
+
+r.cor.fiber[is.nan(r.cor.fiber)] <- 0
+r.cor.fiber[is.infinite(r.cor.fiber)] <- 0
+r.cor.fiber <- as.data.frame(r.cor.fiber)
+
+#y axis -log10 p.value
+
+p.adj.log.fiber <- -log10(p.adj.fiber)
+p.adj.log.fiber[is.infinite(p.adj.log.fiber)] <- 0
+p.adj.log.fiber <- as.data.frame(p.adj.log.fiber)
+
+cor.test.adj.fiber <- cbind(cor.test.fiber[ ,c(1,3)],p.adj.log.fiber) %>% cbind(.,r.cor.fiber) %>% as.data.frame(.)
+colnames(cor.test.adj.fiber) <- c('taxa','nutrient','p.adj.log','estimate')
+
+#volcano plot ggplot()
+
+vp.fiber <- ggplot(cor.test.adj.fiber,
+    aes(x = `estimate`, y = `p.adj.log`)) +
+  geom_point() +
+  ggtitle("Volcano plot") +
+  xlab("correlation") + 
+  ylab("-log10 adjusted p-value")
+
+# ggplotly(vp,tooltip = c('x','y','taxa','nutrient'))
+
+```
+

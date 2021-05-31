@@ -1,0 +1,27 @@
+"0","# nutr.clust <- read_tsv(paste0(table_dir,'nutrient.clusters.09.09.tsv'))"
+"0","# subgroups <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv'))"
+"0","# nutr.sum <- read_tsv(paste0(table_dir,'norm.keto.bls.06.10.tsv'))"
+"0",""
+"0",""
+"0","subgr <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","# conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.01.10.tsv')) %>% column_to_rownames(.,'file_name')"
+"0","nutr.clust <- read_tsv(paste0(table_dir,'nutr.clust.df.01.10.tsv')) "
+"2","Parsed with column specification:
+cols(
+  `1` = [32mcol_double()[39m,
+  `2` = [32mcol_double()[39m,
+  `3` = [32mcol_double()[39m,
+  `4` = [32mcol_double()[39m,
+  `5` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+"
+"0","colnames(nutr.clust) <- c('menue compounds (1)','sweets (2)','vegetables (3)','fats (4)','fruits(5)','file_name')"

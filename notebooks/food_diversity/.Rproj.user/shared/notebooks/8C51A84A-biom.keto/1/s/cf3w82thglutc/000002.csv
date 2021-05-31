@@ -1,0 +1,42 @@
+"0","```r
+L2.rel.clr.U1.U2$sample <- str_replace(L2.rel.clr.U1.U2$sample,pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+
+L6.rel.clr.U1.U2$sample <- str_replace(L6.rel.clr.U1.U2$sample,pattern = 'ST.',replacement = '') %>% 
+  str_replace(.,pattern = '0U', replacement = 'U')
+
+#only U1
+
+L2.U1 <- L2.rel.clr.U1.U2[grepl(pattern = 'U1',L2.rel.clr.U1.U2$sample), ]
+names(L2.U1)[names(L2.U1) == 'sample'] <- 'file_name'
+
+L6.U1 <- L6.rel.clr.U1.U2[grepl(pattern = 'U1',L6.rel.clr.U1.U2$sample), ]
+names(L6.U1)[names(L6.U1) == 'sample'] <- 'file_name'
+
+L6.U1.r <- L6.U1 %>% column_to_rownames(.,'file_name')
+fam.U1 <- sapply(split.default(L6.U1.r, sub('.*_(.*ceae).*', '\\1', names(L6.U1))), rowSums) %>% as.data.frame(.)
+fam.U1$file_name <- row.names(fam.U1)
+
+nutr.U1 <- nutr.sum[grepl(pattern = 'U1',nutr.sum$file_name), ]
+
+conv.sumU1 <- conv.sum[grepl(pattern = 'U1',conv.sum$file_name), ]
+cl.sumU1 <- cl.sum[grepl(pattern = 'U1',cl.sum$file_name), ]
+
+#only U2
+
+L2.U2 <- L2.rel.clr.U1.U2[grepl(pattern = 'U2',L2.rel.clr.U1.U2$sample), ]
+names(L2.U2)[names(L2.U2) == 'sample'] <- 'file_name'
+
+L6.U2 <- L6.rel.clr.U1.U2[grepl(pattern = 'U2',L6.rel.clr.U1.U2$sample), ]
+names(L6.U2)[names(L6.U2) == 'sample'] <- 'file_name'
+
+L6.U2.r <- L6.U2 %>% column_to_rownames(.,'file_name')
+fam.U2 <- sapply(split.default(L6.U2.r, sub('.*_(.*ceae).*', '\\1', names(L6.U2))), rowSums) %>% as.data.frame(.)
+fam.U2$file_name <- row.names(fam.U2)
+
+nutr.U2 <- nutr.sum[grepl(pattern = 'U2',nutr.sum$file_name), ]
+
+conv.sumU2 <- conv.sum[grepl(pattern = 'U2',conv.sum$file_name), ]
+cl.sumU2 <- cl.sum[grepl(pattern = 'U2',cl.sum$file_name), ]
+
+```"

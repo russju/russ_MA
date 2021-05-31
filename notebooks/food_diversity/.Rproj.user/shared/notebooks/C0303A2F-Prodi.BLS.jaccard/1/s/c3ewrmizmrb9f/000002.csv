@@ -1,0 +1,4 @@
+"0","pdf(paste0(diet_dir,'jaccard.pc.pdf'))"
+"2","Fehler in paste0(diet_dir, ""jaccard.pc.pdf"") : 
+  Objekt 'diet_dir' nicht gefunden
+"

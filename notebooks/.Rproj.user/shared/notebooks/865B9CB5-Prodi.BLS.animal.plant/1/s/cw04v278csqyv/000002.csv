@@ -1,0 +1,60 @@
+"0","```r
+#subset of k.bls_prodi per week
+
+plant.animal.w <- merge(plant, animal, by = c(\"file_name\",\"Phenotype\",\"source\",\"Energie_bls\"),all.x = TRUE, all.y = TRUE)
+plant.animal.w <- subset(plant.animal.w,select = c('file_name','Phenotype','source','Energie_bls'))
+
+#sum of energy intake in one week
+
+plant.animal.w$energy_sum_source <- with(plant.animal.w, ave(Energie_bls,file_name, source, FUN = sum))
+
+plant.animal.w$energy_sum_total <- with(plant.animal.w, ave(Energie_bls, file_name, FUN = sum))
+
+
+plant.animal.w$percent <- (100/plant.animal.w$energy_sum_total)*plant.animal.w$energy_sum_source
+
+plant.animal.w$percent.plant <- with(plant.animal.w, ifelse(source=='plant', percent,0))
+plant.animal.w$percent.animal <- with(plant.animal.w, ifelse(source=='animal', percent,0))
+
+pa.w <- plant.animal.w %>% group_by(file_name,percent.animal,percent.plant)
+
+pa.w <- plant.animal.w  %>%
+    group_by(file_name) %>%
+    summarise(percent.plant = unique(percent.plant[percent.plant!=0]), 
+              percent.animal = unique(percent.animal[percent.animal!=0]))
+
+pa.w$correct_percent <- pa.w$percent.plant+pa.w$percent.animal == 100
+
+#coloring by U1 U2
+
+pa.w$U1 <- grepl('U1',pa.w$file_name)
+pa.w$color <- ifelse(pa.w$U1 == 'TRUE','U1','U2')
+
+#density plot
+
+p.w <- ggplot(pa.w, aes(x=`percent.plant`, y=`percent.animal`, color=`color`)) +
+  geom_point() + ggtitle('density plot PRE and POST nutritional protocols')
+# + geom_smooth(method=lm)
+
+mean(pa.w$percent.plant)
+```"
+"1","[1] 55.06004
+"
+"0","```r
+sd(pa.w$percent.plant)
+```"
+"1","[1] 16.4326
+"
+"0","```r
+mean(pa.w$percent.animal)
+```"
+"1","[1] 44.93996
+"
+"0","```r
+sd(pa.w$percent.animal)
+```"
+"1","[1] 16.4326
+"
+"0","```r
+# ggplotly(p, tooltip = c('x','y','text'))
+```"

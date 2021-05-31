@@ -1,0 +1,46 @@
+"0","# write_tsv(pd.conv,paste0(table_dir,'faith.conv.tsv'))"
+"0","# write_tsv(pd.nutr,paste0(table_dir,'faith.nutr.tsv'))"
+"0",""
+"0","div.conv <- read_tsv(paste0(table_dir,'shannon.conv.tsv')) %>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------------------------------------------------[39m
+cols(
+  `Shannon Index` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+
+"
+"0","colnames(div.conv) <- 'Shannon Index conv.clust'"
+"0","div.nut <- read_tsv(paste0(table_dir,'shannon.nutr.tsv'))%>% column_to_rownames(.,'file_name')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------------------------------------------------[39m
+cols(
+  `Shannon Index` = [32mcol_double()[39m,
+  file_name = [31mcol_character()[39m
+)
+
+"
+"0","colnames(div.nut) <- 'Shannon Index nut.clust'"
+"0","# biom.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')"
+"0","# biom.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))%>% column_to_rownames(.,'rowname')"
+"0",""
+"0","biom.L6.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L6.tsv')) %>% column_to_rownames(.,'rowname')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  rowname = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"
+"0","biom.L7.rel <- read_tsv(paste0(table_dir,'rarefied.rel.L7.tsv')) %>% column_to_rownames(.,'rowname')"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m---------------------------------------------------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  rowname = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m for the full column specifications.
+
+"

@@ -1,0 +1,7 @@
+"0","L2.rel.clr <- clr(acomp(L2.rel)) %>% as.data.frame(.)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","nutr.sum <- clr(acomp(nutr.sum)) %>% as.data.frame(.)"
+"1","  ** Are the data/parts all in the same measurement units? **
+"
+"0","# write_tsv(nutr.sum,'C:/Users/Juliane/Desktop/project.directory/data/tables/correlation.proticols.11.09.tsv')"

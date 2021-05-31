@@ -1,0 +1,26 @@
+"0","```r
+norm.L6 <- read_tsv(paste0(table_dir,'biom.L6.rel.clr_19.02.tsv')) %>% column_to_rownames(.,'rowname')
+```"
+"1","
+-- Column specification --------------------------------------------------------
+cols(
+  .default = col_double(),
+  rowname = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+norm.L7 <- read_tsv(paste0(table_dir,'biom.L7.rel.clr_19.02.tsv'))%>% column_to_rownames(.,'rowname')
+```"
+"1","
+-- Column specification --------------------------------------------------------
+cols(
+  .default = col_double(),
+  rowname = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+biom.L6 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L6.csv'),header = TRUE,sep = ';',row.names = 1)
+# biom.L7 <- read.csv(paste0(biom_dir, 'rarefied1623_filtered300_L7.csv'),header = TRUE,sep = ';',row.names = 1)
+```"

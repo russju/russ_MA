@@ -1,0 +1,6 @@
+"0","bls.properties <- full_join(bls.properties, bls.properties.should) %>% "
+"0","  select(Category, Property)"
+"2","Joining, by = ""Property""
+"
+"0","fname = paste0(table_dir, 'BLS.properties.', date, '.tsv')"
+"0","write_tsv(bls.properties, path = fname)"

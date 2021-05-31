@@ -1,0 +1,16 @@
+"0","pdf(paste0(output_converter,'pca.nutclust.pdf'))
+factoextra::fviz_pca_biplot(X =nutrclust.pca, 
+                            # samples
+                            fill.ind = pheno$Phenotype,
+                            col.ind = 'black',
+                            pointshape = 21, pointsize = 3, alpha = 0.5,
+                            geom.ind = 'point',geom.var = FALSE,title = 'PCA nutrient clusters',label = 'none',invisible = c(""ind.sup"", ""quali"", ""var"", ""quanti.sup""),legend = 'none')
+
+dev.off()
+"
+"1","null device "
+"1","
+"
+"1","          1 "
+"1","
+"

@@ -1,0 +1,4 @@
+"0","output_dir = '../results/'"
+"0","data_dir = '../data/'"
+"0","keto_dir = paste0(data_dir, 'EP_Microbiome/')"
+"0","table_dir = paste0(data_dir, 'tables/')"

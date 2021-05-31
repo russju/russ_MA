@@ -1,0 +1,6 @@
+"0","rowmeanL6 <- rowMeans(L6.rel) %>%"
+"0","  cbind(.,L6.rel)"
+"0",""
+"0",""
+"0","L6.rel.clr <- clr(acomp(L6.rel)) %>% as.data.frame(.)"
+"0",""

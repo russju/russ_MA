@@ -1,0 +1,36 @@
+"0","```r
+pdf('C:/Users/Juliane/Desktop/project.directory/results/diet.protocols/unifrac.pc.pdf')
+
+ggarrange(conv.uw.pheno,conv.uw.sex, 
+          labels = c(\"A\", \"B\"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+```"
+"1","Using alpha for a discrete variable is not advised.Using alpha for a discrete variable is not advised.
+"
+"0","```r
+ggarrange(nutr.uw.pheno,nutr.uw.sex, 
+          labels = c(\"A\", \"B\"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+```"
+"1","Using alpha for a discrete variable is not advised.Using alpha for a discrete variable is not advised.
+"
+"0","```r
+ggarrange(conv.w.pheno,conv.w.sex, 
+          labels = c(\"A\", \"B\"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+```"
+"1","Using alpha for a discrete variable is not advised.Using alpha for a discrete variable is not advised.
+"
+"0","```r
+ggarrange(nutr.w.pheno,nutr.w.sex, 
+          labels = c(\"A\", \"B\"),
+          ncol = 1, nrow = 2,heights = c(1,1))
+```"
+"1","Using alpha for a discrete variable is not advised.Using alpha for a discrete variable is not advised.
+"
+"0","```r
+dev.off()
+```"
+"1","null device 
+          1 
+"

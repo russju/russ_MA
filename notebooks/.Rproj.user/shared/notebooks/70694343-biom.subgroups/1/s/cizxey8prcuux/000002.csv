@@ -1,0 +1,16 @@
+"0","subgr <- read_tsv(paste0(table_dir,'subclusters_06.10.tsv'))"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  file_name = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
+"0","subgr <- dplyr::select(subgr,starts_with(c('subgroup','file_name')))"
+"0","nutr.clust <- merge(nutr.clust,subgr,by = 'file_name') %>% column_to_rownames(.,'file_name')"
+"0",""
+"0","X <- dplyr::select(nutr.clust,everything(),-starts_with('subgroup'))"
+"0",""
+"0","Y =nutr.clust$subgroup %>% as.factor(.)"
+"0",""

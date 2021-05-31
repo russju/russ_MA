@@ -1,0 +1,9 @@
+"0","pheno <- ggplot(div, aes(x = Phenotype, y = `Shannon Index L6`, fill = Phenotype)) + 
+"
+"2","Warnmeldung:
+"
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","  geom_boxplot() +"
+"0","  ggtitle('Shannon Index genus level taxa') +geom_signif(comparison = list(c('high converter','low converter')),map_signif_level = TRUE)"

@@ -1,0 +1,26 @@
+"0","```r
+##U1 
+biom.L6.rel.clr.U1 <- biom.L6.rel.clr[grepl('U1',row.names(biom.L6.rel.clr)),]
+
+biom.L7.rel.clr.U1 <- biom.L7.rel.clr[grepl('U1',row.names(biom.L7.rel.clr)),]
+
+nutr.sum.z.U1 <- nutr.sum.z[grepl('U1',row.names(nutr.sum.z)),]
+
+rownames_to_column(biom.L6.rel.clr.U1) %>% write_tsv(.,paste0(table_dir,'biom.L6.rel.clr.U1_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr.U1) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr.U1_19.02.tsv'))
+
+##U2 
+biom.L6.rel.clr.U2 <- biom.L6.rel.clr[grepl('U2',row.names(biom.L6.rel.clr)),]
+
+biom.L7.rel.clr.U2 <- biom.L7.rel.clr[grepl('U2',row.names(biom.L7.rel.clr)),]
+
+nutr.sum.z.U2 <- nutr.sum.z[grepl('U2',row.names(nutr.sum.z)),]
+
+rownames_to_column(biom.L6.rel.clr.U2) %>%
+write_tsv(.,paste0(table_dir,'biom.L6.rel.clr.U2_19.02.tsv'))
+
+rownames_to_column(biom.L7.rel.clr.U2) %>%
+write_tsv(.,paste0(table_dir,'biom.L7.rel.clr.U2_19-02.tsv'))
+```"

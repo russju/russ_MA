@@ -1,0 +1,1 @@
+"0","select(keto.summary, Sex, Phenotype) %>% group_by(Sex, Phenotype) %>% tally() %>% group_by(Sex) %>% mutate(fraction.sex = n / sum(n, na.rm = T)) %>% group_by(Phenotype) %>% mutate(fraction.phenotype = n / sum(n, na.rm = T))"

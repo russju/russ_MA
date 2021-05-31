@@ -1,0 +1,19 @@
+"0","output_dir = '../results/'"
+"2","Warnmeldungen:
+"
+"2","1: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","2: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"2","3: "
+"2","In readChar(file, size, TRUE) :"
+"2"," truncating string with embedded nuls
+"
+"0","data_dir = '../data/'"
+"0","table_dir = paste0(data_dir, 'tables/')"
+"0","biom_dir = paste0(data_dir,'silva.feces/')"
+"0","output_dir2 = paste0(output_dir,'boxplots.taxa.asso/')"

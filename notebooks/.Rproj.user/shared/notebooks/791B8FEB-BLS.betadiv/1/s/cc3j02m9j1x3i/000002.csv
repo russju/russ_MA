@@ -1,0 +1,67 @@
+"0","df.tsne_data <- Rtsne(X = as.matrix(df.clr),"
+"0","                     check_duplicates = FALSE,"
+"0","                     pca = T, pca_center = T, pca_scale = T, normalize = T, "
+"0","                     dims = 2, perplexity = 35,"
+"0","                     verbose=TRUE, max_iter=1000)"
+"1","Performing PCA
+"
+"1","Read the 10614 x 50 data matrix successfully!
+"
+"1","OpenMP is working. 1 threads.
+"
+"1","Using no_dims = 2, perplexity = 35.000000, and theta = 0.500000
+"
+"1","Computing input similarities...
+"
+"1","Building tree...
+"
+"1"," - point 10000 of 10614
+"
+"1","Done in 30.54 seconds (sparsity = 0.013697)!
+Learning embedding...
+"
+"1","Iteration 50: error is 96.675141 (50 iterations in 11.89 seconds)
+"
+"1","Iteration 100: error is 79.920367 (50 iterations in 11.18 seconds)
+"
+"1","Iteration 150: error is 72.507873 (50 iterations in 10.32 seconds)
+"
+"1","Iteration 200: error is 69.753120 (50 iterations in 9.62 seconds)
+"
+"1","Iteration 250: error is 68.195195 (50 iterations in 11.08 seconds)
+"
+"1","Iteration 300: error is 2.314047 (50 iterations in 8.52 seconds)
+"
+"1","Iteration 350: error is 1.871359 (50 iterations in 9.81 seconds)
+"
+"1","Iteration 400: error is 1.584799 (50 iterations in 10.60 seconds)
+"
+"1","Iteration 450: error is 1.384343 (50 iterations in 12.15 seconds)
+"
+"1","Iteration 500: error is 1.237381 (50 iterations in 13.32 seconds)
+"
+"1","Iteration 550: error is 1.126178 (50 iterations in 10.70 seconds)
+"
+"1","Iteration 600: error is 1.039504 (50 iterations in 10.26 seconds)
+"
+"1","Iteration 650: error is 0.970702 (50 iterations in 9.20 seconds)
+"
+"1","Iteration 700: error is 0.916409 (50 iterations in 11.55 seconds)
+"
+"1","Iteration 750: error is 0.873848 (50 iterations in 10.74 seconds)
+"
+"1","Iteration 800: error is 0.841957 (50 iterations in 8.47 seconds)
+"
+"1","Iteration 850: error is 0.818467 (50 iterations in 8.89 seconds)
+"
+"1","Iteration 900: error is 0.802023 (50 iterations in 10.97 seconds)
+"
+"1","Iteration 950: error is 0.788921 (50 iterations in 12.26 seconds)
+"
+"1","Iteration 1000: error is 0.778410 (50 iterations in 11.12 seconds)
+"
+"1","Fitting performed in 212.65 seconds.
+"
+"0","df.data.tsne <- cbind(metadata, df.tsne_data$Y) %>% "
+"0","  rename(Dim.1 = `1`, "
+"0","         Dim.2 = `2`) "

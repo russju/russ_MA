@@ -1,0 +1,43 @@
+"0","```r
+
+#nutrient family
+cor.test.family.sub <- cor.test.family  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+
+cor.test.family.sub2 <- cor.test.family %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'taxa',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrients') %>% data.matrix(.)
+cor.test.family.sub2 <- ifelse(cor.test.family.sub2 >= -log10(0.05),'*','')
+
+##nutrient cluster
+cor.test.nutr.sub <- cor.test.nutr  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+
+cor.test.nutr.sub2 <- cor.test.nutr %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'nutrient clusters') %>% data.matrix(.)
+cor.test.nutr.sub2 <- ifelse(cor.test.nutr.sub2 >= -log10(0.05),'*','')
+
+##convetional cluster
+cor.test.conv.sub <-cor.test.conv  %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('p.adj.log')) %>% pivot_wider(.,names_from = 'family',values_from = 'estimate') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+
+cor.test.conv.sub2 <- cor.test.conv %>% distinct(.) %>% dplyr::select(.,everything(),-starts_with('estimate')) %>% pivot_wider(.,names_from = 'family',values_from = 'p.adj.log') %>%
+  column_to_rownames(.,'conv clusters') %>% data.matrix(.)
+cor.test.conv.sub2 <- ifelse(cor.test.conv.sub2 >= -log10(0.05),'*','')
+
+my_palette <- colorRampPalette(c(\"blue\", \"white\", \"red\"))(n = 299)
+
+pdf(paste0(output_heatmap,'rarefied.24.02.family.heatmaps.pdf'))
+
+heatmap.2(cor.test.family.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.family.sub2)
+
+heatmap.2(cor.test.nutr.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.nutr.sub2)
+```"
+"0","```r
+
+heatmap.2(cor.test.conv.sub,cexRow = .35,cexCol = .35,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = cor.test.conv.sub2)
+
+dev.off()
+```"
+"1","null device 
+          1 
+"

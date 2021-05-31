@@ -1,0 +1,26 @@
+"0","```r
+conv.clust <- read_tsv(paste0(table_dir,'conv.clust.df.weighted.01.10.tsv'))
+```"
+"1","
+-- Column specification --------------------------------------------------------
+cols(
+  .default = col_double(),
+  file_name = col_character()
+)
+i Use `spec()` for the full column specifications.
+"
+"0","```r
+conv.clust <- merge(conv.clust,pheno,by = 'file_name') %>% column_to_rownames(.,'file_name') 
+
+# conv.clust <- conv.clust[grepl('U2',row.names(conv.clust)),]
+
+matrix.conv <- conv.clust %>% group_by(Phenotype) %>%
+  summarise_all(.funs = sum) %>%
+  pivot_longer(-Phenotype) %>%
+  pivot_wider(names_from = Phenotype,values_from=value) %>% 
+  column_to_rownames(.,'name') %>% data.matrix(.)
+
+matrix.conv.z <- scale(matrix.conv)                                                                 
+
+l <- stats::heatmap(matrix.conv.z,cexRow = .8,cexCol = .9,Rowv = NA,Colv = NA)
+```"

@@ -1,0 +1,1164 @@
+---
+title: "Prodi to BLS"
+output: html_notebook
+---
+finished merge
+
+
+# Libraries
+```{r}
+library(tidyverse)
+library(FactoMineR)
+library(ggplot2)
+library(plotly)
+```
+
+# Paths
+```{r}
+output_dir = '../results/'
+bin_dir = '../bin/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```
+
+# Source
+```{r}
+# source(paste0(bin_dir, 'distmat_utils.R'))
+```
+
+
+## Create Output Dirs
+```{r}
+dir.create(output_dir)
+dir.create(table_dir)
+```
+
+# Data Import
+```{r}
+keto.summary <- read_tsv(paste0(table_dir, 'Keto.summary.tsv'))
+keto.samples <- read_tsv(paste0(table_dir, 'Keto.samples.tsv'))
+bls.gram <- read_tsv(paste0(table_dir, 'BLS.gram.15Jun2020.tsv'))
+
+# keto.bls <- read_tsv('paste0(table_dir,'keto.bls.merged.tsv'))##merged bls
+# combined_food <- read_tsv(paste0(table_dir,'keto.bls.recipes.tsv'))##recipes
+```
+
+Ppl used Prodi software to input data. When food item was not in the database they created a new one, based on the packaging info of the product. This means, that micronutrients for these foods are missing (NA).
+
+How much is 'unclassified?' as a fraction of kalories consumed?
+```{r}
+keto.samples %>% 
+  filter(item != 'Leitungswasser Freiburg') %>% 
+  mutate(classified = ifelse(is.na(Calcium), 'unclassified', 'classified')) %>% 
+  group_by(sample, time_point, date, classified) %>% 
+  summarize(kcal = sum(`Energie (kcal)`, na.rm = T)) %>% 
+  pivot_wider(names_from = 'classified', values_from = 'kcal') %>% 
+  mutate_at(.vars = vars(classified, unclassified),
+            .funs = funs(replace_na(., 0))) %>% 
+  mutate(kcal = classified + unclassified, 
+         classified.p = classified / kcal) %>% View()
+```
+Mostly >90% classified, but 10% of samples have more than 20% of kalories not annotated, going as high as 50%.
+
+# Prodi to BLS map
+We need to try to map the existing Prodi Items to the BLS database so that we can estimate micronutrients - especially individual fatty acids which - in sum - could differ between high/low sterol converters.
+Prodi uses BLS, but the underlying naming is slightly different. 
+We'll use regex and partially hard-coded renames of items. This is ugly
+
+BLS available food items
+```{r}
+bls.food <- bls.gram %>% 
+  dplyr::select(item_id, item_descr, item_info, item_cooking) %>% 
+  mutate(name = str_to_lower(item_descr))
+```
+
+# Manual
+We will merge the Prodi names with BLS names and later combine all found item-item matches to a key-map
+
+## 1. Merge
+```{r}
+prodi.food <- keto.samples %>% 
+  group_by(item) %>% 
+  tally() %>% 
+  rename(item_prodi = item) %>% 
+  mutate(name = str_to_lower(item_prodi)) %>% 
+  mutate(name = gsub(name, pattern = '\\([3,6]\\)', replacement = '(zubereitung gastronomie)')) %>% 
+  mutate(name = gsub(name, pattern = '\\([1,4]\\)', replacement = '(zubereitung haushalt)')) %>% 
+  mutate(name = gsub(name, pattern = '\\([2,5]\\)', replacement = '(zubereitung großküche)')) %>% 
+  
+  mutate(name = gsub(name, pattern = 'ziegenmilchfrischkäse mind. ', 
+                     replacement = 'frischkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenmilchschnittkäse mind. ', 
+                     replacement = 'schnittkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenschnittkäse ', 
+                     replacement = 'schnittkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenmilchweichkäse mind. ', 
+                     replacement = 'weichkäse aus ziegenmilch ('),
+         name = gsub(name, pattern = 'ziegenweichkäse ', 
+                     replacement = 'weichkäse aus ziegenmilch (')
+         ) %>% 
+  mutate(name = gsub(name, pattern = 'fett i. tr.$', replacement = 'fett i. tr.)'),
+         name = gsub(name, pattern = 'fett i.tr.$', replacement = 'fett i. tr.)'),
+         name = gsub(name, pattern = ' %', replacement = '%'),
+         name = gsub(name, pattern = 'mind. ', replacement = '(')
+         ) 
+
+n_items = nrow(prodi.food)
+print(paste0('Total: ', n_items))
+
+merged.1 <- 
+  left_join(prodi.food, bls.food, by = 'name')
+
+found.1 <- merged.1 %>% filter(!is.na(item_id))
+left.1 <- merged.1 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = nrow(found.1)
+print(paste0('Found: ', n_found, ' (', nrow(left.1), ' left)' ))
+```
+## 2. Merge
+```{r}
+merged.2 <- 
+  left.1 %>% 
+  mutate(name = gsub(name, pattern = '< 10% fett i. tr.\\)', replacement = 'magerstufe'),
+         name = gsub(name, pattern = '\\(10% fett i. tr.\\)', replacement = 'viertelfettstufe'),
+         name = gsub(name, pattern = '\\(20% fett i. tr.\\)', replacement = 'halbfettstufe'),
+         name = gsub(name, pattern = '\\(30% fett i. tr.\\)', replacement = 'dreiviertelfettstufe'),
+         name = gsub(name, pattern = '\\(40% fett i. tr.\\)', replacement = 'fettstufe'),
+         name = gsub(name, pattern = '\\(45% fett i. tr.\\)', replacement = 'vollfettstufe'),
+         name = gsub(name, pattern = '\\(50% fett i. tr.\\)', replacement = 'rahmstufe'),
+         name = gsub(name, pattern = '\\(60% fett i. tr.\\)', replacement = 'doppelrahmstufe'),
+         ) %>% 
+  mutate(name = gsub(name, pattern = 'joghurt 1,5% fett', replacement = 'joghurt fettarm'),
+         name = gsub(name, pattern = 'joghurt 3,5% fett', replacement = 'joghurt vollfett'),
+         ) %>% 
+  mutate(name = gsub(name, pattern = ' roh', replacement = ' frisch')) %>% 
+  mutate(name = gsub(name, pattern = 'karotte \\(mohrrübe, möhre\\)', replacement = 'mohrrübe')) %>% 
+  mutate(name = gsub(name, pattern = 'karotten gedünstet \\(zubereitung haushalt\\)', 
+                     replacement = 'möhren gedünstet (zubereitung haushalt)')) %>% 
+  mutate(name = case_when(
+    name == 'kaffeesahne 10% fett' ~ 'kaffeesahne 10 % fett',
+    name == 'kuhmilch trinkmilch 3,5% fett' ~ 'kuhmilch trinkmilch vollfett', 
+    name == 'kuhmilch trinkmilch 1,5% fett' ~ 'kuhmilch trinkmilch fettarm', 
+    name == 'trinkmilch mit kakao/schokolade' ~ 'trinkmilch mit kakao, schokolade', 
+    name == 'vollmilchschokolade' ~ 'milchschokolade', 
+    name == 'sahnevollmilchschokolade' ~ 'sahnemilchschokolade',
+    name == 'sahnevollmilchschokolade mit nüssen' ~ 'milchschokolade vollmilch-nuß',
+    name == 'soja-milch' ~ 'sojadrink, sojadrinkprodukte',
+    name == 'schokolade milchschokolade' ~ 'milchschokolade', 
+    name == 'vollmilchschokolade gefüllt mit nuss-nougat' ~ 'milchschokolade nougat',
+    name == 'espresso (getränk)' ~ 'kaffee (getränk)',
+    name == 'cappuccino' ~ 'kaffee mit milch (getränk)',
+    name == 'kaffee halb und halb (getränk)'  ~ 'kaffee halb und halb',
+    name == 'kaffee-ersatz (pulver)' ~ 'kaffee-ersatz trocken',
+    name == 'vollmilchschokolade gefüllt mit nougat-kaffee' ~ 'schokolade gefüllt mit kaffee',
+    name == 'joghurt fettarm' ~ 'joghurt teilentrahmt', 
+    name == 'joghurt vollfett probiotisch' ~ 'joghurt vollfett',
+    name == 'joghurt angereichert mit magermilchpulver 10% fett' ~ 'joghurt mit magermilch angereichert 10% fett',
+    name == 'fruchtjoghurt vollfett' ~ 'joghurt vollfett mit fruchtzubereitung',
+    name %in% c('zartbitterschokolade 92% kakao',
+                'zartbitterschokolade 85%',
+                'zartbitterschokolade 90%',
+                'zartbitterschokolade 99%') ~ 'zartbitterschokolade',
+    name == 'apfelsaft handelsware' ~ 'apfel fruchtsaft',
+    name == 'apfelmus' ~ 'apfelmus (zubereitung haushalt)',
+    name %in% c('apfelsinensaft (orangensaft) ungesüßt handelsware', 
+                'apfelsinensaft (orangensaft) frisch gepresst muttersaft',
+                'orangensaft') ~ 'orange fruchtsaft',
+    name %in% c('orange / apfelsine','apfelsine (orange)') ~ 'orange frisch',
+    name == 'chia' ~ 'chiasamen getrocknet',
+    name %in% c('coca-cola zero','coca-cola light','fanta zero, coca-cola') ~ 'colagetränke entcoffeiniert mit süßstoff', 
+    name == 'mousse au chocolat (schokoladenschaum) (zubereitung gastronomie)' ~ 'mousse au chocolat (zubereitung gastronomie)',
+    name == 'zwiebel' ~ 'zwiebeln',
+    name == 'brötchen' ~ 'brötchen-weizenbrötchen',
+    name == 'macadamianuss frisch' ~ 'macadamianuss',
+    name == 'schlagsahne 30% fett' ~ 'schlagsahne 30 % fett',
+    name == 'polenta frisch' ~ 'polenta (zubereitung gastronomie)',
+    name == 'reis geschält frisch' ~ 'reis geschält',
+    name == 'fenchel knolle frisch' ~ 'fenchel frisch',
+    name == 'frischkäse dreiviertelfettstufe' ~ 'frischkäsezubereitung dreiviertelfettstufe',
+    name == 'frischkäse halbfettstufe' ~ 'frischkäsezubereitung halbfettstufe',
+    name == 'frischkäse (70% fett i. tr.)' ~ 'frischkäsezubereitung 70%f.i.tr',
+    name == 'frischkäse rahm 50% fett i. tr.)' ~ 'frischkäsezubereitung rahmstufe',
+    name == 'körniger frischkäse' ~ 'frischkäse', 
+    name == 'körniger frischkäse magerstufe' ~ 'frischkäsezubereitung magerstufe',
+    name == 'frischkäse doppelrahm (60%, höchst. 85% fett i. tr.)' ~ 'frischkäsezubereitung doppelrahmstufe',
+    name == 'fitline 0,2% natur, exquisa frischkäse' ~ 'frischkäsezubereitung magerstufe',
+    name == 'radieschen' ~ 'radieschen frisch', 
+    name == 'wiener würstchen' ~ 'wiener',
+    name == 'lachsschinken' ~ 'schwein schinken roh geräuchert (lachsschinken)',
+    name == 'zitronensaft frisch gepresst muttersaft' ~ 'zitrone fruchtsaft',
+    name %in% c('kartoffeln geschält druckgedämpft', 'kartoffeln geschält gekocht') ~ 'kartoffeln geschält gegart', 
+    name %in% c('kartoffelbrei/kartoffelpüree (0)', 'kartoffelpüree (standardrezeptur)', 'kartoffelbrei / kartoffelpüree (zubereitung haushalt)') ~ 'kartoffelbrei, kartoffelpüree (zubereitung haushalt)',
+    name == 'kartoffel gekocht, mit schale' ~ 'kartoffeln ungeschält gegart mit küchenabfall',
+    name == 'kartoffelpuffer (standardrezeptur)' ~ 'kartoffelpuffer (zubereitung gastronomie)',
+    name %in% c('kartoffelgratin (standardrezeptur)','kartoffelauflauf/kartoffelgratin (0)') ~ 'kartoffelgratin (zubereitung haushalt)',
+    name %in% c('broccoli gedämpft', 'broccoli gedünstet (zubereitet ohne fett)', 'broccoli gekocht') ~ 'broccoli gegart',
+    name == 'broccoli' ~ 'broccoli frisch',
+    name %in% c('aubergine gebacken','aubergine gebraten (zubereitet ohne fett)','aubergine gegart') ~ 'aubergine frisch gegart', 
+    name == 'aubergine (eierfrucht)' ~ 'aubergine frisch',
+    name %in% c('blumenkohl gedämpft','blumenkohl gekocht') ~ 'blumenkohl gegart',
+    name %in% c('creme fraiche 30% fett','creme/schmand 30% fett', 'creme, schmand 30% fett') ~ 'creme, schmand 30 % fett',
+    name == 'creme/schmand' ~ 'creme schmand',
+    name == 'creme/schmand 20% fett' ~ 'creme, schmand 20% fett',
+    name %in% c('erdnusspaste (erdnussmus)', 'erdnusscreme') ~ 'erdnussbutter, -mus',
+    T ~ name
+  )) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.2 <- merged.2 %>% filter(!is.na(item_id))
+left.2 <- merged.2 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.2)
+print(paste0('Found: ', n_found, ' (', nrow(left.2), ' left)' ))
+```
+
+## 3. Merge
+```{r}
+merged.3 <- 
+  left.2 %>% 
+  mutate(name = gsub(name, pattern = 'gekocht', replacement = 'gegart')) %>% 
+  mutate(name = gsub(name, pattern = '^spinat', replacement = 'blattspinat')) %>% 
+  mutate(name = case_when(
+         name == 'eierteigwaren (nudeln, makkaroni, spaghetti etc.)' ~ 'eierteigwaren',
+         name == 'eierteigwaren (nudeln) gegart, abgetropft' ~ 'eierteigwaren gegart',
+         name == 'eierteigwaren aus weizen frisch' ~ 'eierteigwaren aus weizen',
+         name == 'eierteigwaren spaghetti gegart' ~ 'eierteigwaren gegart',
+         name == 'eierteigwaren besonderer art frisch' ~ 'eierteigwaren besonderer art',
+         name %in% c('eierteigwaren schnitt-/bandnudeln frisch', 'eierteigwaren spaghetti frisch') ~ 'eierteigwaren spaghetti',
+         name == 'eierteigwaren spätzle gegart' ~ 'spätzle (zubereitung haushalt)',
+         name %in% c('teigwaren eifrei spaghetti gegart','teigwaren eifrei suppennudeln gegart') ~ 'teigwaren eifrei gegart',
+         name == 'teigwaren eifrei aus hartweizengrieß frisch' ~ 'teigwaren aus hartgrieß', 
+         name %in% c('gemüsepaprika rot gegart','gemüsepaprika rot gedämpft', 'gemüsepaprika gelb gegart') ~ 'paprikaschoten frisch gegart',
+         name == 'tomate' ~ 'tomaten',
+         name == 'tomatensoße (standardrezeptur)' ~ 'tomatensoße aus frischen tomaten (zubereitung haushalt)',
+         name == 'tomatensoße konserve' ~ 'tomaten konserve gekocht',
+         name == 'tomatensalat mit essig und öl (standardrezeptur)' ~ 'tomatensalat mit olivenöl (zubereitung gastronomie)',
+         name %in% c('tomatensuppe aus frischen tomaten (zubereitung haushalt)', 'tomatensuppe (standardrezeptur)') ~ 'tomatensuppe (zubereitung haushalt)',
+         name == 'tomatensauce toskana, alnatura' ~ 'tomatensoße italienisch (zubereitung großküche)',
+         name == 'roggenvollkornbrot' ~ 'vollkornbrot-roggenvollkornbrot',
+         name %in% c('vollkornbrot-roggenvollkornschrottoastbrot', 'vollkornbrot-weizen/roggenvollkornschrottoastbrot') ~ 'vollkornbrot-weizen, roggenvollkornschrottoastbrot',
+         name %in% c('knäckebrot leicht & cross') ~ 'knäckebrote leicht & cross',
+         name == 'knäckebrot' ~ 'knäckebrote',
+        name == 'vollkornbrot-roggen/weizenvollkornbrot' ~ 'vollkornbrot-roggenvollkornmischbrot' ,
+        name == 'weizen(mehl)brot (weißbrot)' ~ 'weißbrot-weizenbrot', 
+        name == 'roggenbrot' ~ 'graubrot-roggenbrot',
+        name == 'holzofenbrot' ~ 'holzofenbrote',
+        name == 'dinkelbrot' ~ 'dinkelbrot (vollkornbrot)',
+        name == 'vollkornbrötchen' ~ 'vollkornbrötchen allgemein',
+        name == 'brötchen dinkelbrötchen' ~ 'dinkelbrötchen',
+        name == 'vollkornbrötchen-dinkelvollkornbrötchen' ~ 'dinkelvollkornbrötchen',
+        name == 'vollkornbrötchen-weizenvollkornbrötchen mit ölsamenzutaten' ~ 'vollkornbrötchen-weizenvollk.brötchen mit ölsamenzutaten',
+        name == 'brötchen mit butter und schinkenwurst (standardrezeptur)' ~ 'schinkenbrötchen',
+        name == 'grünkohl gegart' ~ 'grünkohl (braunkohl) gegart',
+        name == 'lauch / porree gedünstet (zubereitung haushalt)' ~ 'lauch, porree gedünstet (zubereitung haushalt)',
+        name == 'schnittsalat (blatt-/ pflücksalat)' ~ 'schnittsalat (blatt- pflücksalat)',
+        name %in% c('rind/schwein hackfleisch gebraten (zubereitet ohne fett)',  'rind/schwein hackfleisch gegart') ~ 'rind, schwein hackfleisch gegart',
+        name == 'pökelwaren rippchen/schälrippchen' ~ 'pökelwaren rippchen, schälrippchen',
+        name == 'pudding-/soßenpulver/cremespeisenpulver' ~ 'pudding-, soßenpulver, cremespeisenpulver',
+        name == 'rind/schwein hackfleisch frisch' ~ 'rind, schwein hackfleisch frisch',
+        name == 'bierschinken/schinkenpastete' ~ 'bierschinken, schinkenpastete',
+        name == 'schweineschmalz/-fett' ~ 'schweineschmalz, -fett',
+        name == 'wollwurst/geschwollene' ~ 'wollwurst, geschwollene',
+        name == 'eiersalat mit tomaten und essig/öl dressing (zubereitung großküche)' ~ 'eiersalat mit tomaten (zubereitung großküche)',
+        name == 'walnuss' ~ 'walnuss frisch',
+        name == 'rotbusch-/roibuschtee' ~ 'tee (getränk)', 
+        name %in% c('schwein schinken gegart', 'schweineschinken gegart (kochschinken)') ~ 'schwein schinken',
+        name == 'schafskäse rahmstufe' ~ 'schafskäse',
+        name == 'nuss-nougatcreme' ~ 'nuß-nougat-creme süß',
+        
+         
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.3 <- merged.3 %>% filter(!is.na(item_id))
+left.3 <- merged.3 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.3)
+print(paste0('Found: ', n_found, ' (', nrow(left.3), ' left)' ))
+```
+##4.Merge
+```{r}
+merged.4 <- left.3%>% 
+  # mutate(name = gsub(name, pattern = '', replacement = '')) %>%
+  mutate(name = case_when(
+         name == 'amaranth,gepufft,alnatura' ~ 'amaranth roh',
+         name == 'amerikanische cookies' ~ 'kleinteile aus hartkeksteig',
+         name == 'auberginenmark' ~ 'aubergine(eierfrucht),gegart',
+         name == 'balisto schoko-korn-mix,mars' ~ 'energieriegel mit haselnusscreme',
+         name == 'bergkäse fettstufe' ~ 'bergkäse vollfettstufe',
+         name == 'bier alkoholfrei(<0,5gew% alkohol)' ~ 'bier alkoholfrei(< 0,5gew% alkohol)',
+         name == 'bio® joghurt mild auf mango-vanille 3,7%, 180g becher, andechser' ~ 'joghurt entrahmt mit früchten',
+         name == 'bio® speisequark magerstufe mit joghurt, 250g becher, andechser' ~ 'quark magerstufe- magerquark',
+         name == 'blätterteig gebacken' ~ 'blätterteige',
+         name == 'bohnen dick (saubohnen) reif konserve abgetropft' ~ 'bohnen dick (saubohnen) reif konserve',
+         name == 'bohnen weiß dick gesäuert abgetropft' ~ 'bohnen weiß reif konserve',
+          name == 'bohnensalat (standardrezeptur)' ~ 'bohnensalat sauerkonserve',
+         name == 'bounty' ~ 'schokolade gefüllt mit kokosnuss',
+         name == 'braten soße konserve' ~ 'bratensoße dunkel konserve',
+         name == 'brie (70% fett i. tr.)' ~ 'brie 70% f.i.tr.',
+         name == 'brühe instant (brühwürfel)' ~ 'brühe instant',
+         name == 'bunte fischsuppe mit weißwein (zubereitung haushalt)' ~ 'bunte fischsuppe (zubereitung haushalt)',
+         name == 'buttergemüse (tk), alnatura' ~ 'gemüsemischung tiefgefroren',
+         name == 'camembert (70% fett i. tr.)' ~ 'camembert 70% f.i.tr.',
+         name == 'champignon (zuchtchampignon)' ~ 'champignon gegart',
+         name == 'champignons im ausbackteig' ~ 'champignonpastete mit mürbeteig',
+         name == 'cheeseburger, mcdonalds' ~ 'cheeseburger (zubereitung gastronomie)',
+         name == 'chicken mcnuggets unterschiedliche anzahl, mcdonalds' ~ 'brathähnchen brustfilet frittiert (zubereitet ohne fett)',
+         name == 'chili sin carne, tartex' ~ 'kidney-bohnen in tomatensoße konserve',
+         name == 'chipsfrisch ungarisch, funny-frisch' ~ 'kartoffelchips (verzehrsfertig)',
+         name == 'cocktail (mittlerer alkoholgehalt, ~ 8,7 vol%)' ~ 'cocktails',
+         name == 'color-rado, haribo' ~ 'gummibonbons und gummibärchen',
+         name == 'cottagekäse (hüttenkäse)' ~ 'hüttenkäse',
+         name == 'cracker' ~ 'salzgebäck',
+         name == 'cracker meersalz, alnatura' ~ 'salzgebäck',
+         name == 'croissant mit schoko-nuss-füllung' ~ 'nußhörnchen aus hefeteig fettreich',
+         
+         name == 'dany sahne schoko (115g-becher) danone' ~ 'schokoladenpudding mit vanillesoße (zubereitung großküche)',
+         name == 'dattel gegart' ~ 'dattel frisch gegart',
+         name == 'delikatess feiner fleischsalat, homann' ~ 'fleischsalat (zubereitung gastronomie)',
+         name == 'diät halbfettmargarine' ~ 'margarine halbfett linolsäure <30%',
+         name == 'dinkel-flakes alnatura' ~ 'dinkel ganzes korn roh',
+         name == 'döner kebab' ~ 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie)
+',
+         name == 'dönerfleisch (geflügel) gegrillt' ~ 'geflügel',
+         name == 'donut' ~ 'donuts mit mandeln',
+         name == 'doppelkeks dinkel zartbitter, alnatura' ~ 'schokokeks glutenfrei',
+         name == 'eierlikörtorte' ~ 'schoko-eierlikör-kränzchen aus mürbeteig',
+         name %in% c('eierpfannkuchen (mit buttermilch zubereitet)','eierpfannkuchen (mit milch 1,5% fett zubereitet)','eierpfannkuchen ohne fett')  ~ 'eierpfannkuchen - eierkuchen (zubereitung haushalt)',
+name == 'eiersalat mit käse, wurst und saurer sahne (zubereitung haush' ~ 'eiersalat mit käse und wurst (zubereitung haushalt)',
+name == 'eiersalat, alnatura' ~ 'eiersalat mit tomaten (zubereitung großküche)',
+name == 'eis gemischt (frucht und nuss)' ~ 'fruchteis',
+name == 'eis gemischt (nuss und vanille)' ~ 'milchspeiseeis vanille',
+T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.4 <- merged.4 %>% filter(!is.na(item_id))
+left.4 <- merged.4 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.4)
+print(paste0('Found: ', n_found, ' (', nrow(left.4), ' left)' ))
+```
+##5.Merge
+```{r}
+merged.5 <- left.4%>% 
+  mutate(name = case_when(
+         name == 'zucchini gegart' ~ 'zucchini frisch gegart',
+         name == 'zitronenkuchen (standardrezeptur)' ~ 'zitronenkuchen fertigmischung',
+         name == 'zucchini gedünstet (zubereitet ohne fett)' ~ 'zucchini tiefgefroren gegart',
+         name == 'zartbitterschokolade gefüllt mit trüffel-nuss' ~ 'schokolade gefüllt mit trüffel',
+         name == 'zartbitterschokolade gefüllt mit fruchtcreme' ~ 'schokolade gefüllt mit fruchtcreme',
+         name == 'zanderfilet paniert gebraten (zubereitung gastronomie)' ~ 'zander frisch frittiert mit küchenabfall',
+         name == 'zander gegart fischzuschnitt' ~ 'zander frisch gegart fischzuschnitt',
+         
+         name == 'wurstsalat mit gewürzgurken und salatöl (zubereitung großküche)' ~ 'wurstsalat (standardrezeptur)',
+         name == '	würstchen schweizer art (zubereitung großküche)' ~ 'würstchen "schweizer art" (zubereitung gastronomie)',
+         name == 'weizenmehl type 405' ~ 'weizen mehl type 405',
+         name == 'weizenkleie (speisekleie)' ~ 'weizen kleie',
+         name == 'weinbeere (weintraube)' ~ 'weintrauben',
+         name == 'weichkäse (70% fett i. tr.)' ~ 'weichkäse 70% f.i.tr.',
+         name == 'waldmeister-geister, haribo' ~ 'gummibonbons und gummibärchen',
+         name == 'vollmilchschokolade gefüllt mit karamell-nuss' ~ 'schokolade gefüllt mit nüssen',
+         name == 'vollmilchschokolade crisp' ~ 'milchschokolade crunch',
+         name == 'vegetarisches schmalzimitat' ~ 'vegetarisches schmalz',
+         name == 'vegetarische ravioli gegart' ~ 'vegetarische ravioli',
+         name == 'vanillesoße (standardrezeptur)' ~ 'vanillesoße (zubereitung haushalt)',
+         name == 'tzatziki, homann' ~ 'tzatziki (zubereitung gastronomie)',
+         name == 'tzatziki' ~ 'tzatziki (zubereitung gastronomie)',
+         name == 'tutti-frutti, haribo' ~ 'tutti-frutti (zubereitung haushalt)',
+         name %in% c('traubensaftschorle','traubensaft handelsware') ~ 'fruchtsaftgetränke aus traubensaft',
+         name == 'tomatensoße aus frischen tomaten mit saurer sahne (zubereitung haushalt' ~ 'tomatensoße aus frischen tomaten (zubereitung haushalt)',
+         name == 'tofuaufschnitt paprika, alnatura' ~ 'sojaaufschnitt',
+         name == 'tofu seiden' ~ 'seidentofu',
+         name == 'tofu fest gegart' ~ 'tofu fest',
+         name == 'thunfisch in öl' ~ 'thunfisch konserve in öl',
+         name == 'thunfisch' ~ 'thunfisch frisch fischzuschnitt',
+         name == 'sprossen und lauchgemüse (0)' ~ 'sprossen- und lauchgemüse',
+         name == 'speisequark 40% fett i. tr. (speisequark mit sahne)' ~ 'quark vollfettstufe',
+         name == 'spätzle (standardrezeptur)' ~ 'spätzle (zubereitung haushalt)',
+         name == 'spargelcremesuppe (standardrezeptur)' ~ 'spargelcremesuppe (zubereitung großküche)',
+         name %in% c('spargel gegart zubereitet mit fett und salz (standardrezeptur)','spargel gegart') ~ 'spargel frisch gegart',
+         name == 'spargel gedämpft' ~ 'stangenspargel gedünstet (zubereitung haushalt)',
+         name == 'spaghetti (standardrezeptur)' ~ 'eierteigwaren spaghetti',
+         name == 'sojawürstchen konserve abgetropft' ~ 'sojawürstchen konserve',
+         name == 'softeis schoko' ~ 'softeis',
+         name == 'weißkohl gegart' ~ 'weißkohl (weißkraut) gegart',
+         name == 'shiitakepilz gegart' ~ 'shiitakepilz getrocknet',
+         name == 'schweinespeck durchwachsen (frühstücksspeck, wammerl)' ~ 'schwein speck durchwachsen (frühstücksspeck)',
+         name == 'schweinerückenschnitzel natur (standardrezeptur)' ~ 'schweinerücken gekocht (zubereitung großküche)',
+         name == 'schweinehalsschnitzel paniert (standardrezeptur)' ~ 'schweineschnitzel paniert, gebraten (zubereitung haushalt)',
+         name == 'schweinehalsschnitzel natur (standardrezeptur)' ~ 'schweineschnitzel natur, gebraten (zubereitung haushalt)',
+         name %in% c('schweinegulasch (standardrezeptur)','schwein gulasch (mf) gegart') ~ 'schweinegulasch (zubereitung gastronomie)',
+         name == 'schweinebauch geräuchert' ~ 'schweinebauch gekocht (zubereitung großküche) ',
+         name == 'schwein schnitzel (ma) gebraten (zubereitet ohne fett)' ~ 'schwein steak mittelfett (mittelfett)',
+         name == 'schwein schinkenspeck gegrillt' ~ 'schwein schinkenspeck roh geräuchert',
+         name == 'schwein schinkenspeck gebacken' ~ 'schwein schinkenspeck',
+         name == 'schwein oberschale gegart' ~ 'schwein oberschale',
+         name %in% c('schwein keule (schinken) (ma) frisch','schwein keule (schinken) (fe) frisch') ~ 'schwein keule (schinken) frisch',
+         name == 'chwein keule (schinken) (ma) gegart' ~ 'schwein keule (schinken) (mittelfett) frisch gegart',
+         name == 'schwein fleisch (fe) gegart' ~ 'schwein fleisch fett (fett)',
+         name == 'schwein filet (ma) gegart' ~ 'schwein filet',
+         name == 'schwein bratenfleisch (mf) gebraten (zubereitet ohne fett)' ~ 'schwein bratenfleisch (fett) frisch gegart',
+         name == 'schwein bauchspeck frisch' ~ 'schwein bauch frisch',
+         name %in% c('schwarzwälder schinken gegart','schwarzwälder schinken') ~'schwein keule (schinken) (fett) gepökelt ungeräuchert',
+         name == 'schokoladen-müslikeks aus vollkornteig' ~ 'müslikeks aus vollkornteig',
+         name == 'schokoladeneis' ~ 'schokoladeneis (zubereitung haushalt)',
+         name %in% c('schokoladen-butterkeks mit nougatfüllung','schokoladen-butterkeks') ~ 'butterkeks',
+         name == 'schinkenwurst energiereduziert' ~ 'schinkenwurst',
+         name == 'sardine konserve in öl abgetropft gegart' ~ 'sardine konserve in öl, abgetropft',
+         name %in% c('emmentaler fettstufe','emmentaler rahmstufe') ~ 'emmentaler vollfettstufe',
+         name == 'ente fleisch mit haut gegart' ~ 'ente fleisch mit haut frisch gegart',
+         name == 'erbsensuppe grün mit fleischbrühe (zubereitung großküche)' ~ 'erbsensuppe (zubereitung gastronomie)',
+         name == 'erdnussriegel, pural naturkost' ~ 'erdnuss-krokant',
+         name == 'espresso (getränk) gesüßt' ~ 'kaffee (getränk)',
+         name == 'feldsalat (rapunzel)' ~ 'feldsalat frisch',
+         name == 'fenchel gegart' ~ 'fenchel frisch gegart',
+         name == 'fischfilet gebraten in butter (zubereitung haushalt)' ~ 'fischfilet gebraten (zubereitung haushalt)',
+         name == 'fischstäbchen paniert tiefgefroren gebacken' ~ 'fischstäbchen (zubereitung haushalt)',
+         name == 'fleischbrühe mit flädle (standardrezeptur)' ~ 'flädle (zubereitung haushalt)',
+         name == 'fleischbrühe mit grießklößchen (standardrezeptur)' ~ 'grießklößchensuppe (zubereitung großküche)',
+         name == 'ananassaft in dosen' ~ 'ananas fruchtsaft',
+         name == 'apfelkuchen versunkener (standardrezeptur)' ~ 'apfelkuchen aus rührmasse',
+         name == 'apfelsaftschorle' ~ 'apfel fruchtsaft',
+         name == 'aprikose/orange fruchtsaft' ~ 'apfel-orangenlimonade',
+         name == 'aubergine(eierfrucht),gegart' ~ 'aubergine (eierfrucht) gegart',
+         
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.5 <- merged.5 %>% filter(!is.na(item_id))
+left.5 <- merged.5 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.5)
+print(paste0('Found: ', n_found, ' (', nrow(left.5), ' left)' ))
+```
+##6.Merge
+```{r}
+merged.6 <- left.5%>% 
+  mutate(name = case_when(
+         name == 'zwiebeln gedünstet (zubereitet mit fett und salz)' ~ 'perlzwiebel gekocht',
+         name == 'blauschimmelkäse rahmstufe' ~ 'blauschimmel rahmstufe',
+         name == 'bratensoße energiereduziert' ~ 'bratensoße dunkel konserve',
+         name == 'gummibonbons' ~ 'gummibonbons und gummibärchen',
+         name == 'gurke gesäuert abgetropft' ~ 'gurke konserve abgetropft',
+         name == 'gurkensalat mit joghurtmarinade (standardrezeptur)' ~ 'gurkensalat mit joghurt (zubereitung gastronomie)',
+         name == 'hackbraten (standardrezeptur)' ~ 'hackbraten mit soße (zubereitung haushalt)',
+         name == 'hackfleischsoße bolognese (standardrezeptur)' ~ 'hackfleischsoße italienisch (zubereitung großküche)',
+         name %in% c('hafer-crunchy waldbeere, alnatura','haferflockenkeks') ~ 'haferflockenplätzchen',
+         name == 'haferkleie' ~ 'haferflockenbrei (zubereitung haushalt)',
+         name == 'hagebuttenmarmelade' ~ 'hagebutte konfitüre',
+         name == 'hähnchenschlegel (standardrezeptur)' ~ 'hähnchenschenkel (zubereitung großküche)',
+         name == 'hamburger royal ts, mcdonalds' ~ 'hamburger (zubereitung gastronomie)',
+         name %in% c('hefekuchen mit quark (standardrezeptur)','hefezopf mit quark magerstufe (standardrezeptur)') ~ 'plunder-kranz aus hefeteig fettreich',
+         name == 'hefeteig leicht gebacken' ~ 'hefeteige leicht',
+         name %in% c('hefezopf (standardrezeptur)','hefezopf mit butter (standardrezeptur)') ~ 'hefezopf aus hefeteig fettarm',
+         name == 'heidelbeere (blaubeere, bickbeere)' ~ '',
+         name == 'heidelbeere (blaubeere, bickbeere)' ~ 'heidelbeere frisch',
+         name == 'heringsfilet in dillrahmcreme gegart' ~ 'heringsfilet in dillrahmcreme',
+         name == 'quark magerstufe' ~ 'quark magerstufe- magerquark',
+         name == 'quark entrahmt' ~ 'quark',
+         name %in% c('quark mit kräutern halbfettstufe','quark mit kräutern dreiviertelfettstufe)') ~ 'schnittlauchquark (zubereitung haushalt)',
+         name %in% c('quitte gelee','quittengelee') ~ 'quitte konfitüre',
+         name == 'raffaello praline' ~ 'kokosmakronen',
+         name == 'rahmsoße (zubereitung großküche)' ~ 'rahmsoße von bechamelsoße (zubereitung gastronomie)',
+         name == 'remouladen (0)' ~ 'remoulade 65% fett',
+         name == 'remouladensoße aus mayonnaise mit gewürzgurken (zubereitung haushalt' ~ 'remouladensoße (zubereitung haushalt)',
+         name == 'rhabarberkuchen mit baiser (torte) aus rührmasse (mit milch 1,5% fett zubereitet)' ~ 'rhabarberkuchen mit baiser (torte) aus rührmasse',
+         name %in% c('rind bratenfleisch (ma) gegart','rind bratenfleisch (mf) gegart') ~ 'rind bratenfleisch (mittelfett) frisch gegart',
+         name == 'rind filet (ma) gegart' ~ 'rind filet (lende) (mager) frisch gegart',
+         name == 'rind gulasch (fe) gegart' ~ 'rind gulasch (mager) frisch gegart',
+         name == 'rind hackfleisch gegart (zubereitet mit fett und salz)' ~ 'rind hackfleisch gegart',
+         name == 'rind rücken (roastbeef) (ma) gegart' ~ 'rind rücken (roastbeef) (mf u.fe) gegart',
+         name == 'rind steak (ma) tiefgefroren gebraten (zubereitet ohne fett)' ~ 'rind steak (mager) frisch gegart',
+         name == 'rinderbraten ohne soße' ~ 'rinderbraten mit soße (zubereitung haushalt)',
+         name == 'rindergulasch (standardrezeptur)' ~ 'rind gulasch frisch',
+         name == 'rinderhackfleisch' ~ 'rind hackfleisch frisch',
+         name == 'rindfleisch filet' ~ 'rind filet frisch',
+         name == 'rindfleisch gegart (standardrezeptur)' ~ 'rind fleisch gegart',
+         name == 'rocher, ferrero' ~ 'sahnemilchschokolade vollmilch-noisettecreme',
+         name == 'rostbratwurst gegrillt' ~ 'rostbratwurst',
+         name == 'rote rübe (rote beete)' ~ 'rote rübe frisch',
+         name == 'rote rübe (rote bete) gegart' ~ 'rote rübe gegart',
+         name == 'rotkohl (blaukraut)' ~ 'rotkohl frisch',
+         name == 'rührkuchen' ~ 'kuchen aus rührmasse',
+         name == 'sahne, sauer sauerrahm' ~ 'saure sahne',
+         name == 'sahnepudding mit schokoladengeschmack' ~ 'kochpuddingpulver mit schokoladengeschmack',
+         name == 'sahnesoße (standardrezeptur)' ~ 'sahnesoße braun (zubereitung gastronomie)',
+         name == 'salami (schwein)' ~ 'salami ia fein',
+         name == 'salzstangen (salzbrezeln) als dauergebäck' ~ 'salzstangen',
+         name == 'schwein fleisch fett (fe) frisch' ~ 'schwein fleisch fett (fett)',
+         name == 'schwein keule (schinken) (fe) gepökelt geräuchert' ~ 'schwein keule (schinken) (mittelfett) gepökelt geräuchert',
+         name == 'schwein keule (schinken) (ma) gegart' ~ 'schwein keule (schinken) (mittelfett) frisch gegart',
+         name == 'schwein steak (mf) gebraten (zubereitet mit fett und salz)' ~ 'schwein steak (mittelfett) frisch gegart',
+         name == 'schweinebauch gekocht (zubereitung großküche) ' ~ 'schwein bauch (mittelfett) frisch gegart',
+         name == 'shreddies cerealien, nestle' ~ 'getreideerzeugnisse frühstückscerealien',
+         name == 'smarties nestle' ~ 'dragee-schokoladenüberzug',
+         
+         name == 'toffifee, storck' ~ 'weichkaramelle gefüllt',
+         name %in% c('tofu fest gebacken','tofu fest gebraten (zubereitet ohne fett)') ~ 'tofu fest',
+         name == 'tomatensoße aus frischen tomaten mit saurer sahne (zubereitung haushalt)' ~ 'tomatensoße aus frischen tomaten (zubereitung gastronomie)',
+         name == 'tortellini mit fleischhaltiger füllung getrocknet' ~ 'ravioli (zubereitung gastronomie)',
+         name == 'tuc classic cracker, griesson - de beukelaer' ~ 'salzgebäck',
+         name == 'vitalis roasted müsli cranberry-kürbiskern dr. oetker' ~ 'müsli mit milch, zucker und obst (zubereitung haushalt)',
+         name == 'vitalis schoko müsli klassisch, dr. oetker' ~ 'schoko-müsli',
+         name == 'vitalis weniger süß knusper pur, dr. oetker' ~ 'müsli (zubereitung großküche) (zubereitung großküche)',
+         name == 'vollkornbackwaren' ~ 'vollkornbrot',
+         name == 'vollmilchschokolade gefüllt mit karamell' ~ 'schokolade gefüllt mit sonstigem',
+         name == 'waffelkeks' ~ 'eiswaffeln für diabetiker',
+         name == 'weißbier' ~ 'weizenbier (weißbier) obergärig hell',
+         name == 'weizenbier (weißbier) dunkel' ~ 'weizenbier (weißbier) obergärig',
+         name == 'weizenpops' ~ 'puffweizen',
+         name == 'whopper, burger king' ~ 'cheeseburger doppelter (zubereitung gastronomie)',
+         name == 'windbeutel aus brandmasse mit sahne gefüllt' ~ 'windbeutel aus brandmasse',
+         name == 'wintergrütze pflaume-zimt, dr. oetker' ~ 'fruchtgrütze (zubereitung gastronomie)',
+         name == 'würstchen schweizer art (zubereitung großküche)' ~ 'würstchen "schweizer art" (zubereitung großküche)',
+         name == 'wurstsalat (standardrezeptur)' ~ 'wurstsalat mit zwiebeln (zubereitung haushalt)',
+         name == 'wurstsalat bayerisch (zubereitung gastronomie)' ~ 'wurstsalat "bayerisch" (zubereitung gastronomie)',
+         name == 'zucchini gebraten (zubereitet ohne fett)' ~ 'zucchini frisch gegart',
+         name == 'zucchini gegrillt' ~ 'zucchini frisch gegart',
+         name == 'zuckermais konserve abgetropft gegart' ~ 'zuckermais konserve gegart',
+         name == 'zungenwurst hell (rind)' ~ 'zungenwurst hell',
+         name == 'zungenwurst hell (schwein)' ~ 'mortadella süddeutsch, zungenwurst',
+         name == '' ~ 'zwiebeln gedünstet (zubereitet mit fett und salz)',
+         name == 'zwiebeln gedünstet (zubereitet mit fett und salz)' ~ 'zwiebeln gedünstet (zubereitet ohne fett)',
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.6 <- merged.6 %>% filter(!is.na(item_id))
+left.6 <- merged.6 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.6)
+print(paste0('Found: ', n_found, ' (', nrow(left.6), ' left)' ))
+     
+```
+##7.Merge
+```{r}
+merged.7 <- left.6%>% 
+  mutate(name = case_when(
+         name %in% c('amaranth-crunchy, glutenfrei, naturkornmühle werz','amaranth, gepufft, alnatura') ~ 'amaranth roh',
+         name == 'apfeltasche (mit quark und milch 1,5% fett zubereitet)' ~ 'apfelstrudel (zubereitung haushalt)',
+         name == 'bier alkoholfrei (<0,5gew% alkohol)' ~ 'bier alkoholfrei (< 0,5 gew% alkohol)',
+         name == 'blumenbrot bio' ~ 'knäckebrot mit soja',
+         name == 'brotaufstrich aus pflanzlichen fetten, rahm, joghurt, frischkäse' ~ 'vegetarisches schmalz',
+         name == 'brotaufstrich rote linse, alnatura' ~ 'linsen reif gegart',
+         name == 'eiersalat mit käse, wurst und saurer sahne (zubereitung haushalt)' ~ 'eiersalat mit käse und wurst (zubereitung haushalt)',
+         name == 'eisberg-gurken-tomatensalat mit essig und öl (standardrezeptur)' ~ 'tomaten-gurken-salat mit joghurtsoße (zubereitung großküche)',
+         name == 'eisbergsalat mit essig und öl (standardrezeptur)' ~ 'eisbergsalat mit salatsoße (zubereitung gastronomie)',
+         name == 'eistee mit zitronengeschmack gesüßt' ~ 'tee schwarz mit zucker und zitrone (getränk)',
+         name == 'ente fleisch mit haut gebraten (zubereitet ohne fett)' ~ 'ente fleisch mit haut frisch gegart',
+         name == 'fladenbrot gefüllt mit geflügelfleisch, frischkost (döner) (zubereitung gastronomie)' ~ 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie',
+         name == 'fenchel gedünstet (zubereitet ohne fett)' ~ 'fenchel frisch gegart',
+         name == 'fleischsalat mit salatmayonnaise (zubereitung gastronomie)' ~ 'fleischsalat (zubereitung gastronomie)',
+         name == 'fleischwurst' ~ 'fleischwurst, stadtwurst',
+         name %in% c('french dressing','french dressing energiereduziert') ~ 'french-dressing fertigprodukt',
+         name %in% c('frikadelle aus rind und schwein gebraten (zubereitet ohne fett)','frikadelle aus rind und schwein gegart','frikadelle aus rindfleisch gegart') ~ 'frikadelle (zubereitung gastronomie)',
+         name == 'fruchtbonbon' ~ 'gummibonbon mit fruchtessenz',
+         name == 'früchte-dessertcreme' ~ 'fruchtschaum-dessert aus trockenprodukt (zubereitung großküche)',
+         name == 'fruchteis in waffeltüte' ~ 'fruchteis',
+         name %in% c('garnele gebraten (zubereitet ohne fett)','garnele gegrillt','garnele gegart') ~ 'riesengarnelen gegrillt (zubereitung großküche)',
+         name == 'gartenkresse' ~ 'kresse (gartenkresse)',
+         name == 'gemüse-kartoffeleintopf (standardrezeptur)' ~ 'gemüseeintopf (zubereitung haushalt)',
+         name == 'gemüsebeilagen (0)' ~ 'gemüsemischung gegart',
+         name %in% c('gemüsebrühe (standardrezeptur)','gemüsebrühe gekörnt') ~ 'gemüsebrühe (zubereitung haushalt)',
+         name %in% c('gemüsemischung erbsen-karotten gebacken','gemüsemischung erbsen-karotten gegart','gemüsemischung erbsen-karotten gegart','gemüsemischung erbsen-karotten geschmort (zubereitet ohne fett)','gemüsemischung erbsen-karotten konserve abgetropft gegart','gemüsemischung erbsen-karotten tiefgefroren gegart') ~ 'möhren und erbsen gedünstet, in heller soße (zubereitung großküche)',
+         name == 'gemüsequiche (standardrezeptur)' ~ 'zwiebelkuchen',
+         name == 'gin tonic' ~ 'gin',
+         name == 'goldbären, haribo' ~ 'gummibonbons und gummibärchen',
+         name == 'goldlachs gebraten (zubereitet ohne fett) fischzuschnitt' ~ 'goldlachs frisch gegart fischzuschnitt',
+         name == 'gouda rahmstufe' ~ 'gouda mind. 60% fett i. tr.',
+         name == 'gouda vollfettstufe' ~ 'gouda mind. 50% fett i. tr.',
+         name == 'gouda fettstufe' ~ 'gouda mind. 45% fett i. tr.',
+         name == 'grapefruit-saftschorle' ~ 'grapefruit fruchtsaft',
+         name == '	greyerzer vollfettstufe' ~ 'greyerzer',
+         name == 'grünkohlgemüse mit speck (standardrezeptur)' ~ 'grünkohl-eintopf mit schweinebauch (zubereitung haushalt)',
+         name == 'gulasch (standardrezeptur)' ~ 'rindergulasch (zubereitung großküche)',
+         name == 'gummibären mit maltit' ~ 'gummibonbons und gummibärchen',
+         name == 'gurkensalat mit essig-öl -dressing' ~ 'gurkensalat mit joghurt (zubereitung haushalt)',
+         name == 'heringsfilet in dillrahmcreme konserve' ~ 'heringsfilet in dillrahmcreme',
+         name == 'heringssalat mit saure sahne (standardrezeptur)' ~ 'heringssalat mit sahnesoße (zubereitung gastronomie)',
+         name == 'himbeerkonfitüre' ~ 'himbeere konfitüre',
+         name == 'holunder, bionade' ~ 'holunderbeere fruchtnektar',
+         name == 'hot brownie, burger king' ~ 'muffins mit schokolade',
+         name == 'hot dog' ~ 'wiener würstchen mit brötchen und senf (zubereitung gastronomie)',
+         name == 'hustenbonbon' ~ 'pfefferminz bonbon',
+         name == 'isotonisches getränk' ~ 'getränke energiereduziert',
+         name == 'joghurt vollfett mit buttermilch und früchten' ~ 'joghurt vollfett mit früchten',
+         name == 'joghurt vollfett mit kakao und nuss' ~ 'joghurt mit kakao',
+         name == 'joghurteis vanille' ~ 'vanilleeis (zubereitung haushalt)',
+         name == 'joghurteis gemischt (frucht, vanille)' ~ 'sahnefruchteis (zubereitung haushalt)',
+         name == 'johannisbeer-saftschorle (rot)' ~ 'johannisbeeren fruchtsaft',
+         name == 'kabeljau gedünstet (zubereitet ohne fett) fischzuschnitt' ~ 'kabeljau frisch gegart fischzuschnitt',
+         name == 'kalb bratenfleisch (fe) geräuchert' ~ 'kalb bratenfleisch geräuchert',
+         name == 'kalbfleisch filet' ~ 'kalb filet',
+         name == 'kalbfleisch kalbsrücken, rückensteak mit knochen' ~ 'kalb rücken (kotelett) (mittelfett) frisch gegart',
+         name == 'kalbsbratwurst' ~ 'kalbfleischwurst',
+         name == 'kalbsschnitzel paniert (standardrezeptur)' ~ 'kalb schnitzel (mittelfett) frisch gegart',
+         name == 'kapstachelbeere (physalisfrucht, ananaskirsche)' ~ 'kapstachelbeere frisch',
+         name == 'karottensalat mit essigmarinade (zubereitung haushalt)' ~ 'möhrensalat mit essigmarinade (zubereitung haushalt)',
+         name == 'karottensalat mit zitronenmarinade (zubereitung haushalt)' ~ 'möhrensalat mit zitronenmarinade (zubereitung haushalt)',
+         name == 'karottensalat frisch mit essig-öl-marinade (standardrezeptur)' ~ 'möhrensalat mit salatöl (zubereitung großküche)',
+         
+         name == 'kartoffelbrot' ~ 'kartoffelstärke mehl',
+         name == 'kartoffelchips frisch' ~ 'kartoffelchips (verzehrsfertig)',
+         name == 'käsekuchen (standardrezeptur)' ~ 'käsekuchen aus mürbeteig',
+         name == 'käsespätzle (standardrezeptur)' ~ 'käsespätzle (zubereitung haushalt)',
+         name == 'kaugummi zuckerfrei' ~ '	kaugummi',
+         name == 'keks (butterkeks, hartkeks)' ~ 'butterkeks',
+         name == 'keksriegel überzogen mit vollmilchschokolade' ~ 'schokokeks glutenfrei',
+         name == 'milchschokolade crunch' ~ 'milchschokolade crunch',
+         name == 'kichererbse aufstrich, granovita' ~ 'kichererbsen reif gegart',
+         name == 'kichererbsen-topf orientalisch, davert' ~ 'kichererbsen konserve abgetropft gekocht',
+         name == 'kichererbseneintopf mit gemüse (zubereitung haushalt)' ~ 'kichererbsen-eintopf mit gemüse (zubereitung haushalt)',
+         name == 'kinder schoko-bons ferrero' ~ 'schokolade gefüllt mit milch, joghurt',
+         name == 'kindermilchschnitte' ~ 'biskuitschnitte mit milchcremefüllung',
+         name == 'mayonnaise (zubereitung haushalt)' ~ 'mayonnaise (zubereitung haushalt)',
+         name == 'knoblauchsoße konserve' ~ 'knoblauchsoße von heller soße (zubereitung gastronomie)',
+         name %in% c('knollensellerie gegart','knollensellerie gegart') ~ 'knollensellerie (wurzelsellerie) gegart',
+         name == 'kohlrabi' ~ 'kohlrabi frisch',
+         name == 'kohlrabi gedünstet (zubereitet ohne fett)' ~ 'kohlrabi frisch gegart',
+         name == 'kokos-cornpops' ~ 'kokosflocken aus fondant',
+         name == 'kokosmilch' ~ 'kokosmilch mit süßstoff',
+         name == 'kondensmilch 10% fett' ~ 'kondensmilch kondenssahne 10 % fett',
+         name == 'kondensmilch 15% fett' ~ 'kondenssahne gezuckert 15% fett',
+         name == 'kondensmilch 7,5% fett' ~ 'kondensmilch kondenssahne 7.5 % fett',
+         name == 'kräuterbutter-baguette, kerrygold' ~ 'brötchen mit kräutern',
+         name == 'kräutercremesuppe' ~ 'sellerie-lauch-cremesuppe (zubereitung haushalt)',
+         name == 'sauerkrautsalat mit salatöl (zubereitung großküche)' ~ 'krautsalat mit essig und öl (standardrezeptur)',
+         name == 'kuhmilch' ~ 'kuhmilch',
+         name == 'kürbis' ~ 'kürbis frisch',
+         name == 'kürbis gedünstet (zubereitet mit fett und salz)' ~ 'kürbis gedünstet in sahnesoße (zubereitung gastronomie)',
+         name == 'kürbis gegart' ~ 'kürbis frisch gegart',
+         name == 'schokoladenkeks' ~ 'schokokeks glutenfrei',
+         
+         name == 'rind steak (ma) gebraten (zubereitet ohne fett)' ~ 'rind steak (mittelfett) frisch gegart',
+         name == 'rind filet (lende) (ma) gebraten (zubereitet mit fett und salz)' ~ 'rind filet (lende) (mager) frisch gegart',
+         name == 'remouladensoße aus mayonnaise mit gewürzgurken (zubereitung haushalt)' ~ 'remouladensoße (zubereitung haushalt)',
+         name == 'quark mit kräutern dreiviertelfettstufe' ~ 'quark mit kräutern fettstufe',
+        
+         name == 'putengeschnetzeltes mit paprika (standardrezeptur)' ~ 'putenragout (zubereitung großküche)',
+         name == 'putenbraten gefüllt mit soße (zubereitung gastronomie)' ~ 'putenbraten geschmort, mit soße (zubereitung haushalt)',
+         name == 'pute fleisch ohne haut gebraten (zubereitet ohne fett)' ~ 'putenbraten mit soße (zubereitung gastronomie)',
+         name %in% c('pute brust gegart','pute brust gegrillt','pute brust gebraten (zubereitet ohne fett)','pute brust aufschnitt gepökelt gegart') ~ 'putenbrust gebraten, mit soße (zubereitung großküche)',
+         name == 'pudding vanillegeschmack vollfett ungesüßt' ~ 'kochpuddingpulver mit vanillegeschmack',
+         name == 'preiselbeere getrocknet' ~ 'preiselbeere kronsbeere',
+         name == 'pralinen gefüllt mit karamell' ~ 'pralinen gefüllt mit sonstigem',
+         name == 'porree (lauch)' ~ 'porree frisch',
+         name == 'popcorn' ~ 'mais vollkorn gegart',
+         name == 'polenta gegart' ~ 'polenta (gebackener maisbrei) (zubereitung haushalt)',
+         name == 'plundergebäck' ~ 'buntes plundergebäck',
+         name == 'pizzabaguette mit schinken' ~ 'baguette "italien" mit parmaschinken, parmesan und salat (zubereitung gastronomie)',
+         name == 'pizza quattro stagioni (mit schinken, pilzen, artischocken) (zubereitung gastronomie)' ~ 'pizza quattro stagioni (zubereitung gastronomie)(zubereitung gastronomie)',
+         name == 'pizza mit schinken und pizzakäse (standardrezeptur)' ~ 'pizza al formaggio (zubereitung gastronomie)',
+         name == 'pizza mit schinken mozzarella und tomate (standardrezeptur)' ~ 'pizza al formaggio (zubereitung gastronomie)',
+         name == 'pizza mit mozzarella und tomate (standardrezeptur)' ~ 'pizza napolitana (zubereitung gastronomie)',
+         name == 'pizza mit käse gouda vollfettstufe und tomate (standardrezeptur)' ~ 'pizza napolitana (zubereitung gastronomie)',
+         name == 'pizza margherita (mit tomaten, mozzarella, basilikum) (zubeitung gastronomie)' ~ 'pizza margherita (zubereitung gastronomie)',
+         name == 'pizza al funghi (mit pilzen) (zubereitung gastronomie)' ~ 'pizza al funghi (zubereitung gastronomie)',
+         name == 'pistazie (grüne mandel, pistazien-mandel)' ~ 'pistazie frisch',
+         name == 'pinienkerne' ~ 'pinienkern frisch',
+         name == 'pilzsuppe mit steinpilzen (zubereitung haushalt)' ~ 'steinpilzsuppe trockenprodukt',
+         name == 'phantasia, haribo' ~ 'gummibonbons und gummibärchen',
+         name == 'pflaume' ~ 'pflaumen frisch',
+         name == 'pfirsich/maracuja fruchtsaft' ~ 'pfirsich fruchtsaft',
+         name == 'pfannkuchen (standardrezeptur)' ~ 'pfannkuchen (zubereitung haushalt)',
+         name == 'pea diät bonbons citrus mix frankonia' ~ 'pfefferminz bonbon',
+         name == 'pastinake' ~ 'karotte trunk',
+         name == 'parmaschinken' ~ 'schwein keule (schinken) frisch',
+         name == 'panna cotta (zub.), dr. oetker' ~ 'dessertpulver für quarkspeisen mit vanillegeschmack',
+         
+         name == 'omelett (0)' ~ 'omelett (zubereitung gastronomie)',
+         name == 'ölsoßen, mayonnaisen (0)' ~ 'mayonnaise',
+         name == 'ölsamenmus' ~ 'nuß- und ölsamenzubereitungen',
+         name == 'oliven mit' ~ 'oliven grün frisch',
+         name == 'oliven grün gesäuert abgetropft' ~ 'oliven grün gesäuert',
+         name == 'oliven grün gefüllt mit paprika' ~ 'oliven grün frisch',
+         name == 'nusssahnetorte' ~ 'nußsahnetorte',
+         name == 'nusskuchen aus rührmasse' ~ 'nußkuchen aus rührmasse',
+         name %in% c('nusseis in waffeltüte','nusseis') ~ 'haselnussquarkspeise (zubereitung großküche)',
+         name == 'nuss-nougat-creme süß' ~ 'nuß-nougat-creme süß',
+         name == 'nudelgerichte (lasagne) (0)' ~ 'lasagne al forno (zubereitung gastronomie)',
+         name == 'naturreis gegart (standardrezeptur)' ~ 'wildreis gekocht',
+         name == 'münsterkäse 45% fett i. tr.)' ~ 'münster vollfettstufe',
+         name == 'mortadella vegetarisch, eden' ~ 'vegetarische pasteten mit anderen zusätzen',
+         name == 'mix-it müesli erdbeere, emmi' ~ 'müsli mit milch, zucker und obst (zubereitung haushalt)',
+         name == 'milchmischerzeugnisse 3,5% fett mit vanillegeschmack' ~ 'milchmischerzeugnisse vollfett mit vanille nuß',
+         name %in% c('milchmischerzeugnisse 1,5% fett mit kakao','milchmischerzeugnisse < 1% fett mit kakao ungesüßt','milcherzeugnis mit kakao/schokolade') ~ 'milchmischerzeugnisse fettarm mit kakao',
+         name %in% c('mehrfruchtsaft angereichert mit 3 vitaminen und magnesium (multivitaminsaft)','mehrfruchtsaft angereichert mit 10 vitaminen (multivitaminsaft)','mehrfruchtsaft','mehrfruchtnektar') ~ 'mehrfrucht-nektar mit süßstoff',
+         name == 'mcflurry eis smarties, mcdonalds' ~ 'sahneeiscreme',
+         name == 'maultaschen schwäbisch (zubereitung haushalt)' ~ 'maultaschen "schwäbisch" (zubereitung haushalt)',
+         name == 'mascarpone' ~ 'frischkäse 70% f.i.tr.',
+         name == 'marmorkuchen (standardrezeptur)' ~ 'marmorkuchen aus rührmasse',
+         name == 'maoam kracher, haribo' ~ 'gummibonbons und gummibärchen',
+         name == 'mangold gegart' ~ 'mangold frisch gegart',
+        
+         name == 'mandarinensaft frisch gepresst muttersaft' ~ 'mandarine fruchtsaft',
+         name == 'mais ganzes korn frisch' ~ 'mais vollkorn',
+         name == 'mais (gemüsemais) gegart (zubereitet mit fett und salz)' ~ 'mais gegart',
+         name == 'macadamiacreme sélection, alnatura' ~ 'macadamianuss geröstet und gesalzen',
+         name == 'lyoner' ~ 'lyoner wurst',
+         name == 'litschi, bionade' ~ 'limonaden mit kohlensäure',
+         name == 'lipton ice tea zero' ~ 'tee schwarz mit zucker und zitrone (getränk)',
+         name == 'linseneintopf, alnatura' ~ 'linsen-eintopf (zubereitung gastronomie)',
+         name == 'linsen samen gegart' ~ 'linsen reif frisch gegart',
+         name == 'les sauces hollandaise, thomy' ~ 'sauce hollandaise konserve',
+         name == 'leitungswasser freiburg' ~ 'weiches wasser (<7°d)',
+         name == 'laugengebäck croissant' ~ 'croissant aus blätterteig',
+         name %in% c('laugenbrezel (sichtbares salz entfernt)','laugenbrezel (mit salz)') ~ 'laugengebäck',
+         name == 'latte macchiato' ~ 'kaffee mit milch (getränk)',
+         name == 'lasagne mit hackfleisch (standardrezeptur)' ~ 'lasagne al forno (zubereitung gastronomie)',
+         name == 'landliebe grießpudding traditionell, frieslandcampina' ~ 'grießpudding (zubereitung haushalt)',
+         name == 'lachsfische gebraten (zubereitet ohne fett)' ~ 'lachsfilets gebraten (zubereitung haushalt)',
+         name == 'lachs geräuchert gegart' ~ 'lachs geräuchert',
+         name == 'lachs (salm) gegart' ~ 'goldlachs gegart',
+         name == 'lachs (salm) gedünstet (zubereitet ohne fett)' ~ 'lachs (salm) gedünstet (zubereitet ohne fett)',
+         name %in% c('kürbis gegart','kürbis gedünstet (zubereitet mit fett und salz)') ~ 'kürbis frisch gegart',
+         name == 'kürbis' ~ 'kürbisse frisch',
+         
+
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.7 <- merged.7 %>% filter(!is.na(item_id))
+left.7 <- merged.7 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.7)
+print(paste0('Found: ', n_found, ' (', nrow(left.7), ' left)' ))
+     
+```
+##8.Merge
+```{r}
+merged.8 <- left.7%>% 
+  mutate(name = case_when(
+         name == 'berliner gefüllt mit kirschkonfitüre (standardrezeptur)' ~ 'krapfen (zubereitung gastronomie)',
+         name == 'choco crossies nestle' ~ 'müsli-riegel',
+         name == 'cornetto bottermelk-zitrone langnese' ~ 'zitroneneis (zubereitung haushalt)',
+         name == 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie' ~ 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie)',
+         name == 'eis gemischt (schoko, frucht) in waffeltüte' ~ 'schokoladeneis (zubereitung haushalt)',
+         name == 'eis gemischt energiereduziert (schokolade und vanille)' ~ 'sahneschokoladeneis (zubereitung haushalt)',
+         name == 'eisriegel gefüllt mit vanilleeis, karamell und umhüllt mit schokolade' ~ 'milchspeiseeis vanille',
+         name == 'excellence 99% cacao, lindt' ~ 'bitterschokolade',
+         name == 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie)' ~ 'fladenbrot gefüllt mit geflügelfleisch, rohkost (zubereitung gastronomie)',
+         name == 'geflügelwiener würstchen' ~ 'wiener würstchen konserve',
+         name %in% c('gemüsemischung chinesische art gebacken','gemüsemischung chinesische art gebraten (zubereitet ohne fett)','gemüsemischung chinesische art gegart') ~ 'gemüsemischung frisch gegart',
+         name == 'gemüsemischung mexikanische art konserve abgetropft' ~ 'mischgemüse gedünstet (zubereitung großküche)',
+         name == 'glasnudeln gegart' ~ 'nudeln (zubereitung haushalt)',
+         name %in% c('grill- und pfannenkäse (halloumi)','grillkäse') ~ 'frischkäse sauermilchkäse kochkäse schmelzkäse',
+         name == 'grissini' ~ 'roggen, weizen-mischbrot mit hefe',
+         name == 'gruyerekäse' ~ 'hartkäse vollfettstufe',
+         name == 'gyros' ~ 'schwein gulasch fett (fett)',
+         name == 'hanföl nativ, naturata' ~ 'nuß- und ölsamenzubereitungen',
+         name == 'hanfsamen geschält, davert' ~ 'ölsamen und anderes gekeimtes',
+         name == 'joghurt vollfett laktosefrei' ~ 'joghurt vollfett',
+         name == 'joghurt vollfett mit fruchtzubereitung und müsli' ~ 'joghurt vollfett mit fruchtzubereitung',
+         name == 'kaugummi' ~ 'kaugummi',
+         name == 'knoblauch mayo / aioli, thomy' ~ 'knoblauch-grillsoße',
+         name == 'kokos-sauce, naturata' ~ 'kokosfruchtfleisch',
+         name == 'krautsalat mit essig und öl (standardrezeptur)' ~ 'sauerkrautsalat mit salatöl (zubereitung großküche)',
+         name == 'kuhmilch ?' ~ 'kuhmilch',
+         name == 'lachs (salm) gedünstet (zubereitet ohne fett)' ~ 'lachsfische gegart',
+         
+         name == 'pizza margherita (mit tomaten, mozzarella, basilikum) (zubereitung gastronomie)' ~ 'pizza margherita (zubereitung gastronomie)',
+         name == 'baguette "italien" mit parmaschinken, parmesan und salat (zubereitung gastronomie)' ~ 'baguette "italien" mit parmaschinken, parmesan und salat (zubereitung gastronomie)',
+         name == 'putenschnitzel "italienische art" (zubereitung gastronomie)' ~ 'putenschnitzel "italienische art" (zubereitung gastronomie)',
+         name == 'raclette-käse vollfettstufe' ~ 'schmelzkäse vollfettstufe',
+         name == 'sojaflocken, alnatura' ~ 'sojabohnen getrocknet',
+         name == 'stevia-eistee naturbursche' ~ 'tee (getränk)',
+         name == 'tequilla sunrise' ~ 'cocktails',
+         
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.8 <- merged.8 %>% filter(!is.na(item_id))
+left.8 <- merged.8 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.8)
+print(paste0('Found: ', n_found, ' (', nrow(left.8), ' left)' ))
+```
+##9.Merge
+```{r}
+merged.9 <- left.8%>% 
+  mutate(name = case_when(
+         name == "salatsoße italienisch (zubereitung gastronomie)" ~ "salatsoße 'italienisch' (zubereitung gastronomie))",
+         name %in% c("putenschnitzel natur (standardrezeptur)","putenschnitzel paniert") ~ "putenschnitzel 'italienische art' (zubereitung gastronomie)",
+         name == "currysoße indisch (zubereitung haushalt)" ~ "currysoße 'indisch' (zubereitung haushalt)",
+         name == "wurstsalat 'bayerisch' (zubereitung gastronomie)" ~ "wurstsalat 'bayerisch' (zubereitung gastronomie)",
+         name %in% c("maultaschen 'schwäbisch' (zubereitung haushalt)","original schwäbische maultaschen, bürger") ~ "maultaschen 'schwäbisch' (zubereitung haushalt)",
+         name == "acia-beeren pulver" ~ "heidelbeere frisch",
+         name == "bündner-fleisch (binden-fleisch)" ~ "schwein schulter (bug) (fett) geräuchert",
+         name %in% c("dinkel-crunchy, alnatura","dinkel, gepufft, alnatura") ~ "dinkelvollkornbrötchen",
+         name == "schnaps aus anis" ~ "wacholderschnaps",
+         
+         name == "puten-aufschnitt-grundbrät" ~ "pute klein frisch",
+         name == "maca-pulver" ~ "trockenkartoffeln trockenprodukt",
+         name == "gerstengras" ~ "gerste",
+         name == "garnitur-krönchen meringe vogeley gv" ~ "zuckerlis aus baisermasse",##https://www.vogeley.de/www/de/ProductLines;garniturenzubeh;garnituren
+         name == "erdmandel" ~ "erdnuss roh",
+         name == "dorade royal (goldbrasse)" ~ "Fische gegart",
+         name == "y335012" ~ "	schweinesteak (zubereitung haushalt)",
+         # name == "" ~ "",
+         # name == "" ~ "",
+         # name == "" ~ "",
+         
+         T ~ name)) %>% 
+  left_join(., bls.food, by = 'name')
+
+found.9 <- merged.9 %>% filter(!is.na(item_id))
+left.9 <- merged.9 %>% filter(is.na(item_id)) %>% dplyr::select(-item_id, -item_descr, -item_info, -item_cooking)
+n_found = n_found + nrow(found.9)
+print(paste0('Found: ', n_found, ' (', nrow(left.9), ' left)' ))
+```
+
+##10.Merge
+Merging all found items and annotating bls.gram with item_prodi names
+```{r}
+found.prodi <- Reduce(function(x, y) merge(x, y, all=TRUE), list(found.1,found.2,found.3,found.4,found.5,found.6,found.7,found.8,found.9))
+bls.gram <- 
+  found.prodi %>% 
+  select(item_prodi, item_id) %>% 
+  full_join(bls.gram, by = 'item_id')
+
+
+bls.gram <- bls.gram[ , -which(names(bls.gram) %in% c('item_group','item_no','item_info','item_cooking','item_weight','item_id_length','Energie, Protein (%)','Energie, Kohlenhydrate (%)','Energie, Fett (%)','Energie, Alkohol (%)'))]
+```
+
+
+# Creating new recipes
+
+## Functions
+
+### get ingredient
+```{r}
+get_ingredient <- function(ingredient) {
+  return(bls.gram[is.element(str_to_lower(bls.gram$item_descr), str_to_lower(ingredient)),])
+}
+
+get_ingredient('Butterkeks') 
+```
+
+### make recipe
+```{r}
+make_recipe <- function(ingredients, 
+                        name,
+                        category) {
+  if (!is.list(ingredients)) {stop('Ingredients are not in list format.')}
+  
+  combined_ingredients = NULL
+  
+  print(paste0('New item: ', name))
+  for (ing in ingredients) {
+    ing_name = names(ing)
+    ing_quantity = ing[[1]]
+    if (sum(ing_quantity) ==! 1) {stop('sum of quantity unequal 1')}
+    print(paste0(ing_name, ': ', ing_quantity))
+    
+
+    tmp <-
+      get_ingredient(ing_name) %>%
+      select(`Eiweiß, Proteingehalt`:`Energie, Gesamt (kcal)`) %>% 
+      mutate_all(.funs = funs(. * ing_quantity))
+    combined_ingredients = rbind(combined_ingredients, tmp)
+  }
+
+  combined <- colSums(combined_ingredients, na.rm = T) %>% t(.) %>% 
+    as.data.frame(.) %>% 
+    mutate(item_prodi = name, 
+           item_descr = name, 
+           item_id = 'recipe', 
+           item_cat = category,
+           item_subcat = NA) %>% 
+  
+    select(item_prodi, item_descr, item_id, item_cat, item_subcat, everything())
+
+  return(combined)
+}
+
+```
+
+## Bind Keto recipes to df
+```{r}
+recipes <- bind_rows(
+make_recipe(ingredients = list(c('löffelbiskuit aus biskuitmasse' = 0.3,'frischkäse doppelrahmstufe'=0.3,'hühnerei eigelb frisch'=0.1,'zucker weiß'=0.2,'fruchtsaftlikör'=0.25,'kaffee instant   (getränk)'=0.75,'kakaopulver'=0.25)),name = 'tiramisu',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('pfannkuchen (zubereitung gastronomie)'= 0.3,'salatgemüse'= 0.5,'brathähnchen gegrillt mit küchenabfall'= 0.2)),name = 'wrap gefüllt mit salat und hähnchenfleisch',category = 'Menükomponenten'),
+
+make_recipe(ingredients = list(c('pfannkuchen (zubereitung gastronomie)' = 0.3,'salatgemüse' = 0.5,'brathähnchen gegrillt   mit küchenabfall' = 0.2)),name = 'snack wrap tS, mcdonalds',category = 'Menükomponenten'),
+
+make_recipe(ingredients = list(c('banane frisch' = 0.5,'mango frisch' = 0.5)), name = 'smoothie mango-banane, alnatura',category = 'Früchte, Obst und Obsterzeugnisse'),
+
+make_recipe(ingredients = list(c('butterkeks'=0.5,'milchschokolade nougat'=0.5)),name = 'schokoladenkeks mit nougatfüllung',category = 'Süßwaren, Zucker, Bonbons, Schokolade, Brotaufstrich süß, Eis'),
+  
+make_recipe(ingredients = list(c('schokolade dragiert'=0.4 ,'studentenfutter mit erdnüssen'=0.6)),name = 'schoko-studentenfutter, pural naturkost', category = 'Süßwaren, Zucker, Bonbons, Schokolade, Brotaufstrich süß, Eis'),
+
+make_recipe(ingredients = list(c('kochpuddingpulver mit vanillegeschmack'=0.7,'wildfrüchte'=0.3)),name = 'pudding vanillegeschmack vollfett mit früchten',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('reis geschält gegart'=0.3,'mittelhartes wasser  (7...14°d)'=0.7)),name = 'provamel bio reisdrink plus calcium',category = 'Cerealien, Getreide und Getreideprodukte, Reis'),
+  
+make_recipe(ingredients = list(c('basilikum frisch'=0.5,'olivenöl'=0.3,'knoblauch roh'=0.2)),name = 'pesto',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('mandelmus'=0.3,'mittelhartes wasser  (7...14°d)'=0.7)),name = 'mandeldrink',category = 'Cerealien, Getreide und Getreideprodukte, Reis'),
+  
+make_recipe(ingredients = list(c('weinessig'=0.6,'mittelhartes wasser  (7...14°d)'=0.1,'speisesalz'=0.1,'olivenöl'=0.2)),name = 'livio balsamico dressing, union',category = 'Gewürze, Würzmittel, Hilfsstoffe'),
+  
+make_recipe(ingredients = list(c('butterkeks'=0.3,'milchschokolade'=0.3,'sahnekaramellen'=0.4)),name = 'knusperkeksriegel mit karamell umhüllt mit milchschokolade',category = 'Süßwaren, Zucker, Bonbons, Schokolade, Brotaufstrich süß, Eis'),
+
+make_recipe(ingredients = list(c('kartoffelkroketten (zubereitung großküche)'=0.7,'camembert'=0.3)),name = 'kartoffeltaschen gefüllt mit camembert',category = 'Menükomponenten'),
+
+make_recipe(ingredients = list(c('weizen mehl'=0.3,'mittelhartes wasser  (7...14°d)'=0.1,'speisesalz'=0.05,'pflanzliche   öle linolsäure 30% - 60%'=0.1,'creme, schmand 40 % fett'=0.3,'schwein speck und schinken'=0.1,'pfefferschoten   pulver'=0.05)),name = 'flammkuchen',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('kichererbsen reif gegart'=0.4,'weizenfladenbrot'=0.3,'endiviensalat mit joghurtsoße   (zubereitung großküche)'=0.3)),name = 'falafel in fladenbrot (mit salat und soße)',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('estragon gewürz'=0.3,'senf mittelscharf'=0.5,'speisesalz'=0.2)),name = 'estragon-senf aufstrich, granovita',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('obstessig'=0.3,'pflanzliche öle linolsäure 30% - 60%'=0.4,'mittelhartes wasser    (7...14°d)'=0.3)),name = 'essig-öl-dressing',category = 'Gewürze, Würzmittel, Hilfsstoffe'),
+  
+make_recipe(ingredients = list(c('brötchen mit soja'=0.7,
+  'brötchen-roggenbrötchen mit leinsamen'=0.3)),name = 'eiweißbrötchen',category = 'Brot- und Kleingebäck'),
+  
+make_recipe(ingredients = list(c('vollkornbrot mit soja'=0.7,'graubrot-weizenmischbrot mit leinsamen'=0.3)),name = 'eiweißbrot k&u abendbrot',category = 'Brot- und Kleingebäck'),
+  
+make_recipe(ingredients = list(c('vollkornbrot-weizen, roggenvollkornschrotbrot'=0.3,'graubrot-roggenbrot mit   leinsamen'=0.2,'graubrot-roggenbrot mit sonnenblumenkernen'=0.2,'graubrot-roggenbrot mit   ölsamenzutaten'=0.2,'graubrot-roggenbrot mit sesam'=0.1)),name = 'eiweißbrot edeka',category = 'Brot- und Kleingebäck'),
+  ##https://www.edeka.de/de/produkte/edeka-eiweissbrot-500g
+  
+make_recipe(ingredients = list(c('vollkornbrot-weizen, roggenvollkornschrotbrot'=0.4,'graubrot-roggenbrot mit sonnenblumenkernen'=0.2,'graubrot-roggenbrot mit leinsamen'=0.2,'sojaschrot'=0.2)),name = 'eiweißbrot alnatura',category = 'Brot- und Kleingebäck'),
+#   ##https://www.alnatura.de/de-de/produkte/alle-produkte/backwaren/brot/eiweissbrot-200337/
+  
+make_recipe(ingredients = list(c('vollkornbrot mit soja'=0.5,'graubrot-weizenmischbrot mit leinsamen'=0.5)),name = 'eiweißbrot aldi',category = 'Brot- und Kleingebäck'),
+  
+make_recipe(ingredients = list(c('butterkeks'=0.6,'schokoladencreme (zubereitung gastronomie)'=0.4)),name = 'doppelkeks mit schokofüllung',category = 'Süßwaren, Zucker, Bonbons, Schokolade, Brotaufstrich süß, Eis'),
+  
+make_recipe(ingredients = list(c('currywurst mit curryketchup (zubereitung gastronomie)'=0.5,'pommes frites   (zubereitung großküche)'=0.5)),name = 'currywurst mit pommes',category = 'Menükomponenten'),
+  
+# make_recipe(ingredients = list(c('brötchen (allgemein)'=0.7,'nuß-nougat-creme süß'=0.3)),name = 'brötchen   schokobrötchen') %>% bind_calculation(.,'brötchen   schokobrötchen'))
+  
+make_recipe(ingredients = list(c('dinkel vollkornmehl'=0.3,'mittelhartes wasser  (7...14°d)'=0.7)),name = 'bio dinkel drink natur berief',category = 'Cerealien, Getreide und Getreideprodukte, Reis'),
+  
+make_recipe(ingredients = list(c('milchschokolade'=0.2,'kleinteile aus   hartkeksteig'=0.4,'sahnekaramellen'=0.2,'joghurtcreme (zubereitung haushalt)'=0.2)),name = 'balisto schoko-korn-mix, mars',category = 'Süßwaren, Zucker, Bonbons, Schokolade, Brotaufstrich süß, Eis'),
+  
+# make_recipe(ingredients = list(c('sonnenblumenöl'=0.3,'tomatenmark'=0.3,'mittelhartes wasser    (7...14°d)'=0.1,'branntweinessig'=0.1,'zucker weiß'=0.1,'fruchtsirup'=0.02,'hühnerei eigelb'=0.02,'speisesalz'=0.02,'weizen   stärke'=0.01,'dill gewürz'=0.01,'melassesirup dunkel'=0.01,'tamarinden (sauerdattel) reif mehl','knoblauch pulver'=0.01)),name = 'american sauce, heinz') %>% bind_calculation(.,'american sauce, heinz'))##Fehler in sum(ing_quantity) : ungültiger 'type' (character) des Argumentes
+#  ##https://www.hjheinz.de/saucen/grill--und-feinkostsaucen/product/100189200015/burger-sauce
+  
+# make_recipe(ingredients = list(c('pfannkuchen (zubereitung gastronomie)'=0.4,'salatgemüse'=0.4,'brathähnchen gegrillt   mit küchenabfall'=0.2)),name = 'wrap gefüllt mit salat und hähnchenfleisch',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('knoblauch gekocht'=0.75,'paprikaschoten gegart'=0.2,'perlzwiebel gegart'=0.1,'ingwerpulver'=0.1,'zucchini frisch gegart'=0.25,'tomaten gekocht'=0.5)),name = 'salsa la brava von chovi',category = 'Menükomponenten'),
+  
+make_recipe(ingredients = list(c('eiweißpulver'=0.4,'sojadrink flüssig'=0.4,'wildfrüchte'=0.2)),name = 'shake06wt',category = 'Diätetische Lebensmittel'),
+
+make_recipe(ingredients = list(c('eiweißpulver'=0.5,'sojadrink flüssig'=0.2,'wildfrüchte'=0.3)),name = 'shake45gl',category = 'Diätetische Lebensmittel'),
+)
+```
+
+
+## Merge recipes with BLS
+```{r}
+bls.gram$item_prodi <- tolower(bls.gram$item_prodi)
+bls.gram$item_descr <- tolower(bls.gram$item_descr)
+
+bls.extended <- 
+  rbind(bls.gram, recipes) 
+
+
+# write_tsv(bls.extended,paste0(table_dir, 'bls.extended_01.08.tsv'),append = FALSE)
+# write_tsv(keto.bls,paste0(table_dir, 'keto.bls_04.08.tsv'),append = FALSE)
+
+```
+
+
+
+
+# how similar are the newly calculated keto samples to the originals?
+subset bls items and nutrients
+
+We select some nutrients from keto data so we can approximate quantity to e.g. kcal, 
+bind recipes to the original bls to create an extended bls,
+merge both
+## format
+```{r}
+
+k.bls_prodi <- 
+
+# prodi entries
+  keto.samples %>% 
+  mutate(item = str_to_lower(item)) %>% 
+  rename_at(.vars = vars(`Energie (kcal)`:`Vitamin K Phyllochinon`), 
+            .funs = funs(paste0(., '.prodi'))) %>% 
+  
+  # bls map
+  left_join(., bls.extended %>% 
+              mutate(Energie_orig = `Energie, Gesamt (kcal)`) %>% 
+              rename_at(.vars = vars(`Eiweiß, Proteingehalt`:`Energie, Gesamt (kcal)`), 
+                        .funs = funs(paste0(., '.bls'))),  
+            by = c('item' = 'item_prodi')) %>% 
+  
+  # normalize to kcal
+  mutate_at(.vars = vars(ends_with('.bls')), 
+            .funs = funs(replace_na(. / Energie_orig, 0) * `Energie (kcal).prodi`)) %>% 
+  
+  # split by nutrient db
+  rownames_to_column('diet_id') %>% 
+  pivot_longer(names_to = 'nutrient', values_to = 'value', cols = c(ends_with('.prodi'), ends_with('.bls'))) %>% 
+  mutate(value = replace_na(value, 0)) %>%
+  separate(nutrient, into = c('nutrient', 'database'), sep = '[.]') %>% 
+  # select(-Energie_orig) %>%
+  
+  # generate id for item and db
+  mutate(diet_item_id = paste0(database, '.', diet_id)) %>% 
+
+  # spread back by nutrient
+  pivot_wider(names_from = 'nutrient', values_from = 'value') %>% 
+  
+  # fix energy
+  mutate(`Energie (kcal)` = ifelse(is.infinite(`Energie (kcal)`), 
+                                   `Energie, Gesamt (kcal)`, 
+                                   `Energie (kcal)`)) %>% 
+  
+# k.bls <- k.bls_prodi %>% filter(database == 'bls')
+# write_tsv(k.bls, path = 'C:/Users/Juliane/Desktop/project.directory/data/tables/ k.bls_08.10.tsv',append = FALSE)
+
+# write_tsv(k.bls_prodi, path = 'C:/Users/Juliane/Desktop/project.directory/data/tables/ k.bls_prodi_13_08.tsv',append = FALSE)
+
+  # select nutrients available in both
+  select(diet_item_id, file_name:database, 
+         `Eiweiß, Proteingehalt`,`Kohlenhydrate`,`Fett`,
+         `Ballaststoffe`,
+         # `Vitamin B9 gesamte Folsäure`,`Vitamin B7 Biotin (Vitamin H)`,
+         ## `Vitamin B12 Cobalamin`,
+         # `Vitamin K Phyllochinon`,`Vitamin B3 Niacinäquivalent`,`Vitamin A Retinoläquivalent`,`Eisen`,
+         # `Vitamin B6 Pyridoxin`,
+         `Gesättigte Fettsäuren`,
+         # `Vitamin E Tocopherol`,`Vitamin B5 Pantothensäure`,`Vitamin E Tocopherol`,
+         ## `EPA - Eicosapentaensäure`, `Calcium`,`DHA - Docosahexaensäure`,
+         # `Iodid`,`Vitamin B2 Riboflavin`,
+         # `Cholesterin`,`Vitamin C Ascorbinsäure`,
+         `Einfach ungesättigte Fettsäuren`,
+         # `Octadecatriensäure/Linolensäure`,
+         ## `Octadecadiensäure/Linolsäure`, 
+         # `Vitamin B1 Thiamin`,
+         ## `Vitamin D Calciferole`,
+         `Alkohol (Ethanol)`,
+         `Energie (kcal)`
+         )
+
+names(k.bls_prodi)[names(k.bls_prodi) == 'Energie_orig'] <- 'Energie_bls'
+  
+k.bls <- k.bls_prodi %>% filter(database == 'bls')
+k.prodi <- k.bls_prodi %>% filter(database == 'prodi')
+
+```
+
+## data
+```{r}
+# both
+k.bls_prodi.data <- k.bls_prodi %>% 
+  select(diet_item_id, `Eiweiß, Proteingehalt`:`Energie (kcal)`) %>% 
+  column_to_rownames('diet_item_id')
+
+# bls
+k.bls.data <- k.bls %>% 
+  select(diet_item_id, `Eiweiß, Proteingehalt`:`Energie (kcal)`) %>% 
+  column_to_rownames('diet_item_id')
+
+# prodi
+k.prodi.data <- k.prodi %>% 
+  select(diet_item_id, `Eiweiß, Proteingehalt`:`Energie (kcal)`) %>% 
+  column_to_rownames('diet_item_id')
+```
+
+
+## clr transform
+```{r}
+pseudo = 1e-15
+
+# both
+k.bls_prodi.clr <- rgr::clr(k.bls_prodi.data + pseudo, ifclose = FALSE, ifwarn = TRUE)
+k.bls_prodi.clr.unit <- t(scale(t(k.bls_prodi.clr), center = F, scale = T))
+
+# bls
+k.bls.clr <- rgr::clr(k.bls.data + pseudo, ifclose = FALSE, ifwarn = TRUE)
+k.bls.clr.unit <- t(scale(t(k.bls.clr), center = F, scale = T))
+
+# prodi
+k.prodi.clr <- rgr::clr(k.prodi.data + pseudo, ifclose = FALSE, ifwarn = TRUE)
+k.prodi.clr.unit <- t(scale(t(k.prodi.clr), center = F, scale = T))
+```
+
+## pca
+```{r}
+# both
+k.bls_prodi.clr.pca_data <- PCA(X = k.bls_prodi.clr, graph = FALSE, scale.unit = T)
+k.bls_prodi.metadata <- k.bls_prodi %>% 
+  select(diet_item_id:database)
+k.bls_prodi.clr.pca <- k.bls_prodi.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+# bls
+k.bls.clr.pca_data <- PCA(X = k.bls.clr, graph = FALSE, scale.unit = T)
+k.bls.metadata <- k.bls %>% 
+  select(diet_item_id:database)
+k.bls.clr.pca <- k.bls.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+
+# prodi
+k.prodi.clr.pca_data <- PCA(X = k.prodi.clr, graph = FALSE, scale.unit = T)
+k.prodi.metadata <- k.prodi %>% 
+  select(diet_item_id:database)
+k.prodi.clr.pca <- k.prodi.clr.pca_data %>% 
+  .$ind %>% .$coord %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'Name') 
+```
+
+## metadata
+```{r}
+# both
+k.bls_prodi.data.clr.pca <- k.bls_prodi.clr.pca %>% 
+  left_join(., k.bls_prodi.metadata, by = c('Name' = 'diet_item_id')) %>% 
+  mutate(item_id = str_split_fixed(Name, pattern = '[.]', n = 2)[,2])
+
+# bls
+k.bls.data.clr.pca <- k.bls.clr.pca %>% 
+  left_join(., k.bls.metadata, by = c('Name' = 'diet_item_id')) %>% 
+  mutate(item_id = str_split_fixed(Name, pattern = '[.]', n = 2)[,2])
+
+# prodi
+k.prodi.data.clr.pca <- k.prodi.clr.pca %>% 
+  left_join(., k.prodi.metadata, by = c('Name' = 'diet_item_id')) %>% 
+  mutate(item_id = str_split_fixed(Name, pattern = '[.]', n = 2)[,2])
+```
+
+## plots
+```{r fig.width=15, fig.height=10}
+# both
+keto.bls.pca.plot <- k.bls_prodi.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2, labels = item_descr)) +
+  geom_point(size = 0.5, aes(col = database)) + 
+  geom_line(aes(group = item_id), alpha = 0.1) + 
+  labs(y = paste0('PC 1 (', round(k.bls_prodi.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(k.bls_prodi.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1, 
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+item.pca <- ggplotly(keto.bls.pca.plot,tooltip = 'all',text = k.bls_prodi.data.clr.pca$item_descr)
+
+# bls
+k.bls.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2, labels = item_descr)) +
+  geom_point(size = 0.5, aes(col = database)) + 
+  geom_line(aes(group = item_id), alpha = 0.1) + 
+  labs(y = paste0('PC 1 (', round(k.bls.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(k.bls.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1, 
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+
+# prodi
+k.prodi.data.clr.pca %>% 
+  ggplot(aes(Dim.1, Dim.2, labels = item_descr)) +
+  geom_point(size = 0.5, aes(col = database)) + 
+  geom_line(aes(group = item_id), alpha = 0.1) + 
+  labs(y = paste0('PC 1 (', round(k.prodi.clr.pca_data$eig[1,'percentage of variance'], 1), '%)'), 
+       x = paste0('PC 2 (', round(k.prodi.clr.pca_data$eig[2,'percentage of variance'], 1), '%)')) +
+  theme(plot.title = element_text(hjust = 0.5),
+        aspect.ratio = 1, 
+        ) + 
+  guides(fill = guide_legend(ncol = 1))
+```
+
+

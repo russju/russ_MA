@@ -1,0 +1,14 @@
+"0","```r
+pdf('C:/Users/Juliane/Desktop/project.directory/results/sig.corr.nutr.taxa')
+nutr.L2.sig <- heatmap.2(corr.nutr.L2.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.L2.sig.sub2)
+
+nutr.L6.sig <- heatmap.2(corr.nutr.L6.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.L6.sig.sub2)
+
+nutr.family.sig <- heatmap.2(corr.nutr.family.sig.sub,cexRow = .35,cexCol = .9,trace = 'none',key.title = 'Spearman correlation',col = my_palette,keysize = .5,key.par = list(cex=.4) ,notecol = 'black',srtCol = 30,cellnote = corr.nutr.family.sig.sub2)
+
+dev.off()
+
+```"
+"1","null device 
+          1 
+"

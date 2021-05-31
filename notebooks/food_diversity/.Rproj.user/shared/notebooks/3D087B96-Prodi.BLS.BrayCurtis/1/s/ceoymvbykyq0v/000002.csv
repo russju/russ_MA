@@ -1,0 +1,5 @@
+"0","```r
+output_dir = '../results/'
+data_dir = '../data/'
+table_dir = paste0(data_dir, 'tables/')
+```"

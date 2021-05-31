@@ -1,0 +1,4 @@
+"0","dends <- dendlist(dend.cat, dend.nutr)
+"
+"2","Fehler in sum(.) : ungültiger 'type' (list) des Argumentes
+"

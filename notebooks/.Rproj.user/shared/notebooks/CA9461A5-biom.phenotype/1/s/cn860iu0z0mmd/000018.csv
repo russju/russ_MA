@@ -1,0 +1,4 @@
+"0","pdf(paste0(converter_dir,'foods.sPLS-DA.pdf'))"
+"2","Fehler in pdf(paste0(converter_dir, ""foods.sPLS-DA.pdf"")) : 
+  kann Datei '../results/converter/foods.sPLS-DA.pdf' nicht öffnen
+"
