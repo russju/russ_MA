@@ -3,7 +3,7 @@ comparison of nutrient based and conventional food clustering in order to identi
 
 inside notebook folder:
 BLS.* files contain upload of BLS (national nutrient database) data that was used for generating convetional and nutrient based food clustering
-BLS.betadiv contains the clusterings (convetional clustering was done by BLS food groups, 
+BLS.betadiv contains the computation of the clusterings (convetional clustering was done by BLS food groups, 
 nutrient clustering was done by hierarchical clustering of first three PCs of a PCA of the BLS --> that displays nutrient distribution)
 BLS.tanglegram contains tanglegram of of both clusterings as comparison
 
@@ -11,7 +11,7 @@ Prodi.* files contain basic analysis of ketogenic diet cohort, comparison betwee
 Prodi.toBLS.DP contains merge of diet protocols of ketogenic diet cohort with full nutrient set of BLS
 
 food_diversity folder:
-analysis that was done to compare food diversity measurements between nutreint based and convetional food clustering
+analysis that was done to compare food diversity measurements between nutrient based and conventional food clustering 
 *animal.plant contains comparison of animal and plant derived foods between keto and regular diet
 *BrayCurtis,*Jaccard,*unifrac  inter-sample diversities between keto and regular diet using convetional and nutrient based food clustering
 *faith intra-sample diversities between keto and regular diet using convetional and nutrient based food clustering
