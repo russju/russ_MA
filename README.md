@@ -21,12 +21,12 @@ analysis that was done to compare food diversity measurements between nutrient b
 rarefied_taxa folder:
 
 fecal samlpes between a regualr and keto diet were associated to convetional and nutrient based food cluster intake;
-*corr* files contain correlations between species and genus level taxa and conventional cluster intake (convclust), nutrient cluster intake (nutclust), nutrient intake(nutrient);
+*corr files contain correlations between species and genus level taxa and conventional cluster intake (convclust), nutrient cluster intake (nutclust), nutrient intake(nutrient);
 *family does the same with family level taxa;
 *heatmap generates heatmaps out of the correlation matrices;
 BA_phenotypes looks into bile acid distribution of different sterol-to-coprostanol converters;
-dysbiosis shows inter-sample diversity of fecal samples;
-fat.nutrients correlates dietary fat intake with fats in feces;
+*dysbiosis shows inter-sample diversity of fecal samples;
+*fat.nutrients correlates dietary fat intake with fats in feces;
 *alpha contains correlation between alpha dietary diversity and alpha diversity of fecal bacteria;
 *maaslin contains linear regression maaslin analysis
 
